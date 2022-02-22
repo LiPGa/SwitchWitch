@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75C0E5B927C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
+		75C0E5BA27C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
+		75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
+		75C0E5BE27C47776006BB1D0 /* SWUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5BC27C47776006BB1D0 /* SWUnit.cpp */; };
+		75C0E5BF27C47776006BB1D0 /* SWUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5BC27C47776006BB1D0 /* SWUnit.cpp */; };
+		75C0E5C027C47776006BB1D0 /* SWUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5BC27C47776006BB1D0 /* SWUnit.cpp */; };
+		75C0E5C627C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
+		75C0E5C727C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
+		75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
 		EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */; };
 		EB22BDE025D0E00A002ACE41 /* libcugl-mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDC825D0DE75002ACE41 /* libcugl-mac.a */; };
 		EB22BDFC25D0E0E2002ACE41 /* libcugl-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDCA25D0DE75002ACE41 /* libcugl-ios.a */; };
@@ -129,6 +138,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		75C0E5B727C47440006BB1D0 /* SWBoard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWBoard.cpp; sourceTree = "<group>"; };
+		75C0E5B827C47440006BB1D0 /* SWBoard.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWBoard.hpp; sourceTree = "<group>"; };
+		75C0E5BC27C47776006BB1D0 /* SWUnit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWUnit.cpp; sourceTree = "<group>"; };
+		75C0E5BD27C47776006BB1D0 /* SWUnit.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWUnit.hpp; sourceTree = "<group>"; };
+		75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWSquare.cpp; sourceTree = "<group>"; };
+		75C0E5C527C47EBD006BB1D0 /* SWSquare.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWSquare.hpp; sourceTree = "<group>"; };
 		EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceMargins.plist; sourceTree = "<group>"; };
 		EB22BF5E25D0E8BC002ACE41 /* ShipLab (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ShipLab (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B41D74952A002FE78B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -391,8 +406,14 @@
 				EB51311927A2329900E255AA /* SLShip.h */,
 				EB51312127A2329900E255AA /* SLShip.cpp */,
 				EB51311427A2329900E255AA /* SLAsteroidSet.h */,
+				75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */,
+				75C0E5C527C47EBD006BB1D0 /* SWSquare.hpp */,
+				75C0E5BC27C47776006BB1D0 /* SWUnit.cpp */,
+				75C0E5BD27C47776006BB1D0 /* SWUnit.hpp */,
 				EB51311627A2329900E255AA /* SLAsteroidSet.cpp */,
 				EB51311E27A2329900E255AA /* SLPhotonSet.h */,
+				75C0E5B727C47440006BB1D0 /* SWBoard.cpp */,
+				75C0E5B827C47440006BB1D0 /* SWBoard.hpp */,
 				EB51311327A2329800E255AA /* SLPhotonSet.cpp */,
 			);
 			name = Source;
@@ -577,11 +598,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB51312B27A2329900E255AA /* SLAsteroidSet.cpp in Sources */,
+				75C0E5C027C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				EB51313A27A2329900E255AA /* SLShip.cpp in Sources */,
 				EB51313727A2329900E255AA /* SLInputController.cpp in Sources */,
+				75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				EB51313127A2329900E255AA /* SLCollisionController.cpp in Sources */,
 				EB51312E27A2329900E255AA /* SLApp.cpp in Sources */,
 				EB51313427A2329900E255AA /* SLLoadingScene.cpp in Sources */,
+				75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
 				EB51312827A2329900E255AA /* SLGameScene.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
 				EB51312527A2329900E255AA /* SLPhotonSet.cpp in Sources */,
@@ -593,11 +617,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB51312A27A2329900E255AA /* SLAsteroidSet.cpp in Sources */,
+				75C0E5BF27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				EB51313927A2329900E255AA /* SLShip.cpp in Sources */,
 				EB51313627A2329900E255AA /* SLInputController.cpp in Sources */,
+				75C0E5BA27C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				EB51313027A2329900E255AA /* SLCollisionController.cpp in Sources */,
 				EB51312D27A2329900E255AA /* SLApp.cpp in Sources */,
 				EB51313327A2329900E255AA /* SLLoadingScene.cpp in Sources */,
+				75C0E5C727C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
 				EB51312727A2329900E255AA /* SLGameScene.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
 				EB51312427A2329900E255AA /* SLPhotonSet.cpp in Sources */,
@@ -609,11 +636,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB51312927A2329900E255AA /* SLAsteroidSet.cpp in Sources */,
+				75C0E5BE27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				EB51313827A2329900E255AA /* SLShip.cpp in Sources */,
 				EB51313527A2329900E255AA /* SLInputController.cpp in Sources */,
+				75C0E5B927C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				EB51312F27A2329900E255AA /* SLCollisionController.cpp in Sources */,
 				EB51312C27A2329900E255AA /* SLApp.cpp in Sources */,
 				EB51313227A2329900E255AA /* SLLoadingScene.cpp in Sources */,
+				75C0E5C627C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
 				EB51312627A2329900E255AA /* SLGameScene.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
 				EB51312327A2329900E255AA /* SLPhotonSet.cpp in Sources */,
