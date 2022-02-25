@@ -14,14 +14,15 @@
 
 class Board {
 private:
-    /** Size of the board */
-    int _row;
-    int _col;
     
+    /** Size of the board */
+    int row;
+    int col;
     /** Square matrix on this board*/
     vector<vector<Square>> matrix;
     
 public:
+ 
 #pragma mark Constructors
     /**
      * Creates a board with the given size
@@ -45,8 +46,8 @@ public:
      * @param _pos the position of a square
      * @return the square  at a position
      */
-    const Square& getSquare(const float row, const float col) const {
-        return matrix[row][col];
+    const Square& getSquare(Vec2 input) const {
+        return matrix[input.x][input.y];
     }
     
     /**
@@ -75,5 +76,13 @@ public:
      * @return the list of the victims' position
      */
     vector<cugl::Vec2> getVictims(cugl::Vec2 pos);
+    
+    /**
+     Returns 1 if the square exists at the given Vec2 position
+     returns 0 otherwise
+     @param pos the position being questioned
+     @return a bool with 1 meaning yes, 0 meaning no
+     */
+    bool doesSqaureExist(cugl::Vec2 pos);
 };
 #endif /* SWBoard_hpp */

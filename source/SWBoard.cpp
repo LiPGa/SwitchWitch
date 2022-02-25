@@ -15,9 +15,9 @@ using namespace cugl;
  * @param width The width of the board
  * @param height The height of the board
  */
-Board::Board(const int row, const int col) {
-    _row = row;
-    _col = col;
+Board::Board(const int r, const int c) {
+    row = r;
+    col = c;
 //    for(int i = 0 ; i < row ; i++){
 //        matrix[i].resize(col);
 //    }
@@ -30,8 +30,8 @@ Board::Board(const int row, const int col) {
  * @param value2  the new position of the target square after this switch
  */
 void Board::switchSquares(cugl::Vec2 pos1, cugl::Vec2 pos2) {
-    Square main = getSquare(pos1.x, pos1.y);
-    Square second = getSquare(pos2.x, pos2.y);
+    Square main = getSquare(pos1);
+    Square second = getSquare(pos2);
     setSquare(pos1, main);
     setSquare(pos2, second);
 }
@@ -44,107 +44,34 @@ void Board::switchSquares(cugl::Vec2 pos1, cugl::Vec2 pos2) {
  */
 vector<cugl::Vec2> Board::getVictims(cugl::Vec2 pos) {
     vector<cugl::Vec2> list;
-    Square main = getSquare(pos.x, pos.y);
-    Unit::Attacks pattern = main.getUnit().getAttack();
-    Unit::Directions direction = main.getUnit().getDirection();
-    if(pattern == Unit::Attacks::basicAttack){
-        return vector<cugl::Vec2>();
-    }
-    if(pattern == Unit::Attacks::doubleAttack) {
-        if(direction == Unit::Directions::left) {
-            if(pos.x-2 >= 0) {
-                list.push_back(Vec2 (pos.x-2, pos.y));
-            }
-            if(pos.x - 1 >= 0) {
-                list.push_back(Vec2 (pos.x-1, pos.y));
-            }
-        }
-        if(direction == Unit::Directions::right) {
-            if(pos.x+2 <= _col) {
-                list.push_back(Vec2 (pos.x+2, pos.y));
-            }
-            if(pos.x+1 <= _col) {
-                list.push_back(Vec2 (pos.x+1, pos.y));
-            }
-        }
-        if(direction == Unit::Directions::up) {
-            if(pos.y+2 <= _row) {
-                list.push_back(Vec2 (pos.x, pos.y+2));
-            }
-            if(pos.y+1 <= _row) {
-                list.push_back(Vec2 (pos.x, pos.y+1));
-            }
-        }
-        if(direction == Unit::Directions::down) {
-            if(pos.y-2 >= 0) {
-                list.push_back(Vec2 (pos.x, pos.y-2));
-            }
-            if(pos.y-1 >= 0) {
-                list.push_back(Vec2 (pos.x, pos.y-1));
-            }
-        }
-    }
-    if(pattern == Unit::Attacks::tripleAttack) {
-        if(direction == Unit::Directions::left) {
-            if(pos.x - 1 >= 0 && pos.y -1 >=0){
-                list.push_back(Vec2 (pos.x -1, pos.y-1));
-            }
-            if(pos.x - 1 >= 0){
-                list.push_back(Vec2 (pos.x -1, pos.y));
-            }
-            if(pos.x - 1 >= 0 && pos.y +1 <=_row){
-                list.push_back(Vec2 (pos.x -1, pos.y+1));
-            }
-        }
-        if(direction == Unit::Directions::right) {
-            if(pos.x + 1 <= _col && pos.y -1 >=0){
-                list.push_back(Vec2 (pos.x +1, pos.y-1));
-            }
-            if(pos.x + 1 <= _col){
-                list.push_back(Vec2 (pos.x +1, pos.y));
-            }
-            if(pos.x + 1 <= _col && pos.y +1 <=_row){
-                list.push_back(Vec2 (pos.x +1, pos.y+1));
-            }
-        }
-        if(direction == Unit::Directions::up) {
-            if(pos.x - 1 >= 0 && pos.y - 1 >= 0){
-                list.push_back(Vec2 (pos.x-1, pos.y-1));
-            }
-            if(pos.y - 1 >= 0){
-                list.push_back(Vec2 (pos.x, pos.y-1));
-            }
-            if(pos.x + 1 <= _col && pos.y -1 >= 0){
-                list.push_back(Vec2 (pos.x +1, pos.y-1));
-            }
-        }
-        if(direction == Unit::Directions::down) {
-            if(pos.x - 1 >= 0 && pos.y + 1 <= _row) {
-                list.push_back(Vec2 (pos.x-1, pos.y+1));
-            }
-            if(pos.y + 1 <=_row){
-                list.push_back(Vec2 (pos.x, pos.y+1));
-            }
-            if(pos.x + 1 <= _col && pos.y +1 <= _row){
-                list.push_back(Vec2 (pos.x +1, pos.y+1));
-            }
-        }
-        if(pattern == Unit::Attacks::tripleAttack) {
-            if (pos.x - 1 >= 0 && pos.y - 1 >= 0) {
-                list.push_back(Vec2 (pos.x-1, pos.y-1));
-            }
-            if (pos.x - 1 >= 0 && pos.y + 1 <= _row) {
-                list.push_back(Vec2 (pos.x-1, pos.y+1));
-            }
-            if (pos.x + 1 <= _col && pos.y - 1 >= 0) {
-                list.push_back(Vec2 (pos.x+1, pos.y-1));
-            }
-            if (pos.x + 1 <= _col && pos.y + 1 <= _row) {
-                list.push_back(Vec2 (pos.x+1, pos.y+1));
-            }
-        }
-        
-        
+    Square main = getSquare(pos);
+    vector<cugl::Vec2> pattern;
+    cugl::Vec2 direction;
+    pattern= main.getUnit().getAttack();
+    int d = 0;
+    if (pattern == Unit.down)
+        d = 0;
+    
+    if (pattern == Unit.left)
+        d = 1;
+    
+    if (pattern == Unit.up)
+        d = 2;
+    
+    if (pattern == Unit.right)
+        d = 3;
+    
+    for (auto it = pattern.begin(); it != pattern.end(); ++it){
+        list.push_back(it->getRotation(d*M_PI_2));
     }
     return list;
-};
+
+    
+}
+
+bool Board::doesSqaureExist(cugl::Vec2 pos){
+    return ((pos.x >= 0) &&
+    (pos.x < col) &&
+    (pos.y >= 0) &&
+    (pos.y < row));
+}
