@@ -16,6 +16,9 @@
 		75C0E5C627C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
 		75C0E5C727C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
 		75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
+		DBC4960F27C861EC006BA4CA /* SWInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBC4960D27C861EC006BA4CA /* SWInputController.cpp */; };
+		DBC4961027C861EC006BA4CA /* SWInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBC4960D27C861EC006BA4CA /* SWInputController.cpp */; };
+		DBC4961127C861EC006BA4CA /* SWInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBC4960D27C861EC006BA4CA /* SWInputController.cpp */; };
 		EB07CFB621EFF3F8000CB3A3 /* DeviceMargins.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */; };
 		EB22BDE025D0E00A002ACE41 /* libcugl-mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDC825D0DE75002ACE41 /* libcugl-mac.a */; };
 		EB22BDFC25D0E0E2002ACE41 /* libcugl-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22BDCA25D0DE75002ACE41 /* libcugl-ios.a */; };
@@ -59,9 +62,6 @@
 		EB51313227A2329900E255AA /* SLLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311D27A2329900E255AA /* SLLoadingScene.cpp */; };
 		EB51313327A2329900E255AA /* SLLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311D27A2329900E255AA /* SLLoadingScene.cpp */; };
 		EB51313427A2329900E255AA /* SLLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311D27A2329900E255AA /* SLLoadingScene.cpp */; };
-		EB51313527A2329900E255AA /* SLInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51312027A2329900E255AA /* SLInputController.cpp */; };
-		EB51313627A2329900E255AA /* SLInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51312027A2329900E255AA /* SLInputController.cpp */; };
-		EB51313727A2329900E255AA /* SLInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51312027A2329900E255AA /* SLInputController.cpp */; };
 		EB51313827A2329900E255AA /* SLShip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51312127A2329900E255AA /* SLShip.cpp */; };
 		EB51313927A2329900E255AA /* SLShip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51312127A2329900E255AA /* SLShip.cpp */; };
 		EB51313A27A2329900E255AA /* SLShip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51312127A2329900E255AA /* SLShip.cpp */; };
@@ -144,6 +144,8 @@
 		75C0E5BD27C47776006BB1D0 /* SWUnit.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWUnit.hpp; sourceTree = "<group>"; };
 		75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWSquare.cpp; sourceTree = "<group>"; };
 		75C0E5C527C47EBD006BB1D0 /* SWSquare.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWSquare.hpp; sourceTree = "<group>"; };
+		DBC4960D27C861EC006BA4CA /* SWInputController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWInputController.cpp; sourceTree = "<group>"; };
+		DBC4960E27C861EC006BA4CA /* SWInputController.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; path = SWInputController.h; sourceTree = "<group>"; };
 		EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceMargins.plist; sourceTree = "<group>"; };
 		EB22BF5E25D0E8BC002ACE41 /* ShipLab (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ShipLab (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B41D74952A002FE78B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -167,11 +169,9 @@
 		EB51311927A2329900E255AA /* SLShip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLShip.h; sourceTree = "<group>"; };
 		EB51311A27A2329900E255AA /* SLLoadingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLLoadingScene.h; sourceTree = "<group>"; };
 		EB51311B27A2329900E255AA /* SLCollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLCollisionController.cpp; sourceTree = "<group>"; };
-		EB51311C27A2329900E255AA /* SLInputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLInputController.h; sourceTree = "<group>"; };
 		EB51311D27A2329900E255AA /* SLLoadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLLoadingScene.cpp; sourceTree = "<group>"; };
 		EB51311E27A2329900E255AA /* SLPhotonSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLPhotonSet.h; sourceTree = "<group>"; };
 		EB51311F27A2329900E255AA /* SLCollisionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLCollisionController.h; sourceTree = "<group>"; };
-		EB51312027A2329900E255AA /* SLInputController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLInputController.cpp; sourceTree = "<group>"; };
 		EB51312127A2329900E255AA /* SLShip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLShip.cpp; sourceTree = "<group>"; };
 		EB51312227A2329900E255AA /* SLApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLApp.h; sourceTree = "<group>"; };
 		EB74548C1D74D75C002FBAE6 /* ShipLab (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ShipLab (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -401,8 +401,8 @@
 				EB51311B27A2329900E255AA /* SLCollisionController.cpp */,
 				EB51311827A2329900E255AA /* SLGameScene.h */,
 				EB51311527A2329900E255AA /* SLGameScene.cpp */,
-				EB51311C27A2329900E255AA /* SLInputController.h */,
-				EB51312027A2329900E255AA /* SLInputController.cpp */,
+				DBC4960D27C861EC006BA4CA /* SWInputController.cpp */,
+				DBC4960E27C861EC006BA4CA /* SWInputController.h */,
 				EB51311927A2329900E255AA /* SLShip.h */,
 				EB51312127A2329900E255AA /* SLShip.cpp */,
 				EB51311427A2329900E255AA /* SLAsteroidSet.h */,
@@ -600,7 +600,7 @@
 				EB51312B27A2329900E255AA /* SLAsteroidSet.cpp in Sources */,
 				75C0E5C027C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				EB51313A27A2329900E255AA /* SLShip.cpp in Sources */,
-				EB51313727A2329900E255AA /* SLInputController.cpp in Sources */,
+				DBC4961127C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				EB51313127A2329900E255AA /* SLCollisionController.cpp in Sources */,
 				EB51312E27A2329900E255AA /* SLApp.cpp in Sources */,
@@ -619,7 +619,7 @@
 				EB51312A27A2329900E255AA /* SLAsteroidSet.cpp in Sources */,
 				75C0E5BF27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				EB51313927A2329900E255AA /* SLShip.cpp in Sources */,
-				EB51313627A2329900E255AA /* SLInputController.cpp in Sources */,
+				DBC4961027C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				75C0E5BA27C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				EB51313027A2329900E255AA /* SLCollisionController.cpp in Sources */,
 				EB51312D27A2329900E255AA /* SLApp.cpp in Sources */,
@@ -638,7 +638,7 @@
 				EB51312927A2329900E255AA /* SLAsteroidSet.cpp in Sources */,
 				75C0E5BE27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				EB51313827A2329900E255AA /* SLShip.cpp in Sources */,
-				EB51313527A2329900E255AA /* SLInputController.cpp in Sources */,
+				DBC4960F27C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				75C0E5B927C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				EB51312F27A2329900E255AA /* SLCollisionController.cpp in Sources */,
 				EB51312C27A2329900E255AA /* SLApp.cpp in Sources */,
@@ -801,6 +801,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "";
 				VALIDATE_WORKSPACE_SKIPPED_SDK_FRAMEWORKS = "OpenGL OpenGLES";
 			};
 			name = Debug;

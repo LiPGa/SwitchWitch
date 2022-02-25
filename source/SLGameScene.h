@@ -18,7 +18,7 @@
 #include "SLShip.h"
 #include "SLPhotonSet.h"
 #include "SLAsteroidSet.h"
-#include "SLInputController.h"
+#include "SWInputController.h"
 #include "SLCollisionController.h"
 
 
