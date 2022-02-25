@@ -15,16 +15,6 @@
  * Model class representing an unit.
  */
 class Unit {
-private:
-    /** Color of the unit*/
-    Colors _color;
-    
-    /** Attack pattern of a unit*/
-    Attacks _attack;
-    
-    /** Facing direction of a special unit*/
-    Directions _direction;
-    
 public:
     /** Available colors for a unit*/
     enum Colors {red, green, blue};
@@ -35,7 +25,19 @@ public:
     /** Available directions of a spefical unit*/
     enum Directions {na, up, down, left, right};
     
+private:
+    /** Color of the unit*/
+    Colors _color;
+    
+    /** Attack pattern of a unit*/
+    Attacks _attack;
+    
+    /** Facing direction of a special unit*/
+    Directions _direction;
+
+
 #pragma mark Constructors
+public:
     /**
      * Creates a unit with the given color and attck pattern
      *

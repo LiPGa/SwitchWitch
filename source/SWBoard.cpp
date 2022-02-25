@@ -18,9 +18,9 @@ using namespace cugl;
 Board::Board(const int row, const int col) {
     _row = row;
     _col = col;
-    for(int i = 0 ; i < row ; i++){
-        matrix[i].resize(col);
-    }
+//    for(int i = 0 ; i < row ; i++){
+//        matrix[i].resize(col);
+//    }
 }
 
 /**
