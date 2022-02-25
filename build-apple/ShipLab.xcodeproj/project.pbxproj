@@ -56,9 +56,6 @@
 		EB51312C27A2329900E255AA /* SLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311727A2329900E255AA /* SLApp.cpp */; };
 		EB51312D27A2329900E255AA /* SLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311727A2329900E255AA /* SLApp.cpp */; };
 		EB51312E27A2329900E255AA /* SLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311727A2329900E255AA /* SLApp.cpp */; };
-		EB51312F27A2329900E255AA /* SLCollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311B27A2329900E255AA /* SLCollisionController.cpp */; };
-		EB51313027A2329900E255AA /* SLCollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311B27A2329900E255AA /* SLCollisionController.cpp */; };
-		EB51313127A2329900E255AA /* SLCollisionController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311B27A2329900E255AA /* SLCollisionController.cpp */; };
 		EB51313227A2329900E255AA /* SLLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311D27A2329900E255AA /* SLLoadingScene.cpp */; };
 		EB51313327A2329900E255AA /* SLLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311D27A2329900E255AA /* SLLoadingScene.cpp */; };
 		EB51313427A2329900E255AA /* SLLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311D27A2329900E255AA /* SLLoadingScene.cpp */; };
@@ -168,10 +165,8 @@
 		EB51311827A2329900E255AA /* SLGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLGameScene.h; sourceTree = "<group>"; };
 		EB51311927A2329900E255AA /* SLShip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLShip.h; sourceTree = "<group>"; };
 		EB51311A27A2329900E255AA /* SLLoadingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLLoadingScene.h; sourceTree = "<group>"; };
-		EB51311B27A2329900E255AA /* SLCollisionController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLCollisionController.cpp; sourceTree = "<group>"; };
 		EB51311D27A2329900E255AA /* SLLoadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLLoadingScene.cpp; sourceTree = "<group>"; };
 		EB51311E27A2329900E255AA /* SLPhotonSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLPhotonSet.h; sourceTree = "<group>"; };
-		EB51311F27A2329900E255AA /* SLCollisionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLCollisionController.h; sourceTree = "<group>"; };
 		EB51312127A2329900E255AA /* SLShip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLShip.cpp; sourceTree = "<group>"; };
 		EB51312227A2329900E255AA /* SLApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLApp.h; sourceTree = "<group>"; };
 		EB74548C1D74D75C002FBAE6 /* ShipLab (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ShipLab (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -397,8 +392,6 @@
 				EB51311727A2329900E255AA /* SLApp.cpp */,
 				EB51311A27A2329900E255AA /* SLLoadingScene.h */,
 				EB51311D27A2329900E255AA /* SLLoadingScene.cpp */,
-				EB51311F27A2329900E255AA /* SLCollisionController.h */,
-				EB51311B27A2329900E255AA /* SLCollisionController.cpp */,
 				EB51311827A2329900E255AA /* SLGameScene.h */,
 				EB51311527A2329900E255AA /* SLGameScene.cpp */,
 				DBC4960D27C861EC006BA4CA /* SWInputController.cpp */,
@@ -602,7 +595,6 @@
 				EB51313A27A2329900E255AA /* SLShip.cpp in Sources */,
 				DBC4961127C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */,
-				EB51313127A2329900E255AA /* SLCollisionController.cpp in Sources */,
 				EB51312E27A2329900E255AA /* SLApp.cpp in Sources */,
 				EB51313427A2329900E255AA /* SLLoadingScene.cpp in Sources */,
 				75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
@@ -621,7 +613,6 @@
 				EB51313927A2329900E255AA /* SLShip.cpp in Sources */,
 				DBC4961027C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				75C0E5BA27C47440006BB1D0 /* SWBoard.cpp in Sources */,
-				EB51313027A2329900E255AA /* SLCollisionController.cpp in Sources */,
 				EB51312D27A2329900E255AA /* SLApp.cpp in Sources */,
 				EB51313327A2329900E255AA /* SLLoadingScene.cpp in Sources */,
 				75C0E5C727C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
@@ -640,7 +631,6 @@
 				EB51313827A2329900E255AA /* SLShip.cpp in Sources */,
 				DBC4960F27C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				75C0E5B927C47440006BB1D0 /* SWBoard.cpp in Sources */,
-				EB51312F27A2329900E255AA /* SLCollisionController.cpp in Sources */,
 				EB51312C27A2329900E255AA /* SLApp.cpp in Sources */,
 				EB51313227A2329900E255AA /* SLLoadingScene.cpp in Sources */,
 				75C0E5C627C47EBD006BB1D0 /* SWSquare.cpp in Sources */,

@@ -19,7 +19,6 @@
 #include "SLPhotonSet.h"
 #include "SLAsteroidSet.h"
 #include "SWInputController.h"
-#include "SLCollisionController.h"
 
 
 
@@ -38,8 +37,6 @@ protected:
     // CONTROLLERS are attached directly to the scene (no pointers)
     /** The controller to manage the ship */
     InputController _input;
-    /** The controller for managing collisions */
-    CollisionController _collisions;
     
     // MODELS should be shared pointers or a data structure of shared pointers
     /** The JSON value with all of the constants */

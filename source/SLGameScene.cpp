@@ -15,7 +15,6 @@
 #include <sstream>
 
 #include "SLGameScene.h"
-//#include "GLCollisionController.h"
 
 using namespace cugl;
 using namespace std;
@@ -72,8 +71,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _text = TextLayout::allocWithText(msg, assets->get<Font>("pixel32"));
     _text->layout();
     
-    _collisions.init(getSize());
-    
     reset();
     return true;
 }
@@ -121,11 +118,6 @@ void GameScene::update(float timestep) {
     
     // Move the asteroids
     _asteroids.update(getSize());
-    
-    // Check for collisions and play sound
-    if (_collisions.resolveCollision(_ship, _asteroids)) {
-        AudioEngine::get()->play("bang", _bang, false, _bang->getVolume(), true);
-    }
     
     // Update the health meter
     _text->setText(strtool::format("Health %d", _ship->getHealth()));
