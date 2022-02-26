@@ -15,44 +15,29 @@ using namespace cugl;
 /**
  * Model class representing an unit.
  */
-class Unit {
+class Unit
+{
+public:
+    static const cugl::Vec2 defaultDirection;
+
 public:
     /** Available colors for a unit*/
-    enum Colors {red, green, blue};
-    
-    /** Available attack pattern of a unit, suppose the position of the attacker is (0, 0) and they are facing south*/
-    static vector<cugl::Vec2> basicAttack;
-    basicAttack = {Vec2(0, 1)};
-    
-    vector<cugl::Vec2> doubleAttack = {Vec2(0, 1), Vec2(0, 2)};
-    vector<cugl::Vec2> tripleAttack = {Vec2(-1, 1), Vec2(0, 1), Vec2(1, 1)};
-    vector<cugl::Vec2> cornerAttack = {Vec2(-1, 1), Vec2(-1, -1), Vec2(1, 1), Vec2(1, -1)};
-    
-    /** Available directions of a spefical unit*/
-    cugl::Vec2 up = Vec2(0,-1);
-    cugl::Vec2 down = Vec2(0,1);
-    cugl::Vec2 left = Vec2(-1,0);
-    cugl::Vec2 right = Vec2(0,1);
-    
-    //    basicAttack.push_back(Vec2 (0, 1));
-    //    doubleAttack.push_back(Vec2 (0, 1));
-    //    doubleAttack.push_back(Vec2 (0, 2));
-    //    tripleAttack.push_back(Vec2 (-1, 1));
-    //    tripleAttack.push_back(Vec2 (0, 1));
-    //    tripleAttack.push_back(Vec2 (1, 1));
-    //    cornerAttack.push_back(Vec2 (-1, 1));
-    //    cornerAttack.push_back(Vec2 (-1, -1));
-    //    cornerAttack.push_back(Vec2 (1, 1));
-    //    cornerAttack.push_back(Vec2 (1, -1));
-    
-private:
-    /** Color of the unit*/
-    Colors _color;
-    
-    vector<cugl::Vec2> _attack;
-    
-    cugl::Vec2 _direction;
+    enum Colors
+    {
+        red,
+        green,
+        blue
+    };
 
+private:
+    /** Available attack pattern of a unit, suppose the position of the attacker is (0, 0) and they are facing south*/
+    vector<cugl::Vec2> basicAttack;
+
+    vector<cugl::Vec2> specialAttack;
+
+    cugl::Vec2 direction;
+
+    Colors color;
 
 #pragma mark Constructors
 public:
@@ -60,63 +45,82 @@ public:
      * Creates a unit with the given color and attck pattern
      *
      * @param color the unit color
-     * @param attack the attack pattern of the unit
+     * @param basicAttack the basic attack pattern of the unit
+     * @param specialAttack the special attack pattern of the unit
+     * @param direction the direction the unit is facing
      */
-    Unit(const Colors color, vector<cugl::Vec2> attack, Vec2 direction);
-    /**
-     * Creates a defult unit
-     */
-    Unit() {
-        _color = red;
-        _attack = basicAttack;
-        _direction = down;
-    }
-    
+    Unit(const Colors color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction);
+
     /**
      * Disposes the unit, releasing all resources
      */
     ~Unit() {}
 
-#pragma mark Properties
+    Unit() {}
     /**
-     * Returns the color of this unit
+     * @return unit's basic attack
+     */
+    vector<cugl::Vec2> getBasicAttack()
+    {
+        return basicAttack;
+    }
+    /**
+     * @return unit's special attack
+     */
+    vector<cugl::Vec2> getSpecialAttack()
+    {
+        return specialAttack;
+    }
+    /**
+     * @return unit's color
+     */
+    Colors getColor()
+    {
+        return color;
+    }
+    /**
+     * @return unit's direction
+     */
+    cugl::Vec2 getDirection()
+    {
+        return direction;
+    }
+    /**
+     *Sets unit's basic attack
      *
-     * @return the color of this unit
+     * @param attack
      */
-    const Colors getColor() const {return _color;}
-    
+    void setBasicAttack(vector<cugl::Vec2> attack)
+    {
+        basicAttack = attack;
+    }
     /**
-     * Sets the color of this unit
-     * @param value the color of this unit
-     */
-    void setColor(Colors value) {_color = value;}
-    
-    /**
-     * Returns the attack pattern of this unit
+     *Sets unit's special attack
      *
-     * @return the attack pattern of this unit
+     * @param attack
      */
-    const vector<cugl::Vec2> getAttack() const {return _attack;}
-    
+    void setSpecialAttack(vector<cugl::Vec2> attack)
+    {
+        specialAttack = attack;
+    }
     /**
-     * Sets the attack of this unit
-     * @param value the attack pattern of this unit
-     */
-    void setAttack(vector<cugl::Vec2> value) {_attack = value;}
-    
-    /**
-     * Returns the direction of this special unit
+     *Sets unit's color
      *
-     * @return the direction of this unit
+     * @param c for color
      */
-    const cugl::Vec2 getDirection() {return _direction;}
-    
+    void setColor(Colors c)
+    {
+        color = c;
+    }
     /**
-     * Sets the attack of this unit
-     * @param value the attack pattern of this unit
+     *Sets unit's direction d
+     *
+     * @param attack
      */
-    void setDirection(cugl::Vec2 value) {_direction = value;}
-    
+    void setDirection(cugl::Vec2 d)
+    {
+        direction = d;
+    }
 };
 
 #endif /* SWUnit_hpp */

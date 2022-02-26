@@ -14,21 +14,21 @@
 /**
  * Model class representing a square.
  */
-class Square {
+class Square
+{
 private:
     /** Position of this square*/
     cugl::Vec2 _pos;
-    
+
     /** Unit on this square*/
     Unit _unit;
-
 
 public:
 #pragma mark Constructors
     /**
      * Creats a square with the given position and unit
      */
-    Square(const cugl::Vec2& pos, Unit unit);
+    Square(const cugl::Vec2 &pos, Unit &unit);
 
     /**
      * Disposes the square. releasing all resources
@@ -43,8 +43,8 @@ public:
      *
      * @retuSquaresition of this square
      */
-    const cugl::Vec2& getPosition() const { return _pos; }
-    
+    const cugl::Vec2 &getPosition() const { return _pos; }
+
     /**
      * Sets the position of this square.
      *
@@ -53,22 +53,20 @@ public:
      * @param value the position of this ship
      */
     void setPosition(cugl::Vec2 value) { _pos = value; }
-    
+
     /**
      * Returns the unit on this square.
      *
      * @return the unit on this square
      */
     const Unit getUnit() const { return _unit; }
-    
+
     /**
      * Sets the unit on this square.
      *
      * @param value the unit on this ship
      */
     void setUnit(Unit value) { _unit = value; }
-
 };
-
 
 #endif /* SWSquare_hpp */

@@ -189,9 +189,8 @@
   <ItemGroup>
     <ClInclude Include="..\..\source\SLApp.h" />
     <ClInclude Include="..\..\source\SLAsteroidSet.h" />
-    <ClInclude Include="..\..\source\SLCollisionController.h" />
     <ClInclude Include="..\..\source\SLGameScene.h" />
-    <ClInclude Include="..\..\source\SLInputController.h" />
+    <ClInclude Include="..\..\source\SWInputController.h" />
     <ClInclude Include="..\..\source\SLLoadingScene.h" />
     <ClInclude Include="..\..\source\SLPhotonSet.h" />
     <ClInclude Include="..\..\source\SLShip.h" />
@@ -201,9 +200,8 @@
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\SLApp.cpp" />
     <ClCompile Include="..\..\source\SLAsteroidSet.cpp" />
-    <ClCompile Include="..\..\source\SLCollisionController.cpp" />
     <ClCompile Include="..\..\source\SLGameScene.cpp" />
-    <ClCompile Include="..\..\source\SLInputController.cpp" />
+    <ClCompile Include="..\..\source\SWInputController.cpp" />
     <ClCompile Include="..\..\source\SLLoadingScene.cpp" />
     <ClCompile Include="..\..\source\SLPhotonSet.cpp" />
     <ClCompile Include="..\..\source\SLShip.cpp" />

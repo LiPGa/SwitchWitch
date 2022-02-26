@@ -16,7 +16,8 @@ using namespace cugl;
  * @param pos   The square position
  * @param unit  The unit on the square
  */
-Square::Square(const cugl::Vec2& pos, Unit unit) {
+Square::Square(const cugl::Vec2 &pos, Unit &unit)
+{
     _pos = pos;
     _unit = unit;
 }

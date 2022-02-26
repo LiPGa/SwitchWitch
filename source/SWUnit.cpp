@@ -9,25 +9,20 @@
 #include "SWUnit.hpp"
 using namespace cugl;
 
+const cugl::Vec2 defaultDerection = Vec2::UNIT_X;
+
 /**
  * Creates a unit with the given color and attack pattern.
  *
- * @param color The unit color
- * @param attack The attack pattern of the unit
+ * @param color the unit color
+ * @param basicAttack the basic attack pattern of the unit
+ * @param specialAttack the special attack pattern of the unit
+ * @param direction the direction the unit is facing
  */
-Unit::Unit(const Colors color, vector<cugl::Vec2> attack, cugl::Vec2 direction) {
-    _color = color;
-    _attack = attack;
-    _direction = direction;
+Unit::Unit(const Colors color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction)
+{
+    this->color = color;
+    this->basicAttack = basicAttack;
+    this->direction = direction;
+    this->specialAttack = specialAttack;
 }
-
-//basicAttack.push_back(Vec2 (0, 1));
-//doubleAttack.push_back(Vec2 (0, 1));
-//doubleAttack.push_back(Vec2 (0, 2));
-//tripleAttack.push_back(Vec2 (-1, 1));
-//tripleAttack.push_back(Vec2 (0, 1));
-//tripleAttack.push_back(Vec2 (1, 1));
-//cornerAttack.push_back(Vec2 (-1, 1));
-//cornerAttack.push_back(Vec2 (-1, -1));
-//cornerAttack.push_back(Vec2 (1, 1));
-//cornerAttack.push_back(Vec2 (1, -1));

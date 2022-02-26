@@ -15,12 +15,15 @@ using namespace cugl;
  * @param width The width of the board
  * @param height The height of the board
  */
-Board::Board(const int r, const int c) {
+Board::Board(const int r, const int c)
+{
     row = r;
     col = c;
-//    for(int i = 0 ; i < row ; i++){
-//        matrix[i].resize(col);
-//    }
+}
+Board::Board(Vec2 v)
+{
+    row = v.x;
+    col = v.y;
 }
 
 /**
@@ -29,10 +32,11 @@ Board::Board(const int r, const int c) {
  * @param value1  the position of the target square
  * @param value2  the new position of the target square after this switch
  */
-void Board::switchSquares(cugl::Vec2 pos1, cugl::Vec2 pos2) {
-    Square main = getSquare(pos1);
+void Board::switchSquares(cugl::Vec2 pos1, cugl::Vec2 pos2)
+{
+    Square s = getSquare(pos1);
     Square second = getSquare(pos2);
-    setSquare(pos1, main);
+    setSquare(pos1, s);
     setSquare(pos2, second);
 }
 
@@ -42,36 +46,34 @@ void Board::switchSquares(cugl::Vec2 pos1, cugl::Vec2 pos2) {
  * @param pos the attacker square's position
  * @return the list of the victims' position
  */
-vector<cugl::Vec2> Board::getVictims(cugl::Vec2 pos) {
-    vector<cugl::Vec2> list;
-    Square main = getSquare(pos);
-    vector<cugl::Vec2> pattern;
-    cugl::Vec2 direction;
-    pattern= main.getUnit().getAttack();
-    int d = 0;
-    if (pattern == Unit.down)
-        d = 0;
-    
-    if (pattern == Unit.left)
-        d = 1;
-    
-    if (pattern == Unit.up)
-        d = 2;
-    
-    if (pattern == Unit.right)
-        d = 3;
-    
-    for (auto it = pattern.begin(); it != pattern.end(); ++it){
-        list.push_back(it->getRotation(d*M_PI_2));
-    }
-    return list;
-
-    
+vector<Square> Board::getVictims(cugl::Vec2 pos, bool special)
+{
+    return getVictims(getSquare(pos), special);
 }
 
-bool Board::doesSqaureExist(cugl::Vec2 pos){
+/**
+ * Returns the squares being attacked.
+ *
+ * @param pos the attacker square's position
+ * @return the list of the victims' position
+ */
+vector<Square> Board::getVictims(Square square, bool special)
+{
+    Unit selectedUnit = square.getUnit();
+    float angle = cugl::Vec2::angle(selectedUnit.getDirection(), selectedUnit.defaultDirection);
+    std::vector<cugl::Vec2> attacks = special ? selectedUnit.getSpecialAttack() : selectedUnit.getBasicAttack();
+    std::vector<Square> result;
+    for (auto it = attacks.begin(); it != attacks.end(); ++it)
+    {
+        result.push_back(getSquare(it->getRotation(angle)));
+    }
+    return result;
+}
+
+bool Board::doesSqaureExist(cugl::Vec2 pos)
+{
     return ((pos.x >= 0) &&
-    (pos.x < col) &&
-    (pos.y >= 0) &&
-    (pos.y < row));
+            (pos.x < col) &&
+            (pos.y >= 0) &&
+            (pos.y < row));
 }

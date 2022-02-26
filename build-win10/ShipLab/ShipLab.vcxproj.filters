@@ -24,13 +24,10 @@
     <ClInclude Include="..\..\source\SLAsteroidSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\SLCollisionController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\SLGameScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\SLInputController.h">
+    <ClInclude Include="..\..\source\SWInputController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\SLLoadingScene.h">
@@ -53,13 +50,10 @@
     <ClCompile Include="..\..\source\SLAsteroidSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\SLCollisionController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\SLGameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\SLInputController.cpp">
+    <ClCompile Include="..\..\source\SWInputController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\SLLoadingScene.cpp">
