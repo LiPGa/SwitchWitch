@@ -18,7 +18,9 @@ using namespace cugl;
 class Unit
 {
 public:
-    static const cugl::Vec2 defaultDirection;
+//    static const cugl::Vec2 defaultDirection;
+    cugl::Vec2 defaultDirection;
+
 
 public:
     /** Available colors for a unit*/
@@ -32,15 +34,17 @@ public:
 private:
     /** Available attack pattern of a unit, suppose the position of the attacker is (0, 0) and they are facing south*/
     vector<cugl::Vec2> basicAttack;
-
+    
     vector<cugl::Vec2> specialAttack;
 
     cugl::Vec2 direction;
 
     Colors color;
+    
 
 #pragma mark Constructors
 public:
+    Unit() {}
     /**
      * Creates a unit with the given color and attck pattern
      *
@@ -56,7 +60,7 @@ public:
      */
     ~Unit() {}
 
-    Unit() {}
+
     /**
      * @return unit's basic attack
      */
@@ -74,9 +78,14 @@ public:
     /**
      * @return unit's color
      */
-    Colors getColor()
+    Color4 getColor()
     {
-        return color;
+        switch(color) {
+            case red: return Color4::RED;
+            case green: return Color4::GREEN;
+            case blue: return Color4::BLUE;
+            default: return Color4::RED;
+        }
     }
     /**
      * @return unit's direction

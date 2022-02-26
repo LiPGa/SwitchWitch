@@ -15,15 +15,20 @@ using namespace cugl;
  * @param width The width of the board
  * @param height The height of the board
  */
+Board::Board(){}
 Board::Board(const int r, const int c)
 {
     row = r;
     col = c;
+    matrix = vector<vector<Square>>(row, vector<Square>(col));
+
 }
 Board::Board(Vec2 v)
 {
     row = v.x;
     col = v.y;
+    matrix = vector<vector<Square>>(row, vector<Square>(col));
+
 }
 
 /**

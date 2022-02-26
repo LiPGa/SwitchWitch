@@ -15,6 +15,9 @@
 #include <cugl/cugl.h>
 #include <vector>
 #include <unordered_set>
+#include "SWSquare.hpp"
+#include "SWUnit.hpp"
+#include "SWBoard.hpp"
 #include "SLShip.h"
 #include "SLPhotonSet.h"
 #include "SLAsteroidSet.h"
@@ -42,19 +45,27 @@ protected:
     /** The JSON value with all of the constants */
     std::shared_ptr<cugl::JsonValue> _constants;
     /** Location and animation information for the ship */
-    std::shared_ptr<Ship> _ship;
+//    std::shared_ptr<Ship> _ship;
     /** The location of all of the active asteroids */
-    AsteroidSet _asteroids;
-
+//    AsteroidSet _asteroids;
+    
+    /** The active units on the board*/
+    vector<Unit> _unit_vec;
+    
+    /** The board*/
+    Board _board;
+    
+    int _turns;
+    int _score;
     
     // VIEW items are going to be individual variables
     // In the future, we will replace this with the scene graph
     /** The backgrounnd image */
     std::shared_ptr<cugl::Texture> _background;
-    /** The text with the current health */
-    std::shared_ptr<cugl::TextLayout> _text;
-    /** The sound of a ship-asteroid collision */
-    std::shared_ptr<cugl::Sound> _bang;
+    /** The text with the current remaining turns */
+    std::shared_ptr<cugl::TextLayout> _turn_text;
+    /** The text with the current score */
+    std::shared_ptr<cugl::TextLayout> _score_text;
 
     
 public:
@@ -68,6 +79,8 @@ public:
      */
     GameScene() : cugl::Scene2() {}
     
+    void buildScene();
+    
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      *
@@ -80,6 +93,8 @@ public:
      * Disposes of all (non-static) resources allocated to this mode.
      */
     void dispose() override;
+    
+    
     
     /**
      * Initializes the controller contents, and starts the game
@@ -120,7 +135,7 @@ public:
     /**
      * Resets the status of the game so that we can play again.
      */
-    void reset() override;
+//    void reset() override;
 };
 
 #endif /* __SG_GAME_SCENE_H__ */

@@ -29,14 +29,14 @@ public:
      * @param width The width of the board
      * @param height The height of the board
      */
+    Board();
     Board(const int row, const int col);
-
+    Board(Vec2 v);
     /**
      * Disposes the board, releasing all resources
      */
     ~Board() {}
 
-    Board(Vec2 v);
 
 #pragma mark Properties
     /**

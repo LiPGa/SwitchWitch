@@ -25,6 +25,7 @@ private:
 
 public:
 #pragma mark Constructors
+    Square(){}
     /**
      * Creats a square with the given position and unit
      */
