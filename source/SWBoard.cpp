@@ -32,7 +32,7 @@ Board::Board(Vec2 v)
 }
 
 /**
- * Switch squares
+ * Switches position of two squares on the board.
  *
  * @param value1  the position of the target square
  * @param value2  the new position of the target square after this switch
@@ -46,10 +46,10 @@ void Board::switchSquares(cugl::Vec2 pos1, cugl::Vec2 pos2)
 }
 
 /**
- * Returns the squares being attacked.
+ * Returns the squares being attacked by a given unit on a square.
  *
  * @param pos the attacker square's position
- * @return the list of the victims' position
+ * @return a list of squares being attacked.
  */
 vector<Square> Board::getVictims(cugl::Vec2 pos, bool special)
 {
@@ -57,10 +57,10 @@ vector<Square> Board::getVictims(cugl::Vec2 pos, bool special)
 }
 
 /**
- * Returns the squares being attacked.
+ * Returns the squares being attacked by a given unit on a square.
  *
  * @param pos the attacker square's position
- * @return the list of the victims' position
+ * @return a list of squares being attacked.
  */
 vector<Square> Board::getVictims(Square square, bool special)
 {
@@ -75,6 +75,12 @@ vector<Square> Board::getVictims(Square square, bool special)
     return result;
 }
 
+/** 
+ * Returns if a square exists on the board.
+ * 
+ * @param pos the position of the square.
+ * @return whether the square exists.
+*/
 bool Board::doesSqaureExist(cugl::Vec2 pos)
 {
     return ((pos.x >= 0) &&
