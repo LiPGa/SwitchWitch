@@ -21,3 +21,5 @@ Square::Square(const cugl::Vec2 &pos, Unit &unit)
     _pos = pos;
     _unit = unit;
 }
+
+

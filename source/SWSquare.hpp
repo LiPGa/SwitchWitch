@@ -68,6 +68,15 @@ public:
      * @param value the unit on this ship
      */
     void setUnit(Unit value) { _unit = value; }
+    
+    /**
+     * Override the == operator
+     */
+    bool operator==(const Square& s) const {
+        if (this->_pos.x == s.getPosition().x && this->_pos.y == s.getPosition().y)
+            return true;
+        else return false;
+    }
 };
 
 #endif /* SWSquare_hpp */

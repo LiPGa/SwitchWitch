@@ -51,6 +51,28 @@ protected:
     
     /** The active units on the board*/
     vector<Unit> _unit_vec;
+    /** The active (poly2) units on the board*/
+    vector<Poly2> _units;
+    /** The active (poly2) squares on the board*/
+    vector<Poly2> _squares;
+    
+    /** The pair with the first = squarePoly and second = unitPoly correspondingly*/
+    typedef std::pair<Poly2, Poly2> values;
+    
+    /** Self-defined hash function for square */
+    struct square_hash
+    {
+        std::size_t operator () (Square const& s) const
+        {
+            cugl::Vec2 vec2 = s.getPosition();
+            size_t rowHash = std::hash<int>()(vec2.x);
+            size_t colHash = std::hash<int>()(vec2.y) << 1;
+            return rowHash ^ colHash;
+        }
+    };
+    /** A map with key = Square, and value = pair<sqaurePoly, unitPoly> correspondingly */
+    std::unordered_map<Square, values, square_hash> _map;
+    
     
     /** The board*/
     Board _board;

@@ -75,6 +75,29 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _score_text = TextLayout::allocWithText(turnMsg, assets->get<Font>("pixel32"));
     _score_text->layout();
     
+    // Create Poly2 objects
+    std::shared_ptr<PolyFactory> polyFactory = make_shared<PolyFactory>();
+    // Create the squares & units and put them in the map
+    for (int i=0;i<5;i++) {
+        for(int j=0;j<5;++j){
+            // square
+            auto square = _board.getSquare(Vec2(i,j));
+            Vec2 squareOrigin = square.getPosition();
+            Poly2 squarePoly = polyFactory->makeRect(squareOrigin, Vec2(SQUARE_SIZE, SQUARE_SIZE));
+            _squares.push_back(squarePoly);
+            
+            // unit
+            auto unit = square.getUnit();
+            auto unitOrigin = squareOrigin + Vec2(SQUARE_SIZE/2, SQUARE_SIZE/2);
+            Poly2 unitPoly = polyFactory->makeCircle(unitOrigin, UNIT_SIZE);
+            _units.push_back(unitPoly);
+            
+            // push to the map
+            std::pair<Poly2, Poly2> polyPair(squarePoly, unitPoly);
+            _map[square] = polyPair;
+        }
+    }
+
     reset();
     return true;
 }
@@ -112,7 +135,20 @@ void GameScene::dispose() {
  */
 void GameScene::update(float timestep) {
     // Read the keyboard for each controller.
-    
+    // Read the input
+    _input.update();
+//    if (_input.didPress()) {
+//        Vec2 pos = _input.getPosition() - getSize()/2;
+//        for (int i=0;i<5;i++) {
+//            for(int j=0;j<5;++j){
+//                // see if any this click is inside any sqaure
+//                auto square = _board.getSquare(Vec2(i,j));
+////                if (square.) {
+////                    CULog();
+////                }
+//            }
+//        }
+//    }
     
     // Update the score meter
     _score_text->setText(strtool::format("Score %d", _score));
@@ -139,23 +175,20 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch) {
     std::shared_ptr<Vec2> commonOffset = make_shared<Vec2>(getSize() / 2);
     // batch->draw(_background,Rect(Vec2::ZERO, getSize()));
     
-    std::shared_ptr<PolyFactory> polyFactory = make_shared<PolyFactory>();
-
+    // draw the squares
+    for (Poly2 squarePoly : _squares) {
+        batch->setColor(Color4::BLACK);
+        batch->outline(Rect(squarePoly), *commonOffset);
+        batch->setColor(Color4::WHITE);
+        batch->fill(squarePoly, *commonOffset);
+    }
+    
+    // draw the unit
     for (int i=0;i<5;i++) {
         for(int j=0;j<5;++j){
-            // draw the square
             auto square = _board.getSquare(Vec2(i,j));
-            Vec2 squareOrigin = square.getPosition();
-            Poly2 squarePoly = polyFactory->makeRect(squareOrigin, Vec2(SQUARE_SIZE, SQUARE_SIZE));
-            batch->setColor(Color4::BLACK);
-            batch->outline(Rect(squarePoly), *commonOffset);
-            batch->setColor(Color4::WHITE);
-            batch->fill(squarePoly, *commonOffset);
-            
-            // draw the unit
             auto unit = square.getUnit();
-            auto unitOrigin = squareOrigin + Vec2(SQUARE_SIZE/2, SQUARE_SIZE/2);
-            Poly2 unitPoly = polyFactory->makeCircle(unitOrigin, UNIT_SIZE);
+            Poly2 unitPoly = _map.at(square).second;
             batch->setColor(unit.getColor());
             batch->fill(unitPoly, *commonOffset);
         }
