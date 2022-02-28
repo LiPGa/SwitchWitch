@@ -92,16 +92,6 @@ void GameScene::dispose() {
 
 #pragma mark -
 #pragma mark Gameplay Handling
-/**
- * Resets the status of the game so that we can play again.
- */
-//void GameScene::reset() {
-//    _ship->setPosition(getSize()/2);
-//    _ship->setAngle(0);
-//    _ship->setVelocity(Vec2::ZERO);
-//    _ship->setHealth(_constants->get("ship")->getInt("health",0));
-//    _asteroids.init(_constants->get("asteroids"));
-//}
 
 /**
  * The method called to update the game mode.

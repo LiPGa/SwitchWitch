@@ -18,9 +18,6 @@
 #include "SWSquare.hpp"
 #include "SWUnit.hpp"
 #include "SWBoard.hpp"
-#include "SLShip.h"
-#include "SLPhotonSet.h"
-#include "SLAsteroidSet.h"
 #include "SWInputController.h"
 
 
@@ -135,7 +132,6 @@ public:
     /**
      * Resets the status of the game so that we can play again.
      */
-//    void reset() override;
 };
 
 #endif /* __SG_GAME_SCENE_H__ */
