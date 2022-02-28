@@ -9,10 +9,20 @@
 #include "SWUnit.hpp"
 using namespace cugl;
 
+/** The default direction of a unit.
+ * This default direction repesents the direction the unit is assumed to be facing,
+ * when inputing information reguarding the direction of attacks.
+ * In other words, if the unit is facing in the default direction, all vectors
+ * that represent the direction the unit should attack are not rotated.
+ * If the unit is facing a direction different from the default direction, 
+ * all attack vectors are rotated so that an attack faces the direction of the unit.
+ * 
+ * Currently, the default directio is Vec2(1,0).
+*/
 //const cugl::Vec2 defaultDerection = Vec2::UNIT_X;
 
 /**
- * Creates a unit with the given color and attack pattern.
+ * Creates a unit given a color, direction, basic attack pattern, and special attack pattern.
  *
  * @param color the unit color
  * @param basicAttack the basic attack pattern of the unit
