@@ -18,6 +18,7 @@ private:
     /** Size of the board */
     int row;
     int col;
+
     /** Square matrix on this board*/
     vector<vector<Square>> matrix;
 
@@ -65,7 +66,7 @@ public:
     }
 
     /**
-     * Switch squares
+     * Switches position of two squares on the board.
      *
      * @param value1  the position of the target square
      * @param value2  the new position of the target square after this switch
@@ -73,27 +74,27 @@ public:
     void switchSquares(cugl::Vec2 pos1, cugl::Vec2 pos2);
 
     /**
-     * Returns the squares being attacked.
+     * Returns the squares being attacked by a given unit on a square.
      *
      * @param pos the attacker square's position
-     * @return the list of the victims' position
+     * @return a list of squares being attacked.
      */
     vector<Square> getVictims(cugl::Vec2 pos, bool special);
 
     /**
-     * Returns the squares being attacked.
+     * Returns the squares being attacked by a given unit on a square.
      *
      * @param pos the attacker square's position
-     * @return the list of the victims' position
+     * @return a list of squares being attacked.
      */
     vector<Square> getVictims(Square square, bool special);
 
-    /**
-     Returns 1 if the square exists at the given Vec2 position
-     returns 0 otherwise
-     @param pos the position being questioned
-     @return a bool with 1 meaning yes, 0 meaning no
-     */
+    /** 
+     * Returns if a square exists on the board.
+     * 
+     * @param pos the position of the square.
+     * @return whether the square exists.
+    */
     bool doesSqaureExist(cugl::Vec2 pos);
 };
 #endif /* SWBoard_hpp */

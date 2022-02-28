@@ -38,20 +38,20 @@ public:
 
 #pragma mark Properties
     /**
-     * Returns the posiSquarehis square.
+     * Returns the position of the square relative to the board.
+     * 
+     * This is location of the center of the square.
      *
-     * This is locationSquareenter pixel of the square Squaren.
-     *
-     * @retuSquaresition of this square
+     * @return position of the square (Vec2)
      */
     const cugl::Vec2 &getPosition() const { return _pos; }
 
     /**
      * Sets the position of this square.
      *
-     * This is location of the center pixel of the square on the screen.
+     * This is location of the center of the square.
      *
-     * @param value the position of this ship
+     * @param value the position of this square.
      */
     void setPosition(cugl::Vec2 value) { _pos = value; }
 
