@@ -81,6 +81,21 @@ protected:
     std::shared_ptr<cugl::Texture> _blueUnitTexture;
     std::shared_ptr<cugl::Texture> _greenUnitTexture;
     
+    //TEXTURES SPECIAL UNITS - DIAGONAL
+    std::shared_ptr<cugl::Texture> _diagonalBlueTexture;
+    std::shared_ptr<cugl::Texture> _diagonalGreenTexture;
+    std::shared_ptr<cugl::Texture> _diagonalRedTexture;
+    
+    //TEXTURES SPECIAL UNITS - TWO-FORWARD
+    std::shared_ptr<cugl::Texture> _twoForwardBlueTexture;
+    std::shared_ptr<cugl::Texture> _twoForwardGreenTexture;
+    std::shared_ptr<cugl::Texture> _twoForwardRedTexture;
+    
+    //TEXTURES SPECIAL UNITS - THREE-WAY
+    std::shared_ptr<cugl::Texture> _threeWayBlueTexture;
+    std::shared_ptr<cugl::Texture> _threeWayGreenTexture;
+    std::shared_ptr<cugl::Texture> _threeWayRedTexture;
+    
     /** The pair with the first = squarePoly and second = unitPoly correspondingly*/
     typedef std::pair<Poly2, Poly2> values;
     

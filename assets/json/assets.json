@@ -28,6 +28,33 @@
         },
         "green-unit":{
             "file": "textures/green_unit.png"
+        },
+        "diagonal-blue":{
+            "file": "textures/diagonal_blue.png"
+        },
+        "diagonal-green":{
+            "file": "textures/diagonal_green.png"
+        },
+        "diagonal-red":{
+            "file": "textures/diagonal_red.png"
+        },
+        "three-way-blue":{
+            "file": "textures/three_way_blue_unit.png"
+        },
+        "three-way-green":{
+            "file": "textures/three_way_green_unit.png"
+        },
+        "three-way-red":{
+            "file": "textures/three_way_red_unit.png"
+        },
+        "two-forward-blue":{
+            "file": "textures/two_forward_blue_unit.png"
+        },
+        "two-forward-green":{
+            "file": "textures/two_forward_green_unit.png"
+        },
+        "two-forward-red":{
+            "file": "textures/two_forward_red_unit.png"
         }
     },
     "fonts": {

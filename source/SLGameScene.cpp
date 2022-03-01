@@ -44,6 +44,16 @@ using namespace std;
 #define SQUARE_SELECTED_TEXTURE "square-selected"
 #define SQUARE_ATTACKED_TEXTURE "square-attacked"
 #define SQUARE_SWAP_TEXTURE "square-swap"
+#define DIAGONAL_BLUE "diagonal-blue"
+#define DIAGONAL_GREEN "diagonal-green"
+#define DIAGONAL_RED "diagonal-red"
+#define THREE_WAY_BLUE "three-way-blue"
+#define THREE_WAY_GREEN "three-way-green"
+#define THREE_WAY_RED "three-way-red"
+#define TWO_FORWARD_BLUE "two-forward-blue"
+#define TWO_FORWARD_GREEN "two-forward-green"
+#define TWO_FORWARD_RED "two-forward-red"
+
 
 #pragma mark -
 #pragma mark Constructors
@@ -86,6 +96,18 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _redUnitTexture = _assets->get<Texture>(RED_UNIT);
     _blueUnitTexture = _assets->get<Texture>(BLUE_UNIT);
     _greenUnitTexture = _assets->get<Texture>(GREEN_UNIT);
+    
+    _diagonalRedTexture = _assets->get<Texture>(DIAGONAL_RED);
+    _diagonalBlueTexture = _assets->get<Texture>(DIAGONAL_BLUE);
+    _diagonalGreenTexture = _assets->get<Texture>(DIAGONAL_GREEN);
+    
+    _twoForwardRedTexture = _assets->get<Texture>(TWO_FORWARD_RED);
+    _twoForwardBlueTexture = _assets->get<Texture>(TWO_FORWARD_BLUE);
+    _twoForwardGreenTexture = _assets->get<Texture>(TWO_FORWARD_GREEN);
+    
+    _threeWayRedTexture = _assets->get<Texture>(THREE_WAY_RED);
+    _threeWayBlueTexture = _assets->get<Texture>(THREE_WAY_BLUE);
+    _threeWayGreenTexture = _assets->get<Texture>(THREE_WAY_GREEN);
     
     _currentState = SELECTING_UNIT;
     //Initialize Board
@@ -135,7 +157,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             unit.setBasicAttack(basicAttack);
             
             auto randomNumber = rand() % 100;
-            /*
+        
             if (randomNumber <= 70) {
                 
             } else if (randomNumber > 70 && randomNumber <= 80) {
@@ -145,7 +167,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             } else {
                 unit.setSpecialAttack(diagonalAttack);
             }
-             */
+        
             unit.setColor(Unit::Color(randomNumber%3));
             
             // Assign Unit to Square
@@ -153,12 +175,37 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             std::shared_ptr<cugl::Texture> unitTexture = _redUnitTexture;
             CULog("Unit Color %d", unit.getColor());
             if (unit.getColor() == unit.RED) {
-                unitTexture = _redUnitTexture;
+                if (unit.getSpecialAttack() == twoForwardAttack) {
+                    unitTexture = _twoForwardRedTexture;
+                } else if (unit.getSpecialAttack() == threeWayAttack) {
+                    unitTexture = _threeWayRedTexture;
+                } else if (unit.getSpecialAttack() == diagonalAttack) {
+                    unitTexture = _diagonalRedTexture;
+                } else {
+                    unitTexture = _redUnitTexture;
+                }
             } else if (unit.getColor() == unit.GREEN) {
-                unitTexture = _greenUnitTexture;
+                if (unit.getSpecialAttack() == twoForwardAttack) {
+                    unitTexture = _twoForwardGreenTexture;
+                } else if (unit.getSpecialAttack() == threeWayAttack) {
+                    unitTexture = _threeWayGreenTexture;
+                } else if (unit.getSpecialAttack() == diagonalAttack) {
+                    unitTexture = _diagonalGreenTexture;
+                } else {
+                    unitTexture = _greenUnitTexture;
+                }
             } else if (unit.getColor() == unit.BLUE) {
-                unitTexture = _blueUnitTexture;
+                if (unit.getSpecialAttack() == twoForwardAttack) {
+                    unitTexture = _twoForwardBlueTexture;
+                } else if (unit.getSpecialAttack() == threeWayAttack) {
+                    unitTexture = _threeWayBlueTexture;
+                } else if (unit.getSpecialAttack() == diagonalAttack) {
+                    unitTexture = _diagonalBlueTexture;
+                } else {
+                    unitTexture = _blueUnitTexture;
+                }
             }
+            
             
             auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
             squareNode->addChild(unitNode);
