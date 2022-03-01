@@ -21,6 +21,12 @@ using namespace cugl;
 */
 //const cugl::Vec2 defaultDerection = Vec2::UNIT_X;
 
+Unit::Unit(){
+    defaultDirection = Vec2::UNIT_X;
+    this->_color = RED;
+    this->_direction = Vec2::UNIT_X;
+}
+
 /**
  * Creates a unit given a color, direction, basic attack pattern, and special attack pattern.
  *
@@ -29,11 +35,11 @@ using namespace cugl;
  * @param specialAttack the special attack pattern of the unit
  * @param direction the direction the unit is facing
  */
-Unit::Unit(const Colors color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction)
+Unit::Unit(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction)
 {
     defaultDirection = Vec2::UNIT_X; 
-    this->color = color;
-    this->basicAttack = basicAttack;
-    this->direction = direction;
-    this->specialAttack = specialAttack;
+    this->_color = color;
+    this->_basicAttack = basicAttack;
+    this->_direction = direction;
+    this->_specialAttack = specialAttack;
 }

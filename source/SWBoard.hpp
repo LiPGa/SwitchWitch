@@ -48,7 +48,7 @@ public:
      * @param _pos the position of a square
      * @return the square  at a position
      */
-    const Square &getSquare(Vec2 input) const
+    Square &getSquare(Vec2 input)
     {
         return matrix[input.x][input.y];
     }
@@ -72,7 +72,14 @@ public:
      * @param value2  the new position of the target square after this switch
      */
     void switchSquares(cugl::Vec2 pos1, cugl::Vec2 pos2);
-
+    
+    /**
+     * Switches position of two units while not moving the squares.
+     * 
+     * @param value1  the position of the target square
+     * @param value2  the new position of the target square after this switch
+     */
+    void switchUnits(cugl::Vec2 pos1, cugl::Vec2 pos2);
     /**
      * Returns the squares being attacked by a given unit on a square.
      *

@@ -21,14 +21,16 @@ Board::Board(const int r, const int c)
     row = r;
     col = c;
     matrix = vector<vector<Square>>(row, vector<Square>(col));
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++){
+            matrix[i][j].setPosition(Vec2(i,j));
+        }
+    }
 
 }
 Board::Board(Vec2 v)
 {
-    row = v.x;
-    col = v.y;
-    matrix = vector<vector<Square>>(row, vector<Square>(col));
-
+    Board(v.x, v.y);
 }
 
 /**
@@ -43,6 +45,21 @@ void Board::switchSquares(cugl::Vec2 pos1, cugl::Vec2 pos2)
     Square second = getSquare(pos2);
     setSquare(pos1, s);
     setSquare(pos2, second);
+}
+
+/**
+ * Switches position of two units while not moving the squares.
+ *
+ * @param value1  the position of the target square
+ * @param value2  the new position of the target square after this switch
+ */
+void Board::switchUnits(cugl::Vec2 pos1, cugl::Vec2 pos2){
+    Square first = getSquare(pos1);
+    Square second = getSquare(pos2);
+    Unit firstUnit = first.getUnit();
+    Unit secondUnit = second.getUnit();
+    first.setUnit(secondUnit);
+    second.setUnit(firstUnit);
 }
 
 /**

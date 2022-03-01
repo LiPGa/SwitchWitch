@@ -30,6 +30,11 @@ public:
      * Creats a square with the given position and unit
      */
     Square(const cugl::Vec2 &pos, Unit &unit);
+    
+    /**
+     * Creats a square with the given position
+     */
+    Square(const cugl::Vec2 &pos);
 
     /**
      * Disposes the square. releasing all resources
@@ -60,7 +65,7 @@ public:
      *
      * @return the unit on this square
      */
-    const Unit getUnit() const { return _unit; }
+    Unit getUnit() { return _unit; }
 
     /**
      * Sets the unit on this square.

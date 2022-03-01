@@ -33,11 +33,11 @@ public:
 
 public:
     /** Available colors for a unit. Each unit will have one of the three colors.*/
-    enum Colors
+    enum Color
     {
-        red,
-        green,
-        blue
+        RED,
+        GREEN,
+        BLUE
     };
 
 private:
@@ -50,21 +50,21 @@ private:
      */
 
     /** The basic attacks of this unit*/
-    vector<cugl::Vec2> basicAttack;
+    vector<cugl::Vec2> _basicAttack;
     
     /** The special attacks of this unit*/
-    vector<cugl::Vec2> specialAttack;
+    vector<cugl::Vec2> _specialAttack;
 
     /** The direction this unit is currently facing.*/
-    cugl::Vec2 direction;
+    cugl::Vec2 _direction;
 
     /** The color of this unit.*/
-    Colors color;
+    Color _color;
     
 
 #pragma mark Constructors
 public:
-    Unit() {}
+    Unit();
     /**
      * Creates a unit given a color, direction, basic attack pattern, and special attack pattern.
      *
@@ -73,7 +73,7 @@ public:
      * @param specialAttack the special attack pattern of the unit
      * @param direction the direction the unit is facing
      */
-    Unit(const Colors color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction);
+    Unit(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction);
 
     /**
      * Disposes the unit, releasing all resources
@@ -89,7 +89,7 @@ public:
      */
     vector<cugl::Vec2> getBasicAttack()
     {
-        return basicAttack;
+        return _basicAttack;
     }
     /**
      * * Returns a list of vec2 representing all attacks
@@ -99,19 +99,28 @@ public:
      */
     vector<cugl::Vec2> getSpecialAttack()
     {
-        return specialAttack;
+        return _specialAttack;
     }
+    
     /**
      * @return unit's color
      */
-    Color4 getColor()
+    Color4 getColor4()
     {
-        switch(color) {
-            case red: return Color4::RED;
-            case green: return Color4::GREEN;
-            case blue: return Color4::BLUE;
+        switch(_color) {
+            case RED: return Color4::RED;
+            case GREEN: return Color4::GREEN;
+            case BLUE: return Color4::BLUE;
             default: return Color4::RED;
         }
+    }
+    
+    /**
+     * @return unit's color
+     */
+    Color getColor()
+    {
+        return _color;
     }
     /**
      * Returns the direction which the unit is currently facing.
@@ -120,7 +129,7 @@ public:
      */
     cugl::Vec2 getDirection()
     {
-        return direction;
+        return _direction;
     }
     /**
      * Sets the unit's basic attack. The basic attack is represented as a list of vec2 representing
@@ -131,7 +140,7 @@ public:
      */
     void setBasicAttack(vector<cugl::Vec2> attack)
     {
-        basicAttack = attack;
+        _basicAttack = attack;
     }
     /**
      * Sets the unit's special attack. The special attack is represented as a list of vec2 representing
@@ -142,16 +151,16 @@ public:
      */
     void setSpecialAttack(vector<cugl::Vec2> attack)
     {
-        specialAttack = attack;
+        _specialAttack = attack;
     }
     /**
      *Sets the unit's color
      *
      * @param c the color of the unit.
      */
-    void setColor(Colors c)
+    void setColor(Color c)
     {
-        color = c;
+        _color = c;
     }
     /**
      * Sets the unit's current direction.
@@ -161,7 +170,7 @@ public:
      */
     void setDirection(cugl::Vec2 d)
     {
-        direction = d;
+        _direction = d;
     }
 };
 

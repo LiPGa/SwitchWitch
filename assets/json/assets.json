@@ -4,6 +4,30 @@
             "file":  "textures/ice.png",
             "wrapS": "repeat",
             "wrapT": "repeat"
+        },
+        "square":{
+            "file": "textures/square.png"
+        },
+        "square-selected":{
+            "file": "textures/square_selected.png"
+        },
+        "square-swap":{
+            "file": "textures/square_swap.png"
+        },
+        "square-attacked":{
+            "file": "textures/square_attacked.png"
+        },
+        "transparent":{
+            "file": "textures/transparent_texture.png"
+        },
+        "red-unit":{
+            "file": "textures/red_unit.png"
+        },
+        "blue-unit":{
+            "file": "textures/blue_unit.png"
+        },
+        "green-unit":{
+            "file": "textures/green_unit.png"
         }
     },
     "fonts": {

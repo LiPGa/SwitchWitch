@@ -41,10 +41,23 @@ protected:
     // MODELS should be shared pointers or a data structure of shared pointers
     /** The JSON value with all of the constants */
     std::shared_ptr<cugl::JsonValue> _constants;
-    /** Location and animation information for the ship */
-//    std::shared_ptr<Ship> _ship;
-    /** The location of all of the active asteroids */
-//    AsteroidSet _asteroids;
+    
+    /** Possible states of the level.
+     * Name of state is describing what the current state of the game is waiting for.
+     * For example, the selecting_unit state means the game is waiting for the player to select a unit.
+     */
+    enum State
+    {
+        SELECTING_UNIT,
+        SELECTING_SWAP,
+        ANIMATION
+    };
+    
+    /** The current state of the selection process*/
+    State _currentState;
+    
+    Square _selectedSquare;
+    Square _swappingSquare;
     
     /** The active units on the board*/
     vector<Unit> _unit_vec;
@@ -52,6 +65,21 @@ protected:
     vector<Poly2> _units;
     /** The active (poly2) squares on the board*/
     vector<Poly2> _squares;
+    
+    // VIEW
+    std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
+    
+    //TEXTURES SQUARES
+    std::shared_ptr<cugl::Texture> _squareTexture;
+    std::shared_ptr<cugl::Texture> _selectedSquareTexture;
+    std::shared_ptr<cugl::Texture> _attackedSquareTexture;
+    std::shared_ptr<cugl::Texture> _swapSquareTexture;
+    
+    //TEXTURES UNITS
+    std::shared_ptr<cugl::Texture> _redUnitTexture;
+    std::shared_ptr<cugl::Texture> _blueUnitTexture;
+    std::shared_ptr<cugl::Texture> _greenUnitTexture;
     
     /** The pair with the first = squarePoly and second = unitPoly correspondingly*/
     typedef std::pair<Poly2, Poly2> values;
@@ -72,7 +100,7 @@ protected:
     
     
     /** The board*/
-    Board _board;
+    std::shared_ptr<Board> _board;
     
     int _turns;
     int _score;
@@ -98,7 +126,6 @@ public:
      */
     GameScene() : cugl::Scene2() {}
     
-    void buildScene();
     
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -154,6 +181,41 @@ public:
     /**
      * Resets the status of the game so that we can play again.
      */
+
+private:
+    /**
+     * Returns the tag of a square node based on the position of the square.
+     *
+     * The children of a node are organized by tag number.
+     * This method returns the appropriate tag number given the position of a square.
+     *
+     * @param x     The x position of the square
+     * @param y     The y position of the square
+     * @return    The tag of the square node
+     */
+    int squarePosToTag(const int x, const int y);
+
+    /**
+     * Returns the tag of a square node based on the position of the square.
+     *
+     * The children of a node are organized by tag number.
+     * This method returns the appropriate tag number given the position of a square.
+     *
+     * @param position The position of the square
+     * @return    The tag of the square node
+     */
+    int squarePosToTag(Vec2 position) {
+        return squarePosToTag(position.x, position.y);
+    }
+
+    /**
+     * Returns the position of a square node based on the tag number of a square node.
+     * The children of a node are organized by tag number.
+     *
+     * @param tagNum The tag number of the node
+     * @return The position of the square in a Vec2
+     */
+    cugl::Vec2 tagToSquarePos(const int tagNum);
 };
 
 #endif /* __SG_GAME_SCENE_H__ */
