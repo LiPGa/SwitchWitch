@@ -229,7 +229,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
             squareNode->addChild(unitNode);
 
-            unitNode->setAngle(atan2(unitDirection.y, unitDirection.x));
+            // -y becuase the downward direction is (0, 1) and upward direction is (0, -1)
+            unitNode->setAngle(atan2(-unitDirection.y, unitDirection.x));
 //            CULog("direction = %f, %f", unit.getDirection().x, unit.getDirection().y);
             
             /** Reason why BOARD_SIZE - 1 - j is because the mouse coordinates are
