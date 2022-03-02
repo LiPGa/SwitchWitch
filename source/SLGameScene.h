@@ -199,6 +199,18 @@ public:
 
 private:
     /**
+     * Returns the score based on the units that have been attacked.
+     *
+     * The score = the # of units killed times the # of colors killed times the # of special units killed.
+     *
+     * @param colorNum     The number of colors killed
+     * @param basicUnitsNum    The number of basic units killed
+     * @param specialUnitsNum The number of special units killed
+     * @return    The score of this attack
+     */
+    int calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum);
+    
+    /**
      * Returns the tag of a square node based on the position of the square.
      *
      * The children of a node are organized by tag number.
