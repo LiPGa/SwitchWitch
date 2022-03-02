@@ -54,6 +54,9 @@ private:
     
     /** The special attacks of this unit*/
     vector<cugl::Vec2> _specialAttack;
+    
+    /** The direction this unit facing according to the texture.*/
+    cugl::Vec2 _initDirection;
 
     /** The direction this unit is currently facing.*/
     cugl::Vec2 _direction;
@@ -131,6 +134,17 @@ public:
     {
         return _direction;
     }
+    
+    /**
+     * Returns the initial direction which the unit was facing according to the texture.
+     *
+     * @return unit's init direction
+     */
+    cugl::Vec2 getInitDirection()
+    {
+        return _initDirection;
+    }
+    
     /**
      * Sets the unit's basic attack. The basic attack is represented as a list of vec2 representing
      * the direction and distance of an attack from its square.
@@ -171,6 +185,17 @@ public:
     void setDirection(cugl::Vec2 d)
     {
         _direction = d;
+    }
+    
+    /**
+     * Sets the unit's original direction according to the tecture.
+     *
+     * @param d the direction the unit was facing initially.
+     * Must be a unit vector that represents one of the 4 cardinal directions.
+     */
+    void setInitDirection(cugl::Vec2 d)
+    {
+        _initDirection = d;
     }
 };
 
