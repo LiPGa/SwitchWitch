@@ -159,7 +159,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             auto randomNumber = rand() % 100;
         
             if (randomNumber <= 70) {
-                
             } else if (randomNumber > 70 && randomNumber <= 80) {
                 unit.setSpecialAttack(twoForwardAttack);
             } else if (randomNumber > 80 && randomNumber <= 90) {
@@ -187,14 +186,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             }
             unit.setDirection(unitDirection);
             unit.setInitDirection(unitDirection);
-            CULog("direction = %f, %f", unitDirection.x, unitDirection.y);
             
             unit.setColor(Unit::Color(randomNumber%3));
             
             // Assign Unit to Square
             _board->getSquare(squarePosition).setUnit(unit);
             std::shared_ptr<cugl::Texture> unitTexture = _redUnitTexture;
-            CULog("Unit Color %d", unit.getColor());
+//            CULog("Unit Color %d", unit.getColor());
             if (unit.getColor() == unit.RED) {
                 if (unit.getSpecialAttack() == twoForwardAttack) {
                     unitTexture = _twoForwardRedTexture;
@@ -230,6 +228,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             
             auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
             squareNode->addChild(unitNode);
+
+            unitNode->setAngle(atan2(unitDirection.y, unitDirection.x));
+//            CULog("direction = %f, %f", unit.getDirection().x, unit.getDirection().y);
             
             /** Reason why BOARD_SIZE - 1 - j is because the mouse coordinates are
              * calculated from the top left corner of the screen
@@ -332,6 +333,9 @@ void GameScene::update(float timestep) {
              
         }
         else if (_input.didRelease()){
+            CULog("direction is: %f, %f", square.getUnit().getDirection().x, square.getUnit().getDirection().y);
+            CULog("node angle is: %f", squareNode->getChild(0)->getAngle()*180/M_PI);
+                
             if (_currentState == SELECTING_SWAP){
                 _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->setTexture(_squareTexture);
                 _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_selectedSquare.getPosition()))->setTexture(_squareTexture);
@@ -340,23 +344,23 @@ void GameScene::update(float timestep) {
                     // swap
                     auto selectedUnitNode = _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_selectedSquare.getPosition()))->getChild(0);
                     auto swappedUnitNode = _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->getChild(0);
-                    CULog("------------------------33: %i", selectedUnitNode==nullptr);
-                    CULog("------------------------34: %i", swappedUnitNode==nullptr);
+                    // remove the children
                     _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->removeAllChildren();
                     _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_selectedSquare.getPosition()))->removeAllChildren();
+                    // readd the children
                     _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->addChild(selectedUnitNode);
                     _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_selectedSquare.getPosition()))->addChild(swappedUnitNode);
                     
                     // rotation
-//                    Vec2 swapDirection = _selectedSquare.getPosition()-_swappingSquare.getPosition();
-//                    _swappingSquare.getUnit().setDirection(swapDirection + _swappingSquare.getUnit().getInitDirection());
-//                    
-//                    CULog("curr dir: %f, %f". _swappingSquare.getUnit().getDirection().x, _swappingSquare.getUnit().getDirection().y);
-//                    
-//                    Vec2 initDirection = _swappingSquare.getUnit().getInitDirection();
-//                    _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->getChild(0)->setAngle(atan2(swapDirection.y, swapDirection.x)+atan2(initDirection.y,initDirection.x));
-//                    _swappingSquare.getUnit()..getNode()->getChildByNae("unit")->setAngle(atan2(swapDirection.y, swapDirection.x)+M_PI);
-                    CULog("-------------!!!!!!!!-----------");
+                    Vec2 swapDirection = Vec2(_swappingSquare.getPosition().x-_selectedSquare.getPosition().x, _selectedSquare.getPosition().y-_swappingSquare.getPosition().y);
+                    _swappingSquare.getUnit().setDirection(swapDirection);
+//                    CULog("selectedSquare: %f, %f", _selectedSquare.getPosition().x, _selectedSquare.getPosition().y);
+//                    CULog("swappingSquare: %f, %f", _swappingSquare.getPosition().x, _swappingSquare.getPosition().y);
+//                    CULog("curr dir: %f, %f", swapDirection.x, swapDirection.y);
+
+                    // swapping is completed, so currently the selectedSquare is obtained by the tag of _swappingSquare.
+                    _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->getChild(0)->setAngle(atan2(swapDirection.y, swapDirection.x));
+
                 }
                 _currentState = SELECTING_UNIT;
             }
