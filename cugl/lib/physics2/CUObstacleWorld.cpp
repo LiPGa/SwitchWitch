@@ -325,6 +325,7 @@ void ObstacleWorld::clear() {
         obj->deactivatePhysics(*_world);
     }
     _objects.clear();
+    update(0);
 }
 
 

@@ -48,8 +48,76 @@
 
 using namespace cugl::physics2;
 
+/** The epsilon necessary for box2d not to mark as degenerate */
+#define EPSILON 0.01
+
+/**
+ * Returns true if the given vertices are a non-degenerate triangle
+ *
+ * This method will return false if the vertices are colinear.
+ *
+ * @param p The first vertex in the triangle
+ * @param q The second vertex in the triangle
+ * @param r The third vertex in the triangle
+ *
+ * @return true if the given vertices are a non-degenerate triangle
+ */
+static bool valid_shape(const b2Vec2* verts, int count) {
+    CUAssertLog(count == 3, "This validator currently only supports triangles");
+    const b2Vec2* p = verts;
+    const b2Vec2* q = verts+1;
+    const b2Vec2* r = verts+2;
+    if (fabsf(p->x * (q->y - r->y) + q->x * (r->y - p->y) + r->x * (p->y - q->y)) <= EPSILON) {
+        return false;
+    }
+    
+    // Check that box2d can perform welding
+    b2Vec2 ps[3];
+    int32 tempCount = 0;
+    for (int32 i = 0; i < count; ++i) {
+        b2Vec2 v = verts[i];
+
+        bool unique = true;
+        for (int32 j = 0; j < tempCount; ++j) {
+            if (b2DistanceSquared(v, ps[j]) < ((0.5f * b2_linearSlop) * (0.5f * b2_linearSlop))) {
+                unique = false;
+                break;
+            }
+        }
+
+        if (unique) {
+            ps[tempCount++] = v;
+        }
+    }
+
+    return tempCount == 3;
+}
+
 #pragma mark -
 #pragma mark Constructors
+/**
+ * Initializes a (not necessarily convex) polygon
+ *
+ * The given polygon defines an implicit coordinate space. The body (and hence
+ * the rotational center) will be placed at the given origin position.
+ *
+ * @param poly   The polygon vertices
+ * @param origin The rotational center with respect to the vertices
+ *
+ * @return  true if the obstacle is initialized properly, false otherwise.
+ */
+bool PolygonObstacle::init(const Poly2& poly, const Vec2 origin) {
+    Obstacle::init(Vec2::ZERO);
+        
+    // Compute anchor from absolute origin
+    _bodyinfo.position.Set(origin.x,origin.y);
+    Rect bounds = poly.getBounds();
+    _anchor.x = (origin.x-bounds.origin.x)/bounds.size.width;
+    _anchor.y = (origin.y-bounds.origin.y)/bounds.size.height;
+    setPolygon(poly);
+    return true;
+}
+
 /**
  * Initializes a (not necessarily convex) polygon
  *
@@ -63,7 +131,7 @@ using namespace cugl::physics2;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool PolygonObstacle::init(const Poly2& poly, const Vec2 anchor) {
+bool PolygonObstacle::initWithAnchor(const Poly2& poly, const Vec2 anchor) {
     Obstacle::init(Vec2::ZERO);
     
     // Compute the position from the anchor point
@@ -131,6 +199,7 @@ void PolygonObstacle::resetShapes() {
     Vec2 pos = getPosition();
     _shapes = new b2PolygonShape[ntris];
     b2Vec2 triangle[3];
+    int index = 0;
     for(int ii = 0; ii < ntris; ii++) {
         for(int jj = 0; jj < 3; jj++) {
             Uint32 ind = _polygon.indices[3*ii+jj];
@@ -138,8 +207,12 @@ void PolygonObstacle::resetShapes() {
             triangle[jj].x = temp.x;
             triangle[jj].y = temp.y;
         }
-        _shapes[ii].Set(triangle,3);
+        // Only add non-degenerate triangles
+        if (valid_shape(triangle, 3)) {
+            _shapes[index++].Set(triangle,3);
+        }
     }
+    ntris = index;
     
     if (_geoms == nullptr) {
         _geoms = new b2Fixture*[ntris];
@@ -230,6 +303,9 @@ void PolygonObstacle::createFixtures() {
     
     // Create the fixtures
     releaseFixtures();
+    if (_geoms == nullptr) {
+        _geoms = new b2Fixture*[_fixCount];
+    }
     for(int ii = 0; ii < _fixCount; ii++) {
         _fixture.shape = &(_shapes[ii]);
         _geoms[ii] = _body->CreateFixture(&_fixture);
@@ -249,9 +325,8 @@ void PolygonObstacle::releaseFixtures() {
             _geoms[ii] = nullptr;
         }
     }
-    if (_geoms != nullptr && _fixCount != (int)_polygon.indices.size()/3) {
+    if (_geoms != nullptr) {
         delete[] _geoms;
-        _fixCount = (int)_polygon.indices.size()/3;
-        _geoms = new b2Fixture*[_fixCount];
+        _geoms = nullptr;
     }
 }

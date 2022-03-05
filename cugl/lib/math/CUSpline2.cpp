@@ -335,7 +335,9 @@ void Spline2::setClosed(bool flag) {
     }
     
     if (flag && !_closed) {
-        addAnchor(_points[0]);
+        if (_points[0] != _points.back()) {
+            addAnchor(_points[0]);
+        }
     } else if (!flag && _closed) {
         deleteAnchor(_size);
     }

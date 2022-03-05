@@ -1,13 +1,19 @@
 //
-//  SWInputController.hpp
-//  ShipLab
+//  SWInputController.h
+//  SwitchWitch
 //
-//  Created by Maxim Baduk on 2/24/22.
-//  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
+//  This class buffers in input from the devices and converts it into its
+//  semantic meaning. If your game had an option that allows the player to
+//  remap the control keys, you would store this information in this class.
+//  That way, the main game scene does not have to keep track of the current
+//  key mapping.
 //
-
-#ifndef SWInputController_h
-#define SWInputController_h
+//  Based on Geometry Lab
+//  Author: Walker M. White
+//  Version: 1/20/22
+//
+#ifndef __SW_INPUT_CONTROLLER_H__
+#define __SW_INPUT_CONTROLLER_H__
 
 #include <stdio.h>
 
@@ -34,8 +40,8 @@ protected:
     bool _prevDown;
 
 protected:
-    /** The key for the mouse listeners */
-    Uint32 _mouseKey;
+	/** The key for the mouse listeners */
+	Uint32 _mouseKey;
     /** The mouse position (for mice-based interfaces) */
     cugl::Vec2 _mousePos;
     /** Whether the (left) mouse button is down */
@@ -212,4 +218,7 @@ private:
     void fingerMovedCB(const cugl::TouchEvent& event, const cugl::Vec2 previous, bool focus);
 };
 
-#endif /* SWInputController_h */
+
+
+
+#endif /* __SW_INPUT_CONTROLLER_H__ */

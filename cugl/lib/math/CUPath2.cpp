@@ -268,7 +268,7 @@ std::vector<Uint32> Path2::getIndices() const {
 size_t Path2::getIndices(std::vector<Uint32>& buffer) const {
     size_t isize = buffer.size();
     buffer.reserve(isize+2*vertices.size());
-    for(Uint32 ii = 0; ii < vertices.size(); ii++) {
+    for(Uint32 ii = 0; ii < vertices.size()-1; ii++) {
         buffer.push_back(ii  );
         buffer.push_back(ii+1);
     }
