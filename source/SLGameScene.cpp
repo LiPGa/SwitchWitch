@@ -298,6 +298,11 @@ void GameScene::update(float timestep) {
             }
             else if (_currentState == SELECTING_SWAP 
                 && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1) {
+                
+                _attackedColorNum = 0;
+                _attackedBasicNum = 0;
+                _attackedSpecialNum = 0;
+                
                 _currentState = CONFIRM_SWAP;
                 _swappingSquare = squareOnMouse;
                 // Rotation and Swapping of Model
@@ -305,22 +310,33 @@ void GameScene::update(float timestep) {
                 _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 squareOnMouse->getViewNode()->setTexture(_swapSquareTexture);
                 vector<shared_ptr<Square>> attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
-                for each (shared_ptr<Square> attackedSquares in attackedSquares) {
+                
+                unordered_set<Unit::Color> attackedColors;
+
+                for (shared_ptr<Square> attackedSquares: attackedSquares) {
                     attackedSquares->getViewNode()->setTexture(_attackedSquareTexture);
+                    
+                    auto attackedUnit = attackedSquares->getUnit();
+                    attackedColors.insert(attackedUnit->getColor());
+                    
+                    if (attackedUnit->getSpecialAttack().size()==0) _attackedBasicNum++;
+                    else _attackedSpecialNum++;
                 }
+                _attackedColorNum = (int) attackedColors.size();
+                CULog("%d %d %d", _attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare) {
                 _currentState = SELECTING_SWAP;
                 // If we are de-confirming a swap, we must undo the swap.
                 _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
-                for each (shared_ptr<Square> squares in _board->getAllSquares()) {
+                for (shared_ptr<Square> squares : _board->getAllSquares()) {
                     squares->getViewNode()->setTexture(_squareTexture);
                 }
                 _selectedSquare->getViewNode()->setTexture(_selectedSquareTexture);
             }
         }
         else if (_input.didRelease()){ 
-            for each (shared_ptr<Square> squares in _board->getAllSquares()) {
+            for  (shared_ptr<Square> squares : _board->getAllSquares()) {
                 squares->getViewNode()->setTexture(_squareTexture);
             }
             if (_currentState == CONFIRM_SWAP){
@@ -336,6 +352,8 @@ void GameScene::update(float timestep) {
                 _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
                 _selectedSquare->getViewNode()->addChild(swappedUnitNode);
                 _swappingSquare->getViewNode()->addChild(selectedUnitNode);
+                _turns--;
+                _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
             _currentState = SELECTING_UNIT;
         }

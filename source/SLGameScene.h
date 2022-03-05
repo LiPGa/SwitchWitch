@@ -55,6 +55,14 @@ protected:
     int _turns;
     /** The current score of the player */
     int _score;
+    
+    /** The number of colors killed */
+    int _attackedColorNum;
+    /** The number of basic units killed */
+    int _attackedBasicNum;
+    /** The number of special units killed */
+    int _attackedSpecialNum;
+
 
 #pragma mark -
 #pragma mark Model Variables    
@@ -64,6 +72,7 @@ protected:
     shared_ptr<Square> _selectedSquare;
     /** Square that is currently being selected by the player to swap with the selectedSquare */
     shared_ptr<Square> _swappingSquare;
+    
 
 #pragma mark - 
 #pragma mark View Variables

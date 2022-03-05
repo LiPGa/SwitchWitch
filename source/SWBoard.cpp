@@ -95,7 +95,7 @@ vector<shared_ptr<Square>> Board::getAttackedSquares(cugl::Vec2 pos) {
         return result;
     }
     auto attackingSquare = getSquare(pos);
-    for each (Vec2 vector in attackingSquare->getUnit()->getBasicAttackRotated()) {
+    for (Vec2 vector : attackingSquare->getUnit()->getBasicAttackRotated()) {
         Vec2 squarePos = vector + attackingSquare->getPosition();
         if (doesSqaureExist(squarePos) && attackingSquare->getUnit()->getColor() != getSquare(squarePos)->getUnit()->getColor()) {
             getAttackedSquares_h(result, getSquare(squarePos));
@@ -110,7 +110,7 @@ void Board::getAttackedSquares_h(vector<shared_ptr<Square>> &listOfAttackedSquar
     }
     else {
         listOfAttackedSquares.push_back(attackingSquare);
-        for each (Vec2 vector in attackingSquare->getUnit()->getSpecialAttackRotated()) {
+        for (Vec2 vector : attackingSquare->getUnit()->getSpecialAttackRotated()) {
             Vec2 squarePos = vector + attackingSquare->getPosition();
             if (doesSqaureExist(squarePos) && attackingSquare->getUnit()->getColor() != getSquare(squarePos)->getUnit()->getColor()) {
                 getAttackedSquares_h(listOfAttackedSquares, getSquare(squarePos));
