@@ -1,11 +1,3 @@
-//
-//  SWUnit.hpp
-//  ShipLab
-//
-//  Created by Hedy Yang on 2/21/22.
-//  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
-//
-
 #ifndef SWUnit_hpp
 #define SWUnit_hpp
 
@@ -17,20 +9,6 @@ using namespace cugl;
  */
 class Unit
 {
-public:
-    /** The default direction of a unit.
-     * This default direction repesents the direction the unit is assumed to be facing,
-     * when inputing information reguarding the direction of attacks.
-     * In other words, if the unit is facing in the default direction, all vectors
-     * that represent the direction the unit should attack are not rotated.
-     * If the unit is facing a direction different from the default direction, 
-     * all attack vectors are rotated so that an attack faces the direction of the unit.
-     * 
-     * Currently, the default direction is Vec2(1,0). All units should have the same default direction.
-    */
-    cugl::Vec2 defaultDirection;
-
-
 public:
     /** Available colors for a unit. Each unit will have one of the three colors.*/
     enum Color
@@ -54,97 +32,94 @@ private:
     
     /** The special attacks of this unit*/
     vector<cugl::Vec2> _specialAttack;
-    
-    /** The direction this unit facing according to the texture.*/
-    cugl::Vec2 _initDirection;
 
     /** The direction this unit is currently facing.*/
     cugl::Vec2 _direction;
 
     /** The color of this unit.*/
     Color _color;
+
+    /** The Polygon-Node that represents this unit */
+    shared_ptr<cugl::scene2::PolygonNode> _viewNode;
     
 
 #pragma mark Constructors
 public:
-    Unit();
     /**
-     * Creates a unit given a color, direction, basic attack pattern, and special attack pattern.
+     * Creates an uninitialized Unit.
      *
-     * @param color the unit color
-     * @param basicAttack the basic attack pattern of the unit
-     * @param specialAttack the special attack pattern of the unit
-     * @param direction the direction the unit is facing
+     * You must initialize this Unit before use.
+     *
+     * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a Unit on the
+     * heap, use one of the static constructors instead.
      */
-    Unit(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction);
-
+    Unit() { }
+    
     /**
      * Disposes the unit, releasing all resources
      */
     ~Unit() {}
 
+    /**
+     * Initializes a unit given a color, direction, basic attack pattern, and special attack pattern.
+     *
+     * @param color the unit color
+     * @param basicAttack the basic attack pattern of the unit
+     * @param specialAttack the special attack pattern of the unit
+     * @param direction the direction the unit is facing
+     * @return true if initialization was successful.
+     */
+    bool init(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction);
 
+#pragma mark -
+#pragma mark Static Constructors
+    /**
+     * Returns a newly allocated unit.
+     *
+     * @param color the unit color
+     * @param basicAttack the basic attack pattern of the unit
+     * @param specialAttack the special attack pattern of the unit
+     * @param direction the direction the unit is facing
+     * @return a newly allocated Unit.
+     */
+    static std::shared_ptr<Unit>alloc(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction) {
+        std::shared_ptr<Unit> result = std::make_shared<Unit>();
+        return (result->init(color, basicAttack, specialAttack, direction) ? result : nullptr);
+    }
+
+#pragma mark -
+#pragma mark Static Identifier
+    /** The default direction of a unit.
+     * This default direction repesents the direction the unit is assumed to be facing,
+     * when inputing information reguarding the direction of attacks.
+     * In other words, if the unit is facing in the default direction, all vectors
+     * that represent the direction the unit should attack are not rotated.
+     * If the unit is facing a direction different from the default direction,
+     * all attack vectors are rotated so that an attack faces the direction of the unit.
+     *
+     * Currently, the default direction is Vec2(1,0). All units should have the same default direction.
+    */
+    static const cugl::Vec2 getDefaultDirection() { return Vec2::UNIT_X; }
+
+#pragma mark -
+#pragma mark Identifiers
     /**
      * Returns a list of vec2 representing all attacks
      * in a basic attack. The direction of attacks is based on the units default direction.
      * 
      * @return unit's basic attack pattern
      */
-    vector<cugl::Vec2> getBasicAttack()
-    {
-        return _basicAttack;
-    }
+    vector<cugl::Vec2> getBasicAttack() { return _basicAttack; }
+
     /**
-     * * Returns a list of vec2 representing all attacks
-     * in a special attack. The direction of attacks is based on the units default direction.
-     * 
-     * @return unit's special attack pattern
-     */
-    vector<cugl::Vec2> getSpecialAttack()
-    {
-        return _specialAttack;
-    }
-    
-    /**
-     * @return unit's color
-     */
-    Color4 getColor4()
-    {
-        switch(_color) {
-            case RED: return Color4::RED;
-            case GREEN: return Color4::GREEN;
-            case BLUE: return Color4::BLUE;
-            default: return Color4::RED;
-        }
-    }
-    
-    /**
-     * @return unit's color
-     */
-    Color getColor()
-    {
-        return _color;
-    }
-    /**
-     * Returns the direction which the unit is currently facing.
-     * 
-     * @return unit's direction
-     */
-    cugl::Vec2 getDirection()
-    {
-        return _direction;
-    }
-    
-    /**
-     * Returns the initial direction which the unit was facing according to the texture.
+     * Returns a list of vec2 representing all attacks in a basic attack
+     * allready rotated based on direction the unit is facing.
+     * The direction of attacks is based on the units default direction.
      *
-     * @return unit's init direction
+     * @return unit's basic attack pattern already rotated.
      */
-    cugl::Vec2 getInitDirection()
-    {
-        return _initDirection;
-    }
-    
+    vector<cugl::Vec2> getBasicAttackRotated();
+
     /**
      * Sets the unit's basic attack. The basic attack is represented as a list of vec2 representing
      * the direction and distance of an attack from its square.
@@ -152,51 +127,81 @@ public:
      *
      * @param attack the basic attack pattern of this unit.
      */
-    void setBasicAttack(vector<cugl::Vec2> attack)
-    {
-        _basicAttack = attack;
-    }
+    void setBasicAttack(vector<cugl::Vec2> attack) { _basicAttack = attack; }
+
+    /**
+     * * Returns a list of vec2 representing all attacks
+     * in a special attack. The direction of attacks is based on the units default direction.
+     * 
+     * @return unit's special attack pattern
+     */
+    vector<cugl::Vec2> getSpecialAttack() { return _specialAttack; }
+
+    /**
+     * Returns a list of vec2 representing all attacks in a special attack
+     * allready rotated based on direction the unit is facing.
+     * The direction of attacks is based on the units default direction.
+     *
+     * @return unit's special attack pattern already rotated.
+     */
+    vector<cugl::Vec2> getSpecialAttackRotated();
+
     /**
      * Sets the unit's special attack. The special attack is represented as a list of vec2 representing
      * the direction and distance of an attack from its square.
      * The attack pattern should assume that the unit is facing in the default direction.
      *
-     * @param attack
+     * @param attack the special attack pattern of this unit
      */
-    void setSpecialAttack(vector<cugl::Vec2> attack)
-    {
-        _specialAttack = attack;
-    }
+    void setSpecialAttack(vector<cugl::Vec2> attack) { _specialAttack = attack; }
+
     /**
-     *Sets the unit's color
+     * Returns the unit's color as a Color enum.
+     * @return unit's color
+     */
+    Color getColor() { return _color; }
+    
+    /**
+     * Sets the unit's color
      *
      * @param c the color of the unit.
      */
-    void setColor(Color c)
-    {
-        _color = c;
-    }
-    /**
-     * Sets the unit's current direction.
-     *
-     * @param d the direction the unit is facing. 
-     * Must be a unit vector that represents one of the 4 cardinal directions.
-     */
-    void setDirection(cugl::Vec2 d)
-    {
-        _direction = d;
-    }
+    void setColor(Color c) { _color = c; }
     
     /**
-     * Sets the unit's original direction according to the tecture.
-     *
-     * @param d the direction the unit was facing initially.
-     * Must be a unit vector that represents one of the 4 cardinal directions.
+     * Returns the direction which the unit is currently facing.
+     * 
+     * @return unit's direction
      */
-    void setInitDirection(cugl::Vec2 d)
-    {
-        _initDirection = d;
-    }
+    cugl::Vec2 getDirection() { return _direction; }
+
+    /**
+     * Sets the unit's current direction.
+     * Must be a unit vector that represents one of the 4 cardinal directions.
+     * @param d the direction the unit is facing. 
+     */
+    void setDirection(cugl::Vec2 d) { _direction = d; }
+
+    /**
+    * Retuns the angle between the direction of the unit and the default direction in radians.
+    * 
+    * @returns the angle between direction and default direction
+    */
+    float getAngleBetweenDirectionAndDefault();
+
+    /**
+     * Returns the Polygon-Node that represents the unit's view.
+     *
+     * @return unit's Polygon-Node
+     */
+    shared_ptr<cugl::scene2::PolygonNode> getViewNode() { return _viewNode; }
+
+    /**
+     * Sets the Polygon-Node that represents the unit's view.
+     *
+     * @param a polygon-node for the unit.
+     */
+    void setViewNode(shared_ptr<cugl::scene2::PolygonNode> viewNode) { _viewNode = viewNode; }
 };
 
 #endif /* SWUnit_hpp */

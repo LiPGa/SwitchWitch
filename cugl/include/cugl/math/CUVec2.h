@@ -893,6 +893,17 @@ public:
      * @return the angle between this vector and other.
      */
     float getAngle(const Vec2 other) const;
+
+    /**
+     * Returns the angle between this vector and other.
+     *
+     * Because getAngle is wrong.
+     *
+     * @param other The vector to sweep towards.
+     *
+     * @return the angle between this vector and other.
+     */
+    float realGetAngle(const Vec2 other) const;
     
     /**
      * Returns true this vector contains all zeros.
