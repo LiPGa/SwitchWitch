@@ -60,6 +60,10 @@ protected:
 #pragma mark Model Variables    
     /** The board */
     shared_ptr<Board> _board;
+    /** The replacement units list */
+    shared_ptr<Board> _replacementBoard;
+
+    std::vector<shared_ptr<Unit>> _replacementList;
     /** Square that is currently being selected by the player */
     shared_ptr<Square> _selectedSquare;
     /** Square that is currently being selected by the player to swap with the selectedSquare */
@@ -69,8 +73,9 @@ protected:
 #pragma mark View Variables
     // VIEW
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _replacementBoardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
-
+    int _replacementListLength;
     // VIEW items are going to be individual variables
     // In the future, we will replace this with the scene graph
     /** The backgrounnd image */

@@ -77,7 +77,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     } else if (!Scene2::init(dimen)) {
         return false;
     }
-    
+    //TODO: JSON THIS AND MAKE IT MORE SCALABLE
+  // UNIT ATTACK PATTERNS
+    std::vector<cugl::Vec2> basicAttack{ cugl::Vec2(1,0) };
+    std::vector<cugl::Vec2> diagonalAttack{ Vec2(1,1), Vec2(1,-1), Vec2(-1,1), Vec2(-1,-1) };
+    std::vector<cugl::Vec2> threeWayAttack{ Vec2(1,1), Vec2(1,0), Vec2(1,-1) };
+    std::vector<cugl::Vec2> twoForwardAttack{ Vec2(1,0), Vec2(2,0) };
+
     // Start up the input handler
     _input.init();
     
@@ -117,6 +123,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     //Initialize Board
     _board = Board::alloc(BOARD_SIZE, BOARD_SIZE);
+   
 
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("Turns %d", _turns);
@@ -133,17 +140,63 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _boardNode->setPosition(getSize()/2);
     _boardNode->setTexture(transparent_texture);
     _board->setViewNode(_boardNode);
+
+    //Dummy Replacement List  CHANGE WHEN REPLACEMENT CODE IS DONE!!!
+
+    shared_ptr<Unit> aunit = Unit::alloc(Unit::Color::RED, basicAttack, diagonalAttack, Vec2(0, -1));
+    shared_ptr<Unit> bunit = Unit::alloc(Unit::Color::GREEN, basicAttack, diagonalAttack, Vec2(0, -1));
+    shared_ptr<Unit> cunit = Unit::alloc(Unit::Color::BLUE, basicAttack, diagonalAttack, Vec2(0, -1));
+    shared_ptr<Unit> dunit = Unit::alloc(Unit::Color::RED, basicAttack, diagonalAttack, Vec2(0, -1));
+    _replacementListLength = 3;
+    _replacementList = { aunit,bunit,cunit,dunit };
+    _replacementBoard = Board::alloc(1, _replacementListLength);
+
+
+    // Set view of replacement list
+    _replacementBoardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0,SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
+    _replacementBoardNode->setPosition(0,getSize().height/2);
+    _replacementBoardNode->setTexture(transparent_texture);
+    _replacementBoard->setViewNode(_replacementBoardNode);
+
+
     
-    //TODO: JSON THIS AND MAKE IT MORE SCALABLE
-    // UNIT ATTACK PATTERNS
-    std::vector<cugl::Vec2> basicAttack{cugl::Vec2(1,0)};
-    std::vector<cugl::Vec2> diagonalAttack{Vec2(1,1), Vec2(1,-1), Vec2(-1,1), Vec2(-1,-1)};
-    std::vector<cugl::Vec2> threeWayAttack{Vec2(1,1), Vec2(1,0), Vec2(1,-1)};
-    std::vector<cugl::Vec2> twoForwardAttack{Vec2(1,0), Vec2(2,0)};
+  
+
+  
     
+    for (int i = 0; i < _replacementListLength; i++) {
+       
+            auto squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
+            auto squarePosition = (Vec2(0, i));
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE / 2));
+            _replacementBoard->getSquare(squarePosition)->setViewNode(squareNode);
+            // Add square node to board node.
+            _replacementBoard->getViewNode()->addChild(squareNode);
+            // Grab unit from replacement list
+            shared_ptr<Unit> unit = _replacementList.at(i);
+            // Assign Unit to Square
+            _replacementBoard->getSquare(squarePosition)->setUnit(unit);
+            std::shared_ptr<cugl::Texture> unitTexture;
+            if (unit->getColor() == Unit::RED) {
+                unitTexture = _redUnitTexture;
+            }
+            else if (unit->getColor() == Unit::GREEN) {
+                unitTexture = _greenUnitTexture;
+            }
+            else if (unit->getColor() == Unit::BLUE) {
+                unitTexture = _blueUnitTexture;
+            }
+            auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
+            unit->setViewNode(unitNode);
+            unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+            squareNode->addChild(unitNode);
+    }
+       
+
+
     // Create the squares & units and put them in the map
-    for (int i=0;i<5;i++) {
-        for(int j=0;j<5;++j){
+    for (int i=0;i< BOARD_SIZE;i++) {
+        for(int j=0;j< BOARD_SIZE;++j){
             auto squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
             auto squarePosition = (Vec2(i,j));
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE/2));
@@ -367,7 +420,8 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch) {
     std::shared_ptr<Vec2> commonOffset = make_shared<Vec2>(getSize() / 2);
     // batch->draw(_background,Rect(Vec2::ZERO, getSize()));
     _boardNode->render(batch);
-    
+    _replacementBoardNode->render(batch);
+
     batch->setColor(Color4::BLACK);
     batch->drawText(_turn_text,Vec2(10, getSize().height-_turn_text->getBounds().size.height));
     batch->drawText(_score_text, Vec2(getSize().width - _score_text->getBounds().size.width - 10, getSize().height-_score_text->getBounds().size.height));
