@@ -109,19 +109,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _threeWayBlueTexture = _assets->get<Texture>(THREE_WAY_BLUE);
     _threeWayGreenTexture = _assets->get<Texture>(THREE_WAY_GREEN);
     
-    _currentState = SELECTING_UNIT;
-    //Initialize Board
-    _board = std::shared_ptr<Board>(new Board(BOARD_SIZE, BOARD_SIZE));
-    // Ensuring that these values are never null.
-    _selectedSquare = _board->getSquare(Vec2::ZERO);
-    _swappingSquare = _board->getSquare(Vec2::ZERO);
-
     // Get the background image and constant values
     _background = assets->get<Texture>("background");
-    
-    //TODO: buildScene is broken code.
-    //buildScene();
-    
+
+    //Initialize state
+    _currentState = SELECTING_UNIT;
+
+    //Initialize Board
+    _board = Board::alloc(BOARD_SIZE, BOARD_SIZE);
+
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("Turns %d", _turns);
     _turn_text = TextLayout::allocWithText(turnMsg, assets->get<Font>("pixel32"));
@@ -133,10 +129,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _score_text->layout();
     
     // Set the view of the board.
-    Rect testRect = Rect(0,0,BOARD_SIZE*SQUARE_SIZE,BOARD_SIZE*SQUARE_SIZE);
-    _boardNode = scene2::PolygonNode::allocWithPoly(testRect);
+    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
     _boardNode->setPosition(getSize()/2);
     _boardNode->setTexture(transparent_texture);
+    _board->setViewNode(_boardNode);
     
     //TODO: JSON THIS AND MAKE IT MORE SCALABLE
     // UNIT ATTACK PATTERNS
@@ -146,18 +142,20 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     std::vector<cugl::Vec2> twoForwardAttack{Vec2(1,0), Vec2(2,0)};
     
     // Create the squares & units and put them in the map
-    for (int i=0;i<BOARD_SIZE;i++) {
-        for(int j=0;j<BOARD_SIZE;++j){
+    for (int i=0;i<5;i++) {
+        for(int j=0;j<5;++j){
             auto squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
             auto squarePosition = (Vec2(i,j));
-            squareNode->setPosition((squarePosition * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE/2));
-            
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE/2));
+            _board->getSquare(squarePosition)->setViewNode(squareNode);
+            // Add square node to board node.
+            _board->getViewNode()->addChild(squareNode);
             // Generate a unit and assign a random color
-            Unit unit = Unit();
-            unit.setBasicAttack(basicAttack);
+            shared_ptr<Unit> unit = Unit::alloc(Unit::Color(j % 3), basicAttack, diagonalAttack, Vec2(0,-1));
+
+            // auto randomNumber = rand() % 100;
             
-            auto randomNumber = rand() % 100;
-        
+            /*
             if (randomNumber <= 70) {
             } else if (randomNumber > 70 && randomNumber <= 80) {
                 unit.setSpecialAttack(twoForwardAttack);
@@ -166,7 +164,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             } else {
                 unit.setSpecialAttack(diagonalAttack);
             }
-        
+            
             // determine the direction of the unit
             auto randomNumber2 = rand() % 4;
             Vec2 unitDirection;
@@ -185,15 +183,17 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
                     break;
             }
             unit.setDirection(unitDirection);
-            unit.setInitDirection(unitDirection);
             
             unit.setColor(Unit::Color(randomNumber%3));
-            
+            */
+
             // Assign Unit to Square
-            _board->getSquare(squarePosition).setUnit(unit);
-            std::shared_ptr<cugl::Texture> unitTexture = _redUnitTexture;
-//            CULog("Unit Color %d", unit.getColor());
-            if (unit.getColor() == unit.RED) {
+            _board->getSquare(squarePosition)->setUnit(unit);
+
+            std::shared_ptr<cugl::Texture> unitTexture;
+            if (unit->getColor() == Unit::RED) {
+                unitTexture = _redUnitTexture;
+                /*
                 if (unit.getSpecialAttack() == twoForwardAttack) {
                     unitTexture = _twoForwardRedTexture;
                 } else if (unit.getSpecialAttack() == threeWayAttack) {
@@ -203,7 +203,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
                 } else {
                     unitTexture = _redUnitTexture;
                 }
-            } else if (unit.getColor() == unit.GREEN) {
+                */
+            } else if (unit->getColor() == Unit::GREEN) {
+                unitTexture = _greenUnitTexture;
+                /*
                 if (unit.getSpecialAttack() == twoForwardAttack) {
                     unitTexture = _twoForwardGreenTexture;
                 } else if (unit.getSpecialAttack() == threeWayAttack) {
@@ -213,7 +216,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
                 } else {
                     unitTexture = _greenUnitTexture;
                 }
-            } else if (unit.getColor() == unit.BLUE) {
+                */
+            } else if (unit->getColor() == Unit::BLUE) {
+                unitTexture = _blueUnitTexture;
+                /*
                 if (unit.getSpecialAttack() == twoForwardAttack) {
                     unitTexture = _twoForwardBlueTexture;
                 } else if (unit.getSpecialAttack() == threeWayAttack) {
@@ -223,67 +229,17 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
                 } else {
                     unitTexture = _blueUnitTexture;
                 }
+                */
             }
             
-            
             auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
+            unit->setViewNode(unitNode);
+            unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
-
-            // -y becuase the downward direction is (0, 1) and upward direction is (0, -1)
-            unitNode->setAngle(atan2(-unitDirection.y, unitDirection.x));
-//            CULog("direction = %f, %f", unit.getDirection().x, unit.getDirection().y);
-            
-            /** Reason why BOARD_SIZE - 1 - j is because the mouse coordinates are
-             * calculated from the top left corner of the screen
-             * while the position of nodes are calculated from the bottom left of the node.
-             * Therefore, in order to allign with mouse position, the squares are stored with
-             * a tag that goes backwards in y position.
-             */
-            _boardNode->addChildWithTag(squareNode, squarePosToTag(Vec2(i,BOARD_SIZE - 1 - j)));
         }
     }
     reset();
     return true;
-}
-/**
- * Returns the tag of a square node based on the position of the square.
- *
- * The children of a node are organized by tag number.
- * This method returns the appropriate tag number given the position of a square.
- *
- * @param x     The x position of the square
- * @param y     The y position of the square
- * @return    The tag of the square node
- */
-int GameScene::squarePosToTag(const int x, const int y) {
-    return x * BOARD_SIZE + y;
-}
-
-/**
- * Returns the score based on the units that have been attacked.
- *
- * The score = the # of units killed times the # of colors killed times the # of special units killed.
- *
- * @param colorNum     The number of colors killed
- * @param basicUnitsNum    The number of basic units killed
- * @param specialUnitsNum The number of special units killed
- * @return The score of this attack
- */
-int GameScene::calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum){
-    return colorNum * (basicUnitsNum + specialUnitsNum) * specialUnitsNum;
-}
-
-/**
- * Returns the position of a square node based on the tag number of a square node.
- * The children of a node are organized by tag number.
- *
- * @param tagNum The tag number of the node
- * @return The position of the square in a Vec2
- */
-cugl::Vec2 GameScene::tagToSquarePos(const int tagNum) {
-    int y = tagNum % BOARD_SIZE;
-    int x = (tagNum - y) / BOARD_SIZE;
-    return Vec2(x, y);
 }
 
 /**
@@ -299,6 +255,19 @@ void GameScene::dispose() {
 
 #pragma mark -
 #pragma mark Gameplay Handling
+/**
+ * Returns the score based on the units that have been attacked.
+ *
+ * The score = the # of units killed times the # of colors killed times the # of special units killed.
+ *
+ * @param colorNum     The number of colors killed
+ * @param basicUnitsNum    The number of basic units killed
+ * @param specialUnitsNum The number of special units killed
+ * @return The score of this attack
+ */
+int GameScene::calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum) {
+    return colorNum * (basicUnitsNum + specialUnitsNum) * specialUnitsNum;
+}
 
 /**
  * The method called to update the game mode.
@@ -313,62 +282,64 @@ void GameScene::update(float timestep) {
     _input.update();
     Vec2 pos = _input.getPosition();
     Vec2 boardPos = _boardNode->worldToNodeCoords(pos);
-    Vec2 squarePos = Vec2(int(boardPos.x) / SQUARE_SIZE, int(boardPos.y) / SQUARE_SIZE);
+    /*
+    * The mouse position is measured with the top left of the screen being the origin 
+    * while the origin of the board is on the bottom left.
+    * The extra calculation on y is meant to convert the mouse position as if its origin is on the bottom left.
+    */
+    Vec2 squarePos = Vec2(int(boardPos.x) / SQUARE_SIZE, BOARD_SIZE - 1 - (int(boardPos.y) / SQUARE_SIZE));
     if (_board->doesSqaureExist(squarePos)){
-        auto square = _board->getSquare(squarePos);
-        auto squareNode = _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(squarePos));
-        
+        auto squareOnMouse = _board->getSquare(squarePos);
         if (_input.isDown()) {
             if (_currentState == SELECTING_UNIT) {
-                _selectedSquare = square;
-                squareNode->setTexture(_selectedSquareTexture);
+                _selectedSquare = squareOnMouse;
+                _selectedSquare->getViewNode()->setTexture(_selectedSquareTexture);
                 _currentState = SELECTING_SWAP;
             }
-            else if (_currentState == SELECTING_SWAP) {
-                _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->setTexture(_squareTexture);
-                if (square.getPosition() != _selectedSquare.getPosition() && square.getPosition().distance(_selectedSquare.getPosition()) <= 1) {
-                    _swappingSquare = square;
-                    squareNode->setTexture(_swapSquareTexture);
+            else if (_currentState == SELECTING_SWAP 
+                && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1) {
+                _currentState = CONFIRM_SWAP;
+                _swappingSquare = squareOnMouse;
+                // Rotation and Swapping of Model
+                // We do this so that we can show the attack preview, without changing the actual positional view of units.
+                _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+                squareOnMouse->getViewNode()->setTexture(_swapSquareTexture);
+                vector<shared_ptr<Square>> attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
+                for each (shared_ptr<Square> attackedSquares in attackedSquares) {
+                    attackedSquares->getViewNode()->setTexture(_attackedSquareTexture);
                 }
             }
-             
-        }
-        else if (_input.didRelease()){
-            CULog("direction is: %f, %f", square.getUnit().getDirection().x, square.getUnit().getDirection().y);
-            CULog("node angle is: %f", squareNode->getChild(0)->getAngle()*180/M_PI);
-                
-            if (_currentState == SELECTING_SWAP){
-                _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->setTexture(_squareTexture);
-                _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_selectedSquare.getPosition()))->setTexture(_squareTexture);
-                if (_selectedSquare.getPosition() != _swappingSquare.getPosition() && squarePos == _swappingSquare.getPosition()){
-                    //TODO: ATTACK
-                    // swap
-                    auto selectedUnitNode = _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_selectedSquare.getPosition()))->getChild(0);
-                    auto swappedUnitNode = _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->getChild(0);
-                    // remove the children
-                    _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->removeAllChildren();
-                    _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_selectedSquare.getPosition()))->removeAllChildren();
-                    // readd the children
-                    _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->addChild(selectedUnitNode);
-                    _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_selectedSquare.getPosition()))->addChild(swappedUnitNode);
-                    
-                    // rotation
-                    Vec2 swapDirection = Vec2(_swappingSquare.getPosition().x-_selectedSquare.getPosition().x, _selectedSquare.getPosition().y-_swappingSquare.getPosition().y);
-                    _swappingSquare.getUnit().setDirection(swapDirection);
-//                    CULog("selectedSquare: %f, %f", _selectedSquare.getPosition().x, _selectedSquare.getPosition().y);
-//                    CULog("swappingSquare: %f, %f", _swappingSquare.getPosition().x, _swappingSquare.getPosition().y);
-//                    CULog("curr dir: %f, %f", swapDirection.x, swapDirection.y);
-
-                    // swapping is completed, so currently the selectedSquare is obtained by the tag of _swappingSquare.
-                    _boardNode->getChildByTag<cugl::scene2::PolygonNode>(squarePosToTag(_swappingSquare.getPosition()))->getChild(0)->setAngle(atan2(swapDirection.y, swapDirection.x));
-
+            else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare) {
+                _currentState = SELECTING_SWAP;
+                // If we are de-confirming a swap, we must undo the swap.
+                _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+                for each (shared_ptr<Square> squares in _board->getAllSquares()) {
+                    squares->getViewNode()->setTexture(_squareTexture);
                 }
-                _currentState = SELECTING_UNIT;
+                _selectedSquare->getViewNode()->setTexture(_selectedSquareTexture);
             }
         }
-         
+        else if (_input.didRelease()){ 
+            for each (shared_ptr<Square> squares in _board->getAllSquares()) {
+                squares->getViewNode()->setTexture(_squareTexture);
+            }
+            if (_currentState == CONFIRM_SWAP){
+                //TODO: ATTACK
+                // Because the units in the model where already swapped.
+                auto swappedUnitNode = _selectedSquare->getUnit()->getViewNode();
+                auto selectedUnitNode = _swappingSquare->getUnit()->getViewNode();
+                // Rotate Units
+                swappedUnitNode->setAngle(_selectedSquare->getUnit()->getAngleBetweenDirectionAndDefault());
+                selectedUnitNode->setAngle(_swappingSquare->getUnit()->getAngleBetweenDirectionAndDefault());
+                // Updating View
+                _selectedSquare->getViewNode()->removeChild(selectedUnitNode);
+                _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
+                _selectedSquare->getViewNode()->addChild(swappedUnitNode);
+                _swappingSquare->getViewNode()->addChild(selectedUnitNode);
+            }
+            _currentState = SELECTING_UNIT;
+        }
     }
-    
     // Update the score meter
     _score_text->setText(strtool::format("Score %d", _score));
     _score_text->layout();

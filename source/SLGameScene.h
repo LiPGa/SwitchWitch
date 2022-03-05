@@ -20,14 +20,8 @@
 #include "SWBoard.hpp"
 #include "SWInputController.h"
 
-
-
 /**
- * This class is the primary gameplay constroller for the demo.
- *
- * A world has its own objects, assets, and input controller.  Thus this is
- * really a mini-GameEngine in its own right.  As in 3152, we separate it out
- * so that we can have a separate mode for the loading screen.
+ * This class is the primary gameplay constroller.
  */
 class GameScene : public cugl::Scene2 {
 protected:
@@ -42,6 +36,7 @@ protected:
     /** The JSON value with all of the constants */
     std::shared_ptr<cugl::JsonValue> _constants;
     
+#pragma mark State Varibales
     /** Possible states of the level.
      * Name of state is describing what the current state of the game is waiting for.
      * For example, the selecting_unit state means the game is waiting for the player to select a unit.
@@ -50,26 +45,42 @@ protected:
     {
         SELECTING_UNIT,
         SELECTING_SWAP,
+        CONFIRM_SWAP,
         ANIMATION
     };
     
     /** The current state of the selection process*/
     State _currentState;
-    
-    Square _selectedSquare;
-    Square _swappingSquare;
-    
-    /** The active units on the board*/
-    vector<Unit> _unit_vec;
-    /** The active (poly2) units on the board*/
-    vector<Poly2> _units;
-    /** The active (poly2) squares on the board*/
-    vector<Poly2> _squares;
-    
+    /** The current number of turns left for the player */
+    int _turns;
+    /** The current score of the player */
+    int _score;
+
+#pragma mark -
+#pragma mark Model Variables    
+    /** The board */
+    shared_ptr<Board> _board;
+    /** Square that is currently being selected by the player */
+    shared_ptr<Square> _selectedSquare;
+    /** Square that is currently being selected by the player to swap with the selectedSquare */
+    shared_ptr<Square> _swappingSquare;
+
+#pragma mark - 
+#pragma mark View Variables
     // VIEW
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
-    
+
+    // VIEW items are going to be individual variables
+    // In the future, we will replace this with the scene graph
+    /** The backgrounnd image */
+    std::shared_ptr<cugl::Texture> _background;
+    /** The text with the current remaining turns */
+    std::shared_ptr<cugl::TextLayout> _turn_text;
+    /** The text with the current score */
+    std::shared_ptr<cugl::TextLayout> _score_text;
+#pragma mark -
+#pragma mark Texture Variables
     //TEXTURES SQUARES
     std::shared_ptr<cugl::Texture> _squareTexture;
     std::shared_ptr<cugl::Texture> _selectedSquareTexture;
@@ -95,40 +106,8 @@ protected:
     std::shared_ptr<cugl::Texture> _threeWayBlueTexture;
     std::shared_ptr<cugl::Texture> _threeWayGreenTexture;
     std::shared_ptr<cugl::Texture> _threeWayRedTexture;
-    
-    /** The pair with the first = squarePoly and second = unitPoly correspondingly*/
-    typedef std::pair<Poly2, Poly2> values;
-    
-    /** Self-defined hash function for square */
-    struct square_hash
-    {
-        std::size_t operator () (Square const& s) const
-        {
-            cugl::Vec2 vec2 = s.getPosition();
-            size_t rowHash = std::hash<int>()(vec2.x);
-            size_t colHash = std::hash<int>()(vec2.y) << 1;
-            return rowHash ^ colHash;
-        }
-    };
-    /** A map with key = Square, and value = pair<sqaurePoly, unitPoly> correspondingly */
-    std::unordered_map<Square, values, square_hash> _map;
-    
-    
-    /** The board*/
-    std::shared_ptr<Board> _board;
-    
-    int _turns;
-    int _score;
-    
-    // VIEW items are going to be individual variables
-    // In the future, we will replace this with the scene graph
-    /** The backgrounnd image */
-    std::shared_ptr<cugl::Texture> _background;
-    /** The text with the current remaining turns */
-    std::shared_ptr<cugl::TextLayout> _turn_text;
-    /** The text with the current score */
-    std::shared_ptr<cugl::TextLayout> _score_text;
 
+#pragma mark -
     
 public:
 #pragma mark -
@@ -209,40 +188,6 @@ private:
      * @return    The score of this attack
      */
     int calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum);
-    
-    /**
-     * Returns the tag of a square node based on the position of the square.
-     *
-     * The children of a node are organized by tag number.
-     * This method returns the appropriate tag number given the position of a square.
-     *
-     * @param x     The x position of the square
-     * @param y     The y position of the square
-     * @return    The tag of the square node
-     */
-    int squarePosToTag(const int x, const int y);
-
-    /**
-     * Returns the tag of a square node based on the position of the square.
-     *
-     * The children of a node are organized by tag number.
-     * This method returns the appropriate tag number given the position of a square.
-     *
-     * @param position The position of the square
-     * @return    The tag of the square node
-     */
-    int squarePosToTag(Vec2 position) {
-        return squarePosToTag(position.x, position.y);
-    }
-
-    /**
-     * Returns the position of a square node based on the tag number of a square node.
-     * The children of a node are organized by tag number.
-     *
-     * @param tagNum The tag number of the node
-     * @return The position of the square in a Vec2
-     */
-    cugl::Vec2 tagToSquarePos(const int tagNum);
 };
 
 #endif /* __SG_GAME_SCENE_H__ */
