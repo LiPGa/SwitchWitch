@@ -84,6 +84,8 @@ protected:
     std::shared_ptr<cugl::TextLayout> _turn_text;
     /** The text with the current score */
     std::shared_ptr<cugl::TextLayout> _score_text;
+    /** The text above the replacement board */
+    std::shared_ptr<cugl::TextLayout> _replace_text;
 #pragma mark -
 #pragma mark Texture Variables
     //TEXTURES SQUARES

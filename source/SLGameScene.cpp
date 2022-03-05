@@ -137,6 +137,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _score_text = TextLayout::allocWithText(turnMsg, assets->get<Font>("pixel32"));
     _score_text->layout();
 
+    // Create and layout the replacement text
+    std::string replaceMsg = "Next:";
+    _replace_text = TextLayout::allocWithText(replaceMsg, assets->get<Font>("pixel32"));
+    _replace_text->layout();
+
     // Set the view of the board.
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
     _boardNode->setPosition(getSize() / 2);
@@ -444,6 +449,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     batch->setColor(Color4::BLACK);
     batch->drawText(_turn_text, Vec2(10, getSize().height - _turn_text->getBounds().size.height));
     batch->drawText(_score_text, Vec2(getSize().width - _score_text->getBounds().size.width - 10, getSize().height - _score_text->getBounds().size.height));
+    batch->drawText(_replace_text, Vec2(70, getSize().height - _replace_text->getBounds().size.height - 240));
 
     batch->end();
 }
