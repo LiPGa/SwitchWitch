@@ -11,15 +11,24 @@
 using namespace cugl;
 
 /**
- * Creates a square wiht the given position and unit.
+ * Creats a square with the given position
  *
- * @param pos   The square position
- * @param unit  The unit on the square
+ * @param position of the square
+ * @return if the initialization was successful
  */
-Square::Square(const cugl::Vec2 &pos, Unit &unit)
-{
-    _pos = pos;
-    _unit = unit;
+bool Square::initWithPos(const cugl::Vec2& pos) {
+	this->_pos = pos;
+    return true;
 }
 
-
+/**
+ * Creats a square with the given position and unit
+ *
+ * @param position of the square
+ * @param unit on the square
+ * @return if the initialization was successful
+ */
+bool Square::initWithPosAndUnit(const cugl::Vec2& pos, shared_ptr<Unit> unit) {
+    this->_unit = unit;
+    return initWithPos(pos);
+}

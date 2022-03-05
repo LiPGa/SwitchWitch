@@ -188,23 +188,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\SLApp.h" />
-    <ClInclude Include="..\..\source\SLAsteroidSet.h" />
     <ClInclude Include="..\..\source\SLGameScene.h" />
+    <ClInclude Include="..\..\source\SWBoard.hpp" />
     <ClInclude Include="..\..\source\SWInputController.h" />
     <ClInclude Include="..\..\source\SLLoadingScene.h" />
-    <ClInclude Include="..\..\source\SLPhotonSet.h" />
-    <ClInclude Include="..\..\source\SLShip.h" />
+    <ClInclude Include="..\..\source\SWSquare.hpp" />
+    <ClInclude Include="..\..\source\SWUnit.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\main.cpp" />
     <ClCompile Include="..\..\source\SLApp.cpp" />
-    <ClCompile Include="..\..\source\SLAsteroidSet.cpp" />
     <ClCompile Include="..\..\source\SLGameScene.cpp" />
-    <ClCompile Include="..\..\source\SWInputController.cpp" />
     <ClCompile Include="..\..\source\SLLoadingScene.cpp" />
-    <ClCompile Include="..\..\source\SLPhotonSet.cpp" />
-    <ClCompile Include="..\..\source\SLShip.cpp" />
+    <ClCompile Include="..\..\source\SWBoard.cpp" />
+    <ClCompile Include="..\..\source\SWInputController.cpp" />
+    <ClCompile Include="..\..\source\SWSquare.cpp" />
+    <ClCompile Include="..\..\source\SWUnit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ShipLab.rc" />
