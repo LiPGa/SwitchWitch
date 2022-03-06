@@ -1,7 +1,5 @@
 # Switch Witch
 
-![image-20220305225829313](/Users/jessie_llj/Library/Application Support/typora-user-images/image-20220305225829313.png)
-
 “Burn the witch!”, people are screaming and marching like armies. To protect your home, you need to pick up the magic that you sworn to never use again. You must think carefully and plan ahead because your strength only allows you to switch the enemy formations several times. You’ve got to scramble them up and foil their plan! 
 
 A game developed by Nintendon't for CS 4152/5152 at Cornell University.
