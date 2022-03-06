@@ -88,7 +88,11 @@ protected:
     std::shared_ptr<cugl::TextLayout> _turn_text;
     /** The text with the current score */
     std::shared_ptr<cugl::TextLayout> _score_text;
+    /** Win/Lose text */
+    std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attacked_squares;
+    
+    bool hasLost = false;
 #pragma mark -
 #pragma mark Texture Variables
     //TEXTURES SQUARES

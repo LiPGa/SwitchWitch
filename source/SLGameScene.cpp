@@ -82,6 +82,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _input.init();
     
     //Initialize Variables
+    hasLost = false;
     _assets = assets;
     _turns = 5;
     _score = 0;
@@ -127,6 +128,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     std::string scoreMsg = strtool::format("Score %d", _score);
     _score_text = TextLayout::allocWithText(turnMsg, assets->get<Font>("pixel32"));
     _score_text->layout();
+    
+    _winLoseText = TextLayout::allocWithText("", assets->get<Font>("pixel32"));
+    _winLoseText->setWidth(getSize().width / 3.0);
     
     // Set the view of the board.
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
@@ -364,6 +368,14 @@ void GameScene::update(float timestep) {
                 }
                 
                 _turns--;
+                
+                if (_turns == 0) {
+                    // game over
+                    _winLoseText->setText("Game Over!");
+                    _winLoseText->setWidth(getSize().width / 3.0f);
+                    _winLoseText->layout();
+                    hasLost = true;
+                }
                     
                 _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
@@ -401,6 +413,14 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch) {
     batch->setColor(Color4::BLACK);
     batch->drawText(_turn_text,Vec2(10, getSize().height-_turn_text->getBounds().size.height));
     batch->drawText(_score_text, Vec2(getSize().width - _score_text->getBounds().size.width - 10, getSize().height-_score_text->getBounds().size.height));
+    
+    Affine2 trans;
+    trans.scale(3);
+    trans.translate(Vec2(getSize().width / 2 - 3*_winLoseText->getBounds().size.width / 2, getSize().height / 2));
+    if (hasLost) {
+        batch->setColor(Color4::RED);
+        batch->drawText(_winLoseText, trans);
+    }
 
     batch->end();
 }
