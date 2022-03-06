@@ -22,7 +22,7 @@ The objective of this gameplay prototype is to play and test the core swapping a
 
 **Sirius Liu** - Artist, UX Designer - [yl756@cornell.edu](mailto:yl756@cornell.edu)
 
-**Liam Riley** (He, Him, His) - Programmer - [lrr42@cornell.edu](mailto:lrr42@cornell.edu)
+**Liam Riley** - Programmer - [lrr42@cornell.edu](mailto:lrr42@cornell.edu)
 
 **Arthur Tan** - Project Lead - [dt398@cornell.edu](mailto:dt398@cornell.edu)
 
