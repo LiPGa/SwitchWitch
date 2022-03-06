@@ -65,7 +65,7 @@ protected:
 
 
 #pragma mark -
-#pragma mark Model Variables    
+#pragma mark Model Variables
     /** The board */
     shared_ptr<Board> _board;
     /** Square that is currently being selected by the player */
@@ -74,7 +74,7 @@ protected:
     shared_ptr<Square> _swappingSquare;
     
 
-#pragma mark - 
+#pragma mark -
 #pragma mark View Variables
     // VIEW
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
@@ -88,6 +88,7 @@ protected:
     std::shared_ptr<cugl::TextLayout> _turn_text;
     /** The text with the current score */
     std::shared_ptr<cugl::TextLayout> _score_text;
+    vector<shared_ptr<Square>> _attacked_squares;
 #pragma mark -
 #pragma mark Texture Variables
     //TEXTURES SQUARES
@@ -197,6 +198,15 @@ private:
      * @return    The score of this attack
      */
     int calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum);
+    
+    /**
+     * Generate a unit with random color, attack, and direction on the given square.
+     *
+     * @param sq    The given square
+     * @param squareNode    The given squareNode
+     *
+     */
+    void generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
 };
 
 #endif /* __SG_GAME_SCENE_H__ */
