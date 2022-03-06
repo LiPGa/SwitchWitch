@@ -30,6 +30,10 @@ The objective of this gameplay prototype is to play and test the core swapping a
 
 **Hedy Yang** - Software Lead - [hy378@cornell.edu](mailto:hy378@cornell.edu)
 
+**Ashley Yu**  - Programmer, UX Designer - [yy346@cornell.edu](mailto:yy346@cornell.edu)
+
+**Yihan Zhang** - Programmer - [yz476@cornell.edu](mailto:yz476@cornell.edu)
+
 ## Acknowledgements
 
 Thanks to the [Game Design Initiative at Cornell University](https://gdiac.cis.cornell.edu/) for providing the Cornell University Game Library (CUGL) used for this project.
