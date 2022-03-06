@@ -364,6 +364,7 @@ void GameScene::update(float timestep) {
                 }
                 
                 _turns--;
+                    
                 _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
             _currentState = SELECTING_UNIT;
