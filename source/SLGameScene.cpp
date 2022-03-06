@@ -134,113 +134,114 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _boardNode->setTexture(transparent_texture);
     _board->setViewNode(_boardNode);
     
-    //TODO: JSON THIS AND MAKE IT MORE SCALABLE
-    // UNIT ATTACK PATTERNS
-    std::vector<cugl::Vec2> basicAttack{cugl::Vec2(1,0)};
-    std::vector<cugl::Vec2> diagonalAttack{Vec2(1,1), Vec2(1,-1), Vec2(-1,1), Vec2(-1,-1)};
-    std::vector<cugl::Vec2> threeWayAttack{Vec2(1,1), Vec2(1,0), Vec2(1,-1)};
-    std::vector<cugl::Vec2> twoForwardAttack{Vec2(1,0), Vec2(2,0)};
-    
     // Create the squares & units and put them in the map
     for (int i=0;i<5;i++) {
         for(int j=0;j<5;++j){
-            auto squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
+            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
             auto squarePosition = (Vec2(i,j));
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE/2));
-            _board->getSquare(squarePosition)->setViewNode(squareNode);
+            shared_ptr<Square> sq = _board->getSquare(squarePosition);
+            sq->setViewNode(squareNode);
             // Add square node to board node.
             _board->getViewNode()->addChild(squareNode);
-            // Generate a unit and assign a random color
-            shared_ptr<Unit> unit = Unit::alloc(Unit::Color(j % 3), basicAttack, diagonalAttack, Vec2(0,-1));
-
-            // auto randomNumber = rand() % 100;
-            
-            /*
-            if (randomNumber <= 70) {
-            } else if (randomNumber > 70 && randomNumber <= 80) {
-                unit.setSpecialAttack(twoForwardAttack);
-            } else if (randomNumber > 80 && randomNumber <= 90) {
-                unit.setSpecialAttack(threeWayAttack);
-            } else {
-                unit.setSpecialAttack(diagonalAttack);
-            }
-            
-            // determine the direction of the unit
-            auto randomNumber2 = rand() % 4;
-            Vec2 unitDirection;
-            switch (randomNumber2) {
-                case 0:
-                    unitDirection = Vec2(1,0);
-                    break;
-                case 1:
-                    unitDirection = Vec2(0,1);
-                    break;
-                case 2:
-                    unitDirection = Vec2(-1,0);
-                    break;
-                default:
-                    unitDirection = Vec2(0,-1);
-                    break;
-            }
-            unit.setDirection(unitDirection);
-            
-            unit.setColor(Unit::Color(randomNumber%3));
-            */
-
-            // Assign Unit to Square
-            _board->getSquare(squarePosition)->setUnit(unit);
-
-            std::shared_ptr<cugl::Texture> unitTexture;
-            if (unit->getColor() == Unit::RED) {
-                unitTexture = _redUnitTexture;
-                /*
-                if (unit.getSpecialAttack() == twoForwardAttack) {
-                    unitTexture = _twoForwardRedTexture;
-                } else if (unit.getSpecialAttack() == threeWayAttack) {
-                    unitTexture = _threeWayRedTexture;
-                } else if (unit.getSpecialAttack() == diagonalAttack) {
-                    unitTexture = _diagonalRedTexture;
-                } else {
-                    unitTexture = _redUnitTexture;
-                }
-                */
-            } else if (unit->getColor() == Unit::GREEN) {
-                unitTexture = _greenUnitTexture;
-                /*
-                if (unit.getSpecialAttack() == twoForwardAttack) {
-                    unitTexture = _twoForwardGreenTexture;
-                } else if (unit.getSpecialAttack() == threeWayAttack) {
-                    unitTexture = _threeWayGreenTexture;
-                } else if (unit.getSpecialAttack() == diagonalAttack) {
-                    unitTexture = _diagonalGreenTexture;
-                } else {
-                    unitTexture = _greenUnitTexture;
-                }
-                */
-            } else if (unit->getColor() == Unit::BLUE) {
-                unitTexture = _blueUnitTexture;
-                /*
-                if (unit.getSpecialAttack() == twoForwardAttack) {
-                    unitTexture = _twoForwardBlueTexture;
-                } else if (unit.getSpecialAttack() == threeWayAttack) {
-                    unitTexture = _threeWayBlueTexture;
-                } else if (unit.getSpecialAttack() == diagonalAttack) {
-                    unitTexture = _diagonalBlueTexture;
-                } else {
-                    unitTexture = _blueUnitTexture;
-                }
-                */
-            }
-            
-            auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
-            unit->setViewNode(unitNode);
-            unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-            squareNode->addChild(unitNode);
+            generateUnit(sq, squareNode);
         }
     }
     reset();
     return true;
 }
+
+/**
+ * Generate a unit with random color, attack, and direction on the given square.
+ *
+ * @param sq    The given square
+ * @param squareNode    The given squareNode
+ *
+ */
+void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode) {
+    // TODO: JSON THIS AND MAKE IT MORE SCALABLE
+    std::vector<cugl::Vec2> basicAttack{cugl::Vec2(1,0)};
+    std::vector<cugl::Vec2> diagonalAttack{Vec2(1,1), Vec2(1,-1), Vec2(-1,1), Vec2(-1,-1)};
+    std::vector<cugl::Vec2> threeWayAttack{Vec2(1,1), Vec2(1,0), Vec2(1,-1)};
+    std::vector<cugl::Vec2> twoForwardAttack{Vec2(1,0), Vec2(2,0)};
+    
+    shared_ptr<Unit> unit = Unit::alloc(Unit::Color(0), basicAttack, basicAttack, Vec2(0,-1));
+     
+    auto randomNumber = rand() % 100;
+    
+    if (randomNumber <= 70) {
+    } else if (randomNumber > 70 && randomNumber <= 80) {
+        unit->setSpecialAttack(twoForwardAttack);
+    } else if (randomNumber > 80 && randomNumber <= 90) {
+        unit->setSpecialAttack(threeWayAttack);
+    } else {
+        unit->setSpecialAttack(diagonalAttack);
+    }
+    
+    //determine the direction of the unit
+    auto randomNumber2 = rand() % 4;
+    Vec2 unitDirection;
+    switch (randomNumber2) {
+        case 0:
+            unitDirection = Vec2(1,0);
+            break;
+        case 1:
+            unitDirection = Vec2(0,1);
+            break;
+        case 2:
+            unitDirection = Vec2(-1,0);
+            break;
+        default:
+            unitDirection = Vec2(0,-1);
+            break;
+    }
+    unit->setDirection(unitDirection);
+    
+    unit->setColor(Unit::Color(randomNumber%3));
+    
+    std::shared_ptr<cugl::Texture> unitTexture;
+    if (unit->getColor() == Unit::RED) {
+        unitTexture = _redUnitTexture;
+        if (unit->getSpecialAttack() == twoForwardAttack) {
+            unitTexture = _twoForwardRedTexture;
+        } else if (unit->getSpecialAttack() == threeWayAttack) {
+            unitTexture = _threeWayRedTexture;
+        } else if (unit->getSpecialAttack() == diagonalAttack) {
+            unitTexture = _diagonalRedTexture;
+        } else {
+            unitTexture = _redUnitTexture;
+        }
+    } else if (unit->getColor() == Unit::GREEN) {
+        unitTexture = _greenUnitTexture;
+        if (unit->getSpecialAttack() == twoForwardAttack) {
+            unitTexture = _twoForwardGreenTexture;
+        } else if (unit->getSpecialAttack() == threeWayAttack) {
+            unitTexture = _threeWayGreenTexture;
+        } else if (unit->getSpecialAttack() == diagonalAttack) {
+            unitTexture = _diagonalGreenTexture;
+        } else {
+            unitTexture = _greenUnitTexture;
+        }
+    } else if (unit->getColor() == Unit::BLUE) {
+        unitTexture = _blueUnitTexture;
+        if (unit->getSpecialAttack() == twoForwardAttack) {
+            unitTexture = _twoForwardBlueTexture;
+        } else if (unit->getSpecialAttack() == threeWayAttack) {
+            unitTexture = _threeWayBlueTexture;
+        } else if (unit->getSpecialAttack() == diagonalAttack) {
+            unitTexture = _diagonalBlueTexture;
+        } else {
+            unitTexture = _blueUnitTexture;
+        }
+    }
+    
+    sq->setUnit(unit);
+    auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
+    unit->setViewNode(unitNode);
+    unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+    squareNode->addChild(unitNode);
+}
+
 
 /**
  * Disposes of all (non-static) resources allocated to this mode.
@@ -311,6 +312,8 @@ void GameScene::update(float timestep) {
                 squareOnMouse->getViewNode()->setTexture(_swapSquareTexture);
                 vector<shared_ptr<Square>> attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
                 
+                _attacked_squares = attackedSquares;
+                
                 unordered_set<Unit::Color> attackedColors;
 
                 for (shared_ptr<Square> attackedSquares: attackedSquares) {
@@ -352,6 +355,14 @@ void GameScene::update(float timestep) {
                 _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
                 _selectedSquare->getViewNode()->addChild(swappedUnitNode);
                 _swappingSquare->getViewNode()->addChild(selectedUnitNode);
+                
+                //remove the attacked squares
+                for (shared_ptr<Square> attackedSquare: _attacked_squares) {
+                    auto attacked_unit = attackedSquare->getUnit()->getViewNode();
+                    attackedSquare->getViewNode()->removeChild(attacked_unit);
+                    generateUnit(attackedSquare, attackedSquare->getViewNode());
+                }
+                
                 _turns--;
                 _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
