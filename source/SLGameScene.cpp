@@ -124,6 +124,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     //layout
     _layout = scene2::AnchoredLayout::alloc();
 
+    //set up GUI
+    _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+
     // Initialize state
     _currentState = SELECTING_UNIT;
 
@@ -132,26 +135,30 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("Turns %d", _turns);
-    _turn_text = TextLayout::allocWithText(turnMsg, assets->get<Font>("pixel32"));
-    _turn_text->layout();
+    _turn_text = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
+    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_LEFT, Vec2(0, -(_turn_text->getTextBounds().size.height)));
+    _guiNode->addChildWithName(_turn_text, "turn_text");
 
     // Create and layout the score meter
+    
     std::string scoreMsg = strtool::format("Score %d", _score);
-    _score_text = TextLayout::allocWithText(turnMsg, assets->get<Font>("pixel32"));
-    _score_text->layout();
+    _score_text = scene2::Label::allocWithText(scoreMsg, assets->get<Font>("pixel32"));
+    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
+    _guiNode->addChildWithName(_score_text, "score_text");
+
 
     // Create and layout the replacement text
     std::string replaceMsg = "Next:";
-    _replace_text = TextLayout::allocWithText(replaceMsg, assets->get<Font>("pixel32"));
-    _replace_text->layout();
-
-    //set up GUI
-    _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+    _replace_text = scene2::Label::allocWithText(replaceMsg, assets->get<Font>("pixel32"));
+    _layout->addAbsolute("replace_text", cugl::scene2::Layout::Anchor::MIDDLE_LEFT, Vec2(0,0));
+    _guiNode->addChildWithName(_replace_text, "replace_text");
+    
 
 
     // Set the view of the board.
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
-    _boardNode->setPosition(getSize() / 2);
+    //_boardNode->setPosition(getSize() / 2);
+    _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER,Vec2(0,0));
     _boardNode->setTexture(transparent_texture);
     _board->setViewNode(_boardNode);
 
@@ -170,9 +177,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Set view of replacement list
     _replacementBoardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
-    _replacementBoardNode->setPosition(SQUARE_SIZE, getSize().height / 2);
+    //_replacementBoardNode->setPosition(SQUARE_SIZE, getSize().height / 2);
     _replacementBoardNode->setTexture(transparent_texture);
     _replacementBoard->setViewNode(_replacementBoardNode);
+    _layout->addRelative("_replacementBoardNode", cugl::scene2::Layout::Anchor::MIDDLE_LEFT, Vec2(.1, 0));
 
     _guiNode->addChildWithName(_replacementBoardNode, "_replacementBoardNode");
 
@@ -430,11 +438,14 @@ void GameScene::update(float timestep)
     }
     // Update the score meter
     _score_text->setText(strtool::format("Score %d", _score));
-    _score_text->layout();
+    
 
     // Update the remaining turns
     _turn_text->setText(strtool::format("Turns %d", _turns));
-    _turn_text->layout();
+
+    //Layout everything
+    _layout->layout(_guiNode.get());
+
 }
 
 #pragma mark -
@@ -459,10 +470,10 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     //_replacementBoardNode->render(batch);
     _guiNode->render(batch);
 
-    batch->setColor(Color4::RED);
-    batch->drawText(_turn_text, Vec2(10, getSize().height - _turn_text->getBounds().size.height));
-    batch->drawText(_score_text, Vec2(getSize().width - _score_text->getBounds().size.width - 10, getSize().height - _score_text->getBounds().size.height));
-    batch->drawText(_replace_text, Vec2(70, getSize().height - _replace_text->getBounds().size.height - 240));
+    //batch->setColor(Color4::RED);
+    //batch->drawText(_turn_text, Vec2(10, getSize().height - _turn_text->getBounds().size.height));
+    //batch->drawText(_score_text, Vec2(getSize().width - _score_text->getBounds().size.width - 10, getSize().height - _score_text->getBounds().size.height));
+    //batch->drawText(_replace_text, Vec2(70, getSize().height - _replace_text->getBounds().size.height - 240));
 
     batch->end();
 }

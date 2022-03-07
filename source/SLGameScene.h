@@ -86,11 +86,11 @@ protected:
     /** The backgrounnd image */
     std::shared_ptr<cugl::Texture> _background;
     /** The text with the current remaining turns */
-    std::shared_ptr<cugl::TextLayout> _turn_text;
+    std::shared_ptr<cugl::scene2::Label> _turn_text;
     /** The text with the current score */
-    std::shared_ptr<cugl::TextLayout> _score_text;
+    std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text above the replacement board */
-    std::shared_ptr<cugl::TextLayout> _replace_text;
+    std::shared_ptr<cugl::scene2::Label> _replace_text;
 #pragma mark -
 #pragma mark Texture Variables
     //TEXTURES SQUARES
