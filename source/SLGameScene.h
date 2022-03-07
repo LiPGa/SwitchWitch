@@ -72,9 +72,14 @@ protected:
 #pragma mark - 
 #pragma mark View Variables
     // VIEW
+    std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _replacementBoardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
+    //std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;
+    //std::shared_ptr<cugl::scene2::SceneNode> _replacementBoardNodeS;
+
+
     int _replacementListLength;
     // VIEW items are going to be individual variables
     // In the future, we will replace this with the scene graph

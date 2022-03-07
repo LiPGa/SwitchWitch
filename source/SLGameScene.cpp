@@ -121,6 +121,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Get the background image and constant values
     _background = assets->get<Texture>("background");
 
+    //layout
+    _layout = scene2::AnchoredLayout::alloc();
+
     // Initialize state
     _currentState = SELECTING_UNIT;
 
@@ -142,11 +145,17 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _replace_text = TextLayout::allocWithText(replaceMsg, assets->get<Font>("pixel32"));
     _replace_text->layout();
 
+    //set up GUI
+    _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+
+
     // Set the view of the board.
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
     _boardNode->setPosition(getSize() / 2);
     _boardNode->setTexture(transparent_texture);
     _board->setViewNode(_boardNode);
+
+    _guiNode->addChildWithName(_boardNode, "boardNode");
 
     // Dummy Replacement List  CHANGE WHEN REPLACEMENT CODE IS DONE!!!
 
@@ -164,6 +173,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _replacementBoardNode->setPosition(SQUARE_SIZE, getSize().height / 2);
     _replacementBoardNode->setTexture(transparent_texture);
     _replacementBoard->setViewNode(_replacementBoardNode);
+
+    _guiNode->addChildWithName(_replacementBoardNode, "_replacementBoardNode");
+
 
     // Create the squares & units and put them in the map (replacement board)
     for (int i = 0; i < _replacementListLength; i++)
@@ -443,10 +455,11 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     batch->begin(getCamera()->getCombined());
     std::shared_ptr<Vec2> commonOffset = make_shared<Vec2>(getSize() / 2);
     // batch->draw(_background,Rect(Vec2::ZERO, getSize()));
-    _boardNode->render(batch);
-    _replacementBoardNode->render(batch);
+    //_boardNode->render(batch);
+    //_replacementBoardNode->render(batch);
+    _guiNode->render(batch);
 
-    batch->setColor(Color4::BLACK);
+    batch->setColor(Color4::RED);
     batch->drawText(_turn_text, Vec2(10, getSize().height - _turn_text->getBounds().size.height));
     batch->drawText(_score_text, Vec2(getSize().width - _score_text->getBounds().size.width - 10, getSize().height - _score_text->getBounds().size.height));
     batch->drawText(_replace_text, Vec2(70, getSize().height - _replace_text->getBounds().size.height - 240));
