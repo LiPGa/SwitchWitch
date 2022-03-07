@@ -95,7 +95,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _assets = assets;
     _turns = 5;
     _score = 0;
-
+    _prev_score = 0;
     // Get Textures
     _squareTexture = _assets->get<Texture>(SQUARE_TEXTURE);
     _selectedSquareTexture = _assets->get<Texture>(SQUARE_SELECTED_TEXTURE);
@@ -144,7 +144,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     std::string scoreMsg = strtool::format("Score %d", _score);
     _score_text = scene2::Label::allocWithText(scoreMsg, assets->get<Font>("pixel32"));
-    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-1.3*(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
+    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
     _guiNode->addChildWithName(_score_text, "score_text");
 
     _winLoseText = TextLayout::allocWithText("", assets->get<Font>("pixel32"));
@@ -508,14 +508,18 @@ void GameScene::update(float timestep)
                     _winLoseText->layout();
                     hasLost = true;
                 }
-
+                _prev_score = _score;
                 _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
             _currentState = SELECTING_UNIT;
         }
     }
     // Update the score meter
-    _score_text->setText(strtool::format("Score %d", _score));
+    _score_text->setText(strtool::format("Score %d", _score),true);
+    if ((_prev_score < 9 && _score > 9) || (_prev_score < 99 && _score > 99)) {
+        _layout->remove("score_text");
+        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
+    }
 
 
     // Update the remaining turns

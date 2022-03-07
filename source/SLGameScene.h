@@ -56,6 +56,9 @@ protected:
     int _turns;
     /** The current score of the player */
     int _score;
+    /** The previous score of the player */
+    int _prev_score;
+
 
     /** The number of colors killed */
     int _attackedColorNum;
