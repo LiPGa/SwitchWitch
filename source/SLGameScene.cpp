@@ -144,7 +144,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     std::string scoreMsg = strtool::format("Score %d", _score);
     _score_text = scene2::Label::allocWithText(scoreMsg, assets->get<Font>("pixel32"));
-    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
+    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-1.3*(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
     _guiNode->addChildWithName(_score_text, "score_text");
 
     _winLoseText = TextLayout::allocWithText("", assets->get<Font>("pixel32"));
@@ -516,6 +516,7 @@ void GameScene::update(float timestep)
     }
     // Update the score meter
     _score_text->setText(strtool::format("Score %d", _score));
+
 
     // Update the remaining turns
     _turn_text->setText(strtool::format("Turns %d", _turns));
