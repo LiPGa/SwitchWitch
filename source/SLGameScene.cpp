@@ -91,6 +91,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _input.init();
 
     // Initialize Variables
+    hasLost = false;
     _assets = assets;
     _turns = 5;
     _score = 0;
@@ -121,10 +122,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Get the background image and constant values
     _background = assets->get<Texture>("background");
 
-    //layout
+    // layout
     _layout = scene2::AnchoredLayout::alloc();
 
-    //set up GUI
+    // set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
 
     // Initialize state
@@ -140,21 +141,19 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChildWithName(_turn_text, "turn_text");
 
     // Create and layout the score meter
-    
+
     std::string scoreMsg = strtool::format("Score %d", _score);
     _score_text = scene2::Label::allocWithText(scoreMsg, assets->get<Font>("pixel32"));
     _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
     _guiNode->addChildWithName(_score_text, "score_text");
 
-
-   
-    
-
+    _winLoseText = TextLayout::allocWithText("", assets->get<Font>("pixel32"));
+    _winLoseText->setWidth(getSize().width / 3.0);
 
     // Set the view of the board.
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
     //_boardNode->setPosition(getSize() / 2);
-    _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER,Vec2(0,0));
+    _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
     _boardNode->setTexture(transparent_texture);
     _board->setViewNode(_boardNode);
 
@@ -184,9 +183,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     std::string replaceMsg = "Next:";
     _replace_text = scene2::Label::allocWithText(replaceMsg, assets->get<Font>("pixel32"));
     _layout->addAbsolute("replace_text", cugl::scene2::Layout::Anchor::BOTTOM_LEFT, Vec2(_replacementBoardNode->getPositionX(), _replacementBoardNode->getPositionY() + SQUARE_SIZE));
-    
-    _guiNode->addChildWithName(_replace_text, "replace_text");
 
+    _guiNode->addChildWithName(_replace_text, "replace_text");
 
     // Create the squares & units and put them in the map (replacement board)
     for (int i = 0; i < _replacementListLength; i++)
@@ -330,6 +328,132 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 }
 
 /**
+ * Generate a unit with random color, attack, and direction on the given square.
+ *
+ * @param sq    The given square
+ * @param squareNode    The given squareNode
+ *
+ */
+void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode)
+{
+    // TODO: JSON THIS AND MAKE IT MORE SCALABLE
+    std::vector<cugl::Vec2> basicAttack{cugl::Vec2(1, 0)};
+    std::vector<cugl::Vec2> diagonalAttack{Vec2(1, 1), Vec2(1, -1), Vec2(-1, 1), Vec2(-1, -1)};
+    std::vector<cugl::Vec2> threeWayAttack{Vec2(1, 1), Vec2(1, 0), Vec2(1, -1)};
+    std::vector<cugl::Vec2> twoForwardAttack{Vec2(1, 0), Vec2(2, 0)};
+
+    shared_ptr<Unit> unit = Unit::alloc(Unit::Color(0), basicAttack, basicAttack, Vec2(0, -1));
+
+    auto randomNumber = rand() % 100;
+
+    if (randomNumber <= 70)
+    {
+    }
+    else if (randomNumber > 70 && randomNumber <= 80)
+    {
+        unit->setSpecialAttack(twoForwardAttack);
+    }
+    else if (randomNumber > 80 && randomNumber <= 90)
+    {
+        unit->setSpecialAttack(threeWayAttack);
+    }
+    else
+    {
+        unit->setSpecialAttack(diagonalAttack);
+    }
+
+    // determine the direction of the unit
+    auto randomNumber2 = rand() % 4;
+    Vec2 unitDirection;
+    switch (randomNumber2)
+    {
+    case 0:
+        unitDirection = Vec2(1, 0);
+        break;
+    case 1:
+        unitDirection = Vec2(0, 1);
+        break;
+    case 2:
+        unitDirection = Vec2(-1, 0);
+        break;
+    default:
+        unitDirection = Vec2(0, -1);
+        break;
+    }
+    unit->setDirection(unitDirection);
+
+    unit->setColor(Unit::Color(randomNumber % 3));
+
+    std::shared_ptr<cugl::Texture> unitTexture;
+    if (unit->getColor() == Unit::RED)
+    {
+        unitTexture = _redUnitTexture;
+        if (unit->getSpecialAttack() == twoForwardAttack)
+        {
+            unitTexture = _twoForwardRedTexture;
+        }
+        else if (unit->getSpecialAttack() == threeWayAttack)
+        {
+            unitTexture = _threeWayRedTexture;
+        }
+        else if (unit->getSpecialAttack() == diagonalAttack)
+        {
+            unitTexture = _diagonalRedTexture;
+        }
+        else
+        {
+            unitTexture = _redUnitTexture;
+        }
+    }
+    else if (unit->getColor() == Unit::GREEN)
+    {
+        unitTexture = _greenUnitTexture;
+        if (unit->getSpecialAttack() == twoForwardAttack)
+        {
+            unitTexture = _twoForwardGreenTexture;
+        }
+        else if (unit->getSpecialAttack() == threeWayAttack)
+        {
+            unitTexture = _threeWayGreenTexture;
+        }
+        else if (unit->getSpecialAttack() == diagonalAttack)
+        {
+            unitTexture = _diagonalGreenTexture;
+        }
+        else
+        {
+            unitTexture = _greenUnitTexture;
+        }
+    }
+    else if (unit->getColor() == Unit::BLUE)
+    {
+        unitTexture = _blueUnitTexture;
+        if (unit->getSpecialAttack() == twoForwardAttack)
+        {
+            unitTexture = _twoForwardBlueTexture;
+        }
+        else if (unit->getSpecialAttack() == threeWayAttack)
+        {
+            unitTexture = _threeWayBlueTexture;
+        }
+        else if (unit->getSpecialAttack() == diagonalAttack)
+        {
+            unitTexture = _diagonalBlueTexture;
+        }
+        else
+        {
+            unitTexture = _blueUnitTexture;
+        }
+    }
+
+    sq->setUnit(unit);
+    auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
+    unit->setViewNode(unitNode);
+    unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+    squareNode->addChild(unitNode);
+}
+
+/**
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameScene::dispose()
@@ -391,6 +515,11 @@ void GameScene::update(float timestep)
             }
             else if (_currentState == SELECTING_SWAP && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1)
             {
+
+                _attackedColorNum = 0;
+                _attackedBasicNum = 0;
+                _attackedSpecialNum = 0;
+
                 _currentState = CONFIRM_SWAP;
                 _swappingSquare = squareOnMouse;
                 // Rotation and Swapping of Model
@@ -398,17 +527,32 @@ void GameScene::update(float timestep)
                 _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 squareOnMouse->getViewNode()->setTexture(_swapSquareTexture);
                 vector<shared_ptr<Square>> attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
-                for each (shared_ptr<Square> attackedSquares in attackedSquares)
+
+                _attacked_squares = attackedSquares;
+
+                unordered_set<Unit::Color> attackedColors;
+
+                for (shared_ptr<Square> attackedSquares : attackedSquares)
                 {
                     attackedSquares->getViewNode()->setTexture(_attackedSquareTexture);
+
+                    auto attackedUnit = attackedSquares->getUnit();
+                    attackedColors.insert(attackedUnit->getColor());
+
+                    if (attackedUnit->getSpecialAttack().size() == 0)
+                        _attackedBasicNum++;
+                    else
+                        _attackedSpecialNum++;
                 }
+                _attackedColorNum = (int)attackedColors.size();
+                CULog("%d %d %d", _attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
             {
                 _currentState = SELECTING_SWAP;
                 // If we are de-confirming a swap, we must undo the swap.
                 _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
-                for each (shared_ptr<Square> squares in _board->getAllSquares())
+                for (shared_ptr<Square> squares : _board->getAllSquares())
                 {
                     squares->getViewNode()->setTexture(_squareTexture);
                 }
@@ -417,7 +561,7 @@ void GameScene::update(float timestep)
         }
         else if (_input.didRelease())
         {
-            for each (shared_ptr<Square> squares in _board->getAllSquares())
+            for (shared_ptr<Square> squares : _board->getAllSquares())
             {
                 squares->getViewNode()->setTexture(_squareTexture);
             }
@@ -435,20 +579,39 @@ void GameScene::update(float timestep)
                 _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
                 _selectedSquare->getViewNode()->addChild(swappedUnitNode);
                 _swappingSquare->getViewNode()->addChild(selectedUnitNode);
+
+                // remove the attacked squares
+                for (shared_ptr<Square> attackedSquare : _attacked_squares)
+                {
+                    auto attacked_unit = attackedSquare->getUnit()->getViewNode();
+                    attackedSquare->getViewNode()->removeChild(attacked_unit);
+                    generateUnit(attackedSquare, attackedSquare->getViewNode());
+                }
+
+                _turns--;
+
+                if (_turns == 0)
+                {
+                    // game over
+                    _winLoseText->setText("Game Over!");
+                    _winLoseText->setWidth(getSize().width / 3.0f);
+                    _winLoseText->layout();
+                    hasLost = true;
+                }
+
+                _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
             _currentState = SELECTING_UNIT;
         }
     }
     // Update the score meter
     _score_text->setText(strtool::format("Score %d", _score));
-    
 
     // Update the remaining turns
     _turn_text->setText(strtool::format("Turns %d", _turns));
 
-    //Layout everything
+    // Layout everything
     _layout->layout(_guiNode.get());
-
 }
 
 #pragma mark -
@@ -473,10 +636,24 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     //_replacementBoardNode->render(batch);
     _guiNode->render(batch);
 
-    //batch->setColor(Color4::RED);
-    //batch->drawText(_turn_text, Vec2(10, getSize().height - _turn_text->getBounds().size.height));
-    //batch->drawText(_score_text, Vec2(getSize().width - _score_text->getBounds().size.width - 10, getSize().height - _score_text->getBounds().size.height));
-    //batch->drawText(_replace_text, Vec2(70, getSize().height - _replace_text->getBounds().size.height - 240));
+    // batch->setColor(Color4::RED);
+    // batch->drawText(_turn_text, Vec2(10, getSize().height - _turn_text->getBounds().size.height));
+    // batch->drawText(_score_text, Vec2(getSize().width - _score_text->getBounds().size.width - 10, getSize().height - _score_text->getBounds().size.height));
+    // batch->drawText(_replace_text, Vec2(70, getSize().height - _replace_text->getBounds().size.height - 240));
+    //_boardNode->render(batch);
+
+    batch->setColor(Color4::BLACK);
+    // batch->drawText(_turn_text,Vec2(10, getSize().height-_turn_text->getBounds().size.height));
+    // batch->drawText(_score_text, Vec2(getSize().width - _score_text->getBounds().size.width - 10, getSize().height-_score_text->getBounds().size.height));
+
+    Affine2 trans;
+    trans.scale(3);
+    trans.translate(Vec2(getSize().width / 2 - 3 * _winLoseText->getBounds().size.width / 2, getSize().height / 2));
+    if (hasLost)
+    {
+        batch->setColor(Color4::RED);
+        batch->drawText(_winLoseText, trans);
+    }
 
     batch->end();
 }
