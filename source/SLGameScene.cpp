@@ -161,13 +161,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Dummy Replacement List  CHANGE WHEN REPLACEMENT ALGORYTHM IS DONE!!!
 
-    shared_ptr<Unit> aunit = Unit::alloc(Unit::Color::RED, basicAttack, diagonalAttack, Vec2(0, -1));
-    shared_ptr<Unit> bunit = Unit::alloc(Unit::Color::GREEN, basicAttack, diagonalAttack, Vec2(0, +1));
-    shared_ptr<Unit> cunit = Unit::alloc(Unit::Color::BLUE, basicAttack, diagonalAttack, Vec2(1, 0));
-    shared_ptr<Unit> dunit = Unit::alloc(Unit::Color::RED, basicAttack, diagonalAttack, Vec2(-1, 0));
+    //shared_ptr<Unit> aunit = Unit::alloc(Unit::Color::RED, basicAttack, diagonalAttack, Vec2(0, -1));
+    //shared_ptr<Unit> bunit = Unit::alloc(Unit::Color::GREEN, basicAttack, diagonalAttack, Vec2(0, +1));
+    //shared_ptr<Unit> cunit = Unit::alloc(Unit::Color::BLUE, basicAttack, diagonalAttack, Vec2(1, 0));
+    //shared_ptr<Unit> dunit = Unit::alloc(Unit::Color::RED, basicAttack, diagonalAttack, Vec2(-1, 0));
 
     _replacementListLength = 3;
-    _replacementList = {aunit, bunit, cunit, dunit, bunit, bunit, bunit, bunit, bunit, bunit};
+    _replacementList = {generateUnitDontSet(),generateUnitDontSet(), generateUnitDontSet()};
     _replacementBoard = Board::alloc(1, _replacementListLength);
 
     // Set view of replacement list
@@ -187,36 +187,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChildWithName(_replace_text, "replace_text");
 
     // Create the squares & units and put them in the map (replacement board)
-    for (int i = 0; i < _replacementListLength; i++)
-    {
+    for (int i = 0; i < _replacementListLength; i++) {
+            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
+            auto squarePosition = (Vec2(0, i));
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE / 2));
+            shared_ptr<Square> sq = _replacementBoard->getSquare(squarePosition);
+            sq->setViewNode(squareNode);
+            // Add square node to board node.
+            _replacementBoard->getViewNode()->addChild(squareNode);
+            replaceUnit(sq, squareNode);
 
-        auto squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
-        auto squarePosition = (Vec2(0, i));
-        squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE / 2));
-        _replacementBoard->getSquare(squarePosition)->setViewNode(squareNode);
-        // Add square node to board node.
-        _replacementBoard->getViewNode()->addChild(squareNode);
-        // Grab unit from replacement list
-        shared_ptr<Unit> unit = _replacementList.at(_replacementListLength - i - 1);
-        // Assign Unit to Square
-        _replacementBoard->getSquare(squarePosition)->setUnit(unit);
-        std::shared_ptr<cugl::Texture> unitTexture;
-        if (unit->getColor() == Unit::RED)
-        {
-            unitTexture = _redUnitTexture;
-        }
-        else if (unit->getColor() == Unit::GREEN)
-        {
-            unitTexture = _greenUnitTexture;
-        }
-        else if (unit->getColor() == Unit::BLUE)
-        {
-            unitTexture = _blueUnitTexture;
-        }
-        auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
-        unit->setViewNode(unitNode);
-        unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-        squareNode->addChild(unitNode);
     }
 
     // Create the squares & units and put them in the map
@@ -244,7 +224,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
  * @param squareNode    The given squareNode
  *
  */
-void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode)
+std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> GameScene::generateUnitDontSet()
 {
     // TODO: JSON THIS AND MAKE IT MORE SCALABLE
     std::vector<cugl::Vec2> basicAttack{cugl::Vec2(1, 0)};
@@ -356,12 +336,31 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
         }
     }
 
-    sq->setUnit(unit);
+    //sq->setUnit(unit);
     auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
     unit->setViewNode(unitNode);
     unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-    squareNode->addChild(unitNode);
+    std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> a = { unit, unitNode };
+    //squareNode->addChild(unitNode);
+    return a;
 }
+
+void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode) {
+    auto a = generateUnitDontSet();
+    sq->setUnit(a.first);
+    squareNode->addChild(a.second);
+}
+
+void GameScene::replaceUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode) {
+    
+    auto a = _replacementList.front();
+    _replacementList.erase(_replacementList.begin());
+    sq->setUnit(a.first);
+    squareNode->addChild(a.second);
+    _replacementList.push_back(generateUnitDontSet()); 
+}
+
+
 
 /**
  * Disposes of all (non-static) resources allocated to this mode.
@@ -495,9 +494,19 @@ void GameScene::update(float timestep)
                 {
                     auto attacked_unit = attackedSquare->getUnit()->getViewNode();
                     attackedSquare->getViewNode()->removeChild(attacked_unit);
-                    generateUnit(attackedSquare, attackedSquare->getViewNode());
+                    replaceUnit(attackedSquare, attackedSquare->getViewNode());
                 }
-
+                //change replacement board
+                for (int i = 0; i < _replacementListLength; i++) {
+                    auto rsquare = _replacementBoard->getSquare(Vec2(0, i));
+                    auto runit = rsquare->getUnit()->getViewNode();
+                    rsquare->getViewNode()->removeChild(runit);
+                    //replaceUnit(rsquare, rsquare->getViewNode());
+                    auto a = _replacementList.at(i);
+                    rsquare->setUnit(a.first);
+                    rsquare->getViewNode()->addChild(a.second);
+                }
+                
                 _turns--;
 
                 if (_turns == 0)

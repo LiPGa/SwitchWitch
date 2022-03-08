@@ -71,10 +71,10 @@ protected:
 #pragma mark Model Variables
     /** The board */
     shared_ptr<Board> _board;
-    /** The replacement units list */
+    /** The replacement units,unitNodes list */
     shared_ptr<Board> _replacementBoard;
 
-    std::vector<shared_ptr<Unit>> _replacementList;
+    std::vector<std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>>> _replacementList;
     /** Square that is currently being selected by the player */
     shared_ptr<Square> _selectedSquare;
     /** Square that is currently being selected by the player to swap with the selectedSquare */
@@ -221,6 +221,11 @@ private:
      *
      */
     void generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
+
+    void replaceUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
+        
+    std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> generateUnitDontSet();
+
 };
 
 #endif /* __SG_GAME_SCENE_H__ */
