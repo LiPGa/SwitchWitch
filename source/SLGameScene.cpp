@@ -13,6 +13,8 @@
 #include <cugl/cugl.h>
 #include <iostream>
 #include <sstream>
+#include <math.h>
+#include <algorithm>
 
 #include "SLGameScene.h"
 
@@ -134,6 +136,21 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _boardNode->setTexture(transparent_texture);
     _board->setViewNode(_boardNode);
     
+
+    /**
+     * Set the initial location of special units
+     *
+     * The # of initial special units = Math.floor(0.1 * total number of units on the board).
+     */
+    int initialSUNum = (int)floor(0.1 * BOARD_SIZE * BOARD_SIZE);
+    Vec2 specialPosition[initialSUNum];
+    for (int i = 0; i < initialSUNum; i++) {
+        specialPosition[i] = Vec2(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
+        while (!isSafe(specialPosition[i],&specialPosition[initialSUNum])) {
+            specialPosition[i] = Vec2(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
+        }
+    }
+    
     // Create the squares & units and put them in the map
     for (int i=0;i<5;i++) {
         for(int j=0;j<5;++j){
@@ -145,10 +162,41 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             // Add square node to board node.
             _board->getViewNode()->addChild(squareNode);
             generateUnit(sq, squareNode);
+            for (int i = 0; i < initialSUNum; i++) {
+                if (squarePosition == specialPosition[i]) {
+                    upgradeToSpecial(sq, squareNode);
+                }
+            }
         }
     }
     reset();
     return true;
+}
+
+/**
+ * Check if the given position is safe to hold a special unit
+ *
+ * Among the 8 squares around a special unit, there can be at most one other special unit
+ */
+bool GameScene::isSafe(cugl::Vec2 pos,cugl::Vec2 specialPosition[]) {
+    int count = 0;
+    for (int i = 0; i < specialPosition->length(); i++) {
+        // if the given position is already taken by another special unit
+        if (pos == specialPosition[i]) {
+            return false;
+        }
+        
+        // if there is any special unit among the 8 adjacent squares of the given position
+        if (specialPosition[i].x >= pos.x - 1
+            && specialPosition[i].x <= pos.x + 1
+            && specialPosition[i].y >= pos.y - 1
+            && specialPosition[i].y <= pos.y + 1
+            ) {
+            count++;
+        }
+    }
+    if (count <= 1) return true;
+    return false;
 }
 
 /**
@@ -169,14 +217,22 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
      
     auto randomNumber = rand() % 100;
     
-    if (randomNumber <= 70) {
-    } else if (randomNumber > 70 && randomNumber <= 80) {
-        unit->setSpecialAttack(twoForwardAttack);
-    } else if (randomNumber > 80 && randomNumber <= 90) {
-        unit->setSpecialAttack(threeWayAttack);
-    } else {
-        unit->setSpecialAttack(diagonalAttack);
-    }
+//    /*
+//     * determine the attack pattern of the unit
+//     *
+//     * number of special units (#special) = 0.1 * total number of units
+//     * number of two arrow special = 0.4 * (#special)
+//     * number of three arrow special = 0.4 * (#special)
+//     * number of four arrow special = 0.2 * (#special)
+//     */
+//    if (randomNumber <= 90) {
+//    } else if (randomNumber > 90 && randomNumber <= 94) {
+//        unit->setSpecialAttack(twoForwardAttack);
+//    } else if (randomNumber > 94 && randomNumber <= 98) {
+//        unit->setSpecialAttack(threeWayAttack);
+//    } else {
+//        unit->setSpecialAttack(diagonalAttack);
+//    }
     
     //determine the direction of the unit
     auto randomNumber2 = rand() % 4;
@@ -202,37 +258,37 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
     std::shared_ptr<cugl::Texture> unitTexture;
     if (unit->getColor() == Unit::RED) {
         unitTexture = _redUnitTexture;
-        if (unit->getSpecialAttack() == twoForwardAttack) {
-            unitTexture = _twoForwardRedTexture;
-        } else if (unit->getSpecialAttack() == threeWayAttack) {
-            unitTexture = _threeWayRedTexture;
-        } else if (unit->getSpecialAttack() == diagonalAttack) {
-            unitTexture = _diagonalRedTexture;
-        } else {
-            unitTexture = _redUnitTexture;
-        }
+//        if (unit->getSpecialAttack() == twoForwardAttack) {
+//            unitTexture = _twoForwardRedTexture;
+//        } else if (unit->getSpecialAttack() == threeWayAttack) {
+//            unitTexture = _threeWayRedTexture;
+//        } else if (unit->getSpecialAttack() == diagonalAttack) {
+//            unitTexture = _diagonalRedTexture;
+//        } else {
+//            unitTexture = _redUnitTexture;
+//        }
     } else if (unit->getColor() == Unit::GREEN) {
         unitTexture = _greenUnitTexture;
-        if (unit->getSpecialAttack() == twoForwardAttack) {
-            unitTexture = _twoForwardGreenTexture;
-        } else if (unit->getSpecialAttack() == threeWayAttack) {
-            unitTexture = _threeWayGreenTexture;
-        } else if (unit->getSpecialAttack() == diagonalAttack) {
-            unitTexture = _diagonalGreenTexture;
-        } else {
-            unitTexture = _greenUnitTexture;
-        }
+//        if (unit->getSpecialAttack() == twoForwardAttack) {
+//            unitTexture = _twoForwardGreenTexture;
+//        } else if (unit->getSpecialAttack() == threeWayAttack) {
+//            unitTexture = _threeWayGreenTexture;
+//        } else if (unit->getSpecialAttack() == diagonalAttack) {
+//            unitTexture = _diagonalGreenTexture;
+//        } else {
+//            unitTexture = _greenUnitTexture;
+//        }
     } else if (unit->getColor() == Unit::BLUE) {
         unitTexture = _blueUnitTexture;
-        if (unit->getSpecialAttack() == twoForwardAttack) {
-            unitTexture = _twoForwardBlueTexture;
-        } else if (unit->getSpecialAttack() == threeWayAttack) {
-            unitTexture = _threeWayBlueTexture;
-        } else if (unit->getSpecialAttack() == diagonalAttack) {
-            unitTexture = _diagonalBlueTexture;
-        } else {
-            unitTexture = _blueUnitTexture;
-        }
+//        if (unit->getSpecialAttack() == twoForwardAttack) {
+//            unitTexture = _twoForwardBlueTexture;
+//        } else if (unit->getSpecialAttack() == threeWayAttack) {
+//            unitTexture = _threeWayBlueTexture;
+//        } else if (unit->getSpecialAttack() == diagonalAttack) {
+//            unitTexture = _diagonalBlueTexture;
+//        } else {
+//            unitTexture = _blueUnitTexture;
+//        }
     }
     
     sq->setUnit(unit);
@@ -240,6 +296,54 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
     unit->setViewNode(unitNode);
     unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
     squareNode->addChild(unitNode);
+}
+
+/**
+ * Upgrade a basic unit to a special unit.
+ *
+ * @param sq    The given square
+ */
+void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode) {
+    std::vector<cugl::Vec2> diagonalAttack{Vec2(1,1), Vec2(1,-1), Vec2(-1,1), Vec2(-1,-1)};
+    std::vector<cugl::Vec2> threeWayAttack{Vec2(1,1), Vec2(1,0), Vec2(1,-1)};
+    std::vector<cugl::Vec2> twoForwardAttack{Vec2(1,0), Vec2(2,0)};
+
+    auto unit = sq->getUnit();
+    auto unitNode = unit->getViewNode();
+    auto randomNumber3 = rand() % 10 + 1;
+    if (randomNumber3 <= 4) {
+        unit->setSpecialAttack(twoForwardAttack);
+    } else if (randomNumber3 > 4 && randomNumber3 <= 8) {
+           unit->setSpecialAttack(threeWayAttack);
+    } else {
+           unit->setSpecialAttack(diagonalAttack);
+    }
+
+    if (unit->getColor() == Unit::RED) {
+        if (unit->getSpecialAttack() == twoForwardAttack) {
+            unitNode -> setTexture(_twoForwardRedTexture);
+        } else if (unit->getSpecialAttack() == threeWayAttack) {
+            unitNode -> setTexture(_threeWayRedTexture);
+        } else if (unit->getSpecialAttack() == diagonalAttack) {
+            unitNode -> setTexture (_diagonalRedTexture);
+        }
+    } else if (unit->getColor() == Unit::GREEN) {
+        if (unit->getSpecialAttack() == twoForwardAttack) {
+            unitNode -> setTexture(_twoForwardGreenTexture);
+        } else if (unit->getSpecialAttack() == threeWayAttack) {
+            unitNode -> setTexture(_threeWayGreenTexture);
+        } else if (unit->getSpecialAttack() == diagonalAttack) {
+            unitNode -> setTexture (_diagonalGreenTexture);
+        }
+    } else if (unit->getColor() == Unit::BLUE) {
+        if (unit->getSpecialAttack() == twoForwardAttack) {
+            unitNode -> setTexture(_twoForwardBlueTexture);
+        } else if (unit->getSpecialAttack() == threeWayAttack) {
+            unitNode -> setTexture(_threeWayBlueTexture);
+        } else if (unit->getSpecialAttack() == diagonalAttack) {
+            unitNode -> setTexture (_diagonalBlueTexture);
+        }
+    }
 }
 
 
@@ -361,6 +465,10 @@ void GameScene::update(float timestep) {
                     auto attacked_unit = attackedSquare->getUnit()->getViewNode();
                     attackedSquare->getViewNode()->removeChild(attacked_unit);
                     generateUnit(attackedSquare, attackedSquare->getViewNode());
+                    auto randomNumber4 = rand() % 10;
+                    if (randomNumber4 <= 1) {
+                        upgradeToSpecial(attackedSquare, attackedSquare->getViewNode());
+                    }
                 }
                 
                 _turns--;

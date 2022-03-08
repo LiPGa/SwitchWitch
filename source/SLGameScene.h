@@ -200,13 +200,30 @@ private:
     int calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum);
     
     /**
-     * Generate a unit with random color, attack, and direction on the given square.
+     * Generate a unit with random color and direction on the given square.
      *
      * @param sq    The given square
      * @param squareNode    The given squareNode
      *
      */
     void generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
+    
+
+    
+    /**
+     * Upgrade a basic unit to a special unit.
+     *
+     * @param sq    The given square
+     */
+    void upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
+    
+    /**
+     * check if the given position is safe to hold a special unit
+     *
+     * Among the 8 squares around a special unit, there can be at most one other special unit
+     */
+    bool isSafe(cugl::Vec2 pos,cugl::Vec2 specialPosition[]);
+    
 };
 
 #endif /* __SG_GAME_SCENE_H__ */
