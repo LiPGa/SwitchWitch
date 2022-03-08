@@ -166,8 +166,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     //shared_ptr<Unit> cunit = Unit::alloc(Unit::Color::BLUE, basicAttack, diagonalAttack, Vec2(1, 0));
     //shared_ptr<Unit> dunit = Unit::alloc(Unit::Color::RED, basicAttack, diagonalAttack, Vec2(-1, 0));
 
-    _replacementListLength = 3;
-    _replacementList = {generateUnitDontSet(),generateUnitDontSet(), generateUnitDontSet()};
+    _replacementListLength = 5;
+    for (int i = 0; i < _replacementListLength; i++) {
+        _replacementList.push_back(generateUnitDontSet());
+    }
     _replacementBoard = Board::alloc(1, _replacementListLength);
 
     // Set view of replacement list
@@ -182,7 +184,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Create and layout the replacement text
     std::string replaceMsg = "Next:";
     _replace_text = scene2::Label::allocWithText(replaceMsg, assets->get<Font>("pixel32"));
-    _layout->addAbsolute("replace_text", cugl::scene2::Layout::Anchor::BOTTOM_LEFT, Vec2(_replacementBoardNode->getPositionX(), _replacementBoardNode->getPositionY() + SQUARE_SIZE));
+    _layout->addAbsolute("replace_text", cugl::scene2::Layout::Anchor::BOTTOM_LEFT, Vec2(_replacementBoardNode->getPositionX(),0));
 
     _guiNode->addChildWithName(_replace_text, "replace_text");
 
@@ -195,7 +197,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             sq->setViewNode(squareNode);
             // Add square node to board node.
             _replacementBoard->getViewNode()->addChild(squareNode);
-            replaceUnit(sq, squareNode);
+            replaceUnitNoDelete(sq, squareNode,i);
 
     }
 
