@@ -103,6 +103,9 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _replace_text;
     // std::shared_ptr<cugl::TextLayout> _score_text;
     /** Win/Lose text */
+    std::shared_ptr<cugl::scene2::Label> _endgame_text;
+
+
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attacked_squares;
 

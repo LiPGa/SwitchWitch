@@ -147,8 +147,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
     _guiNode->addChildWithName(_score_text, "score_text");
 
-    _winLoseText = TextLayout::allocWithText("", assets->get<Font>("pixel32"));
-    _winLoseText->setWidth(getSize().width / 3.0);
+    
+
+    
 
     // Set the view of the board.
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
@@ -158,6 +159,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _board->setViewNode(_boardNode);
 
     _guiNode->addChildWithName(_boardNode, "boardNode");
+
+    // Create and layout the win lose text
+    std::string endgameMsg = "YOU LOSE";
+    _endgame_text = scene2::Label::allocWithText(endgameMsg, assets->get<Font>("pixel32"));
+    _endgame_text->setForeground(Color4::CLEAR);
+    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -_endgame_text->getHeight()));
+    _guiNode->addChildWithName(_endgame_text, "endgame_text");
+
 
     // Dummy Replacement List  CHANGE WHEN REPLACEMENT ALGORYTHM IS DONE!!!
 
@@ -529,11 +538,7 @@ void GameScene::update(float timestep)
 
                 if (_turns == 0)
                 {
-                    // game over
-                    _winLoseText->setText("Game Over!");
-                    _winLoseText->setWidth(getSize().width / 3.0f);
-                    _winLoseText->layout();
-                    hasLost = true;
+                  hasLost = true;
                 }
                 _prev_score = _score;
                 _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
@@ -548,6 +553,11 @@ void GameScene::update(float timestep)
         _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
     }
 
+    //dfghgfd
+    if (hasLost) {
+        _endgame_text->setForeground(Color4::RED);
+
+    }
 
     // Update the remaining turns
     _turn_text->setText(strtool::format("Turns %d", _turns));
@@ -589,14 +599,6 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // batch->drawText(_turn_text,Vec2(10, getSize().height-_turn_text->getBounds().size.height));
     // batch->drawText(_score_text, Vec2(getSize().width - _score_text->getBounds().size.width - 10, getSize().height-_score_text->getBounds().size.height));
 
-    Affine2 trans;
-    trans.scale(3);
-    trans.translate(Vec2(getSize().width / 2 - 3 * _winLoseText->getBounds().size.width / 2, getSize().height / 2));
-    if (hasLost)
-    {
-        batch->setColor(Color4::RED);
-        batch->drawText(_winLoseText, trans);
-    }
 
     batch->end();
 }
