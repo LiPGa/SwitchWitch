@@ -360,7 +360,21 @@ void GameScene::replaceUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNod
     _replacementList.push_back(generateUnitDontSet()); 
 }
 
+void GameScene::replaceUnitNoDelete(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode, int i) {
 
+    auto a = _replacementList.at(i);
+    auto runit = a.first;
+    auto rnode= a.second;
+
+    shared_ptr<Unit> unit = Unit::alloc(runit->getColor(), runit->getBasicAttack(), runit->getSpecialAttack(), runit->getDirection());
+    auto unitNode = scene2::PolygonNode::allocWithTexture(rnode->getTexture());
+    unit->setViewNode(unitNode);
+
+    //_replacementList.erase(_replacementList.begin());
+    sq->setUnit(unit);
+    squareNode->addChild(unitNode);
+    //_replacementList.push_back(generateUnitDontSet());
+}
 
 /**
  * Disposes of all (non-static) resources allocated to this mode.
@@ -501,10 +515,12 @@ void GameScene::update(float timestep)
                     auto rsquare = _replacementBoard->getSquare(Vec2(0, i));
                     auto runit = rsquare->getUnit()->getViewNode();
                     rsquare->getViewNode()->removeChild(runit);
-                    //replaceUnit(rsquare, rsquare->getViewNode());
+                    replaceUnitNoDelete(rsquare, rsquare->getViewNode(),i);
+                    /*
                     auto a = _replacementList.at(i);
                     rsquare->setUnit(a.first);
                     rsquare->getViewNode()->addChild(a.second);
+                    */
                 }
                 
                 _turns--;

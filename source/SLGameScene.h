@@ -223,7 +223,9 @@ private:
     void generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
 
     void replaceUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
-        
+
+    void replaceUnitNoDelete(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode, int i);
+
     std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> generateUnitDontSet();
 
 };
