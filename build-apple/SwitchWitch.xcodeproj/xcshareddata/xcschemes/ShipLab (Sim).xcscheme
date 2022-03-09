@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
                BuildableName = "ShipLab (Sim).app"
-               BlueprintName = "ShipLab (Sim)"
-               ReferencedContainer = "container:ShipLab.xcodeproj">
+               BlueprintName = "SwitchWitch (Sim)"
+               ReferencedContainer = "container:SwitchWitch.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,8 +46,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
             BuildableName = "ShipLab (Sim).app"
-            BlueprintName = "ShipLab (Sim)"
-            ReferencedContainer = "container:ShipLab.xcodeproj">
+            BlueprintName = "SwitchWitch (Sim)"
+            ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -63,8 +63,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
             BuildableName = "ShipLab (Sim).app"
-            BlueprintName = "ShipLab (Sim)"
-            ReferencedContainer = "container:ShipLab.xcodeproj">
+            BlueprintName = "SwitchWitch (Sim)"
+            ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

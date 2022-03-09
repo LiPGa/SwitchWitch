@@ -16,6 +16,15 @@
 		75C0E5C627C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
 		75C0E5C727C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
 		75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
+		DB5871F427D92E160023672B /* SWApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871EB27D92E150023672B /* SWApp.cpp */; };
+		DB5871F527D92E160023672B /* SWApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871EB27D92E150023672B /* SWApp.cpp */; };
+		DB5871F627D92E160023672B /* SWApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871EB27D92E150023672B /* SWApp.cpp */; };
+		DB5871F727D92E160023672B /* SWGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871F027D92E160023672B /* SWGameScene.cpp */; };
+		DB5871F827D92E160023672B /* SWGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871F027D92E160023672B /* SWGameScene.cpp */; };
+		DB5871F927D92E160023672B /* SWGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871F027D92E160023672B /* SWGameScene.cpp */; };
+		DB5871FA27D92E160023672B /* SWLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871F127D92E160023672B /* SWLoadingScene.cpp */; };
+		DB5871FB27D92E160023672B /* SWLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871F127D92E160023672B /* SWLoadingScene.cpp */; };
+		DB5871FC27D92E160023672B /* SWLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871F127D92E160023672B /* SWLoadingScene.cpp */; };
 		DBC4960F27C861EC006BA4CA /* SWInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBC4960D27C861EC006BA4CA /* SWInputController.cpp */; };
 		DBC4961027C861EC006BA4CA /* SWInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBC4960D27C861EC006BA4CA /* SWInputController.cpp */; };
 		DBC4961127C861EC006BA4CA /* SWInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBC4960D27C861EC006BA4CA /* SWInputController.cpp */; };
@@ -44,15 +53,6 @@
 		EB51311027A2328A00E255AA /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = EB51310C27A2328A00E255AA /* sounds */; };
 		EB51311127A2328A00E255AA /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = EB51310C27A2328A00E255AA /* sounds */; };
 		EB51311227A2328A00E255AA /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = EB51310C27A2328A00E255AA /* sounds */; };
-		EB51312627A2329900E255AA /* SLGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311527A2329900E255AA /* SLGameScene.cpp */; };
-		EB51312727A2329900E255AA /* SLGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311527A2329900E255AA /* SLGameScene.cpp */; };
-		EB51312827A2329900E255AA /* SLGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311527A2329900E255AA /* SLGameScene.cpp */; };
-		EB51312C27A2329900E255AA /* SLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311727A2329900E255AA /* SLApp.cpp */; };
-		EB51312D27A2329900E255AA /* SLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311727A2329900E255AA /* SLApp.cpp */; };
-		EB51312E27A2329900E255AA /* SLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311727A2329900E255AA /* SLApp.cpp */; };
-		EB51313227A2329900E255AA /* SLLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311D27A2329900E255AA /* SLLoadingScene.cpp */; };
-		EB51313327A2329900E255AA /* SLLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311D27A2329900E255AA /* SLLoadingScene.cpp */; };
-		EB51313427A2329900E255AA /* SLLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB51311D27A2329900E255AA /* SLLoadingScene.cpp */; };
 		EB7454AB1D74D846002FBAE6 /* iOS.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB7454A71D74D846002FBAE6 /* iOS.xcassets */; };
 		EB7454AC1D74D846002FBAE6 /* Landscape.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB7454A81D74D846002FBAE6 /* Landscape.storyboard */; };
 		EB7454AD1D74D846002FBAE6 /* Portrait.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB7454A91D74D846002FBAE6 /* Portrait.storyboard */; };
@@ -132,10 +132,16 @@
 		75C0E5BD27C47776006BB1D0 /* SWUnit.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWUnit.hpp; sourceTree = "<group>"; };
 		75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWSquare.cpp; sourceTree = "<group>"; };
 		75C0E5C527C47EBD006BB1D0 /* SWSquare.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWSquare.hpp; sourceTree = "<group>"; };
+		DB5871EB27D92E150023672B /* SWApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWApp.cpp; sourceTree = "<group>"; };
+		DB5871EF27D92E150023672B /* SWLoadingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWLoadingScene.h; sourceTree = "<group>"; };
+		DB5871F027D92E160023672B /* SWGameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWGameScene.cpp; sourceTree = "<group>"; };
+		DB5871F127D92E160023672B /* SWLoadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWLoadingScene.cpp; sourceTree = "<group>"; };
+		DB5871F227D92E160023672B /* SWGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWGameScene.h; sourceTree = "<group>"; };
+		DB5871F327D92E160023672B /* SWApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWApp.h; sourceTree = "<group>"; };
 		DBC4960D27C861EC006BA4CA /* SWInputController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWInputController.cpp; sourceTree = "<group>"; };
 		DBC4960E27C861EC006BA4CA /* SWInputController.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; path = SWInputController.h; sourceTree = "<group>"; };
 		EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceMargins.plist; sourceTree = "<group>"; };
-		EB22BF5E25D0E8BC002ACE41 /* ShipLab (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ShipLab (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB22BF5E25D0E8BC002ACE41 /* SwitchWitch (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwitchWitch (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B41D74952A002FE78B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EB2BE9BA1D7498D2002FE78B /* textures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = textures; sourceTree = "<group>"; };
 		EB2BE9BE1D749908002FE78B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -148,20 +154,14 @@
 		EB2BE9CE1D749953002FE78B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		EB51310B27A2328A00E255AA /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		EB51310C27A2328A00E255AA /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
-		EB51311527A2329900E255AA /* SLGameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLGameScene.cpp; sourceTree = "<group>"; };
-		EB51311727A2329900E255AA /* SLApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLApp.cpp; sourceTree = "<group>"; };
-		EB51311827A2329900E255AA /* SLGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLGameScene.h; sourceTree = "<group>"; };
-		EB51311A27A2329900E255AA /* SLLoadingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLLoadingScene.h; sourceTree = "<group>"; };
-		EB51311D27A2329900E255AA /* SLLoadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SLLoadingScene.cpp; sourceTree = "<group>"; };
-		EB51312227A2329900E255AA /* SLApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SLApp.h; sourceTree = "<group>"; };
-		EB74548C1D74D75C002FBAE6 /* ShipLab (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ShipLab (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB74548C1D74D75C002FBAE6 /* SwitchWitch (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwitchWitch (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB7454A61D74D846002FBAE6 /* iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS-Info.plist"; sourceTree = "<group>"; };
 		EB7454A71D74D846002FBAE6 /* iOS.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iOS.xcassets; sourceTree = "<group>"; };
 		EB7454A81D74D846002FBAE6 /* Landscape.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Landscape.storyboard; sourceTree = "<group>"; };
 		EB7454A91D74D846002FBAE6 /* Portrait.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Portrait.storyboard; sourceTree = "<group>"; };
 		EBB3D284201444B300E6A7CD /* CUGL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CUGL.xcodeproj; path = "../cugl/build-apple/CUGL.xcodeproj"; sourceTree = "<group>"; };
 		EBB3D29B201444F100E6A7CD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		EBBF18911D74904A008E2001 /* ShipLab (Mac).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ShipLab (Mac).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBBF18911D74904A008E2001 /* SwitchWitch (Mac).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwitchWitch (Mac).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBBF189A1D74904A008E2001 /* Mac.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Mac.xcassets; sourceTree = "<group>"; };
 		EBBF189F1D74904A008E2001 /* Mac-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mac-Info.plist"; sourceTree = "<group>"; };
 		EBC147141E27F07C005494CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -348,9 +348,9 @@
 		EBBF18921D74904A008E2001 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EBBF18911D74904A008E2001 /* ShipLab (Mac).app */,
-				EB74548C1D74D75C002FBAE6 /* ShipLab (iOS).app */,
-				EB22BF5E25D0E8BC002ACE41 /* ShipLab (Sim).app */,
+				EBBF18911D74904A008E2001 /* SwitchWitch (Mac).app */,
+				EB74548C1D74D75C002FBAE6 /* SwitchWitch (iOS).app */,
+				EB22BF5E25D0E8BC002ACE41 /* SwitchWitch (Sim).app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -372,13 +372,13 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				DB5871EB27D92E150023672B /* SWApp.cpp */,
+				DB5871F327D92E160023672B /* SWApp.h */,
+				DB5871F027D92E160023672B /* SWGameScene.cpp */,
+				DB5871F227D92E160023672B /* SWGameScene.h */,
+				DB5871F127D92E160023672B /* SWLoadingScene.cpp */,
+				DB5871EF27D92E150023672B /* SWLoadingScene.h */,
 				EB2BE9B41D74952A002FE78B /* main.cpp */,
-				EB51312227A2329900E255AA /* SLApp.h */,
-				EB51311727A2329900E255AA /* SLApp.cpp */,
-				EB51311A27A2329900E255AA /* SLLoadingScene.h */,
-				EB51311D27A2329900E255AA /* SLLoadingScene.cpp */,
-				EB51311827A2329900E255AA /* SLGameScene.h */,
-				EB51311527A2329900E255AA /* SLGameScene.cpp */,
 				DBC4960D27C861EC006BA4CA /* SWInputController.cpp */,
 				DBC4960E27C861EC006BA4CA /* SWInputController.h */,
 				75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */,
@@ -395,9 +395,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EB22BF5D25D0E8BC002ACE41 /* ShipLab (Sim) */ = {
+		EB22BF5D25D0E8BC002ACE41 /* SwitchWitch (Sim) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EB22BF7B25D0E8BD002ACE41 /* Build configuration list for PBXNativeTarget "ShipLab (Sim)" */;
+			buildConfigurationList = EB22BF7B25D0E8BD002ACE41 /* Build configuration list for PBXNativeTarget "SwitchWitch (Sim)" */;
 			buildPhases = (
 				EB22BF5A25D0E8BC002ACE41 /* Sources */,
 				EB22BF5B25D0E8BC002ACE41 /* Frameworks */,
@@ -407,14 +407,14 @@
 			);
 			dependencies = (
 			);
-			name = "ShipLab (Sim)";
+			name = "SwitchWitch (Sim)";
 			productName = "HelloWorld (Sim)";
-			productReference = EB22BF5E25D0E8BC002ACE41 /* ShipLab (Sim).app */;
+			productReference = EB22BF5E25D0E8BC002ACE41 /* SwitchWitch (Sim).app */;
 			productType = "com.apple.product-type.application";
 		};
-		EB74548B1D74D75C002FBAE6 /* ShipLab (iOS) */ = {
+		EB74548B1D74D75C002FBAE6 /* SwitchWitch (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "ShipLab (iOS)" */;
+			buildConfigurationList = EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "SwitchWitch (iOS)" */;
 			buildPhases = (
 				EB7454881D74D75C002FBAE6 /* Sources */,
 				EB7454891D74D75C002FBAE6 /* Frameworks */,
@@ -424,14 +424,14 @@
 			);
 			dependencies = (
 			);
-			name = "ShipLab (iOS)";
+			name = "SwitchWitch (iOS)";
 			productName = "CUGL Demo (iOS)";
-			productReference = EB74548C1D74D75C002FBAE6 /* ShipLab (iOS).app */;
+			productReference = EB74548C1D74D75C002FBAE6 /* SwitchWitch (iOS).app */;
 			productType = "com.apple.product-type.application";
 		};
-		EBBF18901D74904A008E2001 /* ShipLab (Mac) */ = {
+		EBBF18901D74904A008E2001 /* SwitchWitch (Mac) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "ShipLab (Mac)" */;
+			buildConfigurationList = EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "SwitchWitch (Mac)" */;
 			buildPhases = (
 				EBBF188D1D74904A008E2001 /* Sources */,
 				EBBF188E1D74904A008E2001 /* Frameworks */,
@@ -441,9 +441,9 @@
 			);
 			dependencies = (
 			);
-			name = "ShipLab (Mac)";
+			name = "SwitchWitch (Mac)";
 			productName = "CUGL Demo";
-			productReference = EBBF18911D74904A008E2001 /* ShipLab (Mac).app */;
+			productReference = EBBF18911D74904A008E2001 /* SwitchWitch (Mac).app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -457,19 +457,21 @@
 				TargetAttributes = {
 					EB22BF5D25D0E8BC002ACE41 = {
 						CreatedOnToolsVersion = 12.4;
-						DevelopmentTeam = G6P7H83FK6;
+						DevelopmentTeam = 8PY6L96N4T;
 						ProvisioningStyle = Automatic;
 					};
 					EB74548B1D74D75C002FBAE6 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = G6P7H83FK6;
+						DevelopmentTeam = 8PY6L96N4T;
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 8PY6L96N4T;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = EBBF188C1D74904A008E2001 /* Build configuration list for PBXProject "ShipLab" */;
+			buildConfigurationList = EBBF188C1D74904A008E2001 /* Build configuration list for PBXProject "SwitchWitch" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -488,9 +490,9 @@
 			);
 			projectRoot = "";
 			targets = (
-				EBBF18901D74904A008E2001 /* ShipLab (Mac) */,
-				EB74548B1D74D75C002FBAE6 /* ShipLab (iOS) */,
-				EB22BF5D25D0E8BC002ACE41 /* ShipLab (Sim) */,
+				EBBF18901D74904A008E2001 /* SwitchWitch (Mac) */,
+				EB74548B1D74D75C002FBAE6 /* SwitchWitch (iOS) */,
+				EB22BF5D25D0E8BC002ACE41 /* SwitchWitch (Sim) */,
 			);
 		};
 /* End PBXProject section */
@@ -572,10 +574,10 @@
 				75C0E5C027C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4961127C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */,
-				EB51312E27A2329900E255AA /* SLApp.cpp in Sources */,
-				EB51313427A2329900E255AA /* SLLoadingScene.cpp in Sources */,
 				75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
-				EB51312827A2329900E255AA /* SLGameScene.cpp in Sources */,
+				DB5871F927D92E160023672B /* SWGameScene.cpp in Sources */,
+				DB5871FC27D92E160023672B /* SWLoadingScene.cpp in Sources */,
+				DB5871F627D92E160023672B /* SWApp.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -587,10 +589,10 @@
 				75C0E5BF27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4961027C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				75C0E5BA27C47440006BB1D0 /* SWBoard.cpp in Sources */,
-				EB51312D27A2329900E255AA /* SLApp.cpp in Sources */,
-				EB51313327A2329900E255AA /* SLLoadingScene.cpp in Sources */,
 				75C0E5C727C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
-				EB51312727A2329900E255AA /* SLGameScene.cpp in Sources */,
+				DB5871F827D92E160023672B /* SWGameScene.cpp in Sources */,
+				DB5871FB27D92E160023672B /* SWLoadingScene.cpp in Sources */,
+				DB5871F527D92E160023672B /* SWApp.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -602,10 +604,10 @@
 				75C0E5BE27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4960F27C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				75C0E5B927C47440006BB1D0 /* SWBoard.cpp in Sources */,
-				EB51312C27A2329900E255AA /* SLApp.cpp in Sources */,
-				EB51313227A2329900E255AA /* SLLoadingScene.cpp in Sources */,
 				75C0E5C627C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
-				EB51312627A2329900E255AA /* SLGameScene.cpp in Sources */,
+				DB5871F727D92E160023672B /* SWGameScene.cpp in Sources */,
+				DB5871FA27D92E160023672B /* SWLoadingScene.cpp in Sources */,
+				DB5871F427D92E160023672B /* SWApp.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -625,13 +627,13 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G6P7H83FK6;
+				DEVELOPMENT_TEAM = 8PY6L96N4T;
 				INFOPLIST_FILE = "$(SRCROOT)/../cugl/build-apple/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.sim.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.sim.SwitchWitch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -650,12 +652,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = G6P7H83FK6;
+				DEVELOPMENT_TEAM = 8PY6L96N4T;
 				INFOPLIST_FILE = "$(SRCROOT)/../cugl/build-apple/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.sim.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.sim.SwitchWitch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -671,11 +673,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 8PY6L96N4T;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.SwitchWitch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -691,11 +694,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 8PY6L96N4T;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.SwitchWitch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -756,7 +760,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(CUGL_INCLUDES)";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -813,7 +817,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(CUGL_INCLUDES)";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
@@ -826,12 +830,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8PY6L96N4T;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.SwitchWitch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -840,19 +847,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8PY6L96N4T;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.HelloWorld;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.SwitchWitch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EB22BF7B25D0E8BD002ACE41 /* Build configuration list for PBXNativeTarget "ShipLab (Sim)" */ = {
+		EB22BF7B25D0E8BD002ACE41 /* Build configuration list for PBXNativeTarget "SwitchWitch (Sim)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EB22BF7425D0E8BD002ACE41 /* Debug */,
@@ -861,7 +871,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "ShipLab (iOS)" */ = {
+		EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "SwitchWitch (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EB7454A11D74D75C002FBAE6 /* Debug */,
@@ -870,7 +880,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EBBF188C1D74904A008E2001 /* Build configuration list for PBXProject "ShipLab" */ = {
+		EBBF188C1D74904A008E2001 /* Build configuration list for PBXProject "SwitchWitch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBBF18A01D74904A008E2001 /* Debug */,
@@ -879,7 +889,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "ShipLab (Mac)" */ = {
+		EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "SwitchWitch (Mac)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBBF18A31D74904A008E2001 /* Debug */,
