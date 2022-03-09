@@ -243,7 +243,7 @@ std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> GameScene
     std::vector<cugl::Vec2> threeWayAttack{Vec2(1, 1), Vec2(1, 0), Vec2(1, -1)};
     std::vector<cugl::Vec2> twoForwardAttack{Vec2(1, 0), Vec2(2, 0)};
 
-    shared_ptr<Unit> unit = Unit::alloc(Unit::Color(0), basicAttack, basicAttack, Vec2(0, -1));
+    shared_ptr<Unit> unit = Unit::alloc(Unit::Color(0), basicAttack, {}, Vec2(0, -1));
 
     auto randomNumber = rand() % 100;
 
