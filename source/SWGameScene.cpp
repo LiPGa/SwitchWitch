@@ -463,7 +463,7 @@ void GameScene::update(float timestep)
 
                 _attacked_squares = attackedSquares;
 
-                unordered_set<Unit::Color> attackedColors;
+                unordered_set<Unit::Color, hash<int>> attackedColors;
 
                 for (shared_ptr<Square> attackedSquares : attackedSquares)
                 {
