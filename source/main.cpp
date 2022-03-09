@@ -1,34 +1,12 @@
 //
 //  main.cpp
-//  Ship Lab
+//  SwitchWitch
 //
-//  This is the main entry class for your application.  You may need to modify
-//  it slightly for your application class or platform.
-//
-//  CUGL zlib License:
-//      This software is provided 'as-is', without any express or implied
-//      warranty.  In no event will the authors be held liable for any damages
-//      arising from the use of this software.
-//
-//      Permission is granted to anyone to use this software for any purpose,
-//      including commercial applications, and to alter it and redistribute it
-//      freely, subject to the following restrictions:
-//
-//      1. The origin of this software must not be misrepresented; you must not
-//      claim that you wrote the original software. If you use this software
-//      in a product, an acknowledgment in the product documentation would be
-//      appreciated but is not required.
-//
-//      2. Altered source versions must be plainly marked as such, and must not
-//      be misrepresented as being the original software.
-//
-//      3. This notice may not be removed or altered from any source distribution.
-//
+//  Based on: Geometry Lab
 //  Author: Walker White
 //  Version: 1/20/22
 
-// Include your application class
-#include "SLApp.h"
+#include "SWApp.h"
 
 using namespace cugl;
 
@@ -43,10 +21,10 @@ using namespace cugl;
  */
 int main(int argc, char * argv[]) {
     // Change this to your application class
-    ShipApp app;
+    SwitchWitchApp app;
     
     // Set the properties of your application
-    app.setName("Ship Lab");
+    app.setName("Switch Witch");
     app.setOrganization("GDIAC");
     app.setHighDPI(true);
     //app.setFPS(60.0f);

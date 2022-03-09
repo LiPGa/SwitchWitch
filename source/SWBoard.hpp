@@ -1,3 +1,11 @@
+//
+//  SWBoard.hpp
+//  SwitchWitch
+//
+//  Created by Hedy Yang on 2/21/22.
+//  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
+//
+
 #ifndef SWBoard_hpp
 #define SWBoard_hpp
 

@@ -135,14 +135,28 @@ public:
     /**
      * Initializes a (not necessarily convex) polygon
      *
-     * The anchor point (the rotational center) of the polygon is at the
-     * center of the polygons bounding box.
+     * The given polygon defines an implicit coordinate space, with (0,0) at the
+     * origin. This origin will be the position of the body, and hence its 
+     * rotation center.
      *
      * @param poly   The polygon vertices
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const Poly2& poly) { return init(poly,Vec2(0.5,0.5)); }
+    virtual bool init(const Poly2& poly) { return init(poly,Vec2::ZERO); }
+
+    /**
+     * Initializes a (not necessarily convex) polygon
+     *
+     * The given polygon defines an implicit coordinate space. The body (and hence
+     * the rotational center) will be placed at the given origin position.
+     *
+     * @param poly   The polygon vertices
+     * @param origin The rotational center with respect to the vertices
+     *
+     * @return  true if the obstacle is initialized properly, false otherwise.
+     */
+    virtual bool init(const Poly2& poly, const Vec2 origin);
     
     /**
      * Initializes a (not necessarily convex) polygon
@@ -158,7 +172,7 @@ public:
      *
      * @return true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const Poly2& poly, const Vec2 anchor);
+    virtual bool initWithAnchor(const Poly2& poly, const Vec2 anchor);
 
     
 #pragma mark -
@@ -166,8 +180,9 @@ public:
     /**
      * Returns a (not necessarily convex) polygon
      *
-     * The anchor point (the rotational center) of the polygon is at the 
-     * center of the polygons bounding box.
+     * The given polygon defines an implicit coordinate space, with (0,0) at the
+     * origin. This origin will be the position of the body, and hence its 
+     * rotation center.
      *
      * @param poly   The polygon vertices
      *
@@ -176,6 +191,22 @@ public:
     static std::shared_ptr<PolygonObstacle> alloc(const Poly2& poly) {
         std::shared_ptr<PolygonObstacle> result = std::make_shared<PolygonObstacle>();
         return (result->init(poly) ? result : nullptr);
+    }
+
+    /**
+     * Returns a (not necessarily convex) polygon
+     *
+     * The given polygon defines an implicit coordinate space. The body (and hence
+     * the rotational center) will be placed at the given origin position.
+     *
+     * @param poly   The polygon vertices
+     * @param origin The rotational center with respect to the vertices
+     *
+     * @return a (not necessarily convex) polygon
+     */
+    static std::shared_ptr<PolygonObstacle> alloc(const Poly2& poly, const Vec2 origin) {
+        std::shared_ptr<PolygonObstacle> result = std::make_shared<PolygonObstacle>();
+        return (result->init(poly, origin) ? result : nullptr);
     }
     
     /**
@@ -191,9 +222,9 @@ public:
      *
      * @return a (not necessarily convex) polygon
      */
-    static std::shared_ptr<PolygonObstacle> alloc(const Poly2& poly, const Vec2 anchor) {
+    static std::shared_ptr<PolygonObstacle> allocWithAnchor(const Poly2& poly, const Vec2 anchor) {
         std::shared_ptr<PolygonObstacle> result = std::make_shared<PolygonObstacle>();
-        return (result->init(poly,anchor) ? result : nullptr);
+        return (result->initWithAnchor(poly,anchor) ? result : nullptr);
     }
     
     
