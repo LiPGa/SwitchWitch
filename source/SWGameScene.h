@@ -110,6 +110,7 @@ protected:
     vector<shared_ptr<Square>> _attacked_squares;
 
     bool hasLost = false;
+
 #pragma mark -
 #pragma mark Texture Variables
     // TEXTURES SQUARES
@@ -215,9 +216,9 @@ private:
      * @return    The score of this attack
      */
     int calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum);
-
+    
     /**
-     * Generate a unit with random color, attack, and direction on the given square.
+     * Generate a unit with random color and direction on the given square.
      *
      * @param sq    The given square
      * @param squareNode    The given squareNode
@@ -225,11 +226,26 @@ private:
      */
     void generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
 
-    void replaceUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
+    /**
+     * Upgrade a basic unit to a special unit.
+     *
+     * @param sq    The given square
+     */
+    void upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
+    
+    /**
+     * check if the given position is safe to hold a special unit
+     *
+     * Among the 8 squares around a special unit, there can be at most one other special unit
+     */
+    bool isSafe(cugl::Vec2 pos,cugl::Vec2 specialPosition[]);
+    
 
-    void replaceUnitNoDelete(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode, int i);
-
-    std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> generateUnitDontSet();
+//    void replaceUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
+//
+//    void replaceUnitNoDelete(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode, int i);
+//
+//    std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> generateUnitDontSet();
 
 };
 
