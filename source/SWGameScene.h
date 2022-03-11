@@ -1,17 +1,17 @@
 //
-//  SLGameScene.h
-//  Ship Lab
+//  SWGameScene.h
+//  SwitchWitch
 //
 //  This is the primary class file for running the game.  You should study this file
-//  for ideas on how to structure your own root class. This class is a reimagining of
-//  the first game lab from 3152 in CUGL.
+//  for ideas on how to structure your own root class. This time we are not going to
+//  have any additional model classes
 //
+//  Based on Ship Lab
 //  Author: Walker White
-//  Based on original GameX Ship Demo by Rama C. Hoetzlein, 2002
 //  Version: 1/20/22
 //
-#ifndef __SL_GAME_SCENE_H__
-#define __SL_GAME_SCENE_H__
+#ifndef __SW_GAME_SCENE_H__
+#define __SW_GAME_SCENE_H__
 #include <cugl/cugl.h>
 #include <vector>
 #include <unordered_set>
@@ -23,19 +23,20 @@
 /**
  * This class is the primary gameplay constroller.
  */
-class GameScene : public cugl::Scene2 {
+class GameScene : public cugl::Scene2
+{
 protected:
     /** The asset manager for this game mode. */
     std::shared_ptr<cugl::AssetManager> _assets;
-    
+
     // CONTROLLERS are attached directly to the scene (no pointers)
     /** The controller to manage the ship */
     InputController _input;
-    
+
     // MODELS should be shared pointers or a data structure of shared pointers
     /** The JSON value with all of the constants */
     std::shared_ptr<cugl::JsonValue> _constants;
-    
+
 #pragma mark State Varibales
     /** Possible states of the level.
      * Name of state is describing what the current state of the game is waiting for.
@@ -48,14 +49,17 @@ protected:
         CONFIRM_SWAP,
         ANIMATION
     };
-    
+
     /** The current state of the selection process*/
     State _currentState;
     /** The current number of turns left for the player */
     int _turns;
     /** The current score of the player */
     int _score;
-    
+    /** The previous score of the player */
+    int _prev_score;
+
+
     /** The number of colors killed */
     int _attackedColorNum;
     /** The number of basic units killed */
@@ -63,62 +67,80 @@ protected:
     /** The number of special units killed */
     int _attackedSpecialNum;
 
-
 #pragma mark -
-#pragma mark Model Variables    
+#pragma mark Model Variables
     /** The board */
     shared_ptr<Board> _board;
+    /** The replacement units,unitNodes list */
+    shared_ptr<Board> _replacementBoard;
+
+    std::vector<std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>>> _replacementList;
     /** Square that is currently being selected by the player */
     shared_ptr<Square> _selectedSquare;
     /** Square that is currently being selected by the player to swap with the selectedSquare */
     shared_ptr<Square> _swappingSquare;
-    
 
-#pragma mark - 
+#pragma mark -
 #pragma mark View Variables
     // VIEW
+    std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _replacementBoardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
+    // std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;
+    // std::shared_ptr<cugl::scene2::SceneNode> _replacementBoardNodeS;
 
+    int _replacementListLength;
     // VIEW items are going to be individual variables
     // In the future, we will replace this with the scene graph
     /** The backgrounnd image */
     std::shared_ptr<cugl::Texture> _background;
     /** The text with the current remaining turns */
-    std::shared_ptr<cugl::TextLayout> _turn_text;
+    std::shared_ptr<cugl::scene2::Label> _turn_text;
     /** The text with the current score */
-    std::shared_ptr<cugl::TextLayout> _score_text;
+    std::shared_ptr<cugl::scene2::Label> _score_text;
+    /** The text above the replacement board */
+    std::shared_ptr<cugl::scene2::Label> _replace_text;
+    // std::shared_ptr<cugl::TextLayout> _score_text;
+    /** Win/Lose text */
+    std::shared_ptr<cugl::scene2::Label> _endgame_text;
+
+
+    std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attacked_squares;
+
+    bool hasLost = false;
+
 #pragma mark -
 #pragma mark Texture Variables
-    //TEXTURES SQUARES
+    // TEXTURES SQUARES
     std::shared_ptr<cugl::Texture> _squareTexture;
     std::shared_ptr<cugl::Texture> _selectedSquareTexture;
     std::shared_ptr<cugl::Texture> _attackedSquareTexture;
     std::shared_ptr<cugl::Texture> _swapSquareTexture;
-    
-    //TEXTURES UNITS
+
+    // TEXTURES UNITS
     std::shared_ptr<cugl::Texture> _redUnitTexture;
     std::shared_ptr<cugl::Texture> _blueUnitTexture;
     std::shared_ptr<cugl::Texture> _greenUnitTexture;
-    
-    //TEXTURES SPECIAL UNITS - DIAGONAL
+
+    // TEXTURES SPECIAL UNITS - DIAGONAL
     std::shared_ptr<cugl::Texture> _diagonalBlueTexture;
     std::shared_ptr<cugl::Texture> _diagonalGreenTexture;
     std::shared_ptr<cugl::Texture> _diagonalRedTexture;
-    
-    //TEXTURES SPECIAL UNITS - TWO-FORWARD
+
+    // TEXTURES SPECIAL UNITS - TWO-FORWARD
     std::shared_ptr<cugl::Texture> _twoForwardBlueTexture;
     std::shared_ptr<cugl::Texture> _twoForwardGreenTexture;
     std::shared_ptr<cugl::Texture> _twoForwardRedTexture;
-    
-    //TEXTURES SPECIAL UNITS - THREE-WAY
+
+    // TEXTURES SPECIAL UNITS - THREE-WAY
     std::shared_ptr<cugl::Texture> _threeWayBlueTexture;
     std::shared_ptr<cugl::Texture> _threeWayGreenTexture;
     std::shared_ptr<cugl::Texture> _threeWayRedTexture;
 
 #pragma mark -
-    
+
 public:
 #pragma mark -
 #pragma mark Constructors
@@ -129,8 +151,7 @@ public:
      * This allows us to use the object without a heap pointer.
      */
     GameScene() : cugl::Scene2() {}
-    
-    
+
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      *
@@ -138,14 +159,12 @@ public:
      * static resources, like the input controller.
      */
     ~GameScene() { dispose(); }
-    
+
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      */
     void dispose() override;
-    
-    
-    
+
     /**
      * Initializes the controller contents, and starts the game
      *
@@ -157,9 +176,8 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<cugl::AssetManager>& assets);
+    bool init(const std::shared_ptr<cugl::AssetManager> &assets);
 
-    
 #pragma mark -
 #pragma mark Gameplay Handling
     /**
@@ -180,7 +198,7 @@ public:
      *
      * @param batch     The SpriteBatch to draw with.
      */
-    void render(const std::shared_ptr<cugl::SpriteBatch>& batch) override;
+    void render(const std::shared_ptr<cugl::SpriteBatch> &batch) override;
 
     /**
      * Resets the status of the game so that we can play again.
@@ -207,9 +225,7 @@ private:
      *
      */
     void generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
-    
 
-    
     /**
      * Upgrade a basic unit to a special unit.
      *
@@ -224,6 +240,13 @@ private:
      */
     bool isSafe(cugl::Vec2 pos,cugl::Vec2 specialPosition[]);
     
+
+//    void replaceUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
+//
+//    void replaceUnitNoDelete(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode, int i);
+//
+//    std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> generateUnitDontSet();
+
 };
 
-#endif /* __SG_GAME_SCENE_H__ */
+#endif /* __SW_GAME_SCENE_H__ */

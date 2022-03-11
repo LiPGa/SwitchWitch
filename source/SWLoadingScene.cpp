@@ -1,6 +1,6 @@
 //
-//  GLLoadingScene.cpp
-//  Ship Lab
+//  SWLoadingScene.cpp
+//  Switch Witch
 //
 //  This module provides a very barebones loading screen.  Most of the time you
 //  will not need a loading screen, because the assets will load so fast.  But
@@ -11,10 +11,11 @@
 //  fact, this loading screen uses the new modular JSON format for defining
 //  scenes.  See the file "loading.json" for how to change this scene.
 //
+//  Based on Geometry Lab
 //  Author: Walker White
 //  Version: 1/20/22
 //
-#include "SLLoadingScene.h"
+#include "SWLoadingScene.h"
 
 using namespace cugl;
 
@@ -62,6 +63,7 @@ bool LoadingScene::init(const std::shared_ptr<AssetManager>& assets) {
     _button = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("load_play"));
     _button->addListener([=](const std::string& name, bool down) {
         this->_active = down;
+        std::cout << "Pressed the play button!\n";
     });
     
     Application::get()->setClearColor(Color4(192,192,192,255));

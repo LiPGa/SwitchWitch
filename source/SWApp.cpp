@@ -1,16 +1,17 @@
 //
-//  SLApp.cpp
-//  Ship Lab
+//  SWApp.cpp
+//  SwitchWitch
 //
 //  This is the root class for your game.  The file main.cpp accesses this class
 //  to run the application.  While you could put most of your game logic in
 //  this class, we prefer to break the game up into player modes and have a
 //  class for each mode.
 //
+//  Based on Geometry Lab
 //  Author: Walker White
 //  Version: 1/20/22
 //
-#include "SLApp.h"
+#include "SWApp.h"
 
 using namespace cugl;
 
@@ -27,15 +28,21 @@ using namespace cugl;
  * very last line.  This ensures that the state will transition to FOREGROUND,
  * causing the application to run.
  */
-void ShipApp::onStartup() {
+void SwitchWitchApp::onStartup() {
     _assets = AssetManager::alloc();
     _batch  = SpriteBatch::alloc();
     auto cam = OrthographicCamera::alloc(getDisplaySize());
     
-    // Start-up basic input (DESKTOP ONLY)
+#ifdef CU_TOUCH_SCREEN
+    // Start-up basic input for loading screen (MOBILE ONLY)
+    Input::activate<Touchscreen>();
+#else
+    // Start-up basic input for loading screen (DESKTOP ONLY)
     Input::activate<Mouse>();
     Input::activate<Keyboard>();
-
+#endif
+    
+    // Bare bones asset loading (textures only)
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Sound>(SoundLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
@@ -46,7 +53,7 @@ void ShipApp::onStartup() {
     _loaded = false;
     _loading.init(_assets);
     
-    // Queue up the other assets
+    // Queue up the other assets (EMPTY in this case)
     _assets->loadDirectoryAsync("json/assets.json",nullptr);
     
     AudioEngine::start();
@@ -64,7 +71,7 @@ void ShipApp::onStartup() {
  * very last line.  This ensures that the state will transition to NONE,
  * causing the application to be deleted.
  */
-void ShipApp::onShutdown() {
+void SwitchWitchApp::onShutdown() {
     _loading.dispose();
     _gameplay.dispose();
     _assets = nullptr;
@@ -89,7 +96,7 @@ void ShipApp::onShutdown() {
  * Otherwise, the audio thread may persist while the application is in
  * the background.
  */
-void ShipApp::onSuspend() {
+void SwitchWitchApp::onSuspend() {
     AudioEngine::get()->pause();
 }
 
@@ -103,7 +110,7 @@ void ShipApp::onSuspend() {
  * If you are using audio, you should use this method to resume any audio
  * paused before app suspension.
  */
-void ShipApp::onResume() {
+void SwitchWitchApp::onResume() {
     AudioEngine::get()->resume();
 }
 
@@ -118,7 +125,7 @@ void ShipApp::onResume() {
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void ShipApp::update(float timestep) {
+void SwitchWitchApp::update(float timestep) {
     if (!_loaded && _loading.isActive()) {
         _loading.update(0.01f);
     } else if (!_loaded) {
@@ -139,7 +146,7 @@ void ShipApp::update(float timestep) {
  * When overriding this method, you do not need to call the parent method
  * at all. The default implmentation does nothing.
  */
-void ShipApp::draw() {
+void SwitchWitchApp::draw() {
     if (!_loaded) {
         _loading.render(_batch);
     } else {

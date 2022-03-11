@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
-               BuildableName = "ShipLab (iOS).app"
-               BlueprintName = "ShipLab (iOS)"
-               ReferencedContainer = "container:ShipLab.xcodeproj">
+               BlueprintIdentifier = "EBBF18901D74904A008E2001"
+               BuildableName = "SwitchWitch (Mac).app"
+               BlueprintName = "SwitchWitch (Mac)"
+               ReferencedContainer = "container:SwitchWitch.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,10 +44,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
-            BuildableName = "ShipLab (iOS).app"
-            BlueprintName = "ShipLab (iOS)"
-            ReferencedContainer = "container:ShipLab.xcodeproj">
+            BlueprintIdentifier = "EBBF18901D74904A008E2001"
+            BuildableName = "SwitchWitch (Mac).app"
+            BlueprintName = "SwitchWitch (Mac)"
+            ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -61,10 +61,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
-            BuildableName = "ShipLab (iOS).app"
-            BlueprintName = "ShipLab (iOS)"
-            ReferencedContainer = "container:ShipLab.xcodeproj">
+            BlueprintIdentifier = "EBBF18901D74904A008E2001"
+            BuildableName = "SwitchWitch (Mac).app"
+            BlueprintName = "SwitchWitch (Mac)"
+            ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

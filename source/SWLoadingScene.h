@@ -1,6 +1,6 @@
 //
-//  SLLoadingScene.h
-//  Ship Lab
+//  SWLoadingScene.h
+//  Switch Witch
 //
 //  This module provides a very barebones loading screen.  Most of the time you
 //  will not need a loading screen, because the assets will load so fast.  But
@@ -11,11 +11,12 @@
 //  fact, this loading screen uses the new modular JSON format for defining
 //  scenes.  See the file "loading.json" for how to change this scene.
 //
+//  Based on Geometry Lab
 //  Author: Walker White
 //  Version: 1/20/22
 //
-#ifndef __SL_LOADING_SCENE_H__
-#define __SL_LOADING_SCENE_H__
+#ifndef __SW_LOADING_SCENE_H__
+#define __SW_LOADING_SCENE_H__
 #include <cugl/cugl.h>
 
 
@@ -109,4 +110,4 @@ public:
     bool isPending( ) const;
 };
 
-#endif /* __SL_LOADING_SCENE_H__ */
+#endif /* __SW_LOADING_SCENE_H__ */

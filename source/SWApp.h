@@ -1,25 +1,26 @@
 //
-//  SLApp.h
-//  Ship Lab
+//  SWApp.h
+//  SwitchWitch
 //
 //  This is the root class for your game.  The file main.cpp accesses this class
 //  to run the application.  While you could put most of your game logic in
 //  this class, we prefer to break the game up into player modes and have a
 //  class for each mode.
 //
+//  Based on Geometry Lab
 //  Author: Walker White
 //  Version: 1/20/22
 //
-#ifndef __SL_APP_H__
-#define __SL_APP_H__
+#ifndef __SW_APP_H__
+#define __SW_APP_H__
 #include <cugl/cugl.h>
-#include "SLGameScene.h"
-#include "SLLoadingScene.h"
+#include "SWGameScene.h"
+#include "SWLoadingScene.h"
 
 /**
  * This class represents the application root for the ship demo.
  */
-class ShipApp : public cugl::Application {
+class SwitchWitchApp : public cugl::Application {
 protected:
     /** The global sprite batch for drawing (only want one of these) */
     std::shared_ptr<cugl::SpriteBatch> _batch;
@@ -45,7 +46,7 @@ public:
      * of initialization from the constructor allows main.cpp to perform
      * advanced configuration of the application before it starts.
      */
-    ShipApp() : cugl::Application(), _loaded(false) {}
+    SwitchWitchApp() : cugl::Application(), _loaded(false) {}
     
     /**
      * Disposes of this application, releasing all resources.
@@ -54,7 +55,7 @@ public:
      * It simply calls the dispose() method in Application.  There is nothing
      * special to do here.
      */
-    ~ShipApp() { }
+    ~SwitchWitchApp() { }
     
 #pragma mark Application State
     /**
@@ -133,4 +134,4 @@ public:
     virtual void draw() override;
 };
 
-#endif /* __SL_APP_H__ */
+#endif /* __SW_APP_H__ */

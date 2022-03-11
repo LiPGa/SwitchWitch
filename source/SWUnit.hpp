@@ -1,3 +1,11 @@
+//
+//  SWUnit.hpp
+//  SwitchWitch
+//
+//  Created by Hedy Yang on 2/21/22.
+//  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
+//
+
 #ifndef SWUnit_hpp
 #define SWUnit_hpp
 
