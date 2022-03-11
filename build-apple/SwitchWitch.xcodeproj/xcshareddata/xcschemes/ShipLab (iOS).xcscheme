@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
-               BuildableName = "ShipLab (iOS).app"
+               BuildableName = "SwitchWitch (iOS).app"
                BlueprintName = "SwitchWitch (iOS)"
                ReferencedContainer = "container:SwitchWitch.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
-            BuildableName = "ShipLab (iOS).app"
+            BuildableName = "SwitchWitch (iOS).app"
             BlueprintName = "SwitchWitch (iOS)"
             ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
-            BuildableName = "ShipLab (iOS).app"
+            BuildableName = "SwitchWitch (iOS).app"
             BlueprintName = "SwitchWitch (iOS)"
             ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
