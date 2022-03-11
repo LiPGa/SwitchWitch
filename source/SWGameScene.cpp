@@ -158,7 +158,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _boardNode->setTexture(transparent_texture);
     _board->setViewNode(_boardNode);
     
-//<<<<<<< HEAD:source/SLGameScene.cpp
 
     /**
      * Set the initial location of special units
@@ -181,7 +180,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
             auto squarePosition = (Vec2(i,j));
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE/2));
-//=======
 //
 //
 //    _replacementListLength = 5;
@@ -226,7 +224,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 //            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
 //            auto squarePosition = (Vec2(i, j));
 //            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE / 2));
-//>>>>>>> master:source/SWGameScene.cpp
             
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
@@ -284,7 +281,6 @@ bool GameScene::isSafe(cugl::Vec2 pos,cugl::Vec2 specialPosition[]) {
  * @param squareNode    The given squareNode
  *
  */
-//<<<<<<< HEAD:source/SLGameScene.cpp
 void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode) {
     // TODO: JSON THIS AND MAKE IT MORE SCALABLE
     std::vector<cugl::Vec2> basicAttack{cugl::Vec2(1,0)};
@@ -426,7 +422,6 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 }
 
 
-//=======
 //std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> GameScene::generateUnitDontSet()
 //{
 //    // TODO: JSON THIS AND MAKE IT MORE SCALABLE
@@ -578,7 +573,7 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 //    squareNode->addChild(unitNode);
 //    //_replacementList.push_back(generateUnitDontSet());
 //}
-//>>>>>>> master:source/SWGameScene.cpp
+
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
@@ -652,13 +647,11 @@ void GameScene::update(float timestep)
                 _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 squareOnMouse->getViewNode()->setTexture(_swapSquareTexture);
                 vector<shared_ptr<Square>> attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
-//<<<<<<< HEAD:source/SLGameScene.cpp
                 
 //                _attacked_squares = attackedSquares;
 //
 //                unordered_set<Unit::Color> attackedColors;
-//=======
-//>>>>>>> master:source/SWGameScene.cpp
+
 //
                 _attacked_squares = attackedSquares;
 
@@ -711,7 +704,6 @@ void GameScene::update(float timestep)
                 _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
                 _selectedSquare->getViewNode()->addChild(swappedUnitNode);
                 _swappingSquare->getViewNode()->addChild(selectedUnitNode);
-//<<<<<<< HEAD:source/SLGameScene.cpp
                 
                 //remove the attacked squares
                 for (shared_ptr<Square> attackedSquare: _attacked_squares) {
@@ -731,7 +723,6 @@ void GameScene::update(float timestep)
                 }
                 _prev_score = _score;
                     
-//=======
 //
 //                // remove the attacked squares
 //                for (shared_ptr<Square> attackedSquare : _attacked_squares)
@@ -760,7 +751,6 @@ void GameScene::update(float timestep)
 //                  hasLost = true;
 //                }
 //                _prev_score = _score;
-//>>>>>>> master:source/SWGameScene.cpp
                 _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
             _currentState = SELECTING_UNIT;
