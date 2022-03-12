@@ -74,21 +74,27 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
-    dimen *= SCENE_HEIGHT / dimen.height;
     if (assets == nullptr)
     {
         return false;
     }
-    else if (!Scene2::init(dimen))
-    {
+    
+    // Initialize game constants
+    _constants = assets->get<JsonValue>("constants");
+    _boardMembers = assets->get<JsonValue>("boardMember");
+    _boardJson = assets->get<JsonValue>("board");
+    _sceneHeight = _constants->getInt("scene-height");
+    _boardSize = _constants->getInt("board-size");
+    _squareSize = _constants->getInt("square-size");
+    
+    dimen *= _sceneHeight/dimen.height;
+    
+    if (!Scene2::init(dimen)) {
         return false;
     }
+
     // TODO: JSON THIS AND MAKE IT MORE SCALABLE
     // UNIT ATTACK PATTERNS
-    std::vector<cugl::Vec2> basicAttack{cugl::Vec2(1, 0)};
-    std::vector<cugl::Vec2> diagonalAttack{Vec2(1, 1), Vec2(1, -1), Vec2(-1, 1), Vec2(-1, -1)};
-    std::vector<cugl::Vec2> threeWayAttack{Vec2(1, 1), Vec2(1, 0), Vec2(1, -1)};
-    std::vector<cugl::Vec2> twoForwardAttack{Vec2(1, 0), Vec2(2, 0)};
 
     // Start up the input handler
     _input.init();
@@ -96,31 +102,37 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Initialize Variables
     hasLost = false;
     _assets = assets;
-    _turns = 5;
+//    _turns = 5;
     _score = 0;
     _prev_score = 0;
+    
     // Get Textures
-    _squareTexture = _assets->get<Texture>(SQUARE_TEXTURE);
-    _selectedSquareTexture = _assets->get<Texture>(SQUARE_SELECTED_TEXTURE);
-    _swapSquareTexture = _assets->get<Texture>(SQUARE_SWAP_TEXTURE);
-    _attackedSquareTexture = _assets->get<Texture>(SQUARE_ATTACKED_TEXTURE);
-    auto transparent_texture = _assets->get<Texture>(TRANSPARENT_TEXTURE);
+    // preload all the textures into a hashmap
+    vector<string> textureVec = _constants->get("textures")->asStringArray();
+    for (string textureName : textureVec) {
+        _textures.insert({textureName, _assets->get<Texture>(textureName)});
+    }
+    _squareTexture = _textures.at(SQUARE_TEXTURE);
+    _selectedSquareTexture = _textures.at(SQUARE_SELECTED_TEXTURE);
+    _swapSquareTexture = _textures.at(SQUARE_SWAP_TEXTURE);
+    _attackedSquareTexture = _textures.at(SQUARE_ATTACKED_TEXTURE);
+    auto transparent_texture = _textures.at(TRANSPARENT_TEXTURE);
 
-    _redUnitTexture = _assets->get<Texture>(RED_UNIT);
-    _blueUnitTexture = _assets->get<Texture>(BLUE_UNIT);
-    _greenUnitTexture = _assets->get<Texture>(GREEN_UNIT);
+    _redUnitTexture = _textures.at(RED_UNIT);
+    _blueUnitTexture = _textures.at(BLUE_UNIT);
+    _greenUnitTexture = _textures.at(GREEN_UNIT);
 
-    _diagonalRedTexture = _assets->get<Texture>(DIAGONAL_RED);
-    _diagonalBlueTexture = _assets->get<Texture>(DIAGONAL_BLUE);
-    _diagonalGreenTexture = _assets->get<Texture>(DIAGONAL_GREEN);
+    _diagonalRedTexture = _textures.at(DIAGONAL_RED);
+    _diagonalBlueTexture = _textures.at(DIAGONAL_BLUE);
+    _diagonalGreenTexture = _textures.at(DIAGONAL_GREEN);
 
-    _twoForwardRedTexture = _assets->get<Texture>(TWO_FORWARD_RED);
-    _twoForwardBlueTexture = _assets->get<Texture>(TWO_FORWARD_BLUE);
-    _twoForwardGreenTexture = _assets->get<Texture>(TWO_FORWARD_GREEN);
+    _twoForwardRedTexture = _textures.at(TWO_FORWARD_RED);
+    _twoForwardBlueTexture = _textures.at(TWO_FORWARD_BLUE);
+    _twoForwardGreenTexture = _textures.at(TWO_FORWARD_GREEN);
 
-    _threeWayRedTexture = _assets->get<Texture>(THREE_WAY_RED);
-    _threeWayBlueTexture = _assets->get<Texture>(THREE_WAY_BLUE);
-    _threeWayGreenTexture = _assets->get<Texture>(THREE_WAY_GREEN);
+    _threeWayRedTexture = _textures.at(THREE_WAY_RED);
+    _threeWayBlueTexture = _textures.at(THREE_WAY_BLUE);
+    _threeWayGreenTexture = _textures.at(THREE_WAY_GREEN);
 
     // Get the background image and constant values
     _background = assets->get<Texture>("background");
@@ -137,6 +149,22 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Initialize Board
     _board = Board::alloc(BOARD_SIZE, BOARD_SIZE);
 
+    // buildScene
+    _currLevel = _boardJson->getInt("id");
+    _turns = _boardJson->getInt("total-swap-allowed");
+    _scoreNeeded = _boardJson->getInt("win-condition");
+    // get the type of the unit for every unit in this level
+    // get the direction of the unit for every unit in this level and save in a vector
+    auto unitsInBoardJson = _boardJson->get("board-members")->children();
+    vector<Vec2> unitsDirInBoard;
+    vector<std::string> unitsInBoard;
+    for (auto child : unitsInBoardJson) {
+        auto unitDirArray = child->get("direction")->asFloatArray();
+        unitsDirInBoard.push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
+        auto unitString = child->getString("pattern");
+        unitsInBoard.push_back(unitString);
+    }
+    
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("Turns %d", _turns);
     _turn_text = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
@@ -158,25 +186,42 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _boardNode->setTexture(transparent_texture);
     _board->setViewNode(_boardNode);
     
-
-    /**
-     * Set the initial location of special units
-     *
-     * The # of initial special units = Math.floor(0.1 * total number of units on the board).
-     */
-    int initialSUNum = (int)floor(0.1 * BOARD_SIZE * BOARD_SIZE);
-    Vec2 specialPosition[initialSUNum];
-    for (int i = 0; i < initialSUNum; i++) {
-        specialPosition[i] = Vec2(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
-        while (!isSafe(specialPosition[i],&specialPosition[initialSUNum])) {
-            specialPosition[i] = Vec2(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
-        }
-    }
     _guiNode->addChildWithName(_boardNode, "boardNode");
     
+    
+    // initialize units with different types
+    auto children = _boardMembers ->get("unit")->children();
+    for (auto child : children) {
+        // get color
+        string color = child->getString("color");
+        Unit::Color c;
+        if (color == "red") {
+            c = Unit::Color::RED;
+        } else if (color == "blue") {
+            c = Unit::Color::BLUE;
+        } else {
+            c = Unit::Color::GREEN;
+        }
+        
+        // get basic attack
+        auto basicAttack = child->get("basic-attack")->asFloatArray();
+        auto basicAttackVec = vector<Vec2>{Vec2(basicAttack.at(0), basicAttack.at(1))};
+        
+        // get special attack for this unit
+        auto specialAttackJson = child->get("special-attack")->children();
+        vector<Vec2> specialAttackVec;
+        for (auto specialAttack : specialAttackJson) {
+            auto specialAttackArray = specialAttack->asFloatArray();
+            specialAttackVec.push_back(Vec2(specialAttackArray.at(0), specialAttackArray.at(1)));
+        }
+
+        shared_ptr<Unit> unit = Unit::alloc(c, basicAttackVec, specialAttackVec, Vec2(0,-1));
+        _unitTypes.insert({child->getString("texture"), unit});
+    }
+    
     // Create the squares & units and put them in the map
-    for (int i=0;i<5;i++) {
-        for(int j=0;j<5;++j){
+    for (int i=0;i<_boardSize;i++) {
+        for(int j=0;j<_boardSize;++j){
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
             auto squarePosition = (Vec2(i,j));
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE/2));
@@ -229,12 +274,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             sq->setViewNode(squareNode);
             // Add square node to board node.
             _board->getViewNode()->addChild(squareNode);
-            generateUnit(sq, squareNode);
-            for (int i = 0; i < initialSUNum; i++) {
-                if (squarePosition == specialPosition[i]) {
-                    upgradeToSpecial(sq, squareNode);
-                }
-            }
+            // generate unit for this square
+            std:string unitType = unitsInBoard.at(_boardSize*(_boardSize-j-1)+i);
+            Vec2 unitDirection = unitsDirInBoard.at(_boardSize*(_boardSize-j-1)+i);
+            auto unitTemplate = _unitTypes.at(unitType);
+            shared_ptr<Unit> unit = Unit::alloc(unitTemplate->getColor(), unitTemplate->getBasicAttack(),unitTemplate->getSpecialAttack(), unitDirection);
+            sq->setUnit(unit);
+            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitType));
+            unit->setViewNode(unitNode);
+            unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+            squareNode->addChild(unitNode);
         }
     }
     // Create and layout the win lose text
@@ -635,7 +684,7 @@ void GameScene::update(float timestep)
             }
             else if (_currentState == SELECTING_SWAP && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1)
             {
-
+                CULog("2");
                 _attackedColorNum = 0;
                 _attackedBasicNum = 0;
                 _attackedSpecialNum = 0;
@@ -644,14 +693,17 @@ void GameScene::update(float timestep)
                 _swappingSquare = squareOnMouse;
                 // Rotation and Swapping of Model
                 // We do this so that we can show the attack preview, without changing the actual positional view of units.
+                CULog("2.5");
                 _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+                CULog("2.55");
                 squareOnMouse->getViewNode()->setTexture(_swapSquareTexture);
+                CULog("2.6");
                 vector<shared_ptr<Square>> attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
                 
 //                _attacked_squares = attackedSquares;
 //
 //                unordered_set<Unit::Color> attackedColors;
-
+                CULog("3");
 //
                 _attacked_squares = attackedSquares;
 
@@ -674,6 +726,7 @@ void GameScene::update(float timestep)
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
             {
+                CULog("4");
                 _currentState = SELECTING_SWAP;
                 // If we are de-confirming a swap, we must undo the swap.
                 _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
@@ -692,6 +745,7 @@ void GameScene::update(float timestep)
             }
             if (_currentState == CONFIRM_SWAP)
             {
+                CULog("5");
                 // TODO: ATTACK
                 //  Because the units in the model where already swapped.
                 auto swappedUnitNode = _selectedSquare->getUnit()->getViewNode();
@@ -704,7 +758,7 @@ void GameScene::update(float timestep)
                 _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
                 _selectedSquare->getViewNode()->addChild(swappedUnitNode);
                 _swappingSquare->getViewNode()->addChild(selectedUnitNode);
-                
+                CULog("6");
                 //remove the attacked squares
                 for (shared_ptr<Square> attackedSquare: _attacked_squares) {
                     auto attacked_unit = attackedSquare->getUnit()->getViewNode();

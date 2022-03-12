@@ -1,0 +1,76 @@
+{
+    "unit": {
+        "red": {
+            "color": "red",
+            "texture": "red-unit",
+            "basic-attack": [1,0],
+            "special-attack": []
+        },
+        "blue": {
+            "color": "blue",
+            "texture": "blue-unit",
+            "basic-attack": [1,0],
+            "special-attack": []
+        },
+        "green": {
+            "color": "green",
+            "texture": "green-unit",
+            "basic-attack": [1,0],
+            "special-attack": []
+        },
+        "three-way-blue": {
+            "color": "blue",
+            "texture": "three-way-blue",
+            "basic-attack": [1,0],
+            "special-attack": [[1,1], [1,0], [1,-1]]
+        },
+        "three-way-green": {
+            "color": "green",
+            "texture": "three-way-green",
+            "basic-attack": [1,0],
+            "special-attack": [[1,1], [1,0], [1,-1]]
+        },
+        "three-way-red": {
+            "color": "red",
+            "texture": "three-way-red",
+            "basic-attack": [1,0],
+            "special-attack": [[1,1], [1,0], [-1,-1]]
+        },
+        "diagonal-red": {
+            "color": "red",
+            "texture": "diagonal-red",
+            "basic-attack": [1,0],
+            "special-attack": [[1,1], [-1,1], [1,-1], [-1,-1]]
+        },
+        "diagonal-blue": {
+            "color": "blue",
+            "texture": "diagonal-blue",
+            "basic-attack": [1,0],
+            "special-attack": [[1,1], [-1,1], [1,-1], [-1,-1]]
+        },
+        "diagonal-green": {
+            "color": "green",
+            "texture": "diagonal-green",
+            "basic-attack": [1,0],
+            "special-attack": [[1,1], [-1,1], [1,-1], [-1,-1]]
+        },
+        "two-forward-red": {
+            "color": "red",
+            "texture": "two-forward-red",
+            "basic-attack": [1,0],
+            "special-attack": [[1,1], [2,0]]
+        },
+        "two-forward-blue": {
+            "color": "blue",
+            "texture": "two-forward-blue",
+            "basic-attack": [1,0],
+            "special-attack": [[1,1], [2,0]]
+        },
+        "two-forward-green": {
+            "color": "green",
+            "texture": "two-forward-green",
+            "basic-attack": [1,0],
+            "special-attack": [[1,1], [2,0]]
+        }
+    }
+}
