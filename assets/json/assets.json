@@ -85,7 +85,7 @@
     },
     "jsons" : {
         "constants" : "json/constants.json",
-        "units" : "json/units.json",
+        "boardMember" : "json/boardMember.json",
         "board" : "json/board.json"
     }
 }

@@ -1,5 +1,5 @@
 {
-    "unit-type": {
+    "unit": {
         "red": {
             "color": "red",
             "texture": "red-unit",

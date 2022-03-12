@@ -36,8 +36,8 @@ protected:
     // MODELS should be shared pointers or a data structure of shared pointers
     /** The JSON value with all of the constants */
     std::shared_ptr<cugl::JsonValue> _constants;
-    /** The JSON value with all of the units */
-    std::shared_ptr<cugl::JsonValue> _units;
+    /** The JSON value with all of the board members */
+    std::shared_ptr<cugl::JsonValue> _boardMembers;
     /** The JSON value for the levels */
     std::shared_ptr<cugl::JsonValue> _boardJson;
     

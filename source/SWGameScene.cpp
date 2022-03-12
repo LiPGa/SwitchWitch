@@ -81,7 +81,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     
     // Initialize game constants
     _constants = assets->get<JsonValue>("constants");
-    _units = assets->get<JsonValue>("units");
+    _boardMembers = assets->get<JsonValue>("boardMember");
     _boardJson = assets->get<JsonValue>("board");
     _sceneHeight = _constants->getInt("scene-height");
     _boardSize = _constants->getInt("board-size");
@@ -154,13 +154,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _turns = _boardJson->getInt("total-swap-allowed");
     _scoreNeeded = _boardJson->getInt("win-condition");
     // get the type of the unit for every unit in this level
-    auto unitsInBoard = _boardJson->get("units")->asStringArray();
     // get the direction of the unit for every unit in this level and save in a vector
-    auto unitsDirInBoardJson = _boardJson->get("unit-directions")->children();
+    auto unitsInBoardJson = _boardJson->get("board-members")->children();
     vector<Vec2> unitsDirInBoard;
-    for (auto child : unitsDirInBoardJson) {
-        auto unitDirArray = child->asFloatArray();
+    vector<std::string> unitsInBoard;
+    for (auto child : unitsInBoardJson) {
+        auto unitDirArray = child->get("direction")->asFloatArray();
         unitsDirInBoard.push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
+        auto unitString = child->getString("pattern");
+        unitsInBoard.push_back(unitString);
     }
     
     // Create and layout the turn meter
@@ -188,7 +190,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     
     
     // initialize units with different types
-    auto children = _units->get("unit-type")->children();
+    auto children = _boardMembers ->get("unit")->children();
     for (auto child : children) {
         // get color
         string color = child->getString("color");
