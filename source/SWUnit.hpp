@@ -10,12 +10,14 @@
 #define SWUnit_hpp
 
 #include <cugl/cugl.h>
+#include "SWObject.hpp"
+
 using namespace cugl;
 
 /**
  * Model class representing an unit.
  */
-class Unit
+class Unit : public Object
 {
 public:
     /** Available colors for a unit. Each unit will have one of the three colors.*/
@@ -210,6 +212,7 @@ public:
      * @param a polygon-node for the unit.
      */
     void setViewNode(shared_ptr<cugl::scene2::PolygonNode> viewNode) { _viewNode = viewNode; }
+
 };
 
 #endif /* SWUnit_hpp */
