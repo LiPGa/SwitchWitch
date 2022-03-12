@@ -36,7 +36,23 @@ protected:
     // MODELS should be shared pointers or a data structure of shared pointers
     /** The JSON value with all of the constants */
     std::shared_ptr<cugl::JsonValue> _constants;
-
+    /** The JSON value with all of the units */
+    std::shared_ptr<cugl::JsonValue> _units;
+    /** The JSON value for the levels */
+    std::shared_ptr<cugl::JsonValue> _boardJson;
+    
+    // current level, corresponds to board's ID.
+    int _currLevel;
+    // CONSTANTS
+    int _sceneHeight;
+    int _boardSize;
+    int _squareSize;
+    
+    // hash map for unit textures
+    std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
+    // hash map for units with different types
+    std::unordered_map<std::string, std::shared_ptr<Unit>> _unitTypes;
+    
 #pragma mark State Varibales
     /** Possible states of the level.
      * Name of state is describing what the current state of the game is waiting for.
@@ -56,6 +72,8 @@ protected:
     int _turns;
     /** The current score of the player */
     int _score;
+    // score needed to pass
+    int _scoreNeeded;
     /** The previous score of the player */
     int _prev_score;
 

@@ -1,0 +1,16 @@
+{
+    "id": 1,
+    "total-swap-allowed": 5,
+    "win-condition": 50,
+    "units": ["blue-unit", "blue-unit", "two-forward-blue", "blue-unit", "red-unit",
+              "green-unit", "diagonal-red", "green-unit", "red-unit", "green-unit",
+              "green-unit", "two-forward-blue", "green-unit", "blue-unit", "red-unit",
+              "blue-unit", "green-unit", "blue-unit", "red-unit", "blue-unit",
+              "green-unit", "red-unit", "red-unit", "green-unit", "green-unit"],
+    "unit-directions": [[1,0], [1,0], [1,0], [1,0], [1,0],
+                        [1,0], [1,0], [1,0], [1,0], [1,0],
+                        [1,0], [-1,0], [1,0], [1,0], [1,0],
+                        [1,0], [1,0], [1,0], [1,0], [1,0],
+                        [1,0], [1,0], [1,0], [1,0], [1,0]]
+}
+

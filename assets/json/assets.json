@@ -84,6 +84,8 @@
         }
     },
     "jsons" : {
-        "constants" : "json/constants.json"
+        "constants" : "json/constants.json",
+        "units" : "json/units.json",
+        "board" : "json/board.json"
     }
 }
