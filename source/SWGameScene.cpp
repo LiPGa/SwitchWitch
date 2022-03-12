@@ -38,24 +38,6 @@ using namespace std;
 #define BOARD_SIZE 5
 
 #pragma mark Asset Constants
-/** The key for the square texture in the assets manager*/
-#define SQUARE_TEXTURE "square"
-#define TRANSPARENT_TEXTURE "transparent"
-#define RED_UNIT "red-unit"
-#define GREEN_UNIT "green-unit"
-#define BLUE_UNIT "blue-unit"
-#define SQUARE_SELECTED_TEXTURE "square-selected"
-#define SQUARE_ATTACKED_TEXTURE "square-attacked"
-#define SQUARE_SWAP_TEXTURE "square-swap"
-#define DIAGONAL_BLUE "diagonal-blue"
-#define DIAGONAL_GREEN "diagonal-green"
-#define DIAGONAL_RED "diagonal-red"
-#define THREE_WAY_BLUE "three-way-blue"
-#define THREE_WAY_GREEN "three-way-green"
-#define THREE_WAY_RED "three-way-red"
-#define TWO_FORWARD_BLUE "two-forward-blue"
-#define TWO_FORWARD_GREEN "two-forward-green"
-#define TWO_FORWARD_RED "two-forward-red"
 
 #pragma mark -
 #pragma mark Constructors
@@ -102,7 +84,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Initialize Variables
     hasLost = false;
     _assets = assets;
-//    _turns = 5;
     _score = 0;
     _prev_score = 0;
     
@@ -112,27 +93,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     for (string textureName : textureVec) {
         _textures.insert({textureName, _assets->get<Texture>(textureName)});
     }
-    _squareTexture = _textures.at(SQUARE_TEXTURE);
-    _selectedSquareTexture = _textures.at(SQUARE_SELECTED_TEXTURE);
-    _swapSquareTexture = _textures.at(SQUARE_SWAP_TEXTURE);
-    _attackedSquareTexture = _textures.at(SQUARE_ATTACKED_TEXTURE);
-    auto transparent_texture = _textures.at(TRANSPARENT_TEXTURE);
-
-    _redUnitTexture = _textures.at(RED_UNIT);
-    _blueUnitTexture = _textures.at(BLUE_UNIT);
-    _greenUnitTexture = _textures.at(GREEN_UNIT);
-
-    _diagonalRedTexture = _textures.at(DIAGONAL_RED);
-    _diagonalBlueTexture = _textures.at(DIAGONAL_BLUE);
-    _diagonalGreenTexture = _textures.at(DIAGONAL_GREEN);
-
-    _twoForwardRedTexture = _textures.at(TWO_FORWARD_RED);
-    _twoForwardBlueTexture = _textures.at(TWO_FORWARD_BLUE);
-    _twoForwardGreenTexture = _textures.at(TWO_FORWARD_GREEN);
-
-    _threeWayRedTexture = _textures.at(THREE_WAY_RED);
-    _threeWayBlueTexture = _textures.at(THREE_WAY_BLUE);
-    _threeWayGreenTexture = _textures.at(THREE_WAY_GREEN);
 
     // Get the background image and constant values
     _background = assets->get<Texture>("background");
@@ -183,7 +143,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
     //_boardNode->setPosition(getSize() / 2);
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
-    _boardNode->setTexture(transparent_texture);
+    _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     
     _guiNode->addChildWithName(_boardNode, "boardNode");
@@ -222,7 +182,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Create the squares & units and put them in the map
     for (int i=0;i<_boardSize;i++) {
         for(int j=0;j<_boardSize;++j){
-            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
+            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
             auto squarePosition = (Vec2(i,j));
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE/2));
 //
@@ -236,7 +196,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 //    // Set view of replacement list
 //    _replacementBoardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
 //    //_replacementBoardNode->setPosition(SQUARE_SIZE, getSize().height / 2);
-//    _replacementBoardNode->setTexture(transparent_texture);
+//    _replacementBoardNode->setTexture(_textures.at("transparent"));
 //    _replacementBoard->setViewNode(_replacementBoardNode);
 //    _layout->addRelative("_replacementBoardNode", cugl::scene2::Layout::Anchor::MIDDLE_LEFT, Vec2(.1, 0));
 //
@@ -251,7 +211,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 //
 //    // Create the squares & units and put them in the map (replacement board)
 //    for (int i = 0; i < _replacementListLength; i++) {
-//            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
+//            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
 //            auto squarePosition = (Vec2(0, i));
 //            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE / 2));
 //            shared_ptr<Square> sq = _replacementBoard->getSquare(squarePosition);
@@ -266,7 +226,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 //     // Create the squares & units and put them in the map
 //    for (int i = 0; i < BOARD_SIZE; i++) {
 //        for (int j = 0; j < BOARD_SIZE; ++j) {
-//            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_squareTexture);
+//            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
 //            auto squarePosition = (Vec2(i, j));
 //            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE / 2));
             
@@ -381,7 +341,7 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
     
     std::shared_ptr<cugl::Texture> unitTexture;
     if (unit->getColor() == Unit::RED) {
-        unitTexture = _redUnitTexture;
+        unitTexture = _textures.at("red-unit");
 //        if (unit->getSpecialAttack() == twoForwardAttack) {
 //            unitTexture = _twoForwardRedTexture;
 //        } else if (unit->getSpecialAttack() == threeWayAttack) {
@@ -389,10 +349,10 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
 //        } else if (unit->getSpecialAttack() == diagonalAttack) {
 //            unitTexture = _diagonalRedTexture;
 //        } else {
-//            unitTexture = _redUnitTexture;
+//            unitTexture = _textures.at("red-unit");
 //        }
     } else if (unit->getColor() == Unit::GREEN) {
-        unitTexture = _greenUnitTexture;
+        unitTexture = _textures.at("green-unit");
 //        if (unit->getSpecialAttack() == twoForwardAttack) {
 //            unitTexture = _twoForwardGreenTexture;
 //        } else if (unit->getSpecialAttack() == threeWayAttack) {
@@ -400,10 +360,10 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
 //        } else if (unit->getSpecialAttack() == diagonalAttack) {
 //            unitTexture = _diagonalGreenTexture;
 //        } else {
-//            unitTexture = _greenUnitTexture;
+//            unitTexture = _textures.at("green-unit");
 //        }
     } else if (unit->getColor() == Unit::BLUE) {
-        unitTexture = _blueUnitTexture;
+        unitTexture = _textures.at("blue-unit");
 //        if (unit->getSpecialAttack() == twoForwardAttack) {
 //            unitTexture = _twoForwardBlueTexture;
 //        } else if (unit->getSpecialAttack() == threeWayAttack) {
@@ -411,7 +371,7 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
 //        } else if (unit->getSpecialAttack() == diagonalAttack) {
 //            unitTexture = _diagonalBlueTexture;
 //        } else {
-//            unitTexture = _blueUnitTexture;
+//            unitTexture = _textures.at("blue-unit");
 //        }
     }
     
@@ -445,27 +405,27 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 
     if (unit->getColor() == Unit::RED) {
         if (unit->getSpecialAttack() == twoForwardAttack) {
-            unitNode -> setTexture(_twoForwardRedTexture);
+            unitNode -> setTexture(_textures.at("two-forward-red"));
         } else if (unit->getSpecialAttack() == threeWayAttack) {
-            unitNode -> setTexture(_threeWayRedTexture);
+            unitNode -> setTexture(_textures.at("three-way-red"));
         } else if (unit->getSpecialAttack() == diagonalAttack) {
-            unitNode -> setTexture (_diagonalRedTexture);
+            unitNode -> setTexture (_textures.at("diagonal-red"));
         }
     } else if (unit->getColor() == Unit::GREEN) {
         if (unit->getSpecialAttack() == twoForwardAttack) {
-            unitNode -> setTexture(_twoForwardGreenTexture);
+            unitNode -> setTexture(_textures.at("two-forward-green"));
         } else if (unit->getSpecialAttack() == threeWayAttack) {
-            unitNode -> setTexture(_threeWayGreenTexture);
+            unitNode -> setTexture(_textures.at("three-way-green"));
         } else if (unit->getSpecialAttack() == diagonalAttack) {
-            unitNode -> setTexture (_diagonalGreenTexture);
+            unitNode -> setTexture (_textures.at("diagonal-green"));
         }
     } else if (unit->getColor() == Unit::BLUE) {
         if (unit->getSpecialAttack() == twoForwardAttack) {
-            unitNode -> setTexture(_twoForwardBlueTexture);
+            unitNode -> setTexture(_textures.at("two-forward-blue"));
         } else if (unit->getSpecialAttack() == threeWayAttack) {
-            unitNode -> setTexture(_threeWayBlueTexture);
+            unitNode -> setTexture(_textures.at("three-way-blue"));
         } else if (unit->getSpecialAttack() == diagonalAttack) {
-            unitNode -> setTexture (_diagonalBlueTexture);
+            unitNode -> setTexture (_textures.at("diagonal-blue"));
         }
     }
 }
@@ -524,7 +484,7 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 //    std::shared_ptr<cugl::Texture> unitTexture;
 //    if (unit->getColor() == Unit::RED)
 //    {
-//        unitTexture = _redUnitTexture;
+//        unitTexture = _textures.at("red-unit");
 //        if (unit->getSpecialAttack() == twoForwardAttack)
 //        {
 //            unitTexture = _twoForwardRedTexture;
@@ -539,12 +499,12 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 //        }
 //        else
 //        {
-//            unitTexture = _redUnitTexture;
+//            unitTexture = _textures.at("red-unit");
 //        }
 //    }
 //    else if (unit->getColor() == Unit::GREEN)
 //    {
-//        unitTexture = _greenUnitTexture;
+//        unitTexture = _textures.at("green-unit");
 //        if (unit->getSpecialAttack() == twoForwardAttack)
 //        {
 //            unitTexture = _twoForwardGreenTexture;
@@ -559,12 +519,12 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 //        }
 //        else
 //        {
-//            unitTexture = _greenUnitTexture;
+//            unitTexture = _textures.at("green-unit");
 //        }
 //    }
 //    else if (unit->getColor() == Unit::BLUE)
 //    {
-//        unitTexture = _blueUnitTexture;
+//        unitTexture = _textures.at("blue-unit");
 //        if (unit->getSpecialAttack() == twoForwardAttack)
 //        {
 //            unitTexture = _twoForwardBlueTexture;
@@ -579,7 +539,7 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 //        }
 //        else
 //        {
-//            unitTexture = _blueUnitTexture;
+//            unitTexture = _textures.at("blue-unit");
 //        }
 //    }
 //
@@ -679,7 +639,7 @@ void GameScene::update(float timestep)
             if (_currentState == SELECTING_UNIT)
             {
                 _selectedSquare = squareOnMouse;
-                _selectedSquare->getViewNode()->setTexture(_selectedSquareTexture);
+                _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
                 _currentState = SELECTING_SWAP;
             }
             else if (_currentState == SELECTING_SWAP && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1)
@@ -696,7 +656,7 @@ void GameScene::update(float timestep)
                 CULog("2.5");
                 _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 CULog("2.55");
-                squareOnMouse->getViewNode()->setTexture(_swapSquareTexture);
+                squareOnMouse->getViewNode()->setTexture(_textures.at("square-swap"));
                 CULog("2.6");
                 vector<shared_ptr<Square>> attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
                 
@@ -711,7 +671,7 @@ void GameScene::update(float timestep)
 
                 for (shared_ptr<Square> attackedSquares : attackedSquares)
                 {
-                    attackedSquares->getViewNode()->setTexture(_attackedSquareTexture);
+                    attackedSquares->getViewNode()->setTexture(_textures.at("square-attacked"));
 
                     auto attackedUnit = attackedSquares->getUnit();
                     attackedColors.insert(attackedUnit->getColor());
@@ -732,16 +692,16 @@ void GameScene::update(float timestep)
                 _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 for (shared_ptr<Square> squares : _board->getAllSquares())
                 {
-                    squares->getViewNode()->setTexture(_squareTexture);
+                    squares->getViewNode()->setTexture(_textures.at("square"));
                 }
-                _selectedSquare->getViewNode()->setTexture(_selectedSquareTexture);
+                _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
             }
         }
         else if (_input.didRelease())
         {
             for (shared_ptr<Square> squares : _board->getAllSquares())
             {
-                squares->getViewNode()->setTexture(_squareTexture);
+                squares->getViewNode()->setTexture(_textures.at("square"));
             }
             if (_currentState == CONFIRM_SWAP)
             {
