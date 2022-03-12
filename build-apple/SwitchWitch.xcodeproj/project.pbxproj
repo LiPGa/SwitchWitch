@@ -466,7 +466,7 @@
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = N3K729D7XF;
+						DevelopmentTeam = 4WBNK62USC;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -833,7 +833,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = N3K729D7XF;
+				DEVELOPMENT_TEAM = 4WBNK62USC;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.SwitchWitch;
@@ -850,7 +850,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = N3K729D7XF;
+				DEVELOPMENT_TEAM = 4WBNK62USC;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.SwitchWitch;
