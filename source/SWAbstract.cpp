@@ -6,6 +6,6 @@
 //  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
 //
 
-#include "SWAbstract.hpp"
+#include "SWObject.hpp"
 
 
