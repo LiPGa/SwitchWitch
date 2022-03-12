@@ -126,6 +126,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14FEEBAE27DC100F00B9DBA8 /* SWObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWObject.hpp; sourceTree = "<group>"; };
 		75C0E5B727C47440006BB1D0 /* SWBoard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWBoard.cpp; sourceTree = "<group>"; };
 		75C0E5B827C47440006BB1D0 /* SWBoard.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWBoard.hpp; sourceTree = "<group>"; };
 		75C0E5BC27C47776006BB1D0 /* SWUnit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWUnit.cpp; sourceTree = "<group>"; };
@@ -383,6 +384,7 @@
 				DBC4960E27C861EC006BA4CA /* SWInputController.h */,
 				75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */,
 				75C0E5C527C47EBD006BB1D0 /* SWSquare.hpp */,
+				14FEEBAE27DC100F00B9DBA8 /* SWObject.hpp */,
 				75C0E5BC27C47776006BB1D0 /* SWUnit.cpp */,
 				75C0E5BD27C47776006BB1D0 /* SWUnit.hpp */,
 				75C0E5B727C47440006BB1D0 /* SWBoard.cpp */,

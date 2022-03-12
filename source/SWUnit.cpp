@@ -45,3 +45,4 @@ vector<cugl::Vec2> Unit::getSpecialAttackRotated() {
     std::transform(result.begin(), result.end(), result.begin(), [&](Vec2 vec) { vec.rotate(getAngleBetweenDirectionAndDefault()); return Vec2(round(vec.x), round(vec.y)); });
     return result;
 }
+
