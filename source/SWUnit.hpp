@@ -10,14 +10,14 @@
 #define SWUnit_hpp
 
 #include <cugl/cugl.h>
-#include "SWObject.hpp"
+#include "SWSquareOccupant.hpp"
 
 using namespace cugl;
 
 /**
  * Model class representing an unit.
  */
-class Unit : public Object
+class Unit : public SquareOccupant
 {
 public:
     /** Available colors for a unit. Each unit will have one of the three colors.*/
