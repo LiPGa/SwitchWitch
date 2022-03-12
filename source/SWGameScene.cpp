@@ -74,7 +74,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
-//    dimen *= SCENE_HEIGHT / dimen.height;
     if (assets == nullptr)
     {
         return false;
@@ -93,16 +92,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     if (!Scene2::init(dimen)) {
         return false;
     }
-//    else if (!Scene2::init(dimen))
-//    {
-//        return false;
-//    }
+
     // TODO: JSON THIS AND MAKE IT MORE SCALABLE
     // UNIT ATTACK PATTERNS
-//    std::vector<cugl::Vec2> basicAttack{cugl::Vec2(1, 0)};
-//    std::vector<cugl::Vec2> diagonalAttack{Vec2(1, 1), Vec2(1, -1), Vec2(-1, 1), Vec2(-1, -1)};
-//    std::vector<cugl::Vec2> threeWayAttack{Vec2(1, 1), Vec2(1, 0), Vec2(1, -1)};
-//    std::vector<cugl::Vec2> twoForwardAttack{Vec2(1, 0), Vec2(2, 0)};
 
     // Start up the input handler
     _input.init();
@@ -126,21 +118,21 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _attackedSquareTexture = _textures.at(SQUARE_ATTACKED_TEXTURE);
     auto transparent_texture = _textures.at(TRANSPARENT_TEXTURE);
 
-    _redUnitTexture = _assets->get<Texture>(RED_UNIT);
-    _blueUnitTexture = _assets->get<Texture>(BLUE_UNIT);
-    _greenUnitTexture = _assets->get<Texture>(GREEN_UNIT);
+    _redUnitTexture = _textures.at(RED_UNIT);
+    _blueUnitTexture = _textures.at(BLUE_UNIT);
+    _greenUnitTexture = _textures.at(GREEN_UNIT);
 
-    _diagonalRedTexture = _assets->get<Texture>(DIAGONAL_RED);
-    _diagonalBlueTexture = _assets->get<Texture>(DIAGONAL_BLUE);
-    _diagonalGreenTexture = _assets->get<Texture>(DIAGONAL_GREEN);
+    _diagonalRedTexture = _textures.at(DIAGONAL_RED);
+    _diagonalBlueTexture = _textures.at(DIAGONAL_BLUE);
+    _diagonalGreenTexture = _textures.at(DIAGONAL_GREEN);
 
-    _twoForwardRedTexture = _assets->get<Texture>(TWO_FORWARD_RED);
-    _twoForwardBlueTexture = _assets->get<Texture>(TWO_FORWARD_BLUE);
-    _twoForwardGreenTexture = _assets->get<Texture>(TWO_FORWARD_GREEN);
+    _twoForwardRedTexture = _textures.at(TWO_FORWARD_RED);
+    _twoForwardBlueTexture = _textures.at(TWO_FORWARD_BLUE);
+    _twoForwardGreenTexture = _textures.at(TWO_FORWARD_GREEN);
 
-    _threeWayRedTexture = _assets->get<Texture>(THREE_WAY_RED);
-    _threeWayBlueTexture = _assets->get<Texture>(THREE_WAY_BLUE);
-    _threeWayGreenTexture = _assets->get<Texture>(THREE_WAY_GREEN);
+    _threeWayRedTexture = _textures.at(THREE_WAY_RED);
+    _threeWayBlueTexture = _textures.at(THREE_WAY_BLUE);
+    _threeWayGreenTexture = _textures.at(THREE_WAY_GREEN);
 
     // Get the background image and constant values
     _background = assets->get<Texture>("background");
@@ -192,20 +184,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _boardNode->setTexture(transparent_texture);
     _board->setViewNode(_boardNode);
     
-
-//    /**
-//     * Set the initial location of special units
-//     *
-//     * The # of initial special units = Math.floor(0.1 * total number of units on the board).
-//     */
-//    int initialSUNum = (int)floor(0.1 * BOARD_SIZE * BOARD_SIZE);
-//    Vec2 specialPosition[initialSUNum];
-//    for (int i = 0; i < initialSUNum; i++) {
-//        specialPosition[i] = Vec2(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
-//        while (!isSafe(specialPosition[i],&specialPosition[initialSUNum])) {
-//            specialPosition[i] = Vec2(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
-//        }
-//    }
     _guiNode->addChildWithName(_boardNode, "boardNode");
     
     
@@ -304,15 +282,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             unit->setViewNode(unitNode);
             unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
-            
-            
-            
-//            generateUnit(sq, squareNode);
-//            for (int i = 0; i < initialSUNum; i++) {
-//                if (squarePosition == specialPosition[i]) {
-//                    upgradeToSpecial(sq, squareNode);
-//                }
-//            }
         }
     }
     // Create and layout the win lose text
