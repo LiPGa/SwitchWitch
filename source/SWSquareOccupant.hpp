@@ -9,26 +9,26 @@
 //  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
 //
 
-#ifndef SWObject_hpp
-#define SWObject_hpp
+#ifndef SWSquareOccupant_hpp
+#define SWSquareOccupant_hpp
 
 #include <stdio.h>
 
 #include <cugl/cugl.h>
 using namespace cugl;
 
-class Object
+class SquareOccupant
 {
 public:
 //    enum ObjectType{
 //        ObjUnit,
 //        ObjObstacle
 //    };
-    Object() {};
+    SquareOccupant() {};
 
-    virtual ~Object() {};
+    virtual ~SquareOccupant() {};
     
-    //TODO: PLACEHOLDER FOR MORE COMMON PROPERTIES OF OBJECTS
+    //TODO: PLACEHOLDER FOR MORE COMMON PROPERTIES OF SQUAREOCCUPANTS
     
     virtual shared_ptr<cugl::scene2::PolygonNode> getViewNode()=0;
     
@@ -49,5 +49,5 @@ private:
     
 };
 
-#endif /* SWAbstract_hpp */
+#endif /* SWSquareOccupant_hpp */
 
