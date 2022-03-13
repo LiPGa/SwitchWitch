@@ -1,74 +1,30 @@
 {
     "unit": {
-        "red": {
-            "color": "red",
-            "texture": "red-unit",
+        "basic": {
+            "texture-red": "red-unit",
+            "texture-blue": "blue-unit",
+            "texture-green": "green-unit",
             "basic-attack": [1,0],
-            "special-attack": []
+            "special-attack":[]
         },
-        "blue": {
-            "color": "blue",
-            "texture": "blue-unit",
-            "basic-attack": [1,0],
-            "special-attack": []
-        },
-        "green": {
-            "color": "green",
-            "texture": "green-unit",
-            "basic-attack": [1,0],
-            "special-attack": []
-        },
-        "three-way-blue": {
-            "color": "blue",
-            "texture": "three-way-blue",
+        "three-way": {
+            "texture-red": "three-way-red",
+            "texture-blue": "three-way-blue",
+            "texture-green": "three-way-green",
             "basic-attack": [1,0],
             "special-attack": [[1,1], [1,0], [1,-1]]
         },
-        "three-way-green": {
-            "color": "green",
-            "texture": "three-way-green",
-            "basic-attack": [1,0],
-            "special-attack": [[1,1], [1,0], [1,-1]]
-        },
-        "three-way-red": {
-            "color": "red",
-            "texture": "three-way-red",
-            "basic-attack": [1,0],
-            "special-attack": [[1,1], [1,0], [-1,-1]]
-        },
-        "diagonal-red": {
-            "color": "red",
-            "texture": "diagonal-red",
+        "diagonal": {
+            "texture-red": "diagonal-red",
+            "texture-blue": "diagonal-blue",
+            "texture-green": "diagonal-green",
             "basic-attack": [1,0],
             "special-attack": [[1,1], [-1,1], [1,-1], [-1,-1]]
         },
-        "diagonal-blue": {
-            "color": "blue",
-            "texture": "diagonal-blue",
-            "basic-attack": [1,0],
-            "special-attack": [[1,1], [-1,1], [1,-1], [-1,-1]]
-        },
-        "diagonal-green": {
-            "color": "green",
-            "texture": "diagonal-green",
-            "basic-attack": [1,0],
-            "special-attack": [[1,1], [-1,1], [1,-1], [-1,-1]]
-        },
-        "two-forward-red": {
-            "color": "red",
-            "texture": "two-forward-red",
-            "basic-attack": [1,0],
-            "special-attack": [[1,1], [2,0]]
-        },
-        "two-forward-blue": {
-            "color": "blue",
-            "texture": "two-forward-blue",
-            "basic-attack": [1,0],
-            "special-attack": [[1,1], [2,0]]
-        },
-        "two-forward-green": {
-            "color": "green",
-            "texture": "two-forward-green",
+        "two-forward": {
+            "texture-red": "two-forward-red",
+            "texture-blue": "two-forward-blue",
+            "texture-green": "two-forward-green",
             "basic-attack": [1,0],
             "special-attack": [[1,1], [2,0]]
         }
