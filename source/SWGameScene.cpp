@@ -247,6 +247,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             sq->setUnit(unit);
             auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
             unit->setViewNode(unitNode);
+            if (unitSubType!="basic") {
+                unit->setSpecial(true);
+                sq->getViewNode()->setTexture(_textures.at("special_up_square"));
+            }
             //unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
         }
@@ -406,8 +410,10 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
     std::vector<cugl::Vec2> twoForwardAttack{Vec2(1,0), Vec2(2,0)};
 
     auto unit = sq->getUnit();
+    unit->setSpecial(true);
     auto unitNode = unit->getViewNode();
     auto randomNumber3 = rand() % 10 + 1;
+    sq->getViewNode()->setTexture(_textures.at("special_up_square"));
     if (randomNumber3 <= 4) {
         unit->setSpecialAttack(twoForwardAttack);
     } else if (randomNumber3 > 4 && randomNumber3 <= 8) {
@@ -705,7 +711,12 @@ void GameScene::update(float timestep)
                 _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 for (shared_ptr<Square> squares : _board->getAllSquares())
                 {
-                    squares->getViewNode()->setTexture(_textures.at("square"));
+                    if (squares->getUnit()->isSpecial()) {
+                        squares->getViewNode()->setTexture(_textures.at("special_up_square"));
+                    }
+                    else {
+                        squares->getViewNode()->setTexture(_textures.at("square"));
+                    }
                 }
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
             }
@@ -714,7 +725,12 @@ void GameScene::update(float timestep)
         {
             for (shared_ptr<Square> squares : _board->getAllSquares())
             {
-                squares->getViewNode()->setTexture(_textures.at("square"));
+                if (squares->getUnit()->isSpecial()) {
+                    squares->getViewNode()->setTexture(_textures.at("special_up_square"));
+                }
+                else {
+                    squares->getViewNode()->setTexture(_textures.at("square"));
+                }
             }
             if (_currentState == CONFIRM_SWAP)
             {

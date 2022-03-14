@@ -19,12 +19,13 @@ using namespace cugl;
  * @param direction the direction the unit is facing
  * @return true if initialization was successful.
  */
-bool Unit::init(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction)
+bool Unit::init(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool special)
 {
     this->_color = color;
     this->_basicAttack = basicAttack;
     this->_direction = direction;
     this->_specialAttack = specialAttack;
+    this->_is_special_unit = special;
     return true;
 }
 
@@ -45,4 +46,6 @@ vector<cugl::Vec2> Unit::getSpecialAttackRotated() {
     std::transform(result.begin(), result.end(), result.begin(), [&](Vec2 vec) { vec.rotate(getAngleBetweenDirectionAndDefault()); return Vec2(round(vec.x), round(vec.y)); });
     return result;
 }
+
+
 
