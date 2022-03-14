@@ -247,7 +247,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             sq->setUnit(unit);
             auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
             unit->setViewNode(unitNode);
-            unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+            //unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
         }
     }
@@ -391,7 +391,7 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
     sq->setUnit(unit);
     auto unitNode = scene2::PolygonNode::allocWithTexture(unitTexture);
     unit->setViewNode(unitNode);
-    unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+    //unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
     squareNode->addChild(unitNode);
 }
 
@@ -724,8 +724,8 @@ void GameScene::update(float timestep)
                 auto swappedUnitNode = _selectedSquare->getUnit()->getViewNode();
                 auto selectedUnitNode = _swappingSquare->getUnit()->getViewNode();
                 // Rotate Units
-                swappedUnitNode->setAngle(_selectedSquare->getUnit()->getAngleBetweenDirectionAndDefault());
-                selectedUnitNode->setAngle(_swappingSquare->getUnit()->getAngleBetweenDirectionAndDefault());
+                //swappedUnitNode->setAngle(_selectedSquare->getUnit()->getAngleBetweenDirectionAndDefault());
+                //selectedUnitNode->setAngle(_swappingSquare->getUnit()->getAngleBetweenDirectionAndDefault());
                 // Updating View
                 _selectedSquare->getViewNode()->removeChild(selectedUnitNode);
                 _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
