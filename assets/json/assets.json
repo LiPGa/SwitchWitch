@@ -1,91 +1,91 @@
 {
     "textures": {
         "background": {
-            "file":  "textures/ice.png",
+            "file": "textures/ice.png",
             "wrapS": "repeat",
             "wrapT": "repeat"
         },
-        "square":{
+        "square": {
             "file": "textures/square.png"
         },
-        "square-selected":{
+        "square-selected": {
             "file": "textures/square_selected.png"
         },
-        "square-swap":{
+        "square-swap": {
             "file": "textures/square_swap.png"
         },
-        "square-attacked":{
+        "square-attacked": {
             "file": "textures/square_attacked.png"
         },
-        "transparent":{
+        "transparent": {
             "file": "textures/transparent_texture.png"
         },
-        "basic-red":{
+        "basic-red": {
             "file": "textures/red_unit.png"
         },
-        "basic-blue":{
+        "basic-blue": {
             "file": "textures/blue_unit.png"
         },
-        "basic-green":{
-            "file": "textures/green_unit.png"
+        "basic-green": {
+            "file": "textures/orange_unit.png"
         },
-        "diagonal-blue":{
+        "diagonal-blue": {
             "file": "textures/diagonal_blue.png"
         },
-        "diagonal-green":{
-            "file": "textures/diagonal_green.png"
+        "diagonal-green": {
+            "file": "textures/diagonal_orange.png"
         },
-        "diagonal-red":{
+        "diagonal-red": {
             "file": "textures/diagonal_red.png"
         },
-        "three-way-blue":{
+        "three-way-blue": {
             "file": "textures/three_way_blue_unit.png"
         },
-        "three-way-green":{
-            "file": "textures/three_way_green_unit.png"
+        "three-way-green": {
+            "file": "textures/three_way_orange_unit.png"
         },
-        "three-way-red":{
+        "three-way-red": {
             "file": "textures/three_way_red_unit.png"
         },
-        "two-forward-blue":{
+        "two-forward-blue": {
             "file": "textures/two_forward_blue_unit.png"
         },
-        "two-forward-green":{
-            "file": "textures/two_forward_green_unit.png"
+        "two-forward-green": {
+            "file": "textures/two_forward_orange_unit.png"
         },
-        "two-forward-red":{
+        "two-forward-red": {
             "file": "textures/two_forward_red_unit.png"
         }
     },
     "fonts": {
         "pixel32": {
-            "file":     "fonts/LightPixel7.ttf",
-            "size":     32
+            "file": "fonts/LightPixel7.ttf",
+            "size": 32
         }
     },
-    "sounds" : {
-        "fusion" : {
+    "sounds": {
+        "fusion": {
             "type": "sample",
             "file": "sounds/fusion.ogg"
         },
-        "laser" : {
+        "laser": {
             "type": "sample",
             "file": "sounds/laser.ogg",
             "volume": 0.5
         },
-        "blast" : {
+        "blast": {
             "type": "sample",
             "file": "sounds/explode.ogg"
         },
-        "bang" : {
+        "bang": {
             "type": "sample",
             "file": "sounds/bang.ogg",
             "volume": 0.8
         }
     },
-    "jsons" : {
-        "constants" : "json/constants.json",
-        "boardMember" : "json/boardMember.json",
-        "board" : "json/board.json"
+    "jsons": {
+        "constants": "json/constants.json",
+        "boardMember": "json/boardMember.json",
+        "board": "json/board.json"
     }
 }
