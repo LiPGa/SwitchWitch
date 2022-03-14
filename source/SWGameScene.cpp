@@ -757,6 +757,12 @@ void GameScene::update(float timestep)
                     if (randomNumber4 <= 1) {
                         upgradeToSpecial(attackedSquare, attackedSquare->getViewNode());
                     }
+                    if (attackedSquare->getUnit()->isSpecial()) {
+                        attackedSquare->getViewNode()->setTexture(_textures.at("special_up_square"));
+                    }
+                    else {
+                        attackedSquare->getViewNode()->setTexture(_textures.at("square"));
+                    }
                 }
                 
                 _turns--;
