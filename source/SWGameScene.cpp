@@ -631,7 +631,7 @@ void GameScene::update(float timestep)
      * The extra calculation on y is meant to convert the mouse position as if its origin is on the bottom left.
      */
     Vec2 squarePos = Vec2(int(boardPos.x) / SQUARE_SIZE, BOARD_SIZE - 1 - (int(boardPos.y) / SQUARE_SIZE));
-    if (_board->doesSqaureExist(squarePos))
+    if (_board->doesSqaureExist(squarePos) && boardPos.x>=0 && boardPos.y>= 0)
     {
         auto squareOnMouse = _board->getSquare(squarePos);
         if (_input.isDown())

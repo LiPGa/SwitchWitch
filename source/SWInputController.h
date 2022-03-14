@@ -16,7 +16,7 @@
 #define __SW_INPUT_CONTROLLER_H__
 
 #include <stdio.h>
-
+#include <cugl/cugl.h>
 /**
  * Device-independent input manager.
  *
@@ -25,6 +25,14 @@
  * for this approach varies according to whether it is a mouse or mobile
  * touch controls. This interface hides the details.
  */
+
+ /** The key to use for reseting the game */
+#define RESET_KEY KeyCode::R
+/** The key for toggling the debug display */
+#define DEBUG_KEY KeyCode::D
+/** The key for exitting the game */
+#define EXIT_KEY  KeyCode::ESCAPE
+
 class InputController {
 // Stylistically, I like common stuff protected, device specific private
 protected:
@@ -39,6 +47,26 @@ protected:
     /** Whether there was an active button/touch press last frame*/
     bool _prevDown;
 
+    // Inputs used for level editor
+    /** Whether the up key is down*/
+    bool _upDown;
+    /** Whether the down key is down*/
+    bool _downDown;
+    /** Whether the left key is down*/
+    bool _leftDown;
+    /** Whether the right key is down*/
+    bool _rightDown;
+    /** Whether the red key is down*/
+    bool _redDown;
+    /** Whether the green key is down*/
+    bool _greenDown;
+    /** Whether the blue key is down*/
+    bool _blueDown;
+    /** Whether the save key is down*/
+    bool _saveDown;
+    /** Whether the play key is down*/
+    bool _playDown;
+    
 protected:
 	/** The key for the mouse listeners */
 	Uint32 _mouseKey;
@@ -173,6 +201,63 @@ public:
         return _currDown;
     }
 
+#pragma mark -
+#pragma mark Debug and Level Editor Controls
+    /**
+     * Returns the arrow key or WSAD key pressed as a vector 2.
+     * 
+     * @returns the cardinal direction selected from arrow keys or WSAD.
+     */
+    cugl::Vec2 directionPressed() const;
+
+    /**
+     * Return true if a direction key is pressed this frame.
+     *
+     * This method only checks that a press is active or ongoing.
+     * It does not care when the press was initiated.
+     *
+     * @return true if the user is actively pressing a direction key this frame.
+     */
+    bool isDirectionKeyDown() const {
+        return directionPressed() != cugl::Vec2::ZERO;
+    }
+
+    /**
+     * Returns wether the red button is down. Used in level editor.
+     *
+     * @returns if the red button is down.
+     */
+    bool isRedDown() { return _redDown; }
+
+    /**
+     * Returns wether the green button is down. Used in level editor.
+     *
+     * @returns if the green button is down.
+     */
+    bool isGreenDown() { return _greenDown; }
+
+    /**
+     * Returns wether the blue button is down. Used in level editor.
+     *
+     * @returns if the green button is down.
+     */
+    bool isBlueDown() { return _blueDown; }
+
+    /**
+     * Returns wether the save button is down. Used in level editor.
+     * 
+     * @returns if the save button is down.
+     */
+    bool isSaveDown() { return _saveDown; }
+    
+    /**
+     * Returns wether the play button is down. Used in level editor.
+     *
+     * @returns if the play button is down.
+     */
+    bool isPlayDown() { return _playDown; }
+
+#pragma mark -
 #pragma mark Mouse Callbacks
 private:
     /**

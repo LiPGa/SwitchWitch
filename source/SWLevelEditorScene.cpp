@@ -35,7 +35,15 @@ using namespace std;
 #define SQUARE_SIZE 128
 
 /** How big the board is*/
-#define BOARD_SIZE 5
+#define BOARD_WIDTH 5
+
+#define BOARD_HEIGHT 5
+
+#define SELECTION_BOARD_WIDTH 2
+#define SELECTION_BOARD_HEIGHT 10
+
+/** How to reduce the scale of textures for select*/
+#define SELECTION_BOARD_SCALE 0.5
 
 #pragma mark Asset Constants
 
@@ -99,10 +107,13 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _currentState = SELECTING_UNIT;
 
     // Initialize Board
-    _board = Board::alloc(BOARD_SIZE, BOARD_SIZE);
+    _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
+
+    /// Initialize Selection Board
+    _selectionBoard = Board::alloc(SELECTION_BOARD_HEIGHT, SELECTION_BOARD_WIDTH);
 
     // Set the view of the board.
-    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
+    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_WIDTH * SQUARE_SIZE, BOARD_HEIGHT * SQUARE_SIZE));
     //_boardNode->setPosition(getSize() / 2);
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
     _boardNode->setTexture(_textures.at("transparent"));
@@ -110,6 +121,12 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
 
     _guiNode->addChildWithName(_boardNode, "boardNode");
 
+    // Set the view of the select board.
+    _selectionBoardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, SQUARE_SIZE, BOARD_HEIGHT * SQUARE_SIZE));
+    _layout->addRelative("selectionBoardNode", cugl::scene2::Layout::Anchor::MIDDLE_LEFT, Vec2(SQUARE_SIZE / getSize().width, 0));
+    _selectionBoardNode->setTexture(_textures.at("transparent"));
+    _selectionBoard->setViewNode(_selectionBoardNode);
+    _guiNode->addChildWithName(_selectionBoardNode, "selectionBoardNode");
 
     // initialize units with different types
     auto children = _boardMembers->get("unit")->children();
@@ -153,11 +170,36 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
             sq->setViewNode(squareNode);
             // Add square node to board node.
             _board->getViewNode()->addChild(squareNode);
+            // generate unit for this square
+            Vec2 unitDirection = Unit::getDefaultDirection();
+            auto unitTemplateBeginning = _unitTypes.begin();
+            shared_ptr<Unit> unitTemplate = unitTemplateBeginning->second;
+            std:string unitType = unitTemplateBeginning->first;
+            shared_ptr<Unit> unit = Unit::alloc(unitTemplate->getColor(), unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
+            sq->setUnit(unit);
+            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitType));
+            unit->setViewNode(unitNode);
+            unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+            squareNode->addChild(unitNode);
+        }
+    }
+
+    for (int i = 0; i < SELECTION_BOARD_WIDTH; i++) {
+        for (int j = 0; j < SELECTION_BOARD_HEIGHT; ++j) {
+            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
+            auto squarePosition = (Vec2(i, j));
+            squareNode->setScale(SELECTION_BOARD_SCALE);
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE * SELECTION_BOARD_SCALE) + Vec2::ONE * (SQUARE_SIZE * SELECTION_BOARD_SCALE / 2));
+            shared_ptr<Square> sq = _selectionBoard->getSquare(squarePosition);
+            sq->setViewNode(squareNode);
+            // Add square node to board node.
+            _selectionBoard->getViewNode()->addChild(squareNode);
             /*
             // generate unit for this square
-        std:string unitType = unitsInBoard.at(_boardSize * (_boardSize - j - 1) + i);
-            Vec2 unitDirection = unitsDirInBoard.at(_boardSize * (_boardSize - j - 1) + i);
-            auto unitTemplate = _unitTypes.at(unitType);
+            Vec2 unitDirection = Unit::getDefaultDirection();
+            auto unitTemplateBeginning = _unitTypes.begin();
+            shared_ptr<Unit> unitTemplate = unitTemplateBeginning->second;
+            std:string unitType = unitTemplateBeginning->first;
             shared_ptr<Unit> unit = Unit::alloc(unitTemplate->getColor(), unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
             sq->setUnit(unit);
             auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitType));
@@ -167,6 +209,8 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
             */
         }
     }
+
+    // Create the squares & units for the selection board and put them on the map.
     reset();
     return true;
 }
@@ -198,22 +242,61 @@ void LevelEditorScene::update(float timestep)
     _input.update();
     Vec2 pos = _input.getPosition();
     Vec2 boardPos = _boardNode->worldToNodeCoords(pos);
+    Vec2 selectionBoardPos = _selectionBoardNode->worldToNodeCoords(pos);
     /*
      * The mouse position is measured with the top left of the screen being the origin
      * while the origin of the board is on the bottom left.
      * The extra calculation on y is meant to convert the mouse position as if its origin is on the bottom left.
      */
-    Vec2 squarePos = Vec2(int(boardPos.x) / SQUARE_SIZE, BOARD_SIZE - 1 - (int(boardPos.y) / SQUARE_SIZE));
-    if (_board->doesSqaureExist(squarePos))
+    
+    if (_input.didPress())
     {
-        auto squareOnMouse = _board->getSquare(squarePos);
-        if (_input.isDown())
+        Vec2 squarePos = Vec2(int(boardPos.x) / SQUARE_SIZE, BOARD_HEIGHT - 1 - (int(boardPos.y) / SQUARE_SIZE));
+        Vec2 selectionSquarePos = Vec2(int(selectionBoardPos.x) / int(SQUARE_SIZE * SELECTION_BOARD_SCALE), SELECTION_BOARD_HEIGHT - 1 - (int(selectionBoardPos.y) / int(SQUARE_SIZE * SELECTION_BOARD_SCALE)));
+        if (_board->doesSqaureExist(squarePos) && boardPos.x>=0 && boardPos.y>=0)
         {
+            auto squareOnMouse = _board->getSquare(squarePos);
             if (_currentState == SELECTING_UNIT)
             {
-                _selectedSquare = squareOnMouse;
-                _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
+                if (_selectedSquare != squareOnMouse) {
+                    if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
+                    _selectedSquare = squareOnMouse;
+                    _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
+                }
+                else {
+                    _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
+                    _selectedSquare = NULL;
+                }
             }
+        }
+        if (_selectionBoard->doesSqaureExist(selectionSquarePos) && selectionBoardPos.x >= 0 && selectionBoardPos.y >= 0) {
+            auto squareOnMouse = _selectionBoard->getSquare(selectionSquarePos);
+            if (_selectedUnitFromSelectionBoard != squareOnMouse) {
+                if (_selectedUnitFromSelectionBoard != NULL) _selectedUnitFromSelectionBoard->getViewNode()->setTexture(_textures.at("square"));
+                _selectedUnitFromSelectionBoard = squareOnMouse;
+                _selectedUnitFromSelectionBoard->getViewNode()->setTexture(_textures.at("square-selected"));
+            }
+            else {
+                _selectedUnitFromSelectionBoard->getViewNode()->setTexture(_textures.at("square"));
+                _selectedUnitFromSelectionBoard = NULL;
+            }
+        }
+            
+    }
+    if (_selectedSquare != NULL) {
+        auto unit = _selectedSquare->getUnit();
+        if (_input.isDirectionKeyDown()) {
+            unit->setDirection(_input.directionPressed());
+            unit->getViewNode()->setAngle(unit->getAngleBetweenDirectionAndDefault());
+        }
+        if (_input.isRedDown()) {
+            unit->setColor(Unit::RED);
+        }
+        else if (_input.isGreenDown()) {
+            unit->setColor(Unit::GREEN);
+        }
+        else if (_input.isBlueDown()) {
+            unit->setColor(Unit::BLUE);
         }
     }
     // Layout everything

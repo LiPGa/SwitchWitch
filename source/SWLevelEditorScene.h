@@ -67,9 +67,11 @@ protected:
 #pragma mark Model Variables
     /** Boards */
     shared_ptr<Board> _board;
+    shared_ptr<Board> _selectionBoard;
 
     /** Square that is currently being selected by the player */
     shared_ptr<Square> _selectedSquare;
+    shared_ptr<Square> _selectedUnitFromSelectionBoard;
 
 #pragma mark -
 #pragma mark View Variables
@@ -77,6 +79,7 @@ protected:
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _selectionBoardNode;
 
 #pragma mark -
 
