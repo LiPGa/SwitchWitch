@@ -224,6 +224,14 @@ public:
 
 private:
     /**
+     * Get the pattern for a unit provided its type and color
+     * @param type     The sub-type of the unit
+     * @param color    The coor of the unit
+     * @return    The pattern for the unit (texture)
+     */
+    std::string getUnitType(std::string type, std::string color);
+    
+    /**
      * Returns the score based on the units that have been attacked.
      *
      * The score = the # of units killed times the # of colors killed times the # of special units killed.

@@ -2,5 +2,5 @@
     "scene-height": 720,
     "board-size": 5,
     "square-size": 128,
-    "textures": ["background", "button", "square", "square-selected", "square-swap", "square-attacked", "transparent", "red-unit", "blue-unit", "green-unit", "diagonal-blue", "diagonal-green", "diagonal-red", "three-way-blue", "three-way-green", "three-way-red", "two-forward-blue", "two-forward-green", "two-forward-red"]
+    "textures": ["background", "button", "square", "square-selected", "square-swap", "square-attacked", "transparent", "basic-red", "basic-blue", "basic-green", "diagonal-blue", "diagonal-green", "diagonal-red", "three-way-blue", "three-way-green", "three-way-red", "two-forward-blue", "two-forward-green", "two-forward-red"]
 }
