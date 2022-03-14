@@ -18,16 +18,19 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\SLApp.h">
+    <ClInclude Include="..\..\source\SWApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\SLGameScene.h">
+    <ClInclude Include="..\..\source\SWGameScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\SWInputController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\SLLoadingScene.h">
+     <ClInclude Include="..\..\source\SWSquareOccupant.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\SWLoadingScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\SWUnit.hpp">
@@ -56,13 +59,13 @@
     <ClCompile Include="..\..\source\SWUnit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\SLApp.cpp">
+    <ClCompile Include="..\..\source\SWApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\SLGameScene.cpp">
+    <ClCompile Include="..\..\source\SWGameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\SLLoadingScene.cpp">
+    <ClCompile Include="..\..\source\SWLoadingScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
