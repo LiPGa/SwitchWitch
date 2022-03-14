@@ -1,9 +1,9 @@
 {
     "unit": {
         "basic": {
-            "texture-red": "red-unit",
-            "texture-blue": "blue-unit",
-            "texture-green": "green-unit",
+            "texture-red": "basic-red",
+            "texture-blue": "basic-blue",
+            "texture-green": "basic-green",
             "basic-attack": [1,0],
             "special-attack":[]
         },

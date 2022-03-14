@@ -20,13 +20,13 @@
         "transparent":{
             "file": "textures/transparent_texture.png"
         },
-        "red-unit":{
+        "basic-red":{
             "file": "textures/red_unit.png"
         },
-        "blue-unit":{
+        "basic-blue":{
             "file": "textures/blue_unit.png"
         },
-        "green-unit":{
+        "basic-green":{
             "file": "textures/green_unit.png"
         },
         "diagonal-blue":{

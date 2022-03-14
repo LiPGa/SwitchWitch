@@ -267,11 +267,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
  *
  */
 std::string GameScene::getUnitType(std::string type, std::string color) {
-    if (type == "basic") {
-        return color+"-unit";
-    } else {
-        return type+"-"+color;
-    }
+    return type+"-"+color;
 }
 
 /**
@@ -358,7 +354,7 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
     
     std::shared_ptr<cugl::Texture> unitTexture;
     if (unit->getColor() == Unit::RED) {
-        unitTexture = _textures.at("red-unit");
+        unitTexture = _textures.at("basic-red");
 //        if (unit->getSpecialAttack() == twoForwardAttack) {
 //            unitTexture = _twoForwardRedTexture;
 //        } else if (unit->getSpecialAttack() == threeWayAttack) {
@@ -366,10 +362,10 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
 //        } else if (unit->getSpecialAttack() == diagonalAttack) {
 //            unitTexture = _diagonalRedTexture;
 //        } else {
-//            unitTexture = _textures.at("red-unit");
+//            unitTexture = _textures.at("basic-red");
 //        }
     } else if (unit->getColor() == Unit::GREEN) {
-        unitTexture = _textures.at("green-unit");
+        unitTexture = _textures.at("basic-green");
 //        if (unit->getSpecialAttack() == twoForwardAttack) {
 //            unitTexture = _twoForwardGreenTexture;
 //        } else if (unit->getSpecialAttack() == threeWayAttack) {
@@ -377,10 +373,10 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
 //        } else if (unit->getSpecialAttack() == diagonalAttack) {
 //            unitTexture = _diagonalGreenTexture;
 //        } else {
-//            unitTexture = _textures.at("green-unit");
+//            unitTexture = _textures.at("basic-green");
 //        }
     } else if (unit->getColor() == Unit::BLUE) {
-        unitTexture = _textures.at("blue-unit");
+        unitTexture = _textures.at("basic-blue");
 //        if (unit->getSpecialAttack() == twoForwardAttack) {
 //            unitTexture = _twoForwardBlueTexture;
 //        } else if (unit->getSpecialAttack() == threeWayAttack) {
@@ -388,7 +384,7 @@ void GameScene::generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNo
 //        } else if (unit->getSpecialAttack() == diagonalAttack) {
 //            unitTexture = _diagonalBlueTexture;
 //        } else {
-//            unitTexture = _textures.at("blue-unit");
+//            unitTexture = _textures.at("basic-blue");
 //        }
     }
     
@@ -501,7 +497,7 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 //    std::shared_ptr<cugl::Texture> unitTexture;
 //    if (unit->getColor() == Unit::RED)
 //    {
-//        unitTexture = _textures.at("red-unit");
+//        unitTexture = _textures.at("basic-red");
 //        if (unit->getSpecialAttack() == twoForwardAttack)
 //        {
 //            unitTexture = _twoForwardRedTexture;
@@ -516,12 +512,12 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 //        }
 //        else
 //        {
-//            unitTexture = _textures.at("red-unit");
+//            unitTexture = _textures.at("basic-red");
 //        }
 //    }
 //    else if (unit->getColor() == Unit::GREEN)
 //    {
-//        unitTexture = _textures.at("green-unit");
+//        unitTexture = _textures.at("basic-green");
 //        if (unit->getSpecialAttack() == twoForwardAttack)
 //        {
 //            unitTexture = _twoForwardGreenTexture;
@@ -536,12 +532,12 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 //        }
 //        else
 //        {
-//            unitTexture = _textures.at("green-unit");
+//            unitTexture = _textures.at("basic-green");
 //        }
 //    }
 //    else if (unit->getColor() == Unit::BLUE)
 //    {
-//        unitTexture = _textures.at("blue-unit");
+//        unitTexture = _textures.at("basic-blue");
 //        if (unit->getSpecialAttack() == twoForwardAttack)
 //        {
 //            unitTexture = _twoForwardBlueTexture;
@@ -556,7 +552,7 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 //        }
 //        else
 //        {
-//            unitTexture = _textures.at("blue-unit");
+//            unitTexture = _textures.at("basic-blue");
 //        }
 //    }
 //
