@@ -5,127 +5,152 @@
     "board-members": [
         {
             "type": "unit",
-            "pattern": "blue-unit",
+            "sub-type": "basic",
+            "color": "blue",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "blue-unit",
+            "sub-type": "basic",
+            "color": "blue",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "two-forward-blue",
+            "sub-type": "two-forward",
+            "color": "blue",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "blue-unit",
+            "sub-type": "basic",
+            "color": "blue",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "red-unit",
+            "sub-type": "basic",
+            "color": "red",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "green-unit",
+            "sub-type": "basic",
+            "color": "green",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "diagonal-red",
+            "sub-type": "diagonal",
+            "color": "red",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "green-unit",
+            "sub-type": "basic",
+            "color": "green",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "red-unit",
+            "sub-type": "basic",
+            "color": "red",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "green-unit",
+            "sub-type": "basic",
+            "color": "green",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "green-unit",
+            "sub-type": "basic",
+            "color": "green",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "two-forward-blue",
+            "sub-type": "two-forward",
+            "color": "blue",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "green-unit",
+            "sub-type": "basic",
+            "color": "green",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "blue-unit",
+            "sub-type": "basic",
+            "color": "blue",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "red-unit",
+            "sub-type": "basic",
+            "color": "red",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "blue-unit",
+            "sub-type": "basic",
+            "color": "blue",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "green-unit",
+            "sub-type": "basic",
+            "color": "green",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "blue-unit",
+            "sub-type": "basic",
+            "color": "blue",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "red-unit",
+            "sub-type": "basic",
+            "color": "red",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "blue-unit",
+            "sub-type": "basic",
+            "color": "blue",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "green-unit",
+            "sub-type": "basic",
+            "color": "green",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "red-unit",
+            "sub-type": "basic",
+            "color": "red",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "red-unit",
+            "sub-type": "basic",
+            "color": "red",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "green-unit",
+            "sub-type": "basic",
+            "color": "green",
             "direction": [1,0]
         },
         {
             "type": "unit",
-            "pattern": "green-unit",
+            "sub-type": "basic",
+            "color": "green",
             "direction": [1,0]
         }
     ]
