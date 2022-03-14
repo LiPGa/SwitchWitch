@@ -621,7 +621,7 @@ void GameScene::dispose() {
  */
 int GameScene::calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum)
 {
-    return colorNum * (basicUnitsNum + specialUnitsNum) * specialUnitsNum;
+    return colorNum * (basicUnitsNum + specialUnitsNum) * (specialUnitsNum > 0 ? specialUnitsNum : 1);
 }
 
 /**
