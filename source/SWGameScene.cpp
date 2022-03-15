@@ -107,7 +107,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
     _currLevel = _boardJson->getInt("id");
     _turns = _boardJson->getInt("total-swap-allowed");
-    _scoreNeeded = _boardJson->getInt("win-condition");
+    // thresholds for the star system
+    _onestar_threshold = _boardJson->getInt("one-star-condition");
+    _twostar_threshold = _boardJson->getInt("two-star-condition");
+    _threestar_threshold = _boardJson->getInt("three-star-condition");
     
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("Turns %d", _turns);
@@ -202,27 +205,22 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     }
     
-    std::shared_ptr<scene2::SceneNode> scene = assets->get<scene2::SceneNode>("button");
-    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("button_restart"));
-    _restartbutton->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            CULog("down");
-            reset();
-        }
-    });
+//    std::shared_ptr<scene2::SceneNode> scene = assets->get<scene2::SceneNode>("button");
+//    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("button_restart"));
+//    _restartbutton->addListener([this](const std::string& name, bool down) {
+//        if (down) {
+//            CULog("down");
+//            reset();
+//        }
+//    });
 
-
-    scene->setContentSize(dimen);
-    scene->doLayout(); // Repositions the HUD
-    _guiNode->addChild(scene);
-    _restartbutton->setVisible(false);
-    if (_active) {
-        _restartbutton->activate();
-    }
-    if (_restartbutton->isActive()) CULog("restart active");
-    else CULog("restart not acitve");
-    if (_restartbutton->isDown()) CULog("restart down");
-    else CULog("restart not down");
+//    scene->setContentSize(dimen);
+//    scene->doLayout(); // Repositions the HUD
+//    _guiNode->addChild(scene);
+//    _restartbutton->setVisible(false);
+//    if (_active) {
+//        _restartbutton->activate();
+//    }
 
     return true;
 }
@@ -357,7 +355,7 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 void GameScene::dispose() {
     if (_active) {
         removeAllChildren();
-        _restartbutton = nullptr;
+//        _restartbutton = nullptr;
         _active = false;
     }
 }
@@ -592,9 +590,9 @@ void GameScene::reset() {
  */
 void GameScene::setActive(bool value) {
     _active = value;
-    if (value && ! _restartbutton->isActive()) {
-        _restartbutton->activate();
-    } else if (!value && _restartbutton->isActive()) {
-        _restartbutton->deactivate();
-    }
+//    if (value && ! _restartbutton->isActive()) {
+//        _restartbutton->activate();
+//    } else if (!value && _restartbutton->isActive()) {
+//        _restartbutton->deactivate();
+//    }
 }
