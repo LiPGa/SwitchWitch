@@ -64,34 +64,30 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
 {
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
-    if (assets == nullptr)
-    {
-        return false;
-    }
+    if (assets == nullptr) return false;
 
-    // Initialize game constants
+    // GetJSONValuesFromAssets
     _constants = assets->get<JsonValue>("constants");
     _boardMembers = assets->get<JsonValue>("boardMember");
+    _boardJson = assets->get<JsonValue>("board");
+
+    // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
     _boardSize = _constants->getInt("board-size");
     _squareSize = _constants->getInt("square-size");
 
-    _assets = assets;
-
+    // Initialize Scene
     dimen *= _sceneHeight / dimen.height;
-
-    if (!Scene2::init(dimen)) {
-        return false;
-    }
-
-    // TODO: JSON THIS AND MAKE IT MORE SCALABLE
-    // UNIT ATTACK PATTERNS
+    if (!Scene2::init(dimen)) return false;
 
     // Start up the input handler
     _input.init();
 
+    _currentState = State::NOTHING;
+
     // Get Textures
     // preload all the textures into a hashmap
+    _assets = assets;
     vector<string> textureVec = _constants->get("textures")->asStringArray();
     for (string textureName : textureVec) {
         _textures.insert({ textureName, _assets->get<Texture>(textureName) });
@@ -103,9 +99,6 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     // set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
 
-    // Initialize state
-    _currentState = SELECTING_UNIT;
-
     // Initialize Board
     _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
 
@@ -114,11 +107,9 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
 
     // Set the view of the board.
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_WIDTH * SQUARE_SIZE, BOARD_HEIGHT * SQUARE_SIZE));
-    //_boardNode->setPosition(getSize() / 2);
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
     _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
-
     _guiNode->addChildWithName(_boardNode, "boardNode");
 
     // Set the view of the select board.
@@ -128,27 +119,19 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _selectionBoard->setViewNode(_selectionBoardNode);
     _guiNode->addChildWithName(_selectionBoardNode, "selectionBoardNode");
 
-    // initialize units with different types
+    // Initialize units with different types
+    // Children will be types "basic", "three-way", etc.
     auto children = _boardMembers->get("unit")->children();
     for (auto child : children) {
-        // get color
-        string color = child->getString("color");
-        Unit::Color c;
-        if (color == "red") {
-            c = Unit::Color::RED;
+        // Get basic attack
+        auto subtypeString = child->key();
+        auto basicAttackJson = child->get("basic-attack")->children();
+        vector<Vec2> basicAttackVec;
+        for (auto basicAttack : basicAttackJson) {
+            auto basicAttackArray = basicAttack->asFloatArray();
+            basicAttackVec.push_back(Vec2(basicAttackArray.at(0), basicAttackArray.at(1)));
         }
-        else if (color == "blue") {
-            c = Unit::Color::BLUE;
-        }
-        else {
-            c = Unit::Color::GREEN;
-        }
-
-        // get basic attack
-        auto basicAttack = child->get("basic-attack")->asFloatArray();
-        auto basicAttackVec = vector<Vec2>{ Vec2(basicAttack.at(0), basicAttack.at(1)) };
-
-        // get special attack for this unit
+        // Get special attack
         auto specialAttackJson = child->get("special-attack")->children();
         vector<Vec2> specialAttackVec;
         for (auto specialAttack : specialAttackJson) {
@@ -156,8 +139,9 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
             specialAttackVec.push_back(Vec2(specialAttackArray.at(0), specialAttackArray.at(1)));
         }
 
-        shared_ptr<Unit> unit = Unit::alloc(c, basicAttackVec, specialAttackVec, Vec2(0, -1));
-        _unitTypes.insert({ child->getString("texture"), unit });
+        // store the default color:red for this type of unit
+        shared_ptr<Unit> unit = Unit::alloc(subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1));
+        _unitTypes.insert({ child->key(), unit });
     }
 
     // Create the squares & units and put them in the map
@@ -168,16 +152,18 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE / 2));
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
-            // Add square node to board node.
             _board->getViewNode()->addChild(squareNode);
-            // generate unit for this square
-            Vec2 unitDirection = Unit::getDefaultDirection();
+            // Generate unit for this square
             auto unitTemplateBeginning = _unitTypes.begin();
-            shared_ptr<Unit> unitTemplate = unitTemplateBeginning->second;
-            std:string unitType = unitTemplateBeginning->first;
-            shared_ptr<Unit> unit = Unit::alloc(unitTemplate->getColor(), unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
+            auto unitSubType = unitTemplateBeginning->first;
+            auto unitColor = "red";
+            std:string unitPattern = getUnitType(unitSubType, unitColor);
+            Vec2 unitDirection = Unit::getDefaultDirection();
+            auto unitTemplate = _unitTypes.at(unitSubType);
+            Unit::Color c = Unit::stringToColor(unitColor);
+            shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
             sq->setUnit(unit);
-            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitType));
+            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
             unit->setViewNode(unitNode);
             unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
@@ -192,27 +178,31 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE * SELECTION_BOARD_SCALE) + Vec2::ONE * (SQUARE_SIZE * SELECTION_BOARD_SCALE / 2));
             shared_ptr<Square> sq = _selectionBoard->getSquare(squarePosition);
             sq->setViewNode(squareNode);
-            // Add square node to board node.
             _selectionBoard->getViewNode()->addChild(squareNode);
-            /*
-            // generate unit for this square
-            Vec2 unitDirection = Unit::getDefaultDirection();
-            auto unitTemplateBeginning = _unitTypes.begin();
-            shared_ptr<Unit> unitTemplate = unitTemplateBeginning->second;
-            std:string unitType = unitTemplateBeginning->first;
-            shared_ptr<Unit> unit = Unit::alloc(unitTemplate->getColor(), unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
-            sq->setUnit(unit);
-            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitType));
-            unit->setViewNode(unitNode);
-            unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-            squareNode->addChild(unitNode);
-            */
         }
+    }
+    auto i = 0;
+    for each (auto element in _unitTypes) {
+        auto square = _selectionBoard->getAllSquares()[i];
+        auto unitType = element.second;        
+        square->setUnit(unitType);
+        auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(getUnitType(unitType->getSubType(), Unit::colorToString(unitType->getColor()))));
+        square->getUnit()->setViewNode(unitNode);
+        square->getViewNode()->addChild(unitNode);
+        i++;
     }
 
     // Create the squares & units for the selection board and put them on the map.
     reset();
     return true;
+}
+
+/**
+ * Get the pattern for a unit provided its type and color
+ *
+ */
+std::string LevelEditorScene::getUnitType(std::string type, std::string color) {
+    return type + "-" + color;
 }
 
 /**
@@ -255,21 +245,27 @@ void LevelEditorScene::update(float timestep)
         Vec2 selectionSquarePos = Vec2(int(selectionBoardPos.x) / int(SQUARE_SIZE * SELECTION_BOARD_SCALE), SELECTION_BOARD_HEIGHT - 1 - (int(selectionBoardPos.y) / int(SQUARE_SIZE * SELECTION_BOARD_SCALE)));
         if (_board->doesSqaureExist(squarePos) && boardPos.x>=0 && boardPos.y>=0)
         {
+            _currentState = State::CHANGING_BOARD;
             auto squareOnMouse = _board->getSquare(squarePos);
-            if (_currentState == SELECTING_UNIT)
-            {
-                if (_selectedSquare != squareOnMouse) {
-                    if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
-                    _selectedSquare = squareOnMouse;
-                    _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
+            if (_selectedSquare != squareOnMouse) {
+                if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
+                _selectedSquare = squareOnMouse;
+                _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
+                if (_selectedUnitFromSelectionBoard != NULL) {
+                    auto unit = _selectedSquare->getUnit();
+                    auto unitThatWillReplace = _selectedUnitFromSelectionBoard->getUnit();
+                    unit->setBasicAttack(unitThatWillReplace->getBasicAttack());
+                    unit->setSpecialAttack(unitThatWillReplace->getSpecialAttack());
+                    unit->setSubType(unitThatWillReplace->getSubType());
                 }
-                else {
-                    _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
-                    _selectedSquare = NULL;
-                }
+            }
+            else {
+                _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
+                _selectedSquare = NULL;
             }
         }
         if (_selectionBoard->doesSqaureExist(selectionSquarePos) && selectionBoardPos.x >= 0 && selectionBoardPos.y >= 0) {
+            _currentState = State::CHANGING_BOARD;
             auto squareOnMouse = _selectionBoard->getSquare(selectionSquarePos);
             if (_selectedUnitFromSelectionBoard != squareOnMouse) {
                 if (_selectedUnitFromSelectionBoard != NULL) _selectedUnitFromSelectionBoard->getViewNode()->setTexture(_textures.at("square"));
@@ -280,17 +276,16 @@ void LevelEditorScene::update(float timestep)
                 _selectedUnitFromSelectionBoard->getViewNode()->setTexture(_textures.at("square"));
                 _selectedUnitFromSelectionBoard = NULL;
             }
-        }
-            
+        }    
     }
-    if (_selectedSquare != NULL) {
+    if (_selectedSquare != NULL && State::CHANGING_BOARD) {
         auto unit = _selectedSquare->getUnit();
         if (_input.isDirectionKeyDown()) {
             unit->setDirection(_input.directionPressed());
             unit->getViewNode()->setAngle(unit->getAngleBetweenDirectionAndDefault());
         }
         if (_input.isRedDown()) {
-            unit->setColor(Unit::RED);
+            unit->setColor(Unit::RED);            
         }
         else if (_input.isGreenDown()) {
             unit->setColor(Unit::GREEN);
@@ -298,6 +293,7 @@ void LevelEditorScene::update(float timestep)
         else if (_input.isBlueDown()) {
             unit->setColor(Unit::BLUE);
         }
+        unit->getViewNode()->setTexture(_textures.at(getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))));
     }
     // Layout everything
     _layout->layout(_guiNode.get());

@@ -28,8 +28,6 @@
 
  /** The key to use for reseting the game */
 #define RESET_KEY KeyCode::R
-/** The key for toggling the debug display */
-#define DEBUG_KEY KeyCode::D
 /** The key for exitting the game */
 #define EXIT_KEY  KeyCode::ESCAPE
 
@@ -46,6 +44,9 @@ protected:
     bool _currDown;
     /** Whether there was an active button/touch press last frame*/
     bool _prevDown;
+
+    /** Whether the debug key is down*/
+    bool _debugDown;
 
     // Inputs used for level editor
     /** Whether the up key is down*/
@@ -199,6 +200,15 @@ public:
      */
     bool isDown() const {
         return _currDown;
+    }
+
+    /**
+     * Returns if the debug key is down.
+     *
+     * @returns if the debug key is down.
+     */
+    bool isDebugDown() const {
+        return _debugDown;
     }
 
 #pragma mark -

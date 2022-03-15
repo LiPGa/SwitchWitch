@@ -40,6 +40,7 @@ _greenDown(false),
 _blueDown(false),
 _saveDown(false),
 _playDown(false),
+_debugDown(false),
 _mouseKey(0),
 _touchKey(1) {
 }
@@ -130,8 +131,9 @@ void InputController::update() {
     _redDown = keys->keyPressed(KeyCode::R) || keys->keyPressed(KeyCode::NUM_1);
     _greenDown = keys->keyPressed(KeyCode::G) || keys->keyPressed(KeyCode::NUM_2);
     _blueDown = keys->keyPressed(KeyCode::B) || keys->keyPressed(KeyCode::NUM_3);
-    _saveDown = keys->keyPressed(KeyCode::S) && keys->keyPressed(KeyCode::LEFT_CTRL);
+    _saveDown = keys->keyPressed(KeyCode::S) && keys->keyDown(KeyCode::LEFT_CTRL);
     _playDown = keys->keyPressed(KeyCode::ENTER) || keys->keyPressed(KeyCode::KEYPAD_ENTER);
+    _debugDown = keys->keyPressed(KeyCode::D) && keys->keyDown(KeyCode::LEFT_CTRL);
     #ifdef CU_TOUCH_SCREEN
     _currDown = _fingerDown;
     _currPos = _touchPos;

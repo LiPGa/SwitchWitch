@@ -24,6 +24,14 @@
 class LevelEditorScene : public cugl::Scene2
 {
 protected:
+    enum State {
+        NOTHING,
+        CHANGING_BOARD,
+        CHANGING_INFO
+    };
+
+    State _currentState;
+
     /** The asset manager for this game mode. */
     std::shared_ptr<cugl::AssetManager> _assets;
 
@@ -49,21 +57,6 @@ protected:
     // hash map for units with different types
     std::unordered_map<std::string, std::shared_ptr<Unit>> _unitTypes;
 
-#pragma mark State Varibales
-    /** Possible states of the level.
-     * Name of state is describing what the current state of the game is waiting for.
-     * For example, the selecting_unit state means the game is waiting for the player to select a unit.
-     */
-    enum State
-    {
-        SELECTING_UNIT,
-        PLACING_UNIT
-    };
-
-    /** The current state of the selection process*/
-    State _currentState;
-
-#pragma mark -
 #pragma mark Model Variables
     /** Boards */
     shared_ptr<Board> _board;
@@ -72,6 +65,10 @@ protected:
     /** Square that is currently being selected by the player */
     shared_ptr<Square> _selectedSquare;
     shared_ptr<Square> _selectedUnitFromSelectionBoard;
+
+    int numberOfTurns;
+    int id;
+    int winCondition;
 
 #pragma mark -
 #pragma mark View Variables
@@ -82,7 +79,6 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _selectionBoardNode;
 
 #pragma mark -
-
 public:
 #pragma mark -
 #pragma mark Constructors
@@ -142,12 +138,14 @@ public:
      */
     void render(const std::shared_ptr<cugl::SpriteBatch>& batch) override;
 
-    /**
-     * Resets the status of the game so that we can play again.
-     */
-
 private:
-
+    /**
+     * Get the pattern for a unit provided its type and color
+     * @param type     The sub-type of the unit
+     * @param color    The coor of the unit
+     * @return    The pattern for the unit (texture)
+     */
+    std::string getUnitType(std::string type, std::string color);
 
 };
 
