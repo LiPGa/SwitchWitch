@@ -64,7 +64,7 @@ bool MainMenuScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _editorbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_join"));
 
     std::string titleMsg = strtool::format("Switch Witch");
-    auto titleLabel = scene2::Label::allocWithText(titleMsg, assets->get<Font>("pixel32"));
+    auto titleLabel = scene2::Label::allocWithText(titleMsg, assets->get<Font>("title32"));
     scene->addChild(titleLabel);
 
     // Program the buttons
