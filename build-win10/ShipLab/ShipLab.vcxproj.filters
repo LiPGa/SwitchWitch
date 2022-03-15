@@ -30,9 +30,6 @@
     <ClInclude Include="..\..\source\SWInputController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-     <ClInclude Include="..\..\source\SWSquareOccupant.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\SWLoadingScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -76,12 +73,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\SWInputController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\SWApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\SWGameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\SWLoadingScene.cpp">

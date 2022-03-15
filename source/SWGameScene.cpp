@@ -218,6 +218,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
                     sq->getViewNode()->setTexture(_textures.at("special_left_square"));
                 }
             }
+            else
+            {
+                sq->getViewNode()->setTexture(_textures.at("square"));
+            }
             // unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
         }
@@ -314,7 +318,32 @@ void GameScene::generateUnit(shared_ptr<Square> sq)
     // Update Unit Node
     auto unitNode = unit->getViewNode();
     unitNode->setTexture(_textures[getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))]);
-    unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+    //unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+    if (unitSubTypeSelected != "basic")
+    {
+        unit->setSpecial(true);
+        if (unit->getDirection() == Vec2(0, 1))
+        {
+            sq->getViewNode()->setTexture(_textures.at("special_up_square"));
+        }
+        else if (unit->getDirection() == Vec2(0, -1))
+        {
+            sq->getViewNode()->setTexture(_textures.at("special_down_square"));
+        }
+        else if (unit->getDirection() == Vec2(1, 0))
+        {
+            sq->getViewNode()->setTexture(_textures.at("special_right_square"));
+        }
+        else
+        {
+            sq->getViewNode()->setTexture(_textures.at("special_left_square"));
+        }
+    }
+    else
+    {
+        sq->getViewNode()->setTexture(_textures.at("square"));
+    }
+    
 }
 
 /**

@@ -18,7 +18,7 @@ using namespace cugl;
  * @param direction the direction the unit is facing
  * @return true if initialization was successful.
  */
-bool Unit::init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction)
+bool Unit::init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool special)
 {
     this->_subtype = subtype;
     this->_color = color;

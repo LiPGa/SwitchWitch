@@ -189,29 +189,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\source\SWApp.h" />
-    <ClInclude Include="..\..\source\SWGameScene.h" />
     <ClInclude Include="..\..\source\SWBoard.hpp" />
     <ClInclude Include="..\..\source\SWGameScene.h" />
     <ClInclude Include="..\..\source\SWInputController.h" />
-    <ClInclude Include="..\..\source\SWLoadingScene.h" />
     <ClInclude Include="..\..\source\SWLevelEditorScene.h" />
     <ClInclude Include="..\..\source\SWLoadingScene.h" />
     <ClInclude Include="..\..\source\SWMainMenuScene.h" />
     <ClInclude Include="..\..\source\SWSquare.hpp" />
     <ClInclude Include="..\..\source\SWSquareOccupant.hpp" />
     <ClInclude Include="..\..\source\SWUnit.hpp" />
-    <ClInclude Include="..\..\source\SWSquareOccupant.hpp" />
     <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\source\main.cpp" />
-    <ClCompile Include="..\..\source\SWApp.cpp" />
-    <ClCompile Include="..\..\source\SWGameScene.cpp" />
-    <ClCompile Include="..\..\source\SwLoadingScene.cpp" />
-    <ClCompile Include="..\..\source\SWBoard.cpp" />
-    <ClCompile Include="..\..\source\SWInputController.cpp" />
-    <ClCompile Include="..\..\source\SWSquare.cpp" />
-    <ClCompile Include="..\..\source\SWUnit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ShipLab.rc" />
