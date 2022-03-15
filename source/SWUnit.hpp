@@ -29,17 +29,20 @@ public:
     };
 
 private:
-    /**Both the basic attack and special attack of a unit is stored as a list of vectors. 
+    /**Both the basic attack and special attack of a unit is stored as a list of vectors.
      * Each vector repesents a distance and direction of an attack. The direction is based on the
      * default direction, meaning that all attack data should be inputed assuming that the unit is facing
      * in the default direction.
-     * 
+     *
      * Attacks are assumed to kill any unit instantly.
      */
 
+    /** The name of the unit subtype*/
+    std::string _subtype;
+
     /** The basic attacks of this unit*/
     vector<cugl::Vec2> _basicAttack;
-    
+
     /** The special attacks of this unit*/
     vector<cugl::Vec2> _specialAttack;
 
@@ -54,7 +57,6 @@ private:
 
     /**True if unit is a special unit, False otherwise*/
     bool _is_special_unit;
-    
 
 #pragma mark Constructors
 public:
@@ -66,8 +68,8 @@ public:
      * NEVER USE A CONSTRUCTOR WITH NEW. If you want to allocate a Unit on the
      * heap, use one of the static constructors instead.
      */
-    Unit() { }
-    
+    Unit() {}
+
     /**
      * Disposes the unit, releasing all resources
      */
@@ -82,7 +84,7 @@ public:
      * @param direction the direction the unit is facing
      * @return true if initialization was successful.
      */
-    bool init(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool _special=false);
+    bool init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction);
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -95,9 +97,10 @@ public:
      * @param direction the direction the unit is facing
      * @return a newly allocated Unit.
      */
-    static std::shared_ptr<Unit>alloc(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool special=false) {
+    static std::shared_ptr<Unit> alloc(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction)
+    {
         std::shared_ptr<Unit> result = std::make_shared<Unit>();
-        return (result->init(color, basicAttack, specialAttack, direction, special) ? result : nullptr);
+        return (result->init(subtype, color, basicAttack, specialAttack, direction) ? result : nullptr);
     }
 
 #pragma mark -
@@ -111,15 +114,82 @@ public:
      * all attack vectors are rotated so that an attack faces the direction of the unit.
      *
      * Currently, the default direction is Vec2(1,0). All units should have the same default direction.
-    */
+     */
     static const cugl::Vec2 getDefaultDirection() { return Vec2::UNIT_X; }
+
+    /**
+     * Returns all possible directions the unit can face.
+     *
+     * @return a vector of all possible directions the unit can face in Vec2.
+     */
+    static const vector<cugl::Vec2> getAllPossibleDirections()
+    {
+        return vector<cugl::Vec2>{Vec2::UNIT_X, Vec2::UNIT_X * -1, Vec2::UNIT_Y, Vec2::UNIT_Y * -1};
+    }
+
+    /**
+     * Returns the string data representation of the color according to JSON conventions
+     *
+     * @param c the color
+     * @returns the string of the color
+     */
+    static std::string colorToString(Color c)
+    {
+        switch (c)
+        {
+        case Color::RED:
+            return "red";
+        case Color::GREEN:
+            return "green";
+        case Color::BLUE:
+            return "blue";
+        default:
+            return "red";
+        }
+    }
+
+    /**
+     * Returns the color representation of a string that represents a color according to JSON conventions
+     *
+     * @param str string representation of the color. Must be either "red", "green", or "blue".
+     * @returns the color
+     */
+    static Unit::Color stringToColor(std::string str)
+    {
+        if (str == "red")
+        {
+            return Color::RED;
+        }
+        else if (str == "green")
+        {
+            return Color::GREEN;
+        }
+        else
+        {
+            return Color::BLUE;
+        }
+    }
 
 #pragma mark -
 #pragma mark Identifiers
     /**
+     * Returns the subtype of the unit as a string.
+     *
+     * @return unit's subtype.
+     */
+    std::string getSubType() { return _subtype; }
+
+    /**
+     * Sets the subtype of the unit as a string.
+     *
+     * @return unit's subtype.
+     */
+    void setSubType(std::string subtype) { _subtype = subtype; }
+
+    /**
      * Returns a list of vec2 representing all attacks
      * in a basic attack. The direction of attacks is based on the units default direction.
-     * 
+     *
      * @return unit's basic attack pattern
      */
     vector<cugl::Vec2> getBasicAttack() { return _basicAttack; }
@@ -145,7 +215,7 @@ public:
     /**
      * * Returns a list of vec2 representing all attacks
      * in a special attack. The direction of attacks is based on the units default direction.
-     * 
+     *
      * @return unit's special attack pattern
      */
     vector<cugl::Vec2> getSpecialAttack() { return _specialAttack; }
@@ -173,17 +243,17 @@ public:
      * @return unit's color
      */
     Color getColor() { return _color; }
-    
+
     /**
      * Sets the unit's color
      *
      * @param c the color of the unit.
      */
     void setColor(Color c) { _color = c; }
-    
+
     /**
      * Returns the direction which the unit is currently facing.
-     * 
+     *
      * @return unit's direction
      */
     cugl::Vec2 getDirection() { return _direction; }
@@ -191,15 +261,15 @@ public:
     /**
      * Sets the unit's current direction.
      * Must be a unit vector that represents one of the 4 cardinal directions.
-     * @param d the direction the unit is facing. 
+     * @param d the direction the unit is facing.
      */
     void setDirection(cugl::Vec2 d) { _direction = d; }
 
     /**
-    * Retuns the angle between the direction of the unit and the default direction in radians.
-    * 
-    * @returns the angle between direction and default direction
-    */
+     * Retuns the angle between the direction of the unit and the default direction in radians.
+     *
+     * @returns the angle between direction and default direction
+     */
     float getAngleBetweenDirectionAndDefault();
 
     /**
@@ -219,7 +289,6 @@ public:
     bool isSpecial() { return _is_special_unit; };
 
     void setSpecial(bool special) { _is_special_unit = special; };
-
 };
 
 #endif /* SWUnit_hpp */
