@@ -45,7 +45,6 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _gamebutton;
     /** The menu button for joining a game */
     std::shared_ptr<cugl::scene2::Button> _editorbutton;
-    std::shared_ptr<cugl::scene2::Button> _restartbutton;
     /** The player menu choice */
     Choice _choice;
 
