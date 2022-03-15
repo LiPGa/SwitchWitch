@@ -62,7 +62,11 @@
     },
     "fonts": {
         "pixel32": {
-            "file":     "fonts/LightPixel7.ttf",
+            "file":     "fonts/Arial.ttf",
+            "size":     32
+        },
+        "title32": {
+            "file":     "fonts/UnifrakturMaguntia.ttf",
             "size":     32
         }
     },
