@@ -64,6 +64,10 @@
         "pixel32": {
             "file":     "fonts/Arial.ttf",
             "size":     32
+        },
+        "title32": {
+            "file":     "fonts/UnifrakturMaguntia.ttf",
+            "size":     32
         }
     },
     "sounds" : {

@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		145539FE27E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */; };
+		145539FF27E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */; };
+		14553A0027E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */; };
+		14553A0327E10CB9003BD8E7 /* SWMainMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14553A0227E10CB9003BD8E7 /* SWMainMenuScene.cpp */; };
+		14553A0427E10CB9003BD8E7 /* SWMainMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14553A0227E10CB9003BD8E7 /* SWMainMenuScene.cpp */; };
+		14553A0527E10CB9003BD8E7 /* SWMainMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14553A0227E10CB9003BD8E7 /* SWMainMenuScene.cpp */; };
+		14553A0827E10E4A003BD8E7 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = 14553A0727E10E4A003BD8E7 /* widgets */; };
+		14553A0927E10E4A003BD8E7 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = 14553A0727E10E4A003BD8E7 /* widgets */; };
+		14553A0A27E10E4A003BD8E7 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = 14553A0727E10E4A003BD8E7 /* widgets */; };
 		75C0E5B927C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
 		75C0E5BA27C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
 		75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
@@ -126,6 +135,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWLevelEditorScene.cpp; sourceTree = "<group>"; };
+		14553A0127E10CA6003BD8E7 /* SWLevelEditorScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWLevelEditorScene.h; sourceTree = "<group>"; };
+		14553A0227E10CB9003BD8E7 /* SWMainMenuScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWMainMenuScene.cpp; sourceTree = "<group>"; };
+		14553A0627E10CCE003BD8E7 /* SWMainMenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMainMenuScene.h; sourceTree = "<group>"; };
+		14553A0727E10E4A003BD8E7 /* widgets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widgets; sourceTree = "<group>"; };
 		14FEEBAE27DC100F00B9DBA8 /* SWSquareOccupant.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWSquareOccupant.hpp; sourceTree = "<group>"; };
 		75C0E5B727C47440006BB1D0 /* SWBoard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWBoard.cpp; sourceTree = "<group>"; };
 		75C0E5B827C47440006BB1D0 /* SWBoard.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWBoard.hpp; sourceTree = "<group>"; };
@@ -273,6 +287,7 @@
 		EB2BE9B71D749870002FE78B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				14553A0727E10E4A003BD8E7 /* widgets */,
 				EBFE7C041E19B496001007C2 /* json */,
 				EB51310B27A2328A00E255AA /* fonts */,
 				EB51310C27A2328A00E255AA /* sounds */,
@@ -373,6 +388,10 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				14553A0627E10CCE003BD8E7 /* SWMainMenuScene.h */,
+				14553A0227E10CB9003BD8E7 /* SWMainMenuScene.cpp */,
+				14553A0127E10CA6003BD8E7 /* SWLevelEditorScene.h */,
+				145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */,
 				DB5871EB27D92E150023672B /* SWApp.cpp */,
 				DB5871F327D92E160023672B /* SWApp.h */,
 				DB5871F027D92E160023672B /* SWGameScene.cpp */,
@@ -468,7 +487,7 @@
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 4WBNK62USC;
+						DevelopmentTeam = 857UYV938U;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -528,6 +547,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14553A0A27E10E4A003BD8E7 /* widgets in Resources */,
 				EB22BF9B25D0EA5C002ACE41 /* DeviceMargins.plist in Resources */,
 				EB22BF9625D0EA50002ACE41 /* json in Resources */,
 				EB51311227A2328A00E255AA /* sounds in Resources */,
@@ -543,6 +563,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14553A0927E10E4A003BD8E7 /* widgets in Resources */,
 				EB7454D01D750623002FBAE6 /* textures in Resources */,
 				EB7454AB1D74D846002FBAE6 /* iOS.xcassets in Resources */,
 				EB51311127A2328A00E255AA /* sounds in Resources */,
@@ -558,6 +579,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14553A0827E10E4A003BD8E7 /* widgets in Resources */,
 				EB51311027A2328A00E255AA /* sounds in Resources */,
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
@@ -575,8 +597,10 @@
 			files = (
 				75C0E5C027C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4961127C861EC006BA4CA /* SWInputController.cpp in Sources */,
+				14553A0527E10CB9003BD8E7 /* SWMainMenuScene.cpp in Sources */,
 				75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
+				14553A0027E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */,
 				DB5871F927D92E160023672B /* SWGameScene.cpp in Sources */,
 				DB5871FC27D92E160023672B /* SWLoadingScene.cpp in Sources */,
 				DB5871F627D92E160023672B /* SWApp.cpp in Sources */,
@@ -590,8 +614,10 @@
 			files = (
 				75C0E5BF27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4961027C861EC006BA4CA /* SWInputController.cpp in Sources */,
+				14553A0427E10CB9003BD8E7 /* SWMainMenuScene.cpp in Sources */,
 				75C0E5BA27C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				75C0E5C727C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
+				145539FF27E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */,
 				DB5871F827D92E160023672B /* SWGameScene.cpp in Sources */,
 				DB5871FB27D92E160023672B /* SWLoadingScene.cpp in Sources */,
 				DB5871F527D92E160023672B /* SWApp.cpp in Sources */,
@@ -605,8 +631,10 @@
 			files = (
 				75C0E5BE27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4960F27C861EC006BA4CA /* SWInputController.cpp in Sources */,
+				14553A0327E10CB9003BD8E7 /* SWMainMenuScene.cpp in Sources */,
 				75C0E5B927C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				75C0E5C627C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
+				145539FE27E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */,
 				DB5871F727D92E160023672B /* SWGameScene.cpp in Sources */,
 				DB5871FA27D92E160023672B /* SWLoadingScene.cpp in Sources */,
 				DB5871F427D92E160023672B /* SWApp.cpp in Sources */,
@@ -740,10 +768,11 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development: yy346@cornell.edu (RTR6ZF4UGD)";
 				COPY_PHASE_STRIP = NO;
 				CUGL_INCLUDES = "\"$(SRCROOT)/../cugl/include\"";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 857UYV938U;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -803,10 +832,11 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development: yy346@cornell.edu (RTR6ZF4UGD)";
 				COPY_PHASE_STRIP = NO;
 				CUGL_INCLUDES = "\"$(SRCROOT)/../cugl/include\"";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 857UYV938U;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -835,7 +865,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 4WBNK62USC;
+				DEVELOPMENT_TEAM = 857UYV938U;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -853,7 +883,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 4WBNK62USC;
+				DEVELOPMENT_TEAM = 857UYV938U;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
