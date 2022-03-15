@@ -1,7 +1,7 @@
 {
     "textures": {
         "background": {
-            "file":  "textures/ice.png",
+            "file":  "textures/background.png",
             "wrapS": "repeat",
             "wrapT": "repeat"
         },

@@ -48,7 +48,7 @@ protected:
     // CONSTANTS
     int _sceneHeight;
     int _boardSize;
-    int _squareSize;
+    int _squareSizeAdjustedForScale;
     
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
@@ -62,6 +62,7 @@ protected:
      */
     enum State
     {
+        NOTHING,
         SELECTING_UNIT,
         SELECTING_SWAP,
         CONFIRM_SWAP,
@@ -70,6 +71,10 @@ protected:
 
     /** The current state of the selection process*/
     State _currentState;
+
+    /** The scale which all textures must conform to */
+    Size _scale;
+
     /** The current number of turns left for the player */
     int _turns;
     /** The current score of the player */
@@ -110,6 +115,7 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _replacementBoardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     // std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;
     // std::shared_ptr<cugl::scene2::SceneNode> _replacementBoardNodeS;
 
