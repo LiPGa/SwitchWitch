@@ -49,7 +49,7 @@ using namespace std;
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
-    _debug = false;
+    _debug = true;
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     if (assets == nullptr)
@@ -220,6 +220,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             }
             else
             {
+                unit->setSpecial(false);
                 sq->getViewNode()->setTexture(_textures.at("square"));
             }
             // unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
@@ -341,6 +342,7 @@ void GameScene::generateUnit(shared_ptr<Square> sq)
     }
     else
     {
+        unit->setSpecial(false);
         sq->getViewNode()->setTexture(_textures.at("square"));
     }
     
@@ -645,6 +647,8 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         batch->drawText(unitType, _turn_text->getFont(), Vec2(50, getSize().height - 100));
         batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
+        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "true" : "false";
+        batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
     }
 
     batch->end();
