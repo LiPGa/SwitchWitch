@@ -285,8 +285,15 @@ public:
      */
     void setViewNode(shared_ptr<cugl::scene2::PolygonNode> viewNode) { _viewNode = viewNode; }
 
+    /**
+    Returns true if unit is a special unit
+    */
     bool isSpecial() { return _is_special_unit; };
 
+    /**
+    Sets bool is a unit is special or not
+    @special     bool of whether or not a unit is special
+    */
     void setSpecial(bool special) { _is_special_unit = special; };
 };
 
