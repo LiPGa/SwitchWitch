@@ -136,7 +136,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     std::string endgameMsg = " placeholder ";
     _endgame_text = scene2::Label::allocWithText(endgameMsg, assets->get<Font>("pixel32"));
     _endgame_text->setForeground(Color4::CLEAR);
-    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -_endgame_text->getHeight()));
+    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -2*_endgame_text->getHeight()));
     _guiNode->addChildWithName(_endgame_text, "endgame_text");
 
     // Initialize units with different types
