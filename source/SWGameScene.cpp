@@ -28,10 +28,6 @@ using namespace std;
 /** How big the square width should be */
 #define SQUARE_SIZE 128
 
-/** How big the board is*/
-#define BOARD_WIDTH 5
-#define BOARD_HEIGHT 5
-
 #pragma mark Asset Constants
 
 #pragma mark -
@@ -61,7 +57,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
-    _boardSize = _constants->getInt("board-size");
+    vector<int> boardSize = _constants->get("board-size")->asIntArray();
+    _boardWidth = boardSize.at(0);
+    _boardHeight = boardSize.at(1);
+    _boardWidth = 6;
+    _boardHeight = 9;
     _squareSizeAdjustedForScale = _constants->getInt("square-size");
     
     // Initialize Scene
@@ -104,7 +104,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _currentState = NOTHING;
 
     // Initialize Board
-    _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
+    _board = Board::alloc(_boardHeight, _boardWidth);
     _currLevel = _boardJson->getInt("id");
     _turns = _boardJson->getInt("total-swap-allowed");
     // thresholds for the star system
@@ -126,7 +126,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Set the view of the board.
     _squareSizeAdjustedForScale = int(SQUARE_SIZE * _scale.width);
-    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_WIDTH  * _squareSizeAdjustedForScale, BOARD_HEIGHT * _squareSizeAdjustedForScale));
+    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth  * _squareSizeAdjustedForScale, _boardHeight * _squareSizeAdjustedForScale));
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
     //_boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
@@ -179,8 +179,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     }
 
     // Create the squares & units and put them in the map
-    for (int i=0;i<BOARD_WIDTH;i++) {
-        for(int j=0;j<BOARD_HEIGHT;++j){
+    for (int i=0;i<_boardWidth;i++) {
+        for(int j=0;j<_boardHeight;++j){
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
             auto squarePosition = Vec2(i,j);
             
@@ -189,11 +189,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _board->getViewNode()->addChild(squareNode);
-            // Generate unit for this square
-            auto unitSubType = unitsInBoard.at(_boardSize*(_boardSize-j-1)+i).at(0);
-            auto unitColor = unitsInBoard.at(_boardSize*(_boardSize-j-1)+i).at(1);
+//            // Generate unit for this square
+            auto unitSubType = unitsInBoard.at(_boardWidth*(_boardHeight-j-1)+i).at(0);
+            auto unitColor = unitsInBoard.at(_boardWidth*(_boardHeight-j-1)+i).at(1);
             std:string unitPattern = getUnitType(unitSubType, unitColor);
-            Vec2 unitDirection = unitsDirInBoard.at(_boardSize*(_boardSize-j-1)+i);
+            Vec2 unitDirection = unitsDirInBoard.at(_boardWidth*(_boardHeight-j-1)+i);
             auto unitTemplate = _unitTypes.at(unitSubType);
             Unit::Color c = Unit::stringToColor(unitColor);
             shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(),unitTemplate->getSpecialAttack(), unitDirection);

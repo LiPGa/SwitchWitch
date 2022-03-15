@@ -47,7 +47,8 @@ protected:
     int _currLevel;
     // CONSTANTS
     int _sceneHeight;
-    int _boardSize;
+    int _boardWidth;
+    int _boardHeight;
     int _squareSizeAdjustedForScale;
     
     // hash map for unit textures
