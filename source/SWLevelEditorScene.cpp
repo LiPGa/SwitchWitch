@@ -182,7 +182,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         }
     }
     auto i = 0;
-    for (auto element : _unitTypes) {
+    for each (auto element in _unitTypes) {
         auto square = _selectionBoard->getAllSquares()[i];
         auto unitType = element.second;        
         square->setUnit(unitType);

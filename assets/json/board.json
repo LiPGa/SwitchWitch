@@ -1,9 +1,7 @@
 {
     "id": 1,
     "total-swap-allowed": 5,
-    "one-star-condition": 15,
-    "two-star-condition": 30,
-    "three-star-condition": 50,
+    "win-condition": 50,
     "board-members": [
         {
             "type": "unit",

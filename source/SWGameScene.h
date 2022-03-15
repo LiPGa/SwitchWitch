@@ -48,7 +48,7 @@ protected:
     // CONSTANTS
     int _sceneHeight;
     int _boardSize;
-    int _squareSize;
+    int _squareSizeAdjustedForScale;
     
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
@@ -62,6 +62,7 @@ protected:
      */
     enum State
     {
+        NOTHING,
         SELECTING_UNIT,
         SELECTING_SWAP,
         CONFIRM_SWAP,
@@ -70,16 +71,16 @@ protected:
 
     /** The current state of the selection process*/
     State _currentState;
+
+    /** The scale which all textures must conform to */
+    Size _scale;
+
     /** The current number of turns left for the player */
     int _turns;
     /** The current score of the player */
     int _score;
-    /** one-star threshold */
-    int _onestar_threshold;
-    /** two-star threshold*/
-    int _twostar_threshold;
-    /** three-star threshold*/
-    int _threestar_threshold;
+    // score needed to pass
+    int _scoreNeeded;
     /** The previous score of the player */
     int _prev_score;
 
@@ -114,6 +115,7 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _replacementBoardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     // std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;
     // std::shared_ptr<cugl::scene2::SceneNode> _replacementBoardNodeS;
 
@@ -134,9 +136,6 @@ protected:
 
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
-    
-    /** The button for restart */
-    std::shared_ptr<cugl::scene2::Button> _restartbutton;
 
     bool hasLost = false;
 
@@ -212,6 +211,7 @@ public:
     /**
      * Resets the status of the game so that we can play again.
      */
+
     void reset() override;
     
     /**
@@ -224,7 +224,6 @@ public:
      * @param value whether the scene is currently active
      */
     virtual void setActive(bool value) override;
-
 
 private:
     /**
