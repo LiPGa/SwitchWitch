@@ -99,6 +99,32 @@
         "board" : "json/board.json"
     },
     "scene2s" : {
+        "button": {
+            "type"      : "Node",
+            "format"    : {
+                "type"        : "Float",
+                "orientation" : "vertical",
+                "x_alignment" : "left",
+                "y_alignment" : "bottom"
+            },
+            "children":  {
+               "restart": {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key"     : "textbutton",
+                        "variables" : {
+                            "size": [400,100],
+                            "text": "Restart",
+                            "color": "#000088"
+                        }
+                    },
+                    "layout" : {
+                        "priority" : 1,
+                        "padding"  : [0,50,0,0]
+                    }
+                }   
+            }
+        },
         "menu": {
             "type"      : "Node",
             "format"    : {
@@ -137,7 +163,22 @@
                         "priority" : 1,
                         "padding"  : [0,0,0,0]
                     }
-                }
+                },
+               "restart": {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key"     : "textbutton",
+                        "variables" : {
+                            "size": [400,100],
+                            "text": "Restart",
+                            "color": "#000088"
+                        }
+                    },
+                    "layout" : {
+                        "priority" : 1,
+                        "padding"  : [0,50,0,0]
+                    }
+                }   
             }
         }
     }

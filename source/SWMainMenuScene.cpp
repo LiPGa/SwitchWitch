@@ -62,6 +62,7 @@ bool MainMenuScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _choice = Choice::NONE;
     _gamebutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_host"));
     _editorbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_join"));
+    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_restart"));
 
     std::string titleMsg = strtool::format("Switch Witch");
     auto titleLabel = scene2::Label::allocWithText(titleMsg, assets->get<Font>("title32"));
@@ -78,8 +79,17 @@ bool MainMenuScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
             _choice = Choice::EDITOR;
         }
         });
+    _restartbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("down");
+        }
+        });
     addChild(scene);
     setActive(false);
+    if (_restartbutton->isActive()) CULog("active");
+    else CULog("not acitve");
+    if (_restartbutton->isDown()) CULog("down");
+    else CULog("not down");
     return true;
 }
 
@@ -110,13 +120,18 @@ void MainMenuScene::setActive(bool value) {
             _choice = NONE;
             _gamebutton->activate();
             _editorbutton->activate();
+            
+            _restartbutton->activate();
+
         }
         else {
             _gamebutton->deactivate();
             _editorbutton->deactivate();
+            _restartbutton->deactivate();
             // If any were pressed, reset them
             _gamebutton->setDown(false);
             _editorbutton->setDown(false);
+            _restartbutton->setDown(false);
         }
     }
 }

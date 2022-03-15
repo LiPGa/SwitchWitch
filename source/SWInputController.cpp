@@ -134,6 +134,8 @@ void InputController::update() {
     _saveDown = keys->keyPressed(KeyCode::S) && keys->keyDown(KeyCode::LEFT_CTRL);
     _playDown = keys->keyPressed(KeyCode::ENTER) || keys->keyPressed(KeyCode::KEYPAD_ENTER);
     _debugDown = keys->keyPressed(KeyCode::D) && keys->keyDown(KeyCode::LEFT_CTRL);
+    _resetDown = keys->keyPressed(KeyCode::R);
+
     #ifdef CU_TOUCH_SCREEN
     _currDown = _fingerDown;
     _currPos = _touchPos;

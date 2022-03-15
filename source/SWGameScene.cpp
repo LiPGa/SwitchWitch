@@ -107,7 +107,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
     _currLevel = _boardJson->getInt("id");
     _turns = _boardJson->getInt("total-swap-allowed");
-    _scoreNeeded = _boardJson->getInt("win-condition");
+    // thresholds for the star system
+    _onestar_threshold = _boardJson->getInt("one-star-condition");
+    _twostar_threshold = _boardJson->getInt("two-star-condition");
+    _threestar_threshold = _boardJson->getInt("three-star-condition");
     
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("Turns %d", _turns);
@@ -129,6 +132,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
     
+    // Create and layout the end game message
+    std::string endgameMsg = " placeholder ";
+    _endgame_text = scene2::Label::allocWithText(endgameMsg, assets->get<Font>("pixel32"));
+    _endgame_text->setForeground(Color4::CLEAR);
+    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -_endgame_text->getHeight()));
+    _guiNode->addChildWithName(_endgame_text, "endgame_text");
+
     // Initialize units with different types
     // Children will be types "basic", "three-way", etc.
     auto children = _boardMembers ->get("unit")->children();
@@ -194,15 +204,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             squareNode->addChild(unitNode);
         }
     }
+    
+//    std::shared_ptr<scene2::SceneNode> scene = assets->get<scene2::SceneNode>("button");
+//    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("button_restart"));
+//    _restartbutton->addListener([this](const std::string& name, bool down) {
+//        if (down) {
+//            CULog("down");
+//            reset();
+//        }
+//    });
 
-    // Create and layout the win lose text
-    std::string endgameMsg = "YOU LOSE";
-    _endgame_text = scene2::Label::allocWithText(endgameMsg, assets->get<Font>("pixel32"));
-    _endgame_text->setForeground(Color4::CLEAR);
-    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -_endgame_text->getHeight()));
-    _guiNode->addChildWithName(_endgame_text, "endgame_text");
+//    scene->setContentSize(dimen);
+//    scene->doLayout(); // Repositions the HUD
+//    _guiNode->addChild(scene);
+//    _restartbutton->setVisible(false);
+//    if (_active) {
+//        _restartbutton->activate();
+//    }
 
-    reset();
     return true;
 }
 
@@ -336,6 +355,7 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 void GameScene::dispose() {
     if (_active) {
         removeAllChildren();
+//        _restartbutton = nullptr;
         _active = false;
     }
 }
@@ -370,6 +390,33 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
+    if (_input.didPressReset() and _turns == 0) {
+        CULog("Reset");
+        reset();
+    }
+    
+    if (_turns == 0){
+        
+        if (_score < _onestar_threshold) {
+            _endgame_text->setText("You Lose");
+            _endgame_text->setForeground(Color4::RED);
+        }
+        else if (_score >= _onestar_threshold and _score < _twostar_threshold){
+            _endgame_text->setText("You Win *");
+            _endgame_text->setForeground(Color4::RED);
+        }
+        else if (_score >= _twostar_threshold and _score < _threestar_threshold){
+            _endgame_text->setText("You Win **");
+            _endgame_text->setForeground(Color4::RED);
+        }
+        else{
+            _endgame_text->setText("You Win ***");
+            _endgame_text->setForeground(Color4::RED);
+        }
+//        _restartbutton->setVisible(true);
+
+        return;
+    }
     Vec2 pos = _input.getPosition();
     Vec3 worldCoordinate = screenToWorldCoords(pos);
     Vec2 boardPos = _boardNode->worldToNodeCoords(worldCoordinate);
@@ -523,4 +570,29 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     }
     
     batch->end();
+}
+/**
+ * Resets the status of the game so that we can play again.
+ */
+void GameScene::reset() {
+//    _endgame_text->setForeground(Color4::CLEAR);
+//    _turns = _boardJson->getInt("total-swap-allowed");
+//    _score = 0;
+    init(_assets);
+
+    
+}
+
+/**
+ * Sets whether the scene is currently active
+ *
+ * @param value whether the scene is currently active
+ */
+void GameScene::setActive(bool value) {
+    _active = value;
+//    if (value && ! _restartbutton->isActive()) {
+//        _restartbutton->activate();
+//    } else if (!value && _restartbutton->isActive()) {
+//        _restartbutton->deactivate();
+//    }
 }

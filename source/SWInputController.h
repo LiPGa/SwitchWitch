@@ -67,6 +67,8 @@ protected:
     bool _saveDown;
     /** Whether the play key is down*/
     bool _playDown;
+    /** Whether the restart key is down*/
+    bool _resetDown;
     
 protected:
 	/** The key for the mouse listeners */
@@ -176,6 +178,14 @@ public:
      */
     bool didPress() const {
         return !_prevDown && _currDown;
+    }
+    /**
+     * Return true if the user initiated a reset in this frame.
+     *
+     * @return true if the user initiated a press this reset.
+     */
+    bool didPressReset() const {
+        return _resetDown;
     }
 
     /**
