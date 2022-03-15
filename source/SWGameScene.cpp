@@ -135,19 +135,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _endgame_text->setForeground(Color4::CLEAR);
     _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -_endgame_text->getHeight()));
     _guiNode->addChildWithName(_endgame_text, "endgame_text");
-    
-    std::shared_ptr<scene2::SceneNode> button_scene = _assets->get<scene2::SceneNode>("button");
-    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("button_restart"));
-//    _layout->addAbsolute("restartbutton", cugl::scene2::Layout::Anchor::BOTTOM_CENTER, Vec2(-_restartbutton->getWidth() / 2, -_restartbutton->getHeight()));
-//    _guiNode->addChildWithName(_restartbutton, "restartbutton");
 
-    _restartbutton->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            reset();
-        }
-    });
-    addChild(button_scene);
-    
     // Initialize units with different types
     // Children will be types "basic", "three-way", etc.
     auto children = _boardMembers ->get("unit")->children();
@@ -211,8 +199,29 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             squareNode->addChild(unitNode);
         }
     }
+    
+    std::shared_ptr<scene2::SceneNode> scene = assets->get<scene2::SceneNode>("button");
+    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("button_restart"));
+    _restartbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("down");
+            reset();
+        }
+    });
 
-    reset();
+
+    scene->setContentSize(dimen);
+    scene->doLayout(); // Repositions the HUD
+    _guiNode->addChild(scene);
+    _restartbutton->setVisible(false);
+    if (_active) {
+        _restartbutton->activate();
+    }
+    if (_restartbutton->isActive()) CULog("restart active");
+    else CULog("restart not acitve");
+    if (_restartbutton->isDown()) CULog("restart down");
+    else CULog("restart not down");
+//    reset();
     return true;
 }
 
@@ -346,6 +355,7 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 void GameScene::dispose() {
     if (_active) {
         removeAllChildren();
+        _restartbutton = nullptr;
         _active = false;
     }
 }
@@ -380,7 +390,13 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
+    if (_input.didPressReset() and _turns == 0) {
+        CULog("Reset");
+        reset();
+    }
+    
     if (_turns == 0){
+        
         if (_score < _onestar_threshold) {
             _endgame_text->setText("You Lose");
             _endgame_text->setForeground(Color4::RED);
@@ -397,6 +413,7 @@ void GameScene::update(float timestep)
             _endgame_text->setText("You Win ***");
             _endgame_text->setForeground(Color4::RED);
         }
+//        _restartbutton->setVisible(true);
 
         return;
     }
@@ -552,9 +569,25 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
  * Resets the status of the game so that we can play again.
  */
 void GameScene::reset() {
-    _endgame_text->setForeground(Color4::CLEAR);
-    _turns = _boardJson->getInt("total-swap-allowed");
-    _score = 0;
+//    _endgame_text->setForeground(Color4::CLEAR);
+//    _turns = _boardJson->getInt("total-swap-allowed");
+//    _score = 0;
+    init(_assets);
 
     
 }
+
+/**
+ * Sets whether the scene is currently active
+ *
+ * @param value whether the scene is currently active
+ */
+void GameScene::setActive(bool value) {
+    _active = value;
+    if (value && ! _restartbutton->isActive()) {
+        _restartbutton->activate();
+    } else if (!value && _restartbutton->isActive()) {
+        _restartbutton->deactivate();
+    }
+}
+

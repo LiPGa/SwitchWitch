@@ -95,27 +95,30 @@
         "board" : "json/board.json"
     },
     "scene2s" : {
-        "button" : {
-            "comment"   : "The scene graph definition for the NinePatch button.  Noted the nested layouts.",
+        "button": {
             "type"      : "Node",
-            "format" : {
-                "type"       : "Float",
+            "format"    : {
+                "type"        : "Float",
                 "orientation" : "vertical",
-                "x_alignment" : "center",
+                "x_alignment" : "left",
                 "y_alignment" : "bottom"
             },
-            "children"  : {
-                 "restart"  : {
+            "children":  {
+               "restart": {
                     "type"   : "Widget",
                     "data"   : {
-                        "key" : "textbutton",
+                        "key"     : "textbutton",
                         "variables" : {
-                            "size"  : [550,300],
-                            "text"  : "Restart",
+                            "size": [400,100],
+                            "text": "Restart",
                             "color": "#000088"
                         }
+                    },
+                    "layout" : {
+                        "priority" : 1,
+                        "padding"  : [0,50,0,0]
                     }
-                }
+                }   
             }
         },
         "menu": {
@@ -156,7 +159,22 @@
                         "priority" : 1,
                         "padding"  : [0,0,0,0]
                     }
-                }
+                },
+               "restart": {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key"     : "textbutton",
+                        "variables" : {
+                            "size": [400,100],
+                            "text": "Restart",
+                            "color": "#000088"
+                        }
+                    },
+                    "layout" : {
+                        "priority" : 1,
+                        "padding"  : [0,50,0,0]
+                    }
+                }   
             }
         }
     }

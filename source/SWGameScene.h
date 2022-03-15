@@ -213,6 +213,18 @@ public:
      * Resets the status of the game so that we can play again.
      */
     void reset() override;
+    
+    /**
+     * Sets whether the scene is currently active
+     *
+     * This method should be used to toggle all the UI elements.  Buttons
+     * should be activated when it is made active and deactivated when
+     * it is not.
+     *
+     * @param value whether the scene is currently active
+     */
+    virtual void setActive(bool value) override;
+
 
 private:
     /**

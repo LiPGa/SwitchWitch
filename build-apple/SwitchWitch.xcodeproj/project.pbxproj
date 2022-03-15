@@ -99,6 +99,15 @@
 		EBEC12022194B6F4007E708B /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBEC12012194B6F4007E708B /* Metal.framework */; };
 		EBFE7C051E19B496001007C2 /* json in Resources */ = {isa = PBXBuildFile; fileRef = EBFE7C041E19B496001007C2 /* json */; };
 		EBFE7C091E19B4AC001007C2 /* json in Resources */ = {isa = PBXBuildFile; fileRef = EBFE7C041E19B496001007C2 /* json */; };
+		F547800F27E0EE7000E476E8 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F547800C27E0EE7000E476E8 /* SWLevelEditorScene.cpp */; };
+		F547801027E0EE7000E476E8 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F547800C27E0EE7000E476E8 /* SWLevelEditorScene.cpp */; };
+		F547801127E0EE7000E476E8 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F547800C27E0EE7000E476E8 /* SWLevelEditorScene.cpp */; };
+		F547801227E0EE7000E476E8 /* SWMainMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F547800E27E0EE7000E476E8 /* SWMainMenuScene.cpp */; };
+		F547801327E0EE7000E476E8 /* SWMainMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F547800E27E0EE7000E476E8 /* SWMainMenuScene.cpp */; };
+		F547801427E0EE7000E476E8 /* SWMainMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F547800E27E0EE7000E476E8 /* SWMainMenuScene.cpp */; };
+		F547801627E0EEA900E476E8 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = F547801527E0EEA900E476E8 /* widgets */; };
+		F547801727E0EEA900E476E8 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = F547801527E0EEA900E476E8 /* widgets */; };
+		F547801827E0EEA900E476E8 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = F547801527E0EEA900E476E8 /* widgets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +195,11 @@
 		EBDD16C725C35D3400154533 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.4.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		EBEC12012194B6F4007E708B /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		EBFE7C041E19B496001007C2 /* json */ = {isa = PBXFileReference; lastKnownFileType = folder; path = json; sourceTree = "<group>"; };
+		F547800827E0EE7000E476E8 /* SWLevelEditorScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWLevelEditorScene.h; sourceTree = "<group>"; };
+		F547800C27E0EE7000E476E8 /* SWLevelEditorScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWLevelEditorScene.cpp; sourceTree = "<group>"; };
+		F547800D27E0EE7000E476E8 /* SWMainMenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMainMenuScene.h; sourceTree = "<group>"; };
+		F547800E27E0EE7000E476E8 /* SWMainMenuScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWMainMenuScene.cpp; sourceTree = "<group>"; };
+		F547801527E0EEA900E476E8 /* widgets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widgets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -273,6 +287,7 @@
 		EB2BE9B71D749870002FE78B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				F547801527E0EEA900E476E8 /* widgets */,
 				EBFE7C041E19B496001007C2 /* json */,
 				EB51310B27A2328A00E255AA /* fonts */,
 				EB51310C27A2328A00E255AA /* sounds */,
@@ -373,6 +388,10 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F547800C27E0EE7000E476E8 /* SWLevelEditorScene.cpp */,
+				F547800827E0EE7000E476E8 /* SWLevelEditorScene.h */,
+				F547800E27E0EE7000E476E8 /* SWMainMenuScene.cpp */,
+				F547800D27E0EE7000E476E8 /* SWMainMenuScene.h */,
 				DB5871EB27D92E150023672B /* SWApp.cpp */,
 				DB5871F327D92E160023672B /* SWApp.h */,
 				DB5871F027D92E160023672B /* SWGameScene.cpp */,
@@ -459,7 +478,7 @@
 				TargetAttributes = {
 					EB22BF5D25D0E8BC002ACE41 = {
 						CreatedOnToolsVersion = 12.4;
-						DevelopmentTeam = 8PY6L96N4T;
+						DevelopmentTeam = 2Z462C9P3J;
 						ProvisioningStyle = Automatic;
 					};
 					EB74548B1D74D75C002FBAE6 = {
@@ -468,7 +487,7 @@
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 4WBNK62USC;
+						DevelopmentTeam = 2Z462C9P3J;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -528,6 +547,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F547801827E0EEA900E476E8 /* widgets in Resources */,
 				EB22BF9B25D0EA5C002ACE41 /* DeviceMargins.plist in Resources */,
 				EB22BF9625D0EA50002ACE41 /* json in Resources */,
 				EB51311227A2328A00E255AA /* sounds in Resources */,
@@ -543,6 +563,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F547801727E0EEA900E476E8 /* widgets in Resources */,
 				EB7454D01D750623002FBAE6 /* textures in Resources */,
 				EB7454AB1D74D846002FBAE6 /* iOS.xcassets in Resources */,
 				EB51311127A2328A00E255AA /* sounds in Resources */,
@@ -558,6 +579,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F547801627E0EEA900E476E8 /* widgets in Resources */,
 				EB51311027A2328A00E255AA /* sounds in Resources */,
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
@@ -575,8 +597,10 @@
 			files = (
 				75C0E5C027C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4961127C861EC006BA4CA /* SWInputController.cpp in Sources */,
+				F547801427E0EE7000E476E8 /* SWMainMenuScene.cpp in Sources */,
 				75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
+				F547801127E0EE7000E476E8 /* SWLevelEditorScene.cpp in Sources */,
 				DB5871F927D92E160023672B /* SWGameScene.cpp in Sources */,
 				DB5871FC27D92E160023672B /* SWLoadingScene.cpp in Sources */,
 				DB5871F627D92E160023672B /* SWApp.cpp in Sources */,
@@ -590,8 +614,10 @@
 			files = (
 				75C0E5BF27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4961027C861EC006BA4CA /* SWInputController.cpp in Sources */,
+				F547801327E0EE7000E476E8 /* SWMainMenuScene.cpp in Sources */,
 				75C0E5BA27C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				75C0E5C727C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
+				F547801027E0EE7000E476E8 /* SWLevelEditorScene.cpp in Sources */,
 				DB5871F827D92E160023672B /* SWGameScene.cpp in Sources */,
 				DB5871FB27D92E160023672B /* SWLoadingScene.cpp in Sources */,
 				DB5871F527D92E160023672B /* SWApp.cpp in Sources */,
@@ -605,8 +631,10 @@
 			files = (
 				75C0E5BE27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4960F27C861EC006BA4CA /* SWInputController.cpp in Sources */,
+				F547801227E0EE7000E476E8 /* SWMainMenuScene.cpp in Sources */,
 				75C0E5B927C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				75C0E5C627C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
+				F547800F27E0EE7000E476E8 /* SWLevelEditorScene.cpp in Sources */,
 				DB5871F727D92E160023672B /* SWGameScene.cpp in Sources */,
 				DB5871FA27D92E160023672B /* SWLoadingScene.cpp in Sources */,
 				DB5871F427D92E160023672B /* SWApp.cpp in Sources */,
@@ -629,7 +657,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8PY6L96N4T;
+				DEVELOPMENT_TEAM = 2Z462C9P3J;
 				INFOPLIST_FILE = "$(SRCROOT)/../cugl/build-apple/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
@@ -654,7 +682,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8PY6L96N4T;
+				DEVELOPMENT_TEAM = 2Z462C9P3J;
 				INFOPLIST_FILE = "$(SRCROOT)/../cugl/build-apple/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
@@ -835,7 +863,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 4WBNK62USC;
+				DEVELOPMENT_TEAM = 2Z462C9P3J;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.SwitchWitch;
@@ -852,7 +880,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 4WBNK62USC;
+				DEVELOPMENT_TEAM = 2Z462C9P3J;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.mac.SwitchWitch;
