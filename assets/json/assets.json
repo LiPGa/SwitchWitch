@@ -62,7 +62,7 @@
     },
     "fonts": {
         "pixel32": {
-            "file":     "fonts/LightPixel7.ttf",
+            "file":     "fonts/Arial.ttf",
             "size":     32
         }
     },
