@@ -60,8 +60,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     vector<int> boardSize = _constants->get("board-size")->asIntArray();
     _boardWidth = boardSize.at(0);
     _boardHeight = boardSize.at(1);
-    _boardWidth = 6;
-    _boardHeight = 9;
     _squareSizeAdjustedForScale = _constants->getInt("square-size");
     
     // Initialize Scene
