@@ -48,6 +48,7 @@ protected:
     // CONSTANTS
     int _sceneHeight;
     int _boardSize;
+    int _defaultSquareSize;
     int _squareSizeAdjustedForScale;
     
     // hash map for unit textures
@@ -122,8 +123,6 @@ protected:
     int _replacementListLength;
     // VIEW items are going to be individual variables
     // In the future, we will replace this with the scene graph
-    /** The backgrounnd image */
-    std::shared_ptr<cugl::Texture> _background;
     /** The text with the current remaining turns */
     std::shared_ptr<cugl::scene2::Label> _turn_text;
     /** The text with the current score */

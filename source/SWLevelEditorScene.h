@@ -32,6 +32,9 @@ protected:
 
     State _currentState;
 
+    /** The scale which all textures must conform to */
+    Size _scale;
+
     /** The asset manager for this game mode. */
     std::shared_ptr<cugl::AssetManager> _assets;
 
@@ -50,7 +53,8 @@ protected:
     // CONSTANTS
     int _sceneHeight;
     int _boardSize;
-    int _squareSize;
+    int _defaultSquareSize;
+    int _squareSizeAdjustedForScale;
 
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
@@ -77,6 +81,7 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _selectionBoardNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
 
 #pragma mark -
 public:

@@ -74,7 +74,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
     _boardSize = _constants->getInt("board-size");
-    _squareSize = _constants->getInt("square-size");
+    _defaultSquareSize = _constants->getInt("square-size");
 
     // Initialize Scene
     dimen *= _sceneHeight / dimen.height;
@@ -84,6 +84,12 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _input.init();
 
     _currentState = State::NOTHING;
+
+    // Get the background image and constant values
+    auto background = assets->get<Texture>("background");
+    _backgroundNode = scene2::PolygonNode::allocWithTexture(background);
+    _scale = getSize() / background->getSize();
+    _backgroundNode->setScale(_scale);
 
     // Get Textures
     // preload all the textures into a hashmap
@@ -98,6 +104,8 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
 
     // set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+    _guiNode->addChild(_backgroundNode);
+    _backgroundNode->setAnchor(Vec2::ZERO);
 
     // Initialize Board
     _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
@@ -106,15 +114,16 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _selectionBoard = Board::alloc(SELECTION_BOARD_HEIGHT, SELECTION_BOARD_WIDTH);
 
     // Set the view of the board.
-    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_WIDTH * SQUARE_SIZE, BOARD_HEIGHT * SQUARE_SIZE));
+    _squareSizeAdjustedForScale = int(_defaultSquareSize * min(_scale.width, _scale.height));
+    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_WIDTH * _squareSizeAdjustedForScale, BOARD_HEIGHT * _squareSizeAdjustedForScale));
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
     _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
 
     // Set the view of the select board.
-    _selectionBoardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, SQUARE_SIZE, BOARD_HEIGHT * SQUARE_SIZE));
-    _layout->addRelative("selectionBoardNode", cugl::scene2::Layout::Anchor::MIDDLE_LEFT, Vec2(SQUARE_SIZE / getSize().width, 0));
+    _selectionBoardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _squareSizeAdjustedForScale, BOARD_HEIGHT * _squareSizeAdjustedForScale));
+    _layout->addRelative("selectionBoardNode", cugl::scene2::Layout::Anchor::MIDDLE_LEFT, Vec2(_squareSizeAdjustedForScale / getSize().width, 0));
     _selectionBoardNode->setTexture(_textures.at("transparent"));
     _selectionBoard->setViewNode(_selectionBoardNode);
     _guiNode->addChildWithName(_selectionBoardNode, "selectionBoardNode");
@@ -145,11 +154,12 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     }
 
     // Create the squares & units and put them in the map
-    for (int i = 0; i < _boardSize; i++) {
-        for (int j = 0; j < _boardSize; ++j) {
+    for (int i = 0; i < BOARD_WIDTH; i++) {
+        for (int j = 0; j < BOARD_HEIGHT; ++j) {
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
-            auto squarePosition = (Vec2(i, j));
-            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE / 2));
+            auto squarePosition = Vec2(i, j);
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
+            squareNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _board->getViewNode()->addChild(squareNode);
@@ -174,8 +184,8 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         for (int j = 0; j < SELECTION_BOARD_HEIGHT; ++j) {
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
             auto squarePosition = (Vec2(i, j));
-            squareNode->setScale(SELECTION_BOARD_SCALE);
-            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE * SELECTION_BOARD_SCALE) + Vec2::ONE * (SQUARE_SIZE * SELECTION_BOARD_SCALE / 2));
+            squareNode->setScale(((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize) * SELECTION_BOARD_SCALE);
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale * SELECTION_BOARD_SCALE) + Vec2::ONE * (_squareSizeAdjustedForScale * SELECTION_BOARD_SCALE / 2));
             shared_ptr<Square> sq = _selectionBoard->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _selectionBoard->getViewNode()->addChild(squareNode);
@@ -231,18 +241,14 @@ void LevelEditorScene::update(float timestep)
     // Read the input
     _input.update();
     Vec2 pos = _input.getPosition();
-    Vec2 boardPos = _boardNode->worldToNodeCoords(pos);
-    Vec2 selectionBoardPos = _selectionBoardNode->worldToNodeCoords(pos);
-    /*
-     * The mouse position is measured with the top left of the screen being the origin
-     * while the origin of the board is on the bottom left.
-     * The extra calculation on y is meant to convert the mouse position as if its origin is on the bottom left.
-     */
+    Vec3 worldCoordinate = screenToWorldCoords(pos);
+    Vec2 boardPos = _boardNode->worldToNodeCoords(worldCoordinate);
+    Vec2 selectionBoardPos = _selectionBoardNode->worldToNodeCoords(worldCoordinate);
     
     if (_input.didPress())
     {
-        Vec2 squarePos = Vec2(int(boardPos.x) / SQUARE_SIZE, BOARD_HEIGHT - 1 - (int(boardPos.y) / SQUARE_SIZE));
-        Vec2 selectionSquarePos = Vec2(int(selectionBoardPos.x) / int(SQUARE_SIZE * SELECTION_BOARD_SCALE), SELECTION_BOARD_HEIGHT - 1 - (int(selectionBoardPos.y) / int(SQUARE_SIZE * SELECTION_BOARD_SCALE)));
+        Vec2 squarePos = Vec2(int(boardPos.x / (_squareSizeAdjustedForScale)), int(boardPos.y / (_squareSizeAdjustedForScale)));
+        Vec2 selectionSquarePos = Vec2(int(selectionBoardPos.x / (_squareSizeAdjustedForScale * SELECTION_BOARD_SCALE)), int(selectionBoardPos.y / (_squareSizeAdjustedForScale * SELECTION_BOARD_SCALE)));
         if (_board->doesSqaureExist(squarePos) && boardPos.x>=0 && boardPos.y>=0)
         {
             _currentState = State::CHANGING_BOARD;
@@ -251,7 +257,7 @@ void LevelEditorScene::update(float timestep)
                 if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
                 _selectedSquare = squareOnMouse;
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
-                if (_selectedUnitFromSelectionBoard != NULL) {
+                if (_selectedUnitFromSelectionBoard != NULL && _selectedUnitFromSelectionBoard->getUnit() != NULL) {
                     auto unit = _selectedSquare->getUnit();
                     auto unitThatWillReplace = _selectedUnitFromSelectionBoard->getUnit();
                     unit->setBasicAttack(unitThatWillReplace->getBasicAttack());

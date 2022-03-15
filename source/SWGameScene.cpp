@@ -62,7 +62,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
     _boardSize = _constants->getInt("board-size");
-    _squareSizeAdjustedForScale = _constants->getInt("square-size");
+    _defaultSquareSize = _constants->getInt("square-size");
     
     // Initialize Scene
     dimen *= _sceneHeight/dimen.height;
@@ -84,12 +84,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _textures.insert({textureName, _assets->get<Texture>(textureName)});
     }
 
-    
-
     // Get the background image and constant values
-    _background = assets->get<Texture>("background");
-    _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
-    _scale = getSize() / _background->getSize();
+    auto background = assets->get<Texture>("background");
+    _backgroundNode = scene2::PolygonNode::allocWithTexture(background);
+    _scale = getSize() / background->getSize();
     _backgroundNode->setScale(_scale);
 
     // Allocate Layout
@@ -122,10 +120,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChildWithName(_score_text, "score_text");
 
     // Set the view of the board.
-    _squareSizeAdjustedForScale = int(SQUARE_SIZE * _scale.width);
+    _squareSizeAdjustedForScale = int(_defaultSquareSize * min(_scale.width, _scale.height));
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_WIDTH  * _squareSizeAdjustedForScale, BOARD_HEIGHT * _squareSizeAdjustedForScale));
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
-    //_boardNode->setTexture(_textures.at("transparent"));
+    _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
     
@@ -173,9 +171,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         for(int j=0;j<BOARD_HEIGHT;++j){
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
             auto squarePosition = Vec2(i,j);
-            
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale/2));       
-            squareNode->setScale(_scale.width);
+            squareNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _board->getViewNode()->addChild(squareNode);
@@ -368,7 +365,7 @@ int GameScene::calculateScore(int colorNum, int basicUnitsNum, int specialUnitsN
 void GameScene::update(float timestep)
 {
     // Read the keyboard for each controller.
-    // Read the input
+    // Read the input and convert to a square position.
     _input.update();
     Vec2 pos = _input.getPosition();
     Vec3 worldCoordinate = screenToWorldCoords(pos);
@@ -478,10 +475,9 @@ void GameScene::update(float timestep)
         _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
     }
 
-    //dfghgfd
+    // Update win condition
     if (hasLost) {
         _endgame_text->setForeground(Color4::RED);
-
     }
 
     // Update the remaining turns
@@ -489,7 +485,6 @@ void GameScene::update(float timestep)
 
     // Layout everything
     _layout->layout(_guiNode.get());
-
 }
 
 #pragma mark -
@@ -521,6 +516,5 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
     }
-    
     batch->end();
 }
