@@ -126,7 +126,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _squareSizeAdjustedForScale = int(SQUARE_SIZE * _scale.width);
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_WIDTH * _squareSizeAdjustedForScale, BOARD_HEIGHT * _squareSizeAdjustedForScale));
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
-    //_boardNode->setTexture(_textures.at("transparent"));
+    _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
 
