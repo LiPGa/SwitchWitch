@@ -31,6 +31,16 @@ _currDown(false),
 _prevDown(false),
 _mouseDown(false),
 _fingerDown(false),
+_upDown(false),
+_downDown(false),
+_leftDown(false),
+_rightDown(false),
+_redDown(false),
+_greenDown(false),
+_blueDown(false),
+_saveDown(false),
+_playDown(false),
+_debugDown(false),
 _mouseKey(0),
 _touchKey(1) {
 }
@@ -111,6 +121,19 @@ void InputController::dispose() {
 void InputController::update() {
     _prevDown = _currDown;
     _prevPos = _currPos;
+    // DESKTOP CONTROLS
+    Keyboard* keys = Input::get<Keyboard>();
+    // For Level Editor
+    _upDown = keys->keyPressed(KeyCode::ARROW_UP) || keys->keyPressed(KeyCode::W);
+    _downDown = keys->keyPressed(KeyCode::ARROW_DOWN) || keys->keyPressed(KeyCode::S);
+    _leftDown = keys->keyPressed(KeyCode::ARROW_LEFT) || keys->keyPressed(KeyCode::A);
+    _rightDown = keys->keyPressed(KeyCode::ARROW_RIGHT) || keys->keyPressed(KeyCode::D);
+    _redDown = keys->keyPressed(KeyCode::R) || keys->keyPressed(KeyCode::NUM_1);
+    _greenDown = keys->keyPressed(KeyCode::G) || keys->keyPressed(KeyCode::NUM_2);
+    _blueDown = keys->keyPressed(KeyCode::B) || keys->keyPressed(KeyCode::NUM_3);
+    _saveDown = keys->keyPressed(KeyCode::S) && keys->keyDown(KeyCode::LEFT_CTRL);
+    _playDown = keys->keyPressed(KeyCode::ENTER) || keys->keyPressed(KeyCode::KEYPAD_ENTER);
+    _debugDown = keys->keyPressed(KeyCode::D) && keys->keyDown(KeyCode::LEFT_CTRL);
     #ifdef CU_TOUCH_SCREEN
     _currDown = _fingerDown;
     _currPos = _touchPos;
@@ -118,6 +141,31 @@ void InputController::update() {
     _currDown = _mouseDown;
     _currPos = _mousePos;
     #endif
+}
+
+#pragma mark -
+#pragma mark Keyboard Presses
+/**
+ * Returns the arrow key or WSAD key pressed as a vector 2.
+ *
+ * @returns the cardinal direction selected from arrow keys or WSAD.
+ */
+cugl::Vec2 InputController::directionPressed() const {
+    if (_leftDown) {
+        return Vec2::UNIT_X * -1;
+    }
+    else if (_rightDown) {
+        return Vec2::UNIT_X;
+    }
+    else if (_upDown) {
+        return Vec2::UNIT_Y;
+    }
+    else if (_downDown) {
+        return Vec2::UNIT_Y * -1;
+    }
+    else {
+        return Vec2::ZERO;
+    }
 }
 
 #pragma mark -

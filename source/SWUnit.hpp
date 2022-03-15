@@ -37,6 +37,9 @@ private:
      * Attacks are assumed to kill any unit instantly.
      */
 
+    /** The name of the unit subtype*/
+    std::string _subtype;
+
     /** The basic attacks of this unit*/
     vector<cugl::Vec2> _basicAttack;
     
@@ -79,7 +82,7 @@ public:
      * @param direction the direction the unit is facing
      * @return true if initialization was successful.
      */
-    bool init(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction);
+    bool init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction);
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -92,9 +95,9 @@ public:
      * @param direction the direction the unit is facing
      * @return a newly allocated Unit.
      */
-    static std::shared_ptr<Unit>alloc(const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction) {
+    static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction) {
         std::shared_ptr<Unit> result = std::make_shared<Unit>();
-        return (result->init(color, basicAttack, specialAttack, direction) ? result : nullptr);
+        return (result->init(subtype, color, basicAttack, specialAttack, direction) ? result : nullptr);
     }
 
 #pragma mark -
@@ -111,8 +114,69 @@ public:
     */
     static const cugl::Vec2 getDefaultDirection() { return Vec2::UNIT_X; }
 
+    /**
+     * Returns all possible directions the unit can face.
+     * 
+     * @return a vector of all possible directions the unit can face in Vec2.
+     */
+    static const vector<cugl::Vec2> getAllPossibleDirections() { 
+        return vector<cugl::Vec2>{Vec2::UNIT_X, Vec2::UNIT_X * -1, Vec2::UNIT_Y, Vec2::UNIT_Y * -1};
+    }
+
+    /**
+     * Returns the string data representation of the color according to JSON conventions
+     *
+     * @param c the color
+     * @returns the string of the color
+     */
+    static std::string colorToString(Color c) {
+        switch (c) {
+        case Color::RED:
+            return "red";
+        case Color::GREEN:
+            return "green";
+        case Color::BLUE:
+            return "blue";
+        default:
+            return "red";
+        }
+    }
+
+    /**
+     * Returns the color representation of a string that represents a color according to JSON conventions
+     *
+     * @param str string representation of the color. Must be either "red", "green", or "blue".
+     * @returns the color
+     */
+    static Unit::Color stringToColor(std::string str) {
+        if (str == "red") {
+            return Color::RED;
+        }
+        else if (str == "green") {
+            return Color::GREEN;
+        }
+        else {
+            return Color::BLUE;
+        }
+    }
+
+
 #pragma mark -
 #pragma mark Identifiers
+    /**
+     * Returns the subtype of the unit as a string.
+     * 
+     * @return unit's subtype.
+     */
+    std::string getSubType() { return _subtype; }
+
+    /**
+     * Sets the subtype of the unit as a string.
+     *
+     * @return unit's subtype.
+     */
+    void setSubType(std::string subtype) { _subtype = subtype; }
+
     /**
      * Returns a list of vec2 representing all attacks
      * in a basic attack. The direction of attacks is based on the units default direction.

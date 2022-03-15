@@ -16,20 +16,44 @@
 #include <cugl/cugl.h>
 #include "SWGameScene.h"
 #include "SWLoadingScene.h"
+#include "SWLevelEditorScene.h"
+#include "SWMainMenuScene.h"
+
 
 /**
  * This class represents the application root for the ship demo.
  */
 class SwitchWitchApp : public cugl::Application {
 protected:
+    /**
+     * The current active scene
+     */
+    enum State {
+        /** The loading scene */
+        LOAD,
+        /** The main menu scene */
+        MENU,
+        /** The scene to edit a level */
+        EDITOR,
+        /** The scene to play the game */
+        GAME
+    };
+
+    /** The current active scene */
+    State _scene;
+
     /** The global sprite batch for drawing (only want one of these) */
     std::shared_ptr<cugl::SpriteBatch> _batch;
     /** The global asset manager */
     std::shared_ptr<cugl::AssetManager> _assets;
 
     // Player modes
+    /** The controller for the main menu */
+    MainMenuScene _mainMenu;
     /** The primary controller for the game world */
     GameScene _gameplay;
+    /** The controller for the level editor */
+    LevelEditorScene _levelEditor;
     /** The controller for the loading screen */
     LoadingScene _loading;
 

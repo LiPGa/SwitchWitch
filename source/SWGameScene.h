@@ -26,6 +26,8 @@
 class GameScene : public cugl::Scene2
 {
 protected:
+    bool _debug;
+
     /** The asset manager for this game mode. */
     std::shared_ptr<cugl::AssetManager> _assets;
 
@@ -98,6 +100,9 @@ protected:
     /** Square that is currently being selected by the player to swap with the selectedSquare */
     shared_ptr<Square> _swappingSquare;
 
+    Vec2 _selectedSquareOriginalDirection;
+    Vec2 _swappingSquareOriginalDirection;
+
 #pragma mark -
 #pragma mark View Variables
     // VIEW
@@ -123,9 +128,8 @@ protected:
     /** Win/Lose text */
     std::shared_ptr<cugl::scene2::Label> _endgame_text;
 
-
     std::shared_ptr<cugl::TextLayout> _winLoseText;
-    vector<shared_ptr<Square>> _attacked_squares;
+    vector<shared_ptr<Square>> _attackedSquares;
 
     bool hasLost = false;
 
@@ -136,26 +140,6 @@ protected:
     std::shared_ptr<cugl::Texture> _selectedSquareTexture;
     std::shared_ptr<cugl::Texture> _attackedSquareTexture;
     std::shared_ptr<cugl::Texture> _swapSquareTexture;
-
-    // TEXTURES UNITS
-    std::shared_ptr<cugl::Texture> _redUnitTexture;
-    std::shared_ptr<cugl::Texture> _blueUnitTexture;
-    std::shared_ptr<cugl::Texture> _greenUnitTexture;
-
-    // TEXTURES SPECIAL UNITS - DIAGONAL
-    std::shared_ptr<cugl::Texture> _diagonalBlueTexture;
-    std::shared_ptr<cugl::Texture> _diagonalGreenTexture;
-    std::shared_ptr<cugl::Texture> _diagonalRedTexture;
-
-    // TEXTURES SPECIAL UNITS - TWO-FORWARD
-    std::shared_ptr<cugl::Texture> _twoForwardBlueTexture;
-    std::shared_ptr<cugl::Texture> _twoForwardGreenTexture;
-    std::shared_ptr<cugl::Texture> _twoForwardRedTexture;
-
-    // TEXTURES SPECIAL UNITS - THREE-WAY
-    std::shared_ptr<cugl::Texture> _threeWayBlueTexture;
-    std::shared_ptr<cugl::Texture> _threeWayGreenTexture;
-    std::shared_ptr<cugl::Texture> _threeWayRedTexture;
 
 #pragma mark -
 
@@ -230,6 +214,24 @@ private:
      * @return    The pattern for the unit (texture)
      */
     std::string getUnitType(std::string type, std::string color);
+
+    /**
+     * Get the pattern for a unit provided its type and color
+     * @param type     The sub-type of the unit
+     * @param color    The coor of the unit
+     * @return    The pattern for the unit (texture)
+     */
+    std::string getUnitType(std::string type, Unit::Color color) {
+        if (color == Unit::RED) {
+            return getUnitType(type, "red");
+        }
+        else if (color == Unit::GREEN) {
+            return getUnitType(type, "green");
+        }
+        else {
+            return getUnitType(type, "blue");
+        }
+    }
     
     /**
      * Returns the score based on the units that have been attacked.
@@ -244,20 +246,14 @@ private:
     int calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum);
     
     /**
-     * Generate a unit with random color and direction on the given square.
+     * Generate a unit basic or special with random color and direction on the given square.
      *
      * @param sq    The given square
      * @param squareNode    The given squareNode
      *
      */
-    void generateUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
+    void generateUnit(shared_ptr<Square> sq);
 
-    /**
-     * Upgrade a basic unit to a special unit.
-     *
-     * @param sq    The given square
-     */
-    void upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
     
     /**
      * check if the given position is safe to hold a special unit
