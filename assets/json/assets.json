@@ -95,6 +95,29 @@
         "board" : "json/board.json"
     },
     "scene2s" : {
+        "button" : {
+            "comment"   : "The scene graph definition for the NinePatch button.  Noted the nested layouts.",
+            "type"      : "Node",
+            "format" : {
+                "type"       : "Float",
+                "orientation" : "vertical",
+                "x_alignment" : "center",
+                "y_alignment" : "bottom"
+            },
+            "children"  : {
+                 "restart"  : {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key" : "textbutton",
+                        "variables" : {
+                            "size"  : [550,300],
+                            "text"  : "Restart",
+                            "color": "#000088"
+                        }
+                    }
+                }
+            }
+        },
         "menu": {
             "type"      : "Node",
             "format"    : {

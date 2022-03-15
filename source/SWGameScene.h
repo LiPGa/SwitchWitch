@@ -74,8 +74,12 @@ protected:
     int _turns;
     /** The current score of the player */
     int _score;
-    // score needed to pass
-    int _scoreNeeded;
+    /** one-star threshold */
+    int _onestar_threshold;
+    /** two-star threshold*/
+    int _twostar_threshold;
+    /** three-star threshold*/
+    int _threestar_threshold;
     /** The previous score of the player */
     int _prev_score;
 
@@ -130,6 +134,9 @@ protected:
 
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
+    
+    /** The button for restart */
+    std::shared_ptr<cugl::scene2::Button> _restartbutton;
 
     bool hasLost = false;
 
@@ -205,6 +212,7 @@ public:
     /**
      * Resets the status of the game so that we can play again.
      */
+    void reset() override;
 
 private:
     /**
