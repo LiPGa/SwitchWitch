@@ -58,6 +58,15 @@
         },
         "special_up_square": {
             "file": "textures/up.png"
+        },
+        "special_down_square": {
+            "file": "textures/down.png"
+        },
+        "special_left_square": {
+            "file": "textures/left.png"
+        },
+        "special_right_square": {
+            "file": "textures/right.png"
         }
     },
     "fonts": {

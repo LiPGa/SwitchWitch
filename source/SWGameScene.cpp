@@ -249,7 +249,18 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             unit->setViewNode(unitNode);
             if (unitSubType!="basic") {
                 unit->setSpecial(true);
-                sq->getViewNode()->setTexture(_textures.at("special_up_square"));
+                if (unit->getDirection() == Vec2(0, 1)) {
+                    sq->getViewNode()->setTexture(_textures.at("special_up_square"));
+                }
+                else if (unit->getDirection() == Vec2(0, -1)) {
+                    sq->getViewNode()->setTexture(_textures.at("special_down_square"));
+                }
+                else if (unit->getDirection() == Vec2(1, 0)) {
+                    sq->getViewNode()->setTexture(_textures.at("special_right_square"));
+                }
+                else {
+                    sq->getViewNode()->setTexture(_textures.at("special_left_square"));
+                }
             }
             //unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
@@ -413,7 +424,19 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
     unit->setSpecial(true);
     auto unitNode = unit->getViewNode();
     auto randomNumber3 = rand() % 10 + 1;
-    sq->getViewNode()->setTexture(_textures.at("special_up_square"));
+    if (unit->getDirection() == Vec2(0, 1)) {
+        sq->getViewNode()->setTexture(_textures.at("special_up_square"));
+    }
+    else if (unit->getDirection() == Vec2(0, -1)) {
+        sq->getViewNode()->setTexture(_textures.at("special_down_square"));
+    }
+    else if (unit->getDirection() == Vec2(1, 0)) {
+        sq->getViewNode()->setTexture(_textures.at("special_right_square"));
+    }
+    else {
+        sq->getViewNode()->setTexture(_textures.at("special_left_square"));
+    }
+    //sq->getViewNode()->setTexture(_textures.at("special_up_square"));
     if (randomNumber3 <= 4) {
         unit->setSpecialAttack(twoForwardAttack);
     } else if (randomNumber3 > 4 && randomNumber3 <= 8) {
@@ -712,7 +735,18 @@ void GameScene::update(float timestep)
                 for (shared_ptr<Square> squares : _board->getAllSquares())
                 {
                     if (squares->getUnit()->isSpecial()) {
-                        squares->getViewNode()->setTexture(_textures.at("special_up_square"));
+                        if (squares->getUnit()->getDirection() == Vec2(0, 1)) {
+                            squares->getViewNode()->setTexture(_textures.at("special_up_square"));
+                        }
+                        else if (squares->getUnit()->getDirection() == Vec2(0, -1)) {
+                            squares->getViewNode()->setTexture(_textures.at("special_down_square"));
+                        }
+                        else if (squares->getUnit()->getDirection() == Vec2(1, 0)) {
+                            squares->getViewNode()->setTexture(_textures.at("special_right_square"));
+                        }
+                        else {
+                            squares->getViewNode()->setTexture(_textures.at("special_left_square"));
+                        }
                     }
                     else {
                         squares->getViewNode()->setTexture(_textures.at("square"));
@@ -726,7 +760,18 @@ void GameScene::update(float timestep)
             for (shared_ptr<Square> squares : _board->getAllSquares())
             {
                 if (squares->getUnit()->isSpecial()) {
-                    squares->getViewNode()->setTexture(_textures.at("special_up_square"));
+                    if (squares->getUnit()->getDirection() == Vec2(0, 1)) {
+                        squares->getViewNode()->setTexture(_textures.at("special_up_square"));
+                    }
+                    else if (squares->getUnit()->getDirection() == Vec2(0, -1)) {
+                        squares->getViewNode()->setTexture(_textures.at("special_down_square"));
+                    }
+                    else if (squares->getUnit()->getDirection() == Vec2(1, 0)) {
+                        squares->getViewNode()->setTexture(_textures.at("special_right_square"));
+                    }
+                    else {
+                        squares->getViewNode()->setTexture(_textures.at("special_left_square"));
+                    }
                 }
                 else {
                     squares->getViewNode()->setTexture(_textures.at("square"));
@@ -758,7 +803,18 @@ void GameScene::update(float timestep)
                         upgradeToSpecial(attackedSquare, attackedSquare->getViewNode());
                     }
                     if (attackedSquare->getUnit()->isSpecial()) {
-                        attackedSquare->getViewNode()->setTexture(_textures.at("special_up_square"));
+                        if (attackedSquare->getUnit()->getDirection() == Vec2(0, 1)) {
+                            attackedSquare->getViewNode()->setTexture(_textures.at("special_up_square"));
+                        }
+                        else if (attackedSquare->getUnit()->getDirection() == Vec2(0, -1)) {
+                            attackedSquare->getViewNode()->setTexture(_textures.at("special_down_square"));
+                        }
+                        else if (attackedSquare->getUnit()->getDirection() == Vec2(1, 0)) {
+                            attackedSquare->getViewNode()->setTexture(_textures.at("special_right_square"));
+                        }
+                        else {
+                            attackedSquare->getViewNode()->setTexture(_textures.at("special_left_square"));
+                        }
                     }
                     else {
                         attackedSquare->getViewNode()->setTexture(_textures.at("square"));
