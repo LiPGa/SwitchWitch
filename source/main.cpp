@@ -30,7 +30,9 @@ int main(int argc, char * argv[]) {
     //app.setFPS(60.0f);
 
     // VARY THIS TO TRY OUT YOUR SCENE GRAPH
-    app.setDisplaySize(1280, 720); // 16x9,  Android phones, PC Gaming
+    // Pixel Dimensions of Background Divided by 4.
+    // Default Aspect Ratio 1125 x 2436
+    app.setDisplaySize(332, 720); // 16x9,  Android phones, PC Gaming
 
     /// DO NOT MODIFY ANYTHING BELOW THIS LINE
     if (!app.init()) {

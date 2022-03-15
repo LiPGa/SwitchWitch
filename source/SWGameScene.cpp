@@ -25,17 +25,12 @@ using namespace std;
 #pragma mark -
 #pragma mark Level Layout
 
-// Lock the screen size to fixed height regardless of aspect ratio
-#define SCENE_HEIGHT 720
-
-/** How big the unit radius should be */
-#define UNIT_SIZE 50
-
 /** How big the square width should be */
 #define SQUARE_SIZE 128
 
 /** How big the board is*/
-#define BOARD_SIZE 5
+#define BOARD_WIDTH 5
+#define BOARD_HEIGHT 5
 
 #pragma mark Asset Constants
 
@@ -67,7 +62,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
     _boardSize = _constants->getInt("board-size");
-    _squareSize = _constants->getInt("square-size");
+    _squareSizeAdjustedForScale = _constants->getInt("square-size");
     
     // Initialize Scene
     dimen *= _sceneHeight/dimen.height;
@@ -89,20 +84,27 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _textures.insert({textureName, _assets->get<Texture>(textureName)});
     }
 
+    
+
     // Get the background image and constant values
     _background = assets->get<Texture>("background");
+    _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
+    _scale = getSize() / _background->getSize();
+    _backgroundNode->setScale(_scale);
 
     // Allocate Layout
     _layout = scene2::AnchoredLayout::alloc();
 
     // Set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+    _guiNode->addChild(_backgroundNode);
+    _backgroundNode->setAnchor(Vec2::ZERO);
 
     // Initialize state
-    _currentState = SELECTING_UNIT;
+    _currentState = NOTHING;
 
     // Initialize Board
-    _board = Board::alloc(BOARD_SIZE, BOARD_SIZE);
+    _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
     _currLevel = _boardJson->getInt("id");
     _turns = _boardJson->getInt("total-swap-allowed");
     _scoreNeeded = _boardJson->getInt("win-condition");
@@ -120,9 +122,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChildWithName(_score_text, "score_text");
 
     // Set the view of the board.
-    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE));
+    _squareSizeAdjustedForScale = int(SQUARE_SIZE * _scale.width);
+    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_WIDTH  * _squareSizeAdjustedForScale, BOARD_HEIGHT * _squareSizeAdjustedForScale));
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
-    _boardNode->setTexture(_textures.at("transparent"));
+    //_boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
     
@@ -166,11 +169,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     }
 
     // Create the squares & units and put them in the map
-    for (int i=0;i<_boardSize;i++) {
-        for(int j=0;j<_boardSize;++j){
+    for (int i=0;i<BOARD_WIDTH;i++) {
+        for(int j=0;j<BOARD_HEIGHT;++j){
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
-            auto squarePosition = (Vec2(i,j));
-            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE/2));       
+            auto squarePosition = Vec2(i,j);
+            
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale/2));       
+            squareNode->setScale(_scale.width);
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _board->getViewNode()->addChild(squareNode);
@@ -366,16 +371,13 @@ void GameScene::update(float timestep)
     // Read the input
     _input.update();
     Vec2 pos = _input.getPosition();
-    Vec2 boardPos = _boardNode->worldToNodeCoords(pos);
-    /*
-     * The mouse position is measured with the top left of the screen being the origin
-     * while the origin of the board is on the bottom left.
-     * The extra calculation on y is meant to convert the mouse position as if its origin is on the bottom left.
-     */
-    Vec2 squarePos = Vec2(int(boardPos.x) / SQUARE_SIZE, BOARD_SIZE - 1 - (int(boardPos.y) / SQUARE_SIZE));
+    Vec3 worldCoordinate = screenToWorldCoords(pos);
+    Vec2 boardPos = _boardNode->worldToNodeCoords(worldCoordinate);
+    Vec2 squarePos = Vec2(int(boardPos.x / (_squareSizeAdjustedForScale)), int(boardPos.y / (_squareSizeAdjustedForScale)));
     if (_input.isDebugDown()) {
         _debug = !_debug;
     }
+
     if (_board->doesSqaureExist(squarePos) && boardPos.x>=0 && boardPos.y>= 0)
     {
         auto squareOnMouse = _board->getSquare(squarePos);
@@ -513,11 +515,11 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         std::string unitType = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->getSubType();
         std::string unitColor = _selectedSquare == NULL ? "" : Unit::colorToString(_selectedSquare->getUnit()->getColor());
         auto direction = _selectedSquare == NULL ? Vec2::ZERO : _selectedSquare->getUnit()->getDirection();
-        std::ostringstream unitDirection; 
+        std::ostringstream unitDirection;
         unitDirection << "(" << int(direction.x) << ", " << int(direction.y) << ")";
-        batch->drawText(unitType, _turn_text->getFont(), Vec2(10, getSize().height - 100));
-        batch->drawText(unitColor, _turn_text->getFont(), Vec2(10, getSize().height - 150));
-        batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(10, getSize().height - 200));
+        batch->drawText(unitType, _turn_text->getFont(), Vec2(50, getSize().height - 100));
+        batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
+        batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
     }
     
     batch->end();
