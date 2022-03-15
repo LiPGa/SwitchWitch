@@ -120,6 +120,8 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _replacementBoardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
+
     // std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;
     // std::shared_ptr<cugl::scene2::SceneNode> _replacementBoardNodeS;
 
@@ -128,6 +130,8 @@ protected:
     // In the future, we will replace this with the scene graph
     /** The backgrounnd image */
     std::shared_ptr<cugl::Texture> _background;
+    /** The top UI backgrounnd image */
+    std::shared_ptr<cugl::Texture> _topuibackground;
     /** The text with the current remaining turns */
     std::shared_ptr<cugl::scene2::Label> _turn_text;
     /** The text with the current score */

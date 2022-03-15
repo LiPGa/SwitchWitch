@@ -91,6 +91,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
     _scale = getSize() / _background->getSize();
     _backgroundNode->setScale(_scale);
+    
+    _topuibackground = assets->get<Texture>("top-ui-background");
+    _topuibackgroundNode = scene2::PolygonNode::allocWithTexture(_topuibackground);
+    _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
+    _topuibackgroundNode->setScale(_scale);
 
     // Allocate Layout
     _layout = scene2::AnchoredLayout::alloc();
@@ -98,7 +103,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
     _guiNode->addChild(_backgroundNode);
+//    _guiNode->addChild(_topuibackgroundNode);
     _backgroundNode->setAnchor(Vec2::ZERO);
+    _layout->addAbsolute("top_ui_background", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(0, -(_topuibackgroundNode->getSize().height)));
+    _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
 
     // Initialize state
     _currentState = NOTHING;

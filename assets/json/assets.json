@@ -5,6 +5,9 @@
             "wrapS": "repeat",
             "wrapT": "repeat"
         },
+        "top-ui-background":{
+            "file": "textures/top-ui-background.png"
+        },
         "square":{
             "file": "textures/square.png"
         },
