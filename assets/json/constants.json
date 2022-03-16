@@ -1,6 +1,6 @@
 {
     "scene-height": 720,
-    "board-size": 5,
+    "board-size": [6,9],
     "square-size": 128,
     "textures": [
         "background",

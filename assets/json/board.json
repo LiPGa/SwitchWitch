@@ -1,7 +1,9 @@
 {
     "id": 1,
     "total-swap-allowed": 5,
-    "win-condition": 50,
+    "one-star-condition": 15,
+    "two-star-condition": 30,
+    "three-star-condition": 50,
     "board-members": [
         {
             "type": "unit",
@@ -139,6 +141,180 @@
             "type": "unit",
             "sub-type": "basic",
             "color": "red",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
             "direction": [1,0]
         },
         {

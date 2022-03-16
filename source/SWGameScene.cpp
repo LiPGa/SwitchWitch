@@ -28,21 +28,18 @@ using namespace std;
 /** How big the square width should be */
 #define SQUARE_SIZE 128
 
-/** How big the board is*/
-#define BOARD_WIDTH 5
-#define BOARD_HEIGHT 5
-
 #pragma mark Asset Constants
 
 #pragma mark -
 #pragma mark Constructors
 
 /**
-* sets the correct square texture for a unit.
-* @param square         the square being set
-* @param textures       the texture map being used
-*/
-void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures) {
+ * sets the correct square texture for a unit.
+ * @param square         the square being set
+ * @param textures       the texture map being used
+ */
+void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures)
+{
     if (square->getUnit()->isSpecial())
     {
         if (square->getUnit()->getDirection() == Vec2(0, 1))
@@ -94,7 +91,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
-    _boardSize = _constants->getInt("board-size");
+    vector<int> boardSize = _constants->get("board-size")->asIntArray();
+    _boardWidth = boardSize.at(0);
+    _boardHeight = boardSize.at(1);
     _squareSizeAdjustedForScale = _constants->getInt("square-size");
 
     // Initialize Scene
@@ -125,42 +124,65 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _scale = getSize() / _background->getSize();
     _backgroundNode->setScale(_scale);
 
+    _topuibackground = assets->get<Texture>("top-ui-background");
+    _topuibackgroundNode = scene2::PolygonNode::allocWithTexture(_topuibackground);
+    _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
+    _topuibackgroundNode->setScale(_scale);
+
     // Allocate Layout
     _layout = scene2::AnchoredLayout::alloc();
 
     // Set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
     _guiNode->addChild(_backgroundNode);
+    //    _guiNode->addChild(_topuibackgroundNode);
     _backgroundNode->setAnchor(Vec2::ZERO);
+    _layout->addAbsolute("top_ui_background", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(0, -(_topuibackgroundNode->getSize().height)));
+    _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
 
     // Initialize state
     _currentState = NOTHING;
 
     // Initialize Board
-    _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
+    _board = Board::alloc(_boardHeight, _boardWidth);
     _currLevel = _boardJson->getInt("id");
     _turns = _boardJson->getInt("total-swap-allowed");
     _scoreNeeded = _boardJson->getInt("win-condition");
 
+    _max_turns = _boardJson->getInt("total-swap-allowed");
+    // thresholds for the star system
+    _onestar_threshold = _boardJson->getInt("one-star-condition");
+    _twostar_threshold = _boardJson->getInt("two-star-condition");
+    _threestar_threshold = _boardJson->getInt("three-star-condition");
+
     // Create and layout the turn meter
-    std::string turnMsg = strtool::format("Turns %d", _turns);
+    std::string turnMsg = strtool::format("%d/%d", _turns, _max_turns);
     _turn_text = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
-    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_LEFT, Vec2(0, -(_turn_text->getTextBounds().size.height)));
+    _turn_text->setScale(0.75);
+    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -1.275 * (_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_turn_text, "turn_text");
 
     // Create and layout the score meter
     std::string scoreMsg = strtool::format("Score %d", _score);
     _score_text = scene2::Label::allocWithText(scoreMsg, assets->get<Font>("pixel32"));
-    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
+    _score_text->setScale(0.75);
+    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -0.85 * (_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_score_text, "score_text");
 
     // Set the view of the board.
     _squareSizeAdjustedForScale = int(SQUARE_SIZE * _scale.width);
-    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_WIDTH * _squareSizeAdjustedForScale, BOARD_HEIGHT * _squareSizeAdjustedForScale));
+    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth * _squareSizeAdjustedForScale, _boardHeight * _squareSizeAdjustedForScale));
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
     _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
+
+    // Create and layout the end game message
+    std::string endgameMsg = " placeholder ";
+    _endgame_text = scene2::Label::allocWithText(endgameMsg, assets->get<Font>("pixel32"));
+    _endgame_text->setForeground(Color4::CLEAR);
+    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -2 * _endgame_text->getHeight()));
+    _guiNode->addChildWithName(_endgame_text, "endgame_text");
 
     // Initialize units with different types
     // Children will be types "basic", "three-way", etc.
@@ -206,9 +228,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     }
 
     // Create the squares & units and put them in the map
-    for (int i = 0; i < BOARD_WIDTH; i++)
+    for (int i = 0; i < _boardWidth; i++)
     {
-        for (int j = 0; j < BOARD_HEIGHT; ++j)
+        for (int j = 0; j < _boardHeight; ++j)
         {
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
             auto squarePosition = Vec2(i, j);
@@ -218,12 +240,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _board->getViewNode()->addChild(squareNode);
-            // Generate unit for this square
-            auto unitSubType = unitsInBoard.at(_boardSize * (_boardSize - j - 1) + i).at(0);
-            auto unitColor = unitsInBoard.at(_boardSize * (_boardSize - j - 1) + i).at(1);
+            //            // Generate unit for this square
+            auto unitSubType = unitsInBoard.at(_boardWidth * (_boardHeight - j - 1) + i).at(0);
+            auto unitColor = unitsInBoard.at(_boardWidth * (_boardHeight - j - 1) + i).at(1);
         std:
             string unitPattern = getUnitType(unitSubType, unitColor);
-            Vec2 unitDirection = unitsDirInBoard.at(_boardSize * (_boardSize - j - 1) + i);
+            Vec2 unitDirection = unitsDirInBoard.at(_boardWidth * (_boardHeight - j - 1) + i);
             auto unitTemplate = _unitTypes.at(unitSubType);
             Unit::Color c = Unit::stringToColor(unitColor);
             shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
@@ -233,28 +255,34 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             if (unitSubType != "basic")
             {
                 unit->setSpecial(true);
-                
             }
             else
             {
                 unit->setSpecial(false);
-               
             }
             // unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
             updateSquareTexture(sq, _textures);
-
         }
     }
 
-    // Create and layout the win lose text
-    std::string endgameMsg = "YOU LOSE";
-    _endgame_text = scene2::Label::allocWithText(endgameMsg, assets->get<Font>("pixel32"));
-    _endgame_text->setForeground(Color4::CLEAR);
-    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -_endgame_text->getHeight()));
-    _guiNode->addChildWithName(_endgame_text, "endgame_text");
+    //    std::shared_ptr<scene2::SceneNode> scene = assets->get<scene2::SceneNode>("button");
+    //    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("button_restart"));
+    //    _restartbutton->addListener([this](const std::string& name, bool down) {
+    //        if (down) {
+    //            CULog("down");
+    //            reset();
+    //        }
+    //    });
 
-    reset();
+    //    scene->setContentSize(dimen);
+    //    scene->doLayout(); // Repositions the HUD
+    //    _guiNode->addChild(scene);
+    //    _restartbutton->setVisible(false);
+    //    if (_active) {
+    //        _restartbutton->activate();
+    //    }
+
     return true;
 }
 
@@ -338,20 +366,16 @@ void GameScene::generateUnit(shared_ptr<Square> sq)
     // Update Unit Node
     auto unitNode = unit->getViewNode();
     unitNode->setTexture(_textures[getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))]);
-    //unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+    // unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
     if (unitSubTypeSelected != "basic")
     {
         unit->setSpecial(true);
-       
     }
     else
     {
         unit->setSpecial(false);
-        
     }
     updateSquareTexture(sq, _textures);
-
-    
 }
 
 /**
@@ -423,6 +447,7 @@ void GameScene::dispose()
     if (_active)
     {
         removeAllChildren();
+        //        _restartbutton = nullptr;
         _active = false;
     }
 }
@@ -456,6 +481,39 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
+    if (_input.didPressReset() and _turns == 0)
+    {
+        CULog("Reset");
+        reset();
+    }
+
+    if (_turns == 0)
+    {
+
+        if (_score < _onestar_threshold)
+        {
+            _endgame_text->setText("You Lose");
+            _endgame_text->setForeground(Color4::RED);
+        }
+        else if (_score >= _onestar_threshold and _score < _twostar_threshold)
+        {
+            _endgame_text->setText("You Win *");
+            _endgame_text->setForeground(Color4::RED);
+        }
+        else if (_score >= _twostar_threshold and _score < _threestar_threshold)
+        {
+            _endgame_text->setText("You Win **");
+            _endgame_text->setForeground(Color4::RED);
+        }
+        else
+        {
+            _endgame_text->setText("You Win ***");
+            _endgame_text->setForeground(Color4::RED);
+        }
+        //        _restartbutton->setVisible(true);
+
+        return;
+    }
     Vec2 pos = _input.getPosition();
     Vec3 worldCoordinate = screenToWorldCoords(pos);
     Vec2 boardPos = _boardNode->worldToNodeCoords(worldCoordinate);
@@ -564,7 +622,7 @@ void GameScene::update(float timestep)
     if ((_prev_score < 9 && _score > 9) || (_prev_score < 99 && _score > 99))
     {
         _layout->remove("score_text");
-        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
+        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -0.85 * (_topuibackgroundNode->getSize().height)));
     }
 
     // dfghgfd
@@ -574,7 +632,7 @@ void GameScene::update(float timestep)
     }
 
     // Update the remaining turns
-    _turn_text->setText(strtool::format("Turns %d", _turns));
+    _turn_text->setText(strtool::format("%d/%d", _turns, _max_turns));
 
     // Layout everything
     _layout->layout(_guiNode.get());
@@ -609,9 +667,35 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         batch->drawText(unitType, _turn_text->getFont(), Vec2(50, getSize().height - 100));
         batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
-        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true" : "isSpecial() = false";
+        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
+                                                                                                 : "isSpecial() = false";
         batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
     }
 
     batch->end();
+}
+/**
+ * Resets the status of the game so that we can play again.
+ */
+void GameScene::reset()
+{
+    //    _endgame_text->setForeground(Color4::CLEAR);
+    //    _turns = _boardJson->getInt("total-swap-allowed");
+    //    _score = 0;
+    init(_assets);
+}
+
+/**
+ * Sets whether the scene is currently active
+ *
+ * @param value whether the scene is currently active
+ */
+void GameScene::setActive(bool value)
+{
+    _active = value;
+    //    if (value && ! _restartbutton->isActive()) {
+    //        _restartbutton->activate();
+    //    } else if (!value && _restartbutton->isActive()) {
+    //        _restartbutton->deactivate();
+    //    }
 }

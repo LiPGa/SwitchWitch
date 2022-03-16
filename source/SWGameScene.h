@@ -47,7 +47,8 @@ protected:
     int _currLevel;
     // CONSTANTS
     int _sceneHeight;
-    int _boardSize;
+    int _boardWidth;
+    int _boardHeight;
     int _squareSizeAdjustedForScale;
     
     // hash map for unit textures
@@ -77,10 +78,16 @@ protected:
 
     /** The current number of turns left for the player */
     int _turns;
+    /** The maximum number of turns  */
+    int _max_turns;
     /** The current score of the player */
     int _score;
-    // score needed to pass
-    int _scoreNeeded;
+    /** one-star threshold */
+    int _onestar_threshold;
+    /** two-star threshold*/
+    int _twostar_threshold;
+    /** three-star threshold*/
+    int _threestar_threshold;
     /** The previous score of the player */
     int _prev_score;
 
@@ -116,6 +123,8 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _replacementBoardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
+
     // std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;
     // std::shared_ptr<cugl::scene2::SceneNode> _replacementBoardNodeS;
 
@@ -124,6 +133,8 @@ protected:
     // In the future, we will replace this with the scene graph
     /** The backgrounnd image */
     std::shared_ptr<cugl::Texture> _background;
+    /** The top UI backgrounnd image */
+    std::shared_ptr<cugl::Texture> _topuibackground;
     /** The text with the current remaining turns */
     std::shared_ptr<cugl::scene2::Label> _turn_text;
     /** The text with the current score */
@@ -211,6 +222,19 @@ public:
     /**
      * Resets the status of the game so that we can play again.
      */
+
+    void reset() override;
+    
+    /**
+     * Sets whether the scene is currently active
+     *
+     * This method should be used to toggle all the UI elements.  Buttons
+     * should be activated when it is made active and deactivated when
+     * it is not.
+     *
+     * @param value whether the scene is currently active
+     */
+    virtual void setActive(bool value) override;
 
 private:
     /**
