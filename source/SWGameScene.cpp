@@ -496,12 +496,12 @@ void GameScene::update(float timestep)
             _endgame_text->setText("You Lose");
             _endgame_text->setForeground(Color4::RED);
         }
-        else if (_score >= _onestar_threshold and _score < _twostar_threshold)
+        else if (_score >= _onestar_threshold && _score < _twostar_threshold)
         {
             _endgame_text->setText("You Win *");
             _endgame_text->setForeground(Color4::RED);
         }
-        else if (_score >= _twostar_threshold and _score < _threestar_threshold)
+        else if (_score >= _twostar_threshold && _score < _threestar_threshold)
         {
             _endgame_text->setText("You Win **");
             _endgame_text->setForeground(Color4::RED);
