@@ -147,7 +147,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _board = Board::alloc(_boardHeight, _boardWidth);
     _currLevel = _boardJson->getInt("id");
     _turns = _boardJson->getInt("total-swap-allowed");
-    _scoreNeeded = _boardJson->getInt("win-condition");
 
     _max_turns = _boardJson->getInt("total-swap-allowed");
     // thresholds for the star system
@@ -481,7 +480,7 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
-    if (_input.didPressReset() and _turns == 0)
+    if (_input.didPressReset() && _turns == 0)
     {
         CULog("Reset");
         reset();
@@ -495,12 +494,12 @@ void GameScene::update(float timestep)
             _endgame_text->setText("You Lose");
             _endgame_text->setForeground(Color4::RED);
         }
-        else if (_score >= _onestar_threshold and _score < _twostar_threshold)
+        else if (_score >= _onestar_threshold && _score < _twostar_threshold)
         {
             _endgame_text->setText("You Win *");
             _endgame_text->setForeground(Color4::RED);
         }
-        else if (_score >= _twostar_threshold and _score < _threestar_threshold)
+        else if (_score >= _twostar_threshold && _score < _threestar_threshold)
         {
             _endgame_text->setText("You Win **");
             _endgame_text->setForeground(Color4::RED);
