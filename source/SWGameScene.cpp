@@ -129,6 +129,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
     _topuibackgroundNode->setScale(_scale);
 
+    _topuibackground = assets->get<Texture>("top-ui-background");
+    _topuibackgroundNode = scene2::PolygonNode::allocWithTexture(_topuibackground);
+    _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
+    _topuibackgroundNode->setScale(_scale);
+
     // Allocate Layout
     _layout = scene2::AnchoredLayout::alloc();
 
@@ -147,7 +152,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _board = Board::alloc(_boardHeight, _boardWidth);
     _currLevel = _boardJson->getInt("id");
     _turns = _boardJson->getInt("total-swap-allowed");
-
     _max_turns = _boardJson->getInt("total-swap-allowed");
     // thresholds for the star system
     _onestar_threshold = _boardJson->getInt("one-star-condition");
@@ -281,7 +285,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     //    if (_active) {
     //        _restartbutton->activate();
     //    }
-
     return true;
 }
 
@@ -480,11 +483,10 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
-    if (_input.didPressReset() && _turns == 0)
-    {
-        CULog("Reset");
-        reset();
-    }
+    //    if (_input.didPressReset() and _turns == 0) {
+    //        CULog("Reset");
+    //        reset();
+    //    }
 
     if (_turns == 0)
     {
@@ -494,12 +496,12 @@ void GameScene::update(float timestep)
             _endgame_text->setText("You Lose");
             _endgame_text->setForeground(Color4::RED);
         }
-        else if (_score >= _onestar_threshold && _score < _twostar_threshold)
+        else if (_score >= _onestar_threshold and _score < _twostar_threshold)
         {
             _endgame_text->setText("You Win *");
             _endgame_text->setForeground(Color4::RED);
         }
-        else if (_score >= _twostar_threshold && _score < _threestar_threshold)
+        else if (_score >= _twostar_threshold and _score < _threestar_threshold)
         {
             _endgame_text->setText("You Win **");
             _endgame_text->setForeground(Color4::RED);
@@ -521,7 +523,6 @@ void GameScene::update(float timestep)
     {
         _debug = !_debug;
     }
-
     if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0)
     {
         auto squareOnMouse = _board->getSquare(squarePos);
