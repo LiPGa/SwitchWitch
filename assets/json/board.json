@@ -169,7 +169,7 @@
         },
         {
             "type": "unit",
-            "sub-type": "basic",
+            "sub-type": "two-forward",
             "color": "green",
             "direction": [1,0]
         },
@@ -199,8 +199,50 @@
         },
         {
             "type": "unit",
+            "sub-type": "two-forward",
+            "color": "red",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
             "sub-type": "basic",
             "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "blue",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "blue",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "two-forward",
+            "color": "blue",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "red",
             "direction": [1,0]
         },
         {
@@ -224,7 +266,37 @@
         {
             "type": "unit",
             "sub-type": "basic",
+            "color": "red",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "two-forward",
+            "color": "red",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
             "color": "green",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "diagonal",
+            "color": "red",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "blue",
+            "direction": [1,0]
+        },
+        {
+            "type": "unit",
+            "sub-type": "basic",
+            "color": "red",
             "direction": [1,0]
         },
         {
@@ -242,7 +314,7 @@
         {
             "type": "unit",
             "sub-type": "basic",
-            "color": "green",
+            "color": "blue",
             "direction": [1,0]
         },
         {
@@ -254,79 +326,7 @@
         {
             "type": "unit",
             "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
-            "direction": [1,0]
-        },
-        {
-            "type": "unit",
-            "sub-type": "basic",
-            "color": "green",
+            "color": "blue",
             "direction": [1,0]
         }
     ]
