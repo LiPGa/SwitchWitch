@@ -60,7 +60,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     vector<int> boardSize = _constants->get("board-size")->asIntArray();
     _boardWidth = boardSize.at(0);
     _boardHeight = boardSize.at(1);
-    _squareSizeAdjustedForScale = _constants->getInt("square-size");
+    _defaultSquareSize = _constants->getInt("square-size");
     
     // Initialize Scene
     dimen *= _sceneHeight/dimen.height;
@@ -132,19 +132,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChildWithName(_score_text, "score_text");
 
     // Set the view of the board.
-    _squareSizeAdjustedForScale = int(SQUARE_SIZE * _scale.width);
+    _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height);
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth  * _squareSizeAdjustedForScale, _boardHeight * _squareSizeAdjustedForScale));
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
     _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
-    
-    // Create and layout the end game message
-    std::string endgameMsg = " placeholder ";
-    _endgame_text = scene2::Label::allocWithText(endgameMsg, assets->get<Font>("pixel32"));
-    _endgame_text->setForeground(Color4::CLEAR);
-    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -2*_endgame_text->getHeight()));
-    _guiNode->addChildWithName(_endgame_text, "endgame_text");
 
     // Initialize units with different types
     // Children will be types "basic", "three-way", etc.
@@ -218,7 +211,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -_endgame_text->getHeight()));
     _guiNode->addChildWithName(_endgame_text, "endgame_text");
 
-    reset();
+    //reset();
     return true;
 }
 
@@ -398,11 +391,11 @@ void GameScene::update(float timestep)
             _endgame_text->setText("You Lose");
             _endgame_text->setForeground(Color4::RED);
         }
-        else if (_score >= _onestar_threshold and _score < _twostar_threshold){
+        else if (_score >= _onestar_threshold && _score < _twostar_threshold){
             _endgame_text->setText("You Win *");
             _endgame_text->setForeground(Color4::RED);
         }
-        else if (_score >= _twostar_threshold and _score < _threestar_threshold){
+        else if (_score >= _twostar_threshold && _score < _threestar_threshold){
             _endgame_text->setText("You Win **");
             _endgame_text->setForeground(Color4::RED);
         }

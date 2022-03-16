@@ -49,6 +49,7 @@ protected:
     int _sceneHeight;
     int _boardWidth;
     int _boardHeight;
+    int _defaultSquareSize;
     int _squareSizeAdjustedForScale;
     
     // hash map for unit textures
