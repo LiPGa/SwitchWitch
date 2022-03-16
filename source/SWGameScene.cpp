@@ -230,7 +230,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 //    if (_active) {
 //        _restartbutton->activate();
 //    }
-
     return true;
 }
 
@@ -399,10 +398,10 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
-    if (_input.didPressReset() and _turns == 0) {
-        CULog("Reset");
-        reset();
-    }
+//    if (_input.didPressReset() and _turns == 0) {
+//        CULog("Reset");
+//        reset();
+//    }
     
     if (_turns == 0){
         
@@ -433,7 +432,6 @@ void GameScene::update(float timestep)
     if (_input.isDebugDown()) {
         _debug = !_debug;
     }
-
     if (_board->doesSqaureExist(squarePos) && boardPos.x>=0 && boardPos.y>= 0)
     {
         auto squareOnMouse = _board->getSquare(squarePos);
