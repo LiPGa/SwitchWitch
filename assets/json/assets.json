@@ -64,6 +64,10 @@
         "pixel32": {
             "file":     "fonts/LightPixel7.ttf",
             "size":     32
+        },
+        "sans": {
+            "file":     "fonts/Roboto-Bold.ttf",
+            "size":     32
         }
     },
     "sounds" : {
@@ -109,7 +113,7 @@
                     "data"   : {
                         "key"     : "textbutton",
                         "variables" : {
-                            "size": [400,100],
+                            "size": [250,100],
                             "text": "Play Game",
                             "color": "#000088"
                         }
@@ -124,7 +128,7 @@
                     "data"   : {
                         "key"     : "textbutton",
                         "variables" : {
-                            "size": [400,100],
+                            "size": [250,100],
                             "text": "Level Editor",
                             "color": "#000088"
                         }
@@ -132,6 +136,123 @@
                     "layout" : {
                         "priority" : 1,
                         "padding"  : [0,0,0,0]
+                    }
+                }
+            }
+        },
+        "level-editor" : {
+            "comment"   : "The scene graph definition for the text field demo",
+            "type"      : "Node",
+            "format"    : {
+                "type" : "Anchored"
+            },
+            "children"  : {
+                "id-field"  : {
+                    "type"   : "TextField",
+                    "data"   : {
+                        "font"       : "sans",
+                        "text"       : "0",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [200,50],
+                        "anchor"     : [0.5,0.5],
+                        "cursor"     : true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.05,
+                        "x_offset" : 0.1
+                    }
+                },
+                "id-label"  : {
+                    "type"   : "Label",
+                    "data"   : {
+                        "font"       : "sans",
+                        "text"       : "LevID:",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [100,50],
+                        "anchor"     : [1,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.05,
+                        "x_offset" : -0.2
+                    }
+                },
+                "turn-field"  : {
+                    "type"   : "TextField",
+                    "data"   : {
+                        "font"       : "sans",
+                        "text"       : "0",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [200,50],
+                        "anchor"     : [0.5,0.5],
+                        "cursor"     : true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.15,
+                        "x_offset" : 0.1
+                    }
+                },
+                "turn-label"  : {
+                    "type"   : "Label",
+                    "data"   : {
+                        "font"       : "sans",
+                        "text"       : "Turns:",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [100,50],
+                        "anchor"     : [1,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.15,
+                        "x_offset" : -0.2
+                    }
+                },
+                "score-field"  : {
+                    "type"   : "TextField",
+                    "data"   : {
+                        "font"       : "sans",
+                        "text"       : "0",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [200,50],
+                        "anchor"     : [0.5,0.5],
+                        "cursor"     : true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.25,
+                        "x_offset" : 0.1
+                    }
+                },
+                "score-label"  : {
+                    "type"   : "Label",
+                    "data"   : {
+                        "font"       : "sans",
+                        "text"       : "Score:",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [100,50],
+                        "anchor"     : [1,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.25,
+                        "x_offset" : -0.2
                     }
                 }
             }

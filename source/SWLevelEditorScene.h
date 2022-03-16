@@ -70,9 +70,9 @@ protected:
     shared_ptr<Square> _selectedSquare;
     shared_ptr<Square> _selectedUnitFromSelectionBoard;
 
-    int numberOfTurns;
-    int id;
-    int winCondition;
+    int _numberOfTurns;
+    int _id;
+    int _scoreNeededToWin;
 
 #pragma mark -
 #pragma mark View Variables
@@ -82,6 +82,9 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _selectionBoardNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
+    std::shared_ptr<cugl::scene2::TextField> _levelIDText;
+    std::shared_ptr<cugl::scene2::TextField> _turnText;
+    std::shared_ptr<cugl::scene2::TextField> _scoreText;
 
 #pragma mark -
 public:
@@ -133,16 +136,11 @@ public:
     void update(float timestep) override;
 
     /**
-     * Draws all this scene to the given SpriteBatch.
+     * Sets whether the scene is currently active
      *
-     * The default implementation of this method simply draws the scene graph
-     * to the sprite batch.  By overriding it, you can do custom drawing
-     * in its place.
-     *
-     * @param batch     The SpriteBatch to draw with.
+     * @param value whether the scene is currently active
      */
-    void render(const std::shared_ptr<cugl::SpriteBatch>& batch) override;
-
+    virtual void setActive(bool value) override;
 private:
     /**
      * Get the pattern for a unit provided its type and color
@@ -152,6 +150,14 @@ private:
      */
     std::string getUnitType(std::string type, std::string color);
 
+    /**
+     * Returns if the string is an integer.
+     * 
+     * @returns true if string is an integer.
+     */
+    bool isInteger(const std::string& s);
+
+    void whenDoingTextInput();
 };
 
 #endif /* __SW_GAME_SCENE_H__ */

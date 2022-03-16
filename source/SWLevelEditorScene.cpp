@@ -99,14 +99,42 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         _textures.insert({ textureName, _assets->get<Texture>(textureName) });
     }
 
-    // layout
-    _layout = scene2::AnchoredLayout::alloc();
-
     // set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
-    _guiNode->addChild(_backgroundNode);
+    // Allocate Layout
+    _layout = scene2::AnchoredLayout::alloc();
+    _guiNode->setLayout(_layout);
+    addChild(_backgroundNode);
     _backgroundNode->setAnchor(Vec2::ZERO);
 
+    _numberOfTurns = 0;
+    _id = 0;
+    _scoreNeededToWin = 0;
+
+    // set up text fields
+    auto textField = _assets->get<scene2::SceneNode>("level-editor");
+    textField->setContentSize(dimen);
+    textField->doLayout();
+    addChild(textField);
+    _levelIDText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor_id-field"));
+    _scoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor_score-field"));
+    _turnText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor_turn-field"));
+    _levelIDText->addTypeListener([this](const std::string& name, const std::string& value) {
+        whenDoingTextInput();
+        if (isInteger(value)) _id = stoi(value);
+        _levelIDText->setText(to_string(_id));
+     });
+    _scoreText->addTypeListener([this](const std::string& name, const std::string& value) {
+        whenDoingTextInput();
+        if (isInteger(value)) _scoreNeededToWin = stoi(value);
+        _levelIDText->setText(to_string(_scoreNeededToWin));
+    });
+    _turnText->addTypeListener([this](const std::string& name, const std::string& value) {
+        whenDoingTextInput();
+        if (isInteger(value)) _numberOfTurns = stoi(value);
+        _levelIDText->setText(to_string(_numberOfTurns));
+    });
+   
     // Initialize Board
     _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
 
@@ -202,7 +230,9 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         i++;
     }
 
-    // Create the squares & units for the selection board and put them on the map.
+    _guiNode->doLayout();
+    addChild(_guiNode);
+
     reset();
     return true;
 }
@@ -213,6 +243,19 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
  */
 std::string LevelEditorScene::getUnitType(std::string type, std::string color) {
     return type + "-" + color;
+}
+
+bool LevelEditorScene::isInteger(const std::string& s) {
+    if (s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+'))) return false;
+    char* p;
+    strtol(s.c_str(), &p, 10);
+    return (*p == 0);
+}
+
+void LevelEditorScene::whenDoingTextInput() {
+    _currentState = State::CHANGING_INFO;
+    if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
+    _selectedSquare == NULL;
 }
 
 /**
@@ -266,9 +309,13 @@ void LevelEditorScene::update(float timestep)
                 }
             }
             else {
-                _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
+                if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
                 _selectedSquare = NULL;
             }
+        }
+        else {
+            if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
+            _selectedSquare = NULL;
         }
         if (_selectionBoard->doesSqaureExist(selectionSquarePos) && selectionBoardPos.x >= 0 && selectionBoardPos.y >= 0) {
             _currentState = State::CHANGING_BOARD;
@@ -282,7 +329,7 @@ void LevelEditorScene::update(float timestep)
                 _selectedUnitFromSelectionBoard->getViewNode()->setTexture(_textures.at("square"));
                 _selectedUnitFromSelectionBoard = NULL;
             }
-        }    
+        }
     }
     if (_selectedSquare != NULL && State::CHANGING_BOARD) {
         auto unit = _selectedSquare->getUnit();
@@ -301,27 +348,41 @@ void LevelEditorScene::update(float timestep)
         }
         unit->getViewNode()->setTexture(_textures.at(getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))));
     }
-    // Layout everything
-    _layout->layout(_guiNode.get());
 }
 
 #pragma mark -
 #pragma mark Rendering
+
+
 /**
- * Draws all this scene to the given SpriteBatch.
+ * Sets whether the scene is currently active
  *
- * The default implementation of this method simply draws the scene graph
- * to the sprite batch.  By overriding it, you can do custom drawing
- * in its place.
- *
- * @param batch     The SpriteBatch to draw with.
+ * @param value whether the scene is currently active
  */
-void LevelEditorScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
-{
-    // For now we render 3152-style
-    // DO NOT DO THIS IN YOUR FINAL GAME
-    batch->begin(getCamera()->getCombined());
-    std::shared_ptr<Vec2> commonOffset = make_shared<Vec2>(getSize() / 2);
-    _guiNode->render(batch);
-    batch->end();
+void LevelEditorScene::setActive(bool value) {
+    _active = value;
+    if (value) {
+        Input::activate<TextInput>();
+    }
+    else {
+        Input::deactivate<TextInput>();
+    }
+    if (value && !_levelIDText->isActive()) {
+        _levelIDText->activate();
+    }
+    else if (!value && _levelIDText->isActive()) {
+        _levelIDText->deactivate();
+    }
+    if (value && !_scoreText->isActive()) {
+        _scoreText->activate();
+    }
+    else if (!value && _scoreText->isActive()) {
+        _scoreText->deactivate();
+    }
+    if (value && !_turnText->isActive()) {
+        _turnText->activate();
+    }
+    else if (!value && _turnText->isActive()) {
+        _turnText->deactivate();
+    }
 }

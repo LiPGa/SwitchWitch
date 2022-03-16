@@ -86,6 +86,7 @@ bool InputController::init() {
             this->fingerMovedCB(event, previous, focus);
         });
     }
+
     return _active;
 }
 
