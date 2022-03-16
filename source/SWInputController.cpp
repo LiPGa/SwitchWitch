@@ -122,6 +122,11 @@ void InputController::dispose() {
 void InputController::update() {
     _prevDown = _currDown;
     _prevPos = _currPos;
+
+    #ifdef CU_TOUCH_SCREEN
+    _currDown = _fingerDown;
+    _currPos = _touchPos;
+    #else
     // DESKTOP CONTROLS
     Keyboard* keys = Input::get<Keyboard>();
     // For Level Editor
@@ -135,10 +140,8 @@ void InputController::update() {
     _saveDown = keys->keyPressed(KeyCode::S) && keys->keyDown(KeyCode::LEFT_CTRL);
     _playDown = keys->keyPressed(KeyCode::ENTER) || keys->keyPressed(KeyCode::KEYPAD_ENTER);
     _debugDown = keys->keyPressed(KeyCode::D) && keys->keyDown(KeyCode::LEFT_CTRL);
-    #ifdef CU_TOUCH_SCREEN
-    _currDown = _fingerDown;
-    _currPos = _touchPos;
-    #else
+    _resetDown = keys->keyPressed(KeyCode::R);
+    
     _currDown = _mouseDown;
     _currPos = _mousePos;
     #endif
