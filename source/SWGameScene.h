@@ -77,6 +77,8 @@ protected:
 
     /** The current number of turns left for the player */
     int _turns;
+    /** The maximum number of turns  */
+    int _max_turns;
     /** The current score of the player */
     int _score;
     /** one-star threshold */

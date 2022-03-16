@@ -115,21 +115,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
     _currLevel = _boardJson->getInt("id");
     _turns = _boardJson->getInt("total-swap-allowed");
+    _max_turns = _boardJson->getInt("total-swap-allowed");
     // thresholds for the star system
     _onestar_threshold = _boardJson->getInt("one-star-condition");
     _twostar_threshold = _boardJson->getInt("two-star-condition");
     _threestar_threshold = _boardJson->getInt("three-star-condition");
     
     // Create and layout the turn meter
-    std::string turnMsg = strtool::format("Turns %d", _turns);
+    std::string turnMsg = strtool::format("%d/%d", _turns, _max_turns);
     _turn_text = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
-    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_LEFT, Vec2(0, -(_turn_text->getTextBounds().size.height)));
+    _turn_text->setScale(0.75);
+    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width/7, -1.275*(_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_turn_text, "turn_text");
 
     // Create and layout the score meter
     std::string scoreMsg = strtool::format("Score %d", _score);
     _score_text = scene2::Label::allocWithText(scoreMsg, assets->get<Font>("pixel32"));
-    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
+    _score_text->setScale(0.75);
+    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width/7, -0.85*(_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_score_text, "score_text");
 
     // Set the view of the board.
@@ -530,7 +533,7 @@ void GameScene::update(float timestep)
     _score_text->setText(strtool::format("Score %d", _score),true);
     if ((_prev_score < 9 && _score > 9) || (_prev_score < 99 && _score > 99)) {
         _layout->remove("score_text");
-        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-(_score_text->getTextBounds().size.width), -(_score_text->getTextBounds().size.height)));
+        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width/7, -0.85*(_topuibackgroundNode->getSize().height)));
     }
 
     //dfghgfd
@@ -540,7 +543,7 @@ void GameScene::update(float timestep)
     }
 
     // Update the remaining turns
-    _turn_text->setText(strtool::format("Turns %d", _turns));
+    _turn_text->setText(strtool::format("%d/%d", _turns, _max_turns));
 
     // Layout everything
     _layout->layout(_guiNode.get());
