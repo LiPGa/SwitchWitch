@@ -52,7 +52,8 @@ protected:
 
     // CONSTANTS
     int _sceneHeight;
-    int _boardSize;
+    int _boardWidth;
+    int _boardHeight;
     int _defaultSquareSize;
     int _squareSizeAdjustedForScale;
 
@@ -72,11 +73,14 @@ protected:
 
     int _numberOfTurns;
     int _id;
-    int _scoreNeededToWin;
+    int _oneStarCondition;
+    int _twoStarCondition;
+    int _threeStarCondition;
+
+    bool _playPressed;
 
 #pragma mark -
 #pragma mark View Variables
-    // VIEW
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
@@ -84,7 +88,11 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::TextField> _levelIDText;
     std::shared_ptr<cugl::scene2::TextField> _turnText;
-    std::shared_ptr<cugl::scene2::TextField> _scoreText;
+    std::shared_ptr<cugl::scene2::TextField> _oneStarScoreText;
+    std::shared_ptr<cugl::scene2::TextField> _twoStarScoreText;
+    std::shared_ptr<cugl::scene2::TextField> _threeStarScoreText;
+    std::shared_ptr<cugl::scene2::Button> _playButton;
+    std::shared_ptr<cugl::scene2::Button> _saveButton;
 
 #pragma mark -
 public:
@@ -141,6 +149,13 @@ public:
      * @param value whether the scene is currently active
      */
     virtual void setActive(bool value) override;
+
+    /**
+     * Returns the JSON value of the board.
+     */
+    shared_ptr<cugl::JsonValue> getBoardAsJSON();
+
+    bool goToGameScene() { return _input.isPlayDown() || _playPressed; }
 private:
     /**
      * Get the pattern for a unit provided its type and color
@@ -157,7 +172,15 @@ private:
      */
     bool isInteger(const std::string& s);
 
+    /**
+     * Called whenever the user is doing a text input. 
+     */
     void whenDoingTextInput();
+
+    /**
+     * Saves the JSON value in the level directory
+     */
+    void saveBoardAsJSON();
 };
 
 #endif /* __SW_GAME_SCENE_H__ */

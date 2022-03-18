@@ -106,32 +106,6 @@
         "board" : "json/board.json"
     },
     "scene2s" : {
-        "button": {
-            "type"      : "Node",
-            "format"    : {
-                "type"        : "Float",
-                "orientation" : "vertical",
-                "x_alignment" : "left",
-                "y_alignment" : "bottom"
-            },
-            "children":  {
-               "restart": {
-                    "type"   : "Widget",
-                    "data"   : {
-                        "key"     : "textbutton",
-                        "variables" : {
-                            "size": [400,100],
-                            "text": "Restart",
-                            "color": "#000088"
-                        }
-                    },
-                    "layout" : {
-                        "priority" : 1,
-                        "padding"  : [0,50,0,0]
-                    }
-                }   
-            }
-        },
         "menu": {
             "type"      : "Node",
             "format"    : {
@@ -187,7 +161,7 @@
                         "text"       : "0",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [200,50],
+                        "size"       : [170,50],
                         "anchor"     : [0.5,0.5],
                         "cursor"     : true,
                         "cursorcolor": "#ffffff"
@@ -196,7 +170,7 @@
                         "x_anchor" : "center",
                         "y_anchor" : "top",
                         "y_offset" : -0.05,
-                        "x_offset" : 0.1
+                        "x_offset" : 0.05
                     }
                 },
                 "id-label"  : {
@@ -223,7 +197,7 @@
                         "text"       : "0",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [200,50],
+                        "size"       : [170,50],
                         "anchor"     : [0.5,0.5],
                         "cursor"     : true,
                         "cursorcolor": "#ffffff"
@@ -232,7 +206,7 @@
                         "x_anchor" : "center",
                         "y_anchor" : "top",
                         "y_offset" : -0.15,
-                        "x_offset" : 0.1
+                        "x_offset" : 0.05
                     }
                 },
                 "turn-label"  : {
@@ -252,30 +226,30 @@
                         "x_offset" : -0.2
                     }
                 },
-                "score-field"  : {
+                "one-star-score-field"  : {
                     "type"   : "TextField",
                     "data"   : {
                         "font"       : "sans",
                         "text"       : "0",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [200,50],
+                        "size"       : [170,50],
                         "anchor"     : [0.5,0.5],
                         "cursor"     : true,
                         "cursorcolor": "#ffffff"
                     },
                     "layout" : {
                         "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "y_offset" : -0.25,
-                        "x_offset" : 0.1
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.15,
+                        "x_offset" : 0.05
                     }
                 },
-                "score-label"  : {
+                "one-star-score-label"  : {
                     "type"   : "Label",
                     "data"   : {
                         "font"       : "sans",
-                        "text"       : "Score:",
+                        "text"       : "1 Star",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
                         "size"       : [100,50],
@@ -283,11 +257,118 @@
                     },
                     "layout" : {
                         "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "y_offset" : -0.25,
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.15,
                         "x_offset" : -0.2
                     }
+                },
+                "two-star-score-field"  : {
+                    "type"   : "TextField",
+                    "data"   : {
+                        "font"       : "sans",
+                        "text"       : "0",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [170,50],
+                        "anchor"     : [0.5,0.5],
+                        "cursor"     : true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.1,
+                        "x_offset" : 0.05
+                    }
+                },
+                "two-star-score-label"  : {
+                    "type"   : "Label",
+                    "data"   : {
+                        "font"       : "sans",
+                        "text"       : "2 Star",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [100,50],
+                        "anchor"     : [1,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.1,
+                        "x_offset" : -0.2
+                    }
+                },
+                "three-star-score-field"  : {
+                    "type"   : "TextField",
+                    "data"   : {
+                        "font"       : "sans",
+                        "text"       : "0",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [170,50],
+                        "anchor"     : [0.5,0.5],
+                        "cursor"     : true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.05,
+                        "x_offset" : 0.05
+                    }
+                },
+                "three-star-score-label"  : {
+                    "type"   : "Label",
+                    "data"   : {
+                        "font"       : "sans",
+                        "text"       : "3 Star",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [100,50],
+                        "anchor"     : [1,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.05,
+                        "x_offset" : -0.2
+                    }
+                },
+                "save": {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key"     : "textbutton",
+                        "variables" : {
+                            "size": [70,50],
+                            "text": "Save",
+                            "color": "#000088"
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "right",
+                        "y_anchor" : "top",
+                        "x_offset" : -0.1,
+                        "y_offset" : -0.15
+                    }
+                },
+                "play": {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key"     : "textbutton",
+                        "variables" : {
+                            "size": [70,50],
+                            "text": "Play",
+                            "color": "#000088"
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "right",
+                        "y_anchor" : "top",
+                        "x_offset" : -0.1,
+                        "y_offset" : -0.05
+                    }
                 }
+
             }
         }
     }

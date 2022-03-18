@@ -23,14 +23,7 @@ using namespace cugl;
 using namespace std;
 
 #pragma mark -
-#pragma mark Level Layout
 
-/** How big the square width should be */
-#define SQUARE_SIZE 128
-
-#pragma mark Asset Constants
-
-#pragma mark -
 #pragma mark Constructors
 /**
  * Initializes the controller contents, and starts the game
@@ -53,7 +46,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // GetJSONValuesFromAssets
     _constants = assets->get<JsonValue>("constants");
     _boardMembers = assets->get<JsonValue>("boardMember");
-    _boardJson = assets->get<JsonValue>("board");
 
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
@@ -109,13 +101,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Initialize Board
     _board = Board::alloc(_boardHeight, _boardWidth);
-    _currLevel = _boardJson->getInt("id");
-    _turns = _boardJson->getInt("total-swap-allowed");
-    _max_turns = _boardJson->getInt("total-swap-allowed");
-    // thresholds for the star system
-    _onestar_threshold = _boardJson->getInt("one-star-condition");
-    _twostar_threshold = _boardJson->getInt("two-star-condition");
-    _threestar_threshold = _boardJson->getInt("three-star-condition");
     
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("%d/%d", _turns, _max_turns);
@@ -162,46 +147,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         // store the default color:red for this type of unit
         shared_ptr<Unit> unit = Unit::alloc(subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0,-1));
         _unitTypes.insert({child->key(), unit});
-    }
-
-    // Get the sub-type and color of the unit for every unit in this level
-    // Get the direction of the unit for every unit in this level and save in a vector
-    auto unitsInBoardJson = _boardJson->get("board-members")->children();
-    vector<Vec2> unitsDirInBoard;
-    vector<vector<std::string>> unitsInBoard;
-    for (auto child : unitsInBoardJson) {
-        auto unitDirArray = child->get("direction")->asFloatArray();
-        unitsDirInBoard.push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
-        auto unitColor = child->getString("color");
-        auto unitSubType = child->getString("sub-type");
-        vector<std::string> info{ unitSubType, unitColor };
-        unitsInBoard.push_back(info);
-    }
-
-    // Create the squares & units and put them in the map
-    for (int i=0;i<_boardWidth;i++) {
-        for(int j=0;j<_boardHeight;++j){
-            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
-            auto squarePosition = Vec2(i,j);
-            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale/2));       
-            squareNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
-            shared_ptr<Square> sq = _board->getSquare(squarePosition);
-            sq->setViewNode(squareNode);
-            _board->getViewNode()->addChild(squareNode);
-//            // Generate unit for this square
-            auto unitSubType = unitsInBoard.at(_boardWidth*(_boardHeight-j-1)+i).at(0);
-            auto unitColor = unitsInBoard.at(_boardWidth*(_boardHeight-j-1)+i).at(1);
-            std:string unitPattern = getUnitType(unitSubType, unitColor);
-            Vec2 unitDirection = unitsDirInBoard.at(_boardWidth*(_boardHeight-j-1)+i);
-            auto unitTemplate = _unitTypes.at(unitSubType);
-            Unit::Color c = Unit::stringToColor(unitColor);
-            shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(),unitTemplate->getSpecialAttack(), unitDirection);
-            sq->setUnit(unit);
-            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
-            unit->setViewNode(unitNode);
-            unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-            squareNode->addChild(unitNode);
-        }
     }
 
     // Create and layout the win lose text
@@ -581,4 +526,53 @@ void GameScene::setActive(bool value) {
 //    } else if (!value && _restartbutton->isActive()) {
 //        _restartbutton->deactivate();
 //    }
+}
+
+void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
+    // Get the sub-type and color of the unit for every unit in this level
+    // Get the direction of the unit for every unit in this level and save in a vector
+    _currLevel = boardJSON->getInt("id");
+    _turns = boardJSON->getInt("total-swap-allowed");
+    _max_turns = boardJSON->getInt("total-swap-allowed");
+    // thresholds for the star system
+    _onestar_threshold = boardJSON->getInt("one-star-condition");
+    _twostar_threshold = boardJSON->getInt("two-star-condition");
+    _threestar_threshold = boardJSON->getInt("three-star-condition");
+    auto unitsInBoardJson = boardJSON->get("board-members")->children();
+    vector<Vec2> unitsDirInBoard;
+    vector<vector<std::string>> unitsInBoard;
+    for (auto child : unitsInBoardJson) {
+        auto unitDirArray = child->get("direction")->asFloatArray();
+        unitsDirInBoard.push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
+        auto unitColor = child->getString("color");
+        auto unitSubType = child->getString("sub-type");
+        vector<std::string> info{ unitSubType, unitColor };
+        unitsInBoard.push_back(info);
+    }
+    // Create the squares & units and put them in the map
+    for (int i = 0; i < _boardWidth; i++) {
+        for (int j = 0; j < _boardHeight; ++j) {
+            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
+            auto squarePosition = Vec2(i, j);
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
+            squareNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
+            shared_ptr<Square> sq = _board->getSquare(squarePosition);
+            sq->setViewNode(squareNode);
+            _board->getViewNode()->addChild(squareNode);
+            //            // Generate unit for this square
+            auto unitSubType = unitsInBoard.at(_board->flattenPos(i, j)).at(0);
+            auto unitColor = unitsInBoard.at(_board->flattenPos(i, j)).at(1);
+            std:string unitPattern = getUnitType(unitSubType, unitColor);
+            Vec2 unitDirection = unitsDirInBoard.at(_board->flattenPos(i, j));
+            auto unitTemplate = _unitTypes.at(unitSubType);
+            Unit::Color c = Unit::stringToColor(unitColor);
+            shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
+            sq->setUnit(unit);
+            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
+            unit->setViewNode(unitNode);
+            unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+            squareNode->addChild(unitNode);
+        }
+    }
+    _layout->layout(_guiNode.get());
 }

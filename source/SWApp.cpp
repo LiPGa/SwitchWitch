@@ -149,6 +149,7 @@ void SwitchWitchApp::update(float timestep) {
         case MainMenuScene::Choice::GAME:
             _mainMenu.setActive(false);
             _gameplay.setActive(true);
+            _gameplay.setBoard(_assets->get<JsonValue>("board"));
             _scene = State::GAME;
             break;
         case MainMenuScene::Choice::EDITOR:
@@ -163,9 +164,20 @@ void SwitchWitchApp::update(float timestep) {
         break;
     case GAME:
         _gameplay.update(timestep);
+        if (_gameplay.goToLevelEditor()) {
+            _scene = State::EDITOR;
+            _gameplay.setActive(false);
+            _levelEditor.setActive(true);
+        }
         break;
     case EDITOR:
         _levelEditor.update(timestep);
+        if (_levelEditor.goToGameScene()) {
+            _scene = State::GAME;
+            _gameplay.setBoard(_levelEditor.getBoardAsJSON());
+            _levelEditor.setActive(false);
+            _gameplay.setActive(true);
+        }
     }
 }
 

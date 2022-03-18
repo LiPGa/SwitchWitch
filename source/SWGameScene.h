@@ -40,8 +40,6 @@ protected:
     std::shared_ptr<cugl::JsonValue> _constants;
     /** The JSON value with all of the board members */
     std::shared_ptr<cugl::JsonValue> _boardMembers;
-    /** The JSON value for the levels */
-    std::shared_ptr<cugl::JsonValue> _boardJson;
     
     // current level, corresponds to board's ID.
     int _currLevel;
@@ -236,6 +234,20 @@ public:
      * @param value whether the scene is currently active
      */
     virtual void setActive(bool value) override;
+
+    /**
+     * Sets the board that will be played using JSON
+     * 
+     * @param the JSON representation of the board.
+     */
+    void setBoard(shared_ptr<cugl::JsonValue> boardJSON);
+
+    /**
+     * Returns the current state the game is in.
+     * 
+     * @returns the current state
+     */
+    bool goToLevelEditor() { return _input.isEscapeDown(); }
 
 private:
     /**

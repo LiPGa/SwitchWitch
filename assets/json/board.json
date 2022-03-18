@@ -15,7 +15,7 @@
             "type": "unit",
             "sub-type": "basic",
             "color": "blue",
-            "direction": [1,0]
+            "direction": [-1,0]
         },
         {
             "type": "unit",
@@ -27,7 +27,7 @@
             "type": "unit",
             "sub-type": "basic",
             "color": "blue",
-            "direction": [1,0]
+            "direction": [-1,0]
         },
         {
             "type": "unit",

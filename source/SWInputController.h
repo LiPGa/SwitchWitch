@@ -69,6 +69,8 @@ protected:
     bool _playDown;
     /** Whether the restart key is down*/
     bool _resetDown;
+    /** Whether the escape key is down*/
+    bool _escapeDown;
     
 protected:
 	/** The key for the mouse listeners */
@@ -212,15 +214,6 @@ public:
         return _currDown;
     }
 
-    /**
-     * Returns if the debug key is down.
-     *
-     * @returns if the debug key is down.
-     */
-    bool isDebugDown() const {
-        return _debugDown;
-    }
-
 #pragma mark -
 #pragma mark Debug and Level Editor Controls
     /**
@@ -276,6 +269,22 @@ public:
      * @returns if the play button is down.
      */
     bool isPlayDown() { return _playDown; }
+
+    /**
+     * Returns if the debug key is down.
+     *
+     * @returns if the debug key is down.
+     */
+    bool isDebugDown() const {
+        return _debugDown;
+    }
+
+    /**
+     * Returns if the escape key is down.
+     *
+     * @returns if the escape key is down.
+     */
+    bool isEscapeDown() const { return _escapeDown; }
 
 #pragma mark -
 #pragma mark Mouse Callbacks

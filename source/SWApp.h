@@ -57,6 +57,9 @@ protected:
     /** The controller for the loading screen */
     LoadingScene _loading;
 
+    /** JSON Writer*/
+    cugl::JsonWriter _jsonWriter;
+
     /** Whether or not we have finished loading all assets */
     bool _loaded;
     
