@@ -101,22 +101,25 @@
         "boardMember" : "json/boardMember.json",
         "board" : "json/board.json"
     },
-    "scene2s" : {
-        "button": {
-            "type"      : "Node",
-            "format"    : {
-                "type"        : "Float",
-                "orientation" : "vertical",
-                "x_alignment" : "left",
-                "y_alignment" : "bottom"
+    "scene2s": {
+        "result": {
+            "type": "Node",
+            "format": {
+                "type": "Float",
+                "orientation": "vertical",
+                "x_alignment": "center",
+                "y_alignment": "bottom"
             },
-            "children":  {
-               "restart": {
-                    "type"   : "Widget",
-                    "data"   : {
-                        "key"     : "textbutton",
-                        "variables" : {
-                            "size": [400,100],
+            "children": {
+                "restart": {
+                    "type": "Widget",
+                    "data": {
+                        "key": "textbutton",
+                        "variables": {
+                            "size": [
+                                150,
+                                30
+                            ],
                             "text": "Restart",
                             "color": "#000088"
                         }

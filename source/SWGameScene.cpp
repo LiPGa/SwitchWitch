@@ -70,7 +70,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _input.init();
 
     // Initialize Variables
-    hasLost = false;
+    didRestart = false;
     _assets = assets;
     _score = 0;
     _prev_score = 0;
@@ -101,6 +101,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
     _guiNode->addChild(_backgroundNode);
+
 //    _guiNode->addChild(_topuibackgroundNode);
     _backgroundNode->setAnchor(Vec2::ZERO);
     _layout->addAbsolute("top_ui_background", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(0, -(_topuibackgroundNode->getSize().height)));
@@ -214,6 +215,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     }
     
+<<<<<<< Updated upstream
 //    std::shared_ptr<scene2::SceneNode> scene = assets->get<scene2::SceneNode>("button");
 //    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("button_restart"));
 //    _restartbutton->addListener([this](const std::string& name, bool down) {
@@ -231,6 +233,25 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 //        _restartbutton->activate();
 //    }
 
+    std::shared_ptr<scene2::SceneNode> resultLayout = assets->get<scene2::SceneNode>("result");
+    resultLayout->setContentSize(dimen);
+    resultLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(resultLayout);
+
+    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_restart"));
+    _restartbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("down");
+            didRestart = true;
+        }
+    });
+
+//    _restartbutton->setVisible(false);
+    if (_active) {
+        CULog("restart button activated");
+        _restartbutton->activate();
+    }
+    
     return true;
 }
 
@@ -364,7 +385,7 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
 void GameScene::dispose() {
     if (_active) {
         removeAllChildren();
-//        _restartbutton = nullptr;
+        _restartbutton = nullptr;
         _active = false;
     }
 }
@@ -399,14 +420,18 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
-    if (_input.didPressReset() and _turns == 0) {
+
+    
+    if (_turns == 0 and didRestart == true){
         CULog("Reset");
         reset();
     }
-    
-    if (_turns == 0){
-        
-        if (_score < _onestar_threshold) {
+
+    if (_turns == 0)
+    {
+
+        if (_score < _onestar_threshold)
+        {
             _endgame_text->setText("You Lose");
             _endgame_text->setForeground(Color4::RED);
         }
@@ -517,10 +542,6 @@ void GameScene::update(float timestep)
                 }
                 
                 _turns--;
-                if (_turns == 0)
-                {
-                 hasLost = true;
-                }
                 _prev_score = _score;
                 _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
@@ -533,13 +554,6 @@ void GameScene::update(float timestep)
         _layout->remove("score_text");
         _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width/7, -0.85*(_topuibackgroundNode->getSize().height)));
     }
-
-    //dfghgfd
-    if (hasLost) {
-        _endgame_text->setForeground(Color4::RED);
-
-    }
-
     // Update the remaining turns
     _turn_text->setText(strtool::format("%d/%d", _turns, _max_turns));
 
