@@ -388,6 +388,7 @@ void LevelEditorScene::update(float timestep)
         }
         unit->getViewNode()->setTexture(_textures.at(getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))));
     }
+    if (_input.isSaveDown()) { saveBoardAsJSON(); }
 }
 
 #pragma mark -
