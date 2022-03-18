@@ -125,8 +125,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _oneStarScoreText->addTypeListener([this](const std::string& name, const std::string& value) {
         whenDoingTextInput();
         if (value.empty()) return;
-        if (isInteger(value)) _oneStarCondition = stoi(value);
-        _oneStarScoreText->setText(to_string(_oneStarCondition));
+        if (!isInteger(value)) _oneStarScoreText->setText(to_string(_oneStarCondition));
     });
     _oneStarScoreText->addExitListener([this](const std::string& name, const std::string& value) {
         if (isInteger(value)) _oneStarCondition = stoi(value);
@@ -135,8 +134,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _twoStarScoreText->addTypeListener([this](const std::string& name, const std::string& value) {
         whenDoingTextInput();
         if (value.empty()) return;
-        if (isInteger(value)) _twoStarCondition = stoi(value);
-        _twoStarScoreText->setText(to_string(_twoStarCondition));
+        if (!isInteger(value)) _twoStarScoreText->setText(to_string(_twoStarCondition));
         });
     _twoStarScoreText->addExitListener([this](const std::string& name, const std::string& value) {
         if (isInteger(value)) _twoStarCondition = stoi(value);
@@ -145,8 +143,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _threeStarScoreText->addTypeListener([this](const std::string& name, const std::string& value) {
         whenDoingTextInput();
         if (value.empty()) return;
-        if (isInteger(value)) _threeStarCondition = stoi(value);
-        _threeStarScoreText->setText(to_string(_threeStarCondition));
+        if (!isInteger(value)) _threeStarScoreText->setText(to_string(_threeStarCondition));
         });
     _threeStarScoreText->addExitListener([this](const std::string& name, const std::string& value) {
         if (isInteger(value)) _threeStarCondition = stoi(value);
@@ -156,10 +153,10 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         whenDoingTextInput();
         if (value.empty()) return;
         if (!isInteger(value)) _turnText->setText(to_string(_numberOfTurns));
-    });
+        });
     _turnText->addExitListener([this](const std::string& name, const std::string& value) {
-            if(isInteger(value)) _numberOfTurns = stoi(value);
-            else _turnText->setText(to_string(_numberOfTurns));
+        if(isInteger(value)) _numberOfTurns = stoi(value);
+        else _turnText->setText(to_string(_numberOfTurns));
         });
 
     // Initialize Buttons

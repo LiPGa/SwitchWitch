@@ -210,11 +210,11 @@
                 "id-field"  : {
                     "type"   : "TextField",
                     "data"   : {
-                        "font"       : "sans",
+                        "font"       : "pixel32",
                         "text"       : "0",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [170,50],
+                        "size"       : [170,40],
                         "anchor"     : [0.5,0.5],
                         "cursor"     : true,
                         "cursorcolor": "#ffffff"
@@ -229,11 +229,11 @@
                 "id-label"  : {
                     "type"   : "Label",
                     "data"   : {
-                        "font"       : "sans",
+                        "font"       : "pixel32",
                         "text"       : "LevID:",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [100,50],
+                        "size"       : [100,40],
                         "anchor"     : [1,0.5]
                     },
                     "layout" : {
@@ -246,11 +246,11 @@
                 "turn-field"  : {
                     "type"   : "TextField",
                     "data"   : {
-                        "font"       : "sans",
+                        "font"       : "pixel32",
                         "text"       : "0",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [170,50],
+                        "size"       : [170,40],
                         "anchor"     : [0.5,0.5],
                         "cursor"     : true,
                         "cursorcolor": "#ffffff"
@@ -265,11 +265,11 @@
                 "turn-label"  : {
                     "type"   : "Label",
                     "data"   : {
-                        "font"       : "sans",
+                        "font"       : "pixel32",
                         "text"       : "Turns:",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [100,50],
+                        "size"       : [100,40],
                         "anchor"     : [1,0.5]
                     },
                     "layout" : {
@@ -282,11 +282,11 @@
                 "one-star-score-field"  : {
                     "type"   : "TextField",
                     "data"   : {
-                        "font"       : "sans",
+                        "font"       : "pixel32",
                         "text"       : "0",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [170,50],
+                        "size"       : [170,40],
                         "anchor"     : [0.5,0.5],
                         "cursor"     : true,
                         "cursorcolor": "#ffffff"
@@ -301,11 +301,11 @@
                 "one-star-score-label"  : {
                     "type"   : "Label",
                     "data"   : {
-                        "font"       : "sans",
+                        "font"       : "pixel32",
                         "text"       : "1 Star",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [100,50],
+                        "size"       : [100,40],
                         "anchor"     : [1,0.5]
                     },
                     "layout" : {
@@ -318,11 +318,11 @@
                 "two-star-score-field"  : {
                     "type"   : "TextField",
                     "data"   : {
-                        "font"       : "sans",
+                        "font"       : "pixel32",
                         "text"       : "0",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [170,50],
+                        "size"       : [170,40],
                         "anchor"     : [0.5,0.5],
                         "cursor"     : true,
                         "cursorcolor": "#ffffff"
@@ -337,11 +337,11 @@
                 "two-star-score-label"  : {
                     "type"   : "Label",
                     "data"   : {
-                        "font"       : "sans",
+                        "font"       : "pixel32",
                         "text"       : "2 Star",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [100,50],
+                        "size"       : [100,40],
                         "anchor"     : [1,0.5]
                     },
                     "layout" : {
@@ -354,11 +354,11 @@
                 "three-star-score-field"  : {
                     "type"   : "TextField",
                     "data"   : {
-                        "font"       : "sans",
+                        "font"       : "pixel32",
                         "text"       : "0",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [170,50],
+                        "size"       : [170,40],
                         "anchor"     : [0.5,0.5],
                         "cursor"     : true,
                         "cursorcolor": "#ffffff"
@@ -373,11 +373,11 @@
                 "three-star-score-label"  : {
                     "type"   : "Label",
                     "data"   : {
-                        "font"       : "sans",
+                        "font"       : "pixel32",
                         "text"       : "3 Star",
                         "foreground" : "#ffffff",
                         "background" : "#000000",
-                        "size"       : [100,50],
+                        "size"       : [100,40],
                         "anchor"     : [1,0.5]
                     },
                     "layout" : {
