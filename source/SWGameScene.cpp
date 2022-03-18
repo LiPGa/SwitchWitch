@@ -140,6 +140,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+    addChild(_guiNode);
     _guiNode->addChild(_backgroundNode);
 
 //    _guiNode->addChild(_topuibackgroundNode);
@@ -279,15 +280,18 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_restart"));
     _restartbutton->addListener([this](const std::string& name, bool down) {
+        CULog("pressed");
         if (down) {
             CULog("down");
             didRestart = true;
         }
     });
 
-//    _restartbutton->setVisible(false);
+    _restartbutton->setVisible(false);
     if (_active) {
-        CULog("restart button activated");
+        CULog("Restart button activated");
+        CULog("Size is %s",_restartbutton->getContentSize().toString().c_str());
+        CULog("Position is %s",_restartbutton->getPosition().toString().c_str());
         _restartbutton->activate();
     }
     
@@ -489,7 +493,6 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
-    
     if (_turns == 0 and didRestart == true){
         CULog("Reset");
         reset();
@@ -518,8 +521,7 @@ void GameScene::update(float timestep)
             _endgame_text->setText("You Win ***");
             _endgame_text->setForeground(Color4::RED);
         }
-        //        _restartbutton->setVisible(true);
-
+         _restartbutton->setVisible(true);
         return;
     }
     Vec2 pos = _input.getPosition();
@@ -678,6 +680,7 @@ void GameScene::reset()
     //    _endgame_text->setForeground(Color4::CLEAR);
     //    _turns = _boardJson->getInt("total-swap-allowed");
     //    _score = 0;
+    removeChild(_guiNode);
     init(_assets);
 }
 

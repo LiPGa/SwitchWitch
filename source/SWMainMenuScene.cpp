@@ -112,6 +112,7 @@ void MainMenuScene::setActive(bool value) {
             _editorbutton->activate();
         }
         else {
+            CULog("Menu button desactivated");
             _gamebutton->deactivate();
             _editorbutton->deactivate();
             // If any were pressed, reset them
