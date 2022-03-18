@@ -460,7 +460,7 @@ shared_ptr<cugl::JsonValue> LevelEditorScene::getBoardAsJSON() {
     boardJSON->appendChild("two-star-condition", cugl::JsonValue::alloc((long int)_twoStarCondition));
     boardJSON->appendChild("three-star-condition", cugl::JsonValue::alloc((long int)_twoStarCondition));
     shared_ptr<cugl::JsonValue> squareOccupantArray = cugl::JsonValue::allocArray();
-    for each (shared_ptr<Square> square in _board->getAllSquares()) {
+    for (shared_ptr<Square> square : _board->getAllSquares()) {
         auto unit = square->getUnit();
         auto unitJSON = cugl::JsonValue::allocObject();
         unitJSON->appendChild("type", cugl::JsonValue::alloc("unit"));
