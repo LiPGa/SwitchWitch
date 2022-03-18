@@ -215,7 +215,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     }
     
-<<<<<<< Updated upstream
 //    std::shared_ptr<scene2::SceneNode> scene = assets->get<scene2::SceneNode>("button");
 //    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("button_restart"));
 //    _restartbutton->addListener([this](const std::string& name, bool down) {
