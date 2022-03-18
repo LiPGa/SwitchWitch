@@ -118,6 +118,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     {
         _textures.insert({textureName, _assets->get<Texture>(textureName)});
     }
+    
+    // Get Probablities
+    // Preload all the probabilities into a hashmap
+    vector<string> probabilityVec = _constants->get("probability-respawn")->asStringArray();
+    int probabilitySum = 0;
+    for (string probabilityName : probabilityVec)
+    {
+        probabilitySum += _boardMembers-> get("unit") -> get(probabilityName) -> get("probability-respawn") -> asInt();
+        _probability.insert({probabilityName, probabilitySum});
+    }
 
     // Get the background image and constant values
     _background = assets->get<Texture>("background");
@@ -339,28 +349,45 @@ void GameScene::generateUnit(shared_ptr<Square> sq)
     unit->setColor(Unit::Color(rand() % 3));
     // TODO: Probabilities need to be inbedded in JSON.
     // TODO: Relation between probabilities and unitSubTypes stored in some kind of data structure.
-    int basicUnitSpawnProbabilityPrecentage = 90;
-    int twoForwardAttackSpawnProbabilityPrecentage = 4;
-    int threeWayAttackSpawnProbabilityPrecentage = 4;
-    int diagonalAttackSpawnProbabilityPrecentage = 2;
     auto unitSelectRandomNumber = rand() % 100;
     std::string unitSubTypeSelected;
-    if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage)
-    {
+    if (unitSelectRandomNumber < _probability["basic"]){
         unitSubTypeSelected = "basic";
     }
-    else if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage + twoForwardAttackSpawnProbabilityPrecentage)
-    {
+    else if (unitSelectRandomNumber < _probability["two-forward"]) {
         unitSubTypeSelected = "two-forward";
     }
-    else if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage + twoForwardAttackSpawnProbabilityPrecentage + threeWayAttackSpawnProbabilityPrecentage)
-    {
+    else if (unitSelectRandomNumber < _probability["three-way"]) {
         unitSubTypeSelected = "three-way";
     }
-    else
-    {
+    else if (unitSelectRandomNumber < _probability["diagonal"]) {
         unitSubTypeSelected = "diagonal";
     }
+    
+//    int basicUnitSpawnProbabilityPrecentage = 90;
+//    int twoForwardAttackSpawnProbabilityPrecentage = 4;
+//    int threeWayAttackSpawnProbabilityPrecentage = 4;
+//    int diagonalAttackSpawnProbabilityPrecentage = 2;
+//    auto unitSelectRandomNumber = rand() % 100;
+//
+//    std::string unitSubTypeSelected;
+//    if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage)
+//    {
+//        unitSubTypeSelected = "basic";
+//    }
+//    else if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage + twoForwardAttackSpawnProbabilityPrecentage)
+//    {
+//        unitSubTypeSelected = "two-forward";
+//    }
+//    else if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage + twoForwardAttackSpawnProbabilityPrecentage + threeWayAttackSpawnProbabilityPrecentage)
+//    {
+//        unitSubTypeSelected = "three-way";
+//    }
+//    else
+//    {
+//        unitSubTypeSelected = "diagonal";
+//    }
+        
     auto unitSelected = _unitTypes[unitSubTypeSelected];
     unit->setSubType(unitSelected->getSubType());
     unit->setBasicAttack(unitSelected->getBasicAttack());
