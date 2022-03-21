@@ -143,11 +143,14 @@ protected:
     // std::shared_ptr<cugl::TextLayout> _score_text;
     /** Win/Lose text */
     std::shared_ptr<cugl::scene2::Label> _endgame_text;
-
+    /** The button to restart  a game */
+    std::shared_ptr<cugl::scene2::Button> _restartbutton;
+    
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
 
-    bool hasLost = false;
+    /** Whther the player pressed restart button*/
+    bool didRestart = false;
 
 #pragma mark -
 #pragma mark Texture Variables

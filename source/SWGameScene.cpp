@@ -97,7 +97,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _input.init();
 
     // Initialize Variables
-    hasLost = false;
+    didRestart = false;
     _assets = assets;
     _score = 0;
     _prev_score = 0;
@@ -130,8 +130,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+    addChild(_guiNode);
     _guiNode->addChild(_backgroundNode);
+
 //    _guiNode->addChild(_topuibackgroundNode);
+
     _backgroundNode->setAnchor(Vec2::ZERO);
     _layout->addAbsolute("top_ui_background", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(0, -(_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
@@ -199,7 +202,28 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -_endgame_text->getHeight()));
     _guiNode->addChildWithName(_endgame_text, "endgame_text");
 
-    //reset();
+    std::shared_ptr<scene2::SceneNode> resultLayout = assets->get<scene2::SceneNode>("result");
+    resultLayout->setContentSize(dimen);
+    resultLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(resultLayout);
+
+    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_restart"));
+    _restartbutton->addListener([this](const std::string& name, bool down) {
+        CULog("pressed");
+        if (down) {
+            CULog("down");
+            didRestart = true;
+        }
+    });
+
+    _restartbutton->setVisible(false);
+    if (_active) {
+        CULog("Restart button activated");
+        CULog("Size is %s",_restartbutton->getContentSize().toString().c_str());
+        CULog("Position is %s",_restartbutton->getPosition().toString().c_str());
+        _restartbutton->activate();
+    }
+    
     return true;
 }
 
@@ -349,7 +373,7 @@ void GameScene::dispose()
     if (_active)
     {
         removeAllChildren();
-        //        _restartbutton = nullptr;
+        _restartbutton = nullptr;
         _active = false;
     }
 }
@@ -383,10 +407,10 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input and convert to a square position.
     _input.update();
-    //    if (_input.didPressReset() and _turns == 0) {
-    //        CULog("Reset");
-    //        reset();
-    //    }
+    if (_turns == 0 and didRestart == true){
+        CULog("Reset");
+        reset();
+    }
 
     if (_turns == 0)
     {
@@ -411,8 +435,7 @@ void GameScene::update(float timestep)
             _endgame_text->setText("You Win ***");
             _endgame_text->setForeground(Color4::RED);
         }
-        //        _restartbutton->setVisible(true);
-
+         _restartbutton->setVisible(true);
         return;
     }
     Vec2 pos = _input.getPosition();
@@ -507,10 +530,6 @@ void GameScene::update(float timestep)
                 }
 
                 _turns--;
-                if (_turns == 0)
-                {
-                    hasLost = true;
-                }
                 _prev_score = _score;
                 _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
@@ -524,12 +543,6 @@ void GameScene::update(float timestep)
         _layout->remove("score_text");
         _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -0.85 * (_topuibackgroundNode->getSize().height)));
     }
-
-    // Update win condition
-    if (hasLost) {
-        _endgame_text->setForeground(Color4::RED);
-    }
-
     // Update the remaining turns
     _turn_text->setText(strtool::format("%d/%d", _turns, _max_turns));
 
@@ -581,6 +594,7 @@ void GameScene::reset()
     //    _endgame_text->setForeground(Color4::CLEAR);
     //    _turns = _boardJson->getInt("total-swap-allowed");
     //    _score = 0;
+    removeChild(_guiNode);
     init(_assets);
 }
 

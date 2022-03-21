@@ -113,13 +113,13 @@
         "boardMember": "json/boardMember.json",
         "board": "json/board.json"
     },
-    "scene2s" : {
-        "button": {
+    "scene2s": {
+        "result": {
             "type": "Node",
             "format": {
                 "type": "Float",
                 "orientation": "vertical",
-                "x_alignment": "left",
+                "x_alignment": "center",
                 "y_alignment": "bottom"
             },
             "children": {
@@ -129,8 +129,8 @@
                         "key": "textbutton",
                         "variables": {
                             "size": [
-                                400,
-                                100
+                                150,
+                                30
                             ],
                             "text": "Restart",
                             "color": "#000088"
