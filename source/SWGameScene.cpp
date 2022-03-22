@@ -270,6 +270,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _star3 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star3"));
     _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_restart"));
     _restartbutton->deactivate();
+    _restartbutton->setDown(false);
     _restartbutton->addListener([this](const std::string& name, bool down) {
         CULog("pressed");
         if (down) {
@@ -684,9 +685,9 @@ void GameScene::reset()
 void GameScene::setActive(bool value)
 {
     _active = value;
-    //    if (value && ! _restartbutton->isActive()) {
-    //        _restartbutton->activate();
-    //    } else if (!value && _restartbutton->isActive()) {
-    //        _restartbutton->deactivate();
-    //    }
+//        if (value && ! _restartbutton->isActive()) {
+//            _restartbutton->activate();
+//        } else if (!value && _restartbutton->isActive()) {
+//            _restartbutton->deactivate();
+//        }
 }
