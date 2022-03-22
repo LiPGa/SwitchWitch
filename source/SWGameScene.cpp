@@ -116,7 +116,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     vector<string> textureVec = _constants->get("textures")->asStringArray();
     for (string textureName : textureVec)
     {
-        CULog(textureName.c_str());
         _textures.insert({textureName, _assets->get<Texture>(textureName)});
     }
 
@@ -270,8 +269,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _star2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star2"));
     _star3 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star3"));
     _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_restart"));
-    _restartbutton->activate();
-//    _restartbutton->setVisible(false);
+    _restartbutton->deactivate();
     _restartbutton->addListener([this](const std::string& name, bool down) {
         CULog("pressed");
         if (down) {
@@ -487,10 +485,8 @@ void GameScene::update(float timestep)
 
     if (_turns == 0)
     {
-        
-        _resultLayout->setVisible(true);
+        _restartbutton->activate();
         _score_number->setText(to_string(_score));
-
         if (_score < _onestar_threshold)
         {
             _star1->setTexture(_textures.at("star_empty"));
@@ -509,12 +505,15 @@ void GameScene::update(float timestep)
             _star2->setTexture(_textures.at("star_full"));
             _star3->setTexture(_textures.at("star_empty"));
         }
-        else
+        else if ( _score >= _threestar_threshold)
         {
+            CULog("three star");
             _star1->setTexture(_textures.at("star_full"));
             _star2->setTexture(_textures.at("star_full"));
             _star3->setTexture(_textures.at("star_full"));
         }
+        
+        _resultLayout->setVisible(true);
         return;
     }
     Vec2 pos = _input.getPosition();
