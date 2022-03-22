@@ -116,6 +116,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     vector<string> textureVec = _constants->get("textures")->asStringArray();
     for (string textureName : textureVec)
     {
+        CULog(textureName.c_str());
         _textures.insert({textureName, _assets->get<Texture>(textureName)});
     }
 
@@ -130,11 +131,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
     _topuibackgroundNode->setScale(_scale);
 
-    _topuibackground = assets->get<Texture>("top-ui-background");
-    _topuibackgroundNode = scene2::PolygonNode::allocWithTexture(_topuibackground);
-    _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
-    _topuibackgroundNode->setScale(_scale);
-
     // Allocate Layout
     _layout = scene2::AnchoredLayout::alloc();
 
@@ -142,9 +138,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
     addChild(_guiNode);
     _guiNode->addChild(_backgroundNode);
-
-//    _guiNode->addChild(_topuibackgroundNode);
-
     _backgroundNode->setAnchor(Vec2::ZERO);
     _layout->addAbsolute("top_ui_background", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(0, -(_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
@@ -183,13 +176,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
-
-    // Create and layout the end game message
-    std::string endgameMsg = " placeholder ";
-    _endgame_text = scene2::Label::allocWithText(endgameMsg, assets->get<Font>("pixel32"));
-    _endgame_text->setForeground(Color4::CLEAR);
-    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -2 * _endgame_text->getHeight()));
-    _guiNode->addChildWithName(_endgame_text, "endgame_text");
 
     // Initialize units with different types
     // Children will be types "basic", "three-way", etc.
@@ -273,12 +259,19 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     }
 
-    std::shared_ptr<scene2::SceneNode> resultLayout = assets->get<scene2::SceneNode>("result");
-    resultLayout->setContentSize(dimen);
-    resultLayout->doLayout(); // Repositions the HUD
-    _guiNode->addChild(resultLayout);
-
-    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_restart"));
+    _resultLayout = assets->get<scene2::SceneNode>("result");
+    _resultLayout->setContentSize(dimen);
+    _resultLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(_resultLayout);
+    _resultLayout->setVisible(false);
+    
+    _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
+    _star1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star1"));
+    _star2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star2"));
+    _star3 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star3"));
+    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_restart"));
+    _restartbutton->activate();
+//    _restartbutton->setVisible(false);
     _restartbutton->addListener([this](const std::string& name, bool down) {
         CULog("pressed");
         if (down) {
@@ -287,13 +280,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     });
 
-    _restartbutton->setVisible(false);
-    if (_active) {
-        CULog("Restart button activated");
-        CULog("Size is %s",_restartbutton->getContentSize().toString().c_str());
-        CULog("Position is %s",_restartbutton->getPosition().toString().c_str());
-        _restartbutton->activate();
-    }
+    
     
     return true;
 }
@@ -500,28 +487,34 @@ void GameScene::update(float timestep)
 
     if (_turns == 0)
     {
+        
+        _resultLayout->setVisible(true);
+        _score_number->setText(to_string(_score));
 
         if (_score < _onestar_threshold)
         {
-            _endgame_text->setText("You Lose");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_empty"));
+            _star2->setTexture(_textures.at("star_empty"));
+            _star3->setTexture(_textures.at("star_empty"));
         }
         else if (_score >= _onestar_threshold && _score < _twostar_threshold)
         {
-            _endgame_text->setText("You Win *");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_full"));
+            _star2->setTexture(_textures.at("star_empty"));
+            _star3->setTexture(_textures.at("star_empty"));
         }
         else if (_score >= _twostar_threshold && _score < _threestar_threshold)
         {
-            _endgame_text->setText("You Win **");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_full"));
+            _star2->setTexture(_textures.at("star_full"));
+            _star3->setTexture(_textures.at("star_empty"));
         }
         else
         {
-            _endgame_text->setText("You Win ***");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_full"));
+            _star2->setTexture(_textures.at("star_full"));
+            _star3->setTexture(_textures.at("star_full"));
         }
-         _restartbutton->setVisible(true);
         return;
     }
     Vec2 pos = _input.getPosition();

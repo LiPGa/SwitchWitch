@@ -124,6 +124,8 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
+    std::shared_ptr<scene2::SceneNode> _resultLayout;
+
 
     // std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;
     // std::shared_ptr<cugl::scene2::SceneNode> _replacementBoardNodeS;
@@ -135,20 +137,28 @@ protected:
     std::shared_ptr<cugl::Texture> _background;
     /** The top UI backgrounnd image */
     std::shared_ptr<cugl::Texture> _topuibackground;
+    /** The result menu image */
+    std::shared_ptr<cugl::Texture> _resultmenubackground;
     /** The text with the current remaining turns */
     std::shared_ptr<cugl::scene2::Label> _turn_text;
     /** The text with the current score */
     std::shared_ptr<cugl::scene2::Label> _score_text;
+    /** The text with the final score */
+    std::shared_ptr<cugl::scene2::Label> _score_number;
+
+    /** The images of the final stars*/
+    std::shared_ptr<cugl::scene2::PolygonNode> _star1;
+    std::shared_ptr<cugl::scene2::PolygonNode> _star2;
+    std::shared_ptr<cugl::scene2::PolygonNode> _star3;
+    
     /** The text above the replacement board */
     std::shared_ptr<cugl::scene2::Label> _replace_text;
-    // std::shared_ptr<cugl::TextLayout> _score_text;
-    /** Win/Lose text */
-    std::shared_ptr<cugl::scene2::Label> _endgame_text;
     /** The button to restart  a game */
     std::shared_ptr<cugl::scene2::Button> _restartbutton;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
+    
 
     /** Whther the player pressed restart button*/
     bool didRestart = false;

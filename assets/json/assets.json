@@ -73,6 +73,21 @@
         },
         "button": {
             "file": "textures/button.png"
+        },
+        "result_background":{
+            "file": "textures/result-background.png"
+        },
+        "result_btn_retry":{
+            "file": "textures/result-btn-retry.png"
+        },
+        "result_btn_play":{
+            "file": "textures/result-btn-play.png"
+        },
+        "star_full":{
+            "file": "textures/star-full.png"
+        },
+        "star_empty":{
+            "file": "textures/star-empty.png"
         }
     },
     "fonts": {
@@ -106,7 +121,9 @@
         }
     },
     "widgets": {
-        "textbutton": "widgets/textbutton.json"
+        "textbutton": "widgets/textbutton.json",
+        "retrybutton": "widgets/retrybutton.json",
+        "resultmenu": "widgets/resultmenu.json"
     },
     "jsons": {
         "constants": "json/constants.json",
@@ -120,30 +137,117 @@
                 "type": "Float",
                 "orientation": "vertical",
                 "x_alignment": "center",
-                "y_alignment": "bottom"
+                "y_alignment": "middle"
             },
             "children": {
-                "restart": {
-                    "type": "Widget",
+                "board":{
+                    "type": "Image",
                     "data": {
-                        "key": "textbutton",
-                        "variables": {
-                            "size": [
-                                150,
-                                30
-                            ],
-                            "text": "Restart",
-                            "color": "#000088"
-                        }
+                        "texture": "result_background",
+                        "scale": 0.6
                     },
-                    "layout": {
-                        "priority": 1,
-                        "padding": [
-                            0,
-                            50,
-                            0,
-                            0
-                        ]
+                    "layout" : {
+                        "y_anchor": "middle",
+                        "x_anchor": "center"
+                    },
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "children":{
+                        "star1":{
+                            "type": "Image",
+                            "data": {
+                                "texture": "star_full"
+                            },
+                            "layout" : {
+                                "y_anchor": "middle",
+                                "x_anchor": "center",
+                                "x_offset": -0.3,
+                                "y_offset": 0.1
+                            },
+                            "format"    : {
+                                "type" : "Anchored"
+                            }
+                        },
+                        "star2":{
+                            "type": "Image",
+                            "data": {
+                                "texture": "star_full"
+                            },
+                            "layout" : {
+                                "y_anchor": "middle",
+                                "x_anchor": "center",
+                                "x_offset": -0.1,
+                                "y_offset": 0.1
+                            },
+                            "format"    : {
+                                "type" : "Anchored"
+                            }
+                        },
+                        "star3":{
+                            "type": "Image",
+                            "data": {
+                                "texture": "star_empty"
+                            },
+                            "layout" : {
+                                "y_anchor": "middle",
+                                "x_anchor": "center",
+                                "x_offset": 0.1,
+                                "y_offset": 0.1
+                            },
+                            "format"    : {
+                                "type" : "Anchored"
+                            }
+                        },
+                        "score":{
+                            "type": "Label",
+                            "data": {
+                              "font": "pixel32",
+                              "text": "Score",
+                              "foreground": "#63351D",
+                              "halign": "center",
+                              "valign": "true middle",
+                              "anchor": [ 0.5, 0.5 ],
+                              "scale": 1.0,
+                              "visible": true
+                            },
+                            "layout": {
+                              "x_anchor": "center",
+                              "y_anchor": "middle",
+                              "x_offset": -0.01,
+                              "y_offset": 0
+                            }
+                        },
+                        "number":{
+                            "type": "Label",
+                            "data": {
+                              "font": "pixel32",
+                              "text": "placement",
+                              "foreground": "#EBEBEB",
+                              "halign": "center",
+                              "valign": "true middle",
+                              "anchor": [ 0.5, 0.5 ],
+                              "scale": 2,
+                              "visible": true
+                            },
+                            "layout": {
+                              "x_anchor": "center",
+                              "y_anchor": "middle",
+                              "x_offset": -0.01,
+                              "y_offset": -0.1
+                            }
+                        },
+                        "restart": {
+                            "type": "Widget",
+                            "data": {
+                                "key": "retrybutton"
+                            },
+                            "layout": {
+                                "y_anchor": "bottom",
+                                "x_anchor": "center",
+                                "y_offset": 0.2
+                            }
+                        }
                     }
                 }
             }
