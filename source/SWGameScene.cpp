@@ -506,9 +506,8 @@ void GameScene::update(float timestep)
             _star2->setTexture(_textures.at("star_full"));
             _star3->setTexture(_textures.at("star_empty"));
         }
-        else if ( _score >= _threestar_threshold)
+        else
         {
-            CULog("three star");
             _star1->setTexture(_textures.at("star_full"));
             _star2->setTexture(_textures.at("star_full"));
             _star3->setTexture(_textures.at("star_full"));
