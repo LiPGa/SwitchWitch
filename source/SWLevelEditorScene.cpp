@@ -385,7 +385,12 @@ void LevelEditorScene::update(float timestep)
         }
         unit->getViewNode()->setTexture(_textures.at(getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))));
     }
-    if (_input.isSaveDown()) { saveBoardAsJSON(); }
+    if (_input.isSaveDown()) {
+        CULog("save");
+        saveBoardAsJSON();
+        
+    }
+    
 }
 
 #pragma mark -
@@ -453,6 +458,7 @@ void LevelEditorScene::setActive(bool value) {
  * Returns the JSON value of the board.
  */
 shared_ptr<cugl::JsonValue> LevelEditorScene::getBoardAsJSON() {
+    CULog("get board as json");
     shared_ptr<cugl::JsonValue> boardJSON = cugl::JsonValue::allocObject();
     boardJSON->appendChild("id", cugl::JsonValue::alloc((long int)_id));
     boardJSON->appendChild("total-swap-allowed", cugl::JsonValue::alloc((long int)_numberOfTurns));
@@ -481,7 +487,13 @@ shared_ptr<cugl::JsonValue> LevelEditorScene::getBoardAsJSON() {
  */
 void LevelEditorScene::saveBoardAsJSON() {
     std::ostringstream fileName;
-    fileName << "board" << _id << ".json";
+    fileName << "" << "board" << _id << ".json";
+    CULog("filename: %s", fileName.str().c_str());
+    if (cugl::filetool::file_exists(fileName.str())) {
+        CULog("file exist");
+    } else
+        CULog("file not exist");
     shared_ptr<cugl::JsonWriter> saveDirectory = cugl::JsonWriter::alloc(fileName.str());
+    CULog("..");
     saveDirectory->writeJson(getBoardAsJSON());
 }
