@@ -27,5 +27,11 @@
         "special_right_square",
         "star_empty",
         "star_full"
+    ],
+    "probability-respawn": [
+        "basic",
+        "two-forward",
+        "three-way",
+        "diagonal"
     ]
 }

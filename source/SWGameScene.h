@@ -55,6 +55,8 @@ protected:
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
     // hash map for units with different types
     std::unordered_map<std::string, std::shared_ptr<Unit>> _unitTypes;
+    // hash map for unit probabilities
+    std::unordered_map<std::string, int> _probability;
     
 #pragma mark State Varibales
     /** Possible states of the level.
