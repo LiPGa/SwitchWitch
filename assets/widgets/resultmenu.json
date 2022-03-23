@@ -1,0 +1,27 @@
+{
+    "contents": {
+              "type": "Image",
+              "format":
+              {
+                "type": "Anchored"
+              },
+              "data":
+              {
+                "texture": "result_background",
+                "scale": 0.8,
+                "anchor": [ 0.5, 1],
+                "size"    : [100, 100]
+              },
+              "layout":
+              {
+                "x_anchor": "center",
+                "y_anchor": "top"
+              }
+        },
+        "variables" : {
+            "option1" : ["children","center","children","button1","data","variables","text"],
+            "option2" : ["children","center","children","button2","data","variables","text"],
+            "option3" : ["children","center","children","button3","data","variables","text"]
+        }
+}
+

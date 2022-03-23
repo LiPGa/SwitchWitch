@@ -106,7 +106,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _input.init();
 
     // Initialize Variables
-    hasLost = false;
+    didRestart = false;
     _assets = assets;
     _score = 0;
     _prev_score = 0;
@@ -140,18 +140,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
     _topuibackgroundNode->setScale(_scale);
 
-    _topuibackground = assets->get<Texture>("top-ui-background");
-    _topuibackgroundNode = scene2::PolygonNode::allocWithTexture(_topuibackground);
-    _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
-    _topuibackgroundNode->setScale(_scale);
-
     // Allocate Layout
     _layout = scene2::AnchoredLayout::alloc();
 
     // Set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+    addChild(_guiNode);
     _guiNode->addChild(_backgroundNode);
-    //    _guiNode->addChild(_topuibackgroundNode);
     _backgroundNode->setAnchor(Vec2::ZERO);
     _layout->addAbsolute("top_ui_background", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(0, -(_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
@@ -190,13 +185,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
-
-    // Create and layout the end game message
-    std::string endgameMsg = " placeholder ";
-    _endgame_text = scene2::Label::allocWithText(endgameMsg, assets->get<Font>("pixel32"));
-    _endgame_text->setForeground(Color4::CLEAR);
-    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -2 * _endgame_text->getHeight()));
-    _guiNode->addChildWithName(_endgame_text, "endgame_text");
 
     // Initialize units with different types
     // Children will be types "basic", "three-way", etc.
@@ -280,22 +268,29 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     }
 
-    //    std::shared_ptr<scene2::SceneNode> scene = assets->get<scene2::SceneNode>("button");
-    //    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("button_restart"));
-    //    _restartbutton->addListener([this](const std::string& name, bool down) {
-    //        if (down) {
-    //            CULog("down");
-    //            reset();
-    //        }
-    //    });
+    _resultLayout = assets->get<scene2::SceneNode>("result");
+    _resultLayout->setContentSize(dimen);
+    _resultLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(_resultLayout);
+    _resultLayout->setVisible(false);
+    
+    _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
+    _star1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star1"));
+    _star2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star2"));
+    _star3 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star3"));
+    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_restart"));
+    _restartbutton->deactivate();
+    _restartbutton->setDown(false);
+    _restartbutton->addListener([this](const std::string& name, bool down) {
+        CULog("pressed");
+        if (down) {
+            CULog("down");
+            didRestart = true;
+        }
+    });
 
-    //    scene->setContentSize(dimen);
-    //    scene->doLayout(); // Repositions the HUD
-    //    _guiNode->addChild(scene);
-    //    _restartbutton->setVisible(false);
-    //    if (_active) {
-    //        _restartbutton->activate();
-    //    }
+    
+    
     return true;
 }
 
@@ -477,7 +472,7 @@ void GameScene::dispose()
     if (_active)
     {
         removeAllChildren();
-        //        _restartbutton = nullptr;
+        _restartbutton = nullptr;
         _active = false;
     }
 }
@@ -511,36 +506,41 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
-    //    if (_input.didPressReset() and _turns == 0) {
-    //        CULog("Reset");
-    //        reset();
-    //    }
+    if (_turns == 0 and didRestart == true){
+        CULog("Reset");
+        reset();
+    }
 
     if (_turns == 0)
     {
-
+        _restartbutton->activate();
+        _score_number->setText(to_string(_score));
         if (_score < _onestar_threshold)
         {
-            _endgame_text->setText("You Lose");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_empty"));
+            _star2->setTexture(_textures.at("star_empty"));
+            _star3->setTexture(_textures.at("star_empty"));
         }
         else if (_score >= _onestar_threshold && _score < _twostar_threshold)
         {
-            _endgame_text->setText("You Win *");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_full"));
+            _star2->setTexture(_textures.at("star_empty"));
+            _star3->setTexture(_textures.at("star_empty"));
         }
         else if (_score >= _twostar_threshold && _score < _threestar_threshold)
         {
-            _endgame_text->setText("You Win **");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_full"));
+            _star2->setTexture(_textures.at("star_full"));
+            _star3->setTexture(_textures.at("star_empty"));
         }
         else
         {
-            _endgame_text->setText("You Win ***");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_full"));
+            _star2->setTexture(_textures.at("star_full"));
+            _star3->setTexture(_textures.at("star_full"));
         }
-        //        _restartbutton->setVisible(true);
-
+        
+        _resultLayout->setVisible(true);
         return;
     }
     Vec2 pos = _input.getPosition();
@@ -635,10 +635,6 @@ void GameScene::update(float timestep)
                 }
 
                 _turns--;
-                if (_turns == 0)
-                {
-                    hasLost = true;
-                }
                 _prev_score = _score;
                 _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
             }
@@ -652,13 +648,6 @@ void GameScene::update(float timestep)
         _layout->remove("score_text");
         _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -0.85 * (_topuibackgroundNode->getSize().height)));
     }
-
-    // dfghgfd
-    if (hasLost)
-    {
-        _endgame_text->setForeground(Color4::RED);
-    }
-
     // Update the remaining turns
     _turn_text->setText(strtool::format("%d/%d", _turns, _max_turns));
 
@@ -710,6 +699,7 @@ void GameScene::reset()
     //    _endgame_text->setForeground(Color4::CLEAR);
     //    _turns = _boardJson->getInt("total-swap-allowed");
     //    _score = 0;
+    removeChild(_guiNode);
     init(_assets);
 }
 
@@ -721,9 +711,9 @@ void GameScene::reset()
 void GameScene::setActive(bool value)
 {
     _active = value;
-    //    if (value && ! _restartbutton->isActive()) {
-    //        _restartbutton->activate();
-    //    } else if (!value && _restartbutton->isActive()) {
-    //        _restartbutton->deactivate();
-    //    }
+//        if (value && ! _restartbutton->isActive()) {
+//            _restartbutton->activate();
+//        } else if (!value && _restartbutton->isActive()) {
+//            _restartbutton->deactivate();
+//        }
 }
