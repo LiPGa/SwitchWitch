@@ -88,6 +88,12 @@
         },
         "star_empty":{
             "file": "textures/star-empty.png"
+        },
+        "scoremeter_background": {
+            "file": "textures/scoremeter_background.png"
+        },
+        "scoremeter_foreground": {
+            "file": "textures/scoremeter_foreground.png"
         }
     },
     "fonts": {
