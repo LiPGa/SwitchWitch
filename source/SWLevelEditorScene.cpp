@@ -386,7 +386,6 @@ void LevelEditorScene::update(float timestep)
         unit->getViewNode()->setTexture(_textures.at(getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))));
     }
     if (_input.isSaveDown()) {
-        CULog("save");
         saveBoardAsJSON();
         
     }
@@ -458,13 +457,12 @@ void LevelEditorScene::setActive(bool value) {
  * Returns the JSON value of the board.
  */
 shared_ptr<cugl::JsonValue> LevelEditorScene::getBoardAsJSON() {
-    CULog("get board as json");
     shared_ptr<cugl::JsonValue> boardJSON = cugl::JsonValue::allocObject();
     boardJSON->appendChild("id", cugl::JsonValue::alloc((long int)_id));
     boardJSON->appendChild("total-swap-allowed", cugl::JsonValue::alloc((long int)_numberOfTurns));
     boardJSON->appendChild("one-star-condition", cugl::JsonValue::alloc((long int)_oneStarCondition));
     boardJSON->appendChild("two-star-condition", cugl::JsonValue::alloc((long int)_twoStarCondition));
-    boardJSON->appendChild("three-star-condition", cugl::JsonValue::alloc((long int)_twoStarCondition));
+    boardJSON->appendChild("three-star-condition", cugl::JsonValue::alloc((long int)_threeStarCondition));
     shared_ptr<cugl::JsonValue> squareOccupantArray = cugl::JsonValue::allocArray();
     for (shared_ptr<Square> square : _board->getAllSquares()) {
         auto unit = square->getUnit();
@@ -487,13 +485,9 @@ shared_ptr<cugl::JsonValue> LevelEditorScene::getBoardAsJSON() {
  */
 void LevelEditorScene::saveBoardAsJSON() {
     std::ostringstream fileName;
-    fileName << "" << "board" << _id << ".json";
-    CULog("filename: %s", fileName.str().c_str());
-    if (cugl::filetool::file_exists(fileName.str())) {
-        CULog("file exist");
-    } else
-        CULog("file not exist");
-    shared_ptr<cugl::JsonWriter> saveDirectory = cugl::JsonWriter::alloc(fileName.str());
-    CULog("..");
+    fileName << "board" << _id << ".json";
+    vector<string> path = {Application::get()->getSaveDirectory(), fileName.str()};
+    CULog("The file path is: %s", filetool::join_path(path).c_str());
+    shared_ptr<cugl::JsonWriter> saveDirectory = cugl::JsonWriter::alloc(filetool::join_path(path));
     saveDirectory->writeJson(getBoardAsJSON());
 }
