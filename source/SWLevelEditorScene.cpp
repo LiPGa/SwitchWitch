@@ -292,7 +292,7 @@ bool LevelEditorScene::isInteger(const std::string& s) {
 void LevelEditorScene::whenDoingTextInput() {
     _currentState = State::CHANGING_INFO;
     if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
-    _selectedSquare == NULL;
+    _selectedSquare = NULL;
 }
 
 /**
