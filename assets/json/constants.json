@@ -24,6 +24,14 @@
         "special_up_square",
         "special_down_square",
         "special_left_square",
-        "special_right_square"
+        "special_right_square",
+        "star_empty",
+        "star_full"
+    ],
+    "probability-respawn": [
+        "basic",
+        "two-forward",
+        "three-way",
+        "diagonal"
     ]
 }

@@ -23,7 +23,14 @@ using namespace cugl;
 using namespace std;
 
 #pragma mark -
+#pragma mark Level Layout
 
+/** How big the square width should be */
+#define SQUARE_SIZE 128
+
+#pragma mark Asset Constants
+
+#pragma mark -
 #pragma mark Constructors
 
 /**
@@ -80,14 +87,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // GetJSONValuesFromAssets
     _constants = assets->get<JsonValue>("constants");
     _boardMembers = assets->get<JsonValue>("boardMember");
+    _boardJson = assets->get<JsonValue>("board");
 
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
     vector<int> boardSize = _constants->get("board-size")->asIntArray();
     _boardWidth = boardSize.at(0);
     _boardHeight = boardSize.at(1);
+    _squareSizeAdjustedForScale = _constants->getInt("square-size");
     _defaultSquareSize = _constants->getInt("square-size");
-    
+
     // Initialize Scene
     dimen *= _sceneHeight / dimen.height;
     if (!Scene2::init(dimen))
@@ -105,20 +114,26 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Get Textures
     // Preload all the textures into a hashmap
     vector<string> textureVec = _constants->get("textures")->asStringArray();
-    for (string textureName : textureVec) {
+    for (string textureName : textureVec)
+    {
         _textures.insert({textureName, _assets->get<Texture>(textureName)});
+    }
+    
+    // Get Probablities
+    // Preload all the probabilities into a hashmap
+    vector<string> probabilityVec = _constants->get("probability-respawn")->asStringArray();
+    int probabilitySum = 0;
+    for (string probabilityName : probabilityVec)
+    {
+        probabilitySum += _boardMembers-> get("unit") -> get(probabilityName) -> get("probability-respawn") -> asInt();
+        _probability.insert({probabilityName, probabilitySum});
     }
 
     // Get the background image and constant values
-    auto background = assets->get<Texture>("background");
-    _backgroundNode = scene2::PolygonNode::allocWithTexture(background);
-    _scale = getSize() / background->getSize();
+    _background = assets->get<Texture>("background");
+    _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
+    _scale = getSize() / _background->getSize();
     _backgroundNode->setScale(_scale);
-
-    _topuibackground = assets->get<Texture>("top-ui-background");
-    _topuibackgroundNode = scene2::PolygonNode::allocWithTexture(_topuibackground);
-    _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
-    _topuibackgroundNode->setScale(_scale);
 
     _topuibackground = assets->get<Texture>("top-ui-background");
     _topuibackgroundNode = scene2::PolygonNode::allocWithTexture(_topuibackground);
@@ -132,9 +147,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
     addChild(_guiNode);
     _guiNode->addChild(_backgroundNode);
-
-//    _guiNode->addChild(_topuibackgroundNode);
-
     _backgroundNode->setAnchor(Vec2::ZERO);
     _layout->addAbsolute("top_ui_background", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(0, -(_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
@@ -144,7 +156,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Initialize Board
     _board = Board::alloc(_boardHeight, _boardWidth);
-    
+    _currLevel = _boardJson->getInt("id");
+    _turns = _boardJson->getInt("total-swap-allowed");
+    _max_turns = _boardJson->getInt("total-swap-allowed");
+    // thresholds for the star system
+    _onestar_threshold = _boardJson->getInt("one-star-condition");
+    _twostar_threshold = _boardJson->getInt("two-star-condition");
+    _threestar_threshold = _boardJson->getInt("three-star-condition");
+
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("%d/%d", _turns, _max_turns);
     _turn_text = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
@@ -161,8 +180,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Set the view of the board.
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height);
-    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth  * _squareSizeAdjustedForScale, _boardHeight * _squareSizeAdjustedForScale));
-    _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(-.04, -.115));
+    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth * _squareSizeAdjustedForScale, _boardHeight * _squareSizeAdjustedForScale));
+    _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(-.05, -.1));
     _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
@@ -195,19 +214,73 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _unitTypes.insert({child->key(), unit});
     }
 
-    // Create and layout the win lose text
-    std::string endgameMsg = "YOU LOSE";
-    _endgame_text = scene2::Label::allocWithText(endgameMsg, assets->get<Font>("pixel32"));
-    _endgame_text->setForeground(Color4::CLEAR);
-    _layout->addAbsolute("endgame_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_endgame_text->getWidth() / 2, -_endgame_text->getHeight()));
-    _guiNode->addChildWithName(_endgame_text, "endgame_text");
+    // Get the sub-type and color of the unit for every unit in this level
+    // Get the direction of the unit for every unit in this level and save in a vector
+    auto unitsInBoardJson = _boardJson->get("board-members")->children();
+    vector<Vec2> unitsDirInBoard;
+    vector<vector<std::string>> unitsInBoard;
+    for (auto child : unitsInBoardJson)
+    {
+        auto unitDirArray = child->get("direction")->asFloatArray();
+        unitsDirInBoard.push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
+        auto unitColor = child->getString("color");
+        auto unitSubType = child->getString("sub-type");
+        vector<std::string> info{unitSubType, unitColor};
+        unitsInBoard.push_back(info);
+    }
 
-    std::shared_ptr<scene2::SceneNode> resultLayout = assets->get<scene2::SceneNode>("result");
-    resultLayout->setContentSize(dimen);
-    resultLayout->doLayout(); // Repositions the HUD
-    _guiNode->addChild(resultLayout);
+    // Create the squares & units and put them in the map
+    for (int i = 0; i < _boardWidth; i++)
+    {
+        for (int j = 0; j < _boardHeight; ++j)
+        {
+            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
+            auto squarePosition = Vec2(i, j);
 
-    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_restart"));
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale * 1.2) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
+            squareNode->setScale(_scale.width);
+            shared_ptr<Square> sq = _board->getSquare(squarePosition);
+            sq->setViewNode(squareNode);
+            _board->getViewNode()->addChild(squareNode);
+            //            // Generate unit for this square
+            auto unitSubType = unitsInBoard.at(_boardWidth * (_boardHeight - j - 1) + i).at(0);
+            auto unitColor = unitsInBoard.at(_boardWidth * (_boardHeight - j - 1) + i).at(1);
+        std:
+            string unitPattern = getUnitType(unitSubType, unitColor);
+            Vec2 unitDirection = unitsDirInBoard.at(_boardWidth * (_boardHeight - j - 1) + i);
+            auto unitTemplate = _unitTypes.at(unitSubType);
+            Unit::Color c = Unit::stringToColor(unitColor);
+            shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
+            sq->setUnit(unit);
+            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
+            unit->setViewNode(unitNode);
+            if (unitSubType != "basic")
+            {
+                unit->setSpecial(true);
+            }
+            else
+            {
+                unit->setSpecial(false);
+            }
+            // unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+            squareNode->addChild(unitNode);
+            updateSquareTexture(sq, _textures);
+        }
+    }
+
+    _resultLayout = assets->get<scene2::SceneNode>("result");
+    _resultLayout->setContentSize(dimen);
+    _resultLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(_resultLayout);
+    _resultLayout->setVisible(false);
+    
+    _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
+    _star1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star1"));
+    _star2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star2"));
+    _star3 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star3"));
+    _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_restart"));
+    _restartbutton->deactivate();
+    _restartbutton->setDown(false);
     _restartbutton->addListener([this](const std::string& name, bool down) {
         CULog("pressed");
         if (down) {
@@ -216,13 +289,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     });
 
-    _restartbutton->setVisible(false);
-    if (_active) {
-        CULog("Restart button activated");
-        CULog("Size is %s",_restartbutton->getContentSize().toString().c_str());
-        CULog("Position is %s",_restartbutton->getPosition().toString().c_str());
-        _restartbutton->activate();
-    }
+    
     
     return true;
 }
@@ -247,7 +314,8 @@ bool GameScene::isSafe(cugl::Vec2 pos, cugl::Vec2 specialPosition[])
     for (int i = 0; i < specialPosition->length(); i++)
     {
         // if the given position is already taken by another special unit
-        if (pos == specialPosition[i]) {
+        if (pos == specialPosition[i])
+        {
             return false;
         }
 
@@ -276,28 +344,45 @@ void GameScene::generateUnit(shared_ptr<Square> sq)
     unit->setColor(Unit::Color(rand() % 3));
     // TODO: Probabilities need to be inbedded in JSON.
     // TODO: Relation between probabilities and unitSubTypes stored in some kind of data structure.
-    int basicUnitSpawnProbabilityPrecentage = 90;
-    int twoForwardAttackSpawnProbabilityPrecentage = 4;
-    int threeWayAttackSpawnProbabilityPrecentage = 4;
-    int diagonalAttackSpawnProbabilityPrecentage = 2;
     auto unitSelectRandomNumber = rand() % 100;
     std::string unitSubTypeSelected;
-    if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage)
-    {
+    if (unitSelectRandomNumber < _probability["basic"]){
         unitSubTypeSelected = "basic";
     }
-    else if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage + twoForwardAttackSpawnProbabilityPrecentage)
-    {
+    else if (unitSelectRandomNumber < _probability["two-forward"]) {
         unitSubTypeSelected = "two-forward";
     }
-    else if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage + twoForwardAttackSpawnProbabilityPrecentage + threeWayAttackSpawnProbabilityPrecentage)
-    {
+    else if (unitSelectRandomNumber < _probability["three-way"]) {
         unitSubTypeSelected = "three-way";
     }
-    else
-    {
+    else if (unitSelectRandomNumber < _probability["diagonal"]) {
         unitSubTypeSelected = "diagonal";
     }
+    
+//    int basicUnitSpawnProbabilityPrecentage = 90;
+//    int twoForwardAttackSpawnProbabilityPrecentage = 4;
+//    int threeWayAttackSpawnProbabilityPrecentage = 4;
+//    int diagonalAttackSpawnProbabilityPrecentage = 2;
+//    auto unitSelectRandomNumber = rand() % 100;
+//
+//    std::string unitSubTypeSelected;
+//    if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage)
+//    {
+//        unitSubTypeSelected = "basic";
+//    }
+//    else if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage + twoForwardAttackSpawnProbabilityPrecentage)
+//    {
+//        unitSubTypeSelected = "two-forward";
+//    }
+//    else if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage + twoForwardAttackSpawnProbabilityPrecentage + threeWayAttackSpawnProbabilityPrecentage)
+//    {
+//        unitSubTypeSelected = "three-way";
+//    }
+//    else
+//    {
+//        unitSubTypeSelected = "diagonal";
+//    }
+        
     auto unitSelected = _unitTypes[unitSubTypeSelected];
     unit->setSubType(unitSelected->getSubType());
     unit->setBasicAttack(unitSelected->getBasicAttack());
@@ -325,10 +410,23 @@ void GameScene::generateUnit(shared_ptr<Square> sq)
  */
 /*
 void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode) {
-
     auto unit = sq->getUnit();
+    unit->setSpecial(true);
     auto unitNode = unit->getViewNode();
     auto randomNumber3 = rand() % 10 + 1;
+    if (unit->getDirection() == Vec2(0, 1)) {
+        sq->getViewNode()->setTexture(_textures.at("special_up_square"));
+    }
+    else if (unit->getDirection() == Vec2(0, -1)) {
+        sq->getViewNode()->setTexture(_textures.at("special_down_square"));
+    }
+    else if (unit->getDirection() == Vec2(1, 0)) {
+        sq->getViewNode()->setTexture(_textures.at("special_right_square"));
+    }
+    else {
+        sq->getViewNode()->setTexture(_textures.at("special_left_square"));
+    }
+    //sq->getViewNode()->setTexture(_textures.at("special_up_square"));
     if (randomNumber3 <= 4) {
         unit->setSpecialAttack(twoForwardAttack);
     } else if (randomNumber3 > 4 && randomNumber3 <= 8) {
@@ -336,7 +434,6 @@ void GameScene::upgradeToSpecial(shared_ptr<Square> sq, shared_ptr<scene2::Polyg
     } else {
            unit->setSpecialAttack(diagonalAttack);
     }
-
     if (unit->getColor() == Unit::RED) {
         if (unit->getSpecialAttack() == twoForwardAttack) {
             unitNode -> setTexture(_textures.at("two-forward-red"));
@@ -405,7 +502,7 @@ int GameScene::calculateScore(int colorNum, int basicUnitsNum, int specialUnitsN
 void GameScene::update(float timestep)
 {
     // Read the keyboard for each controller.
-    // Read the input and convert to a square position.
+    // Read the input
     _input.update();
     if (_turns == 0 and didRestart == true){
         CULog("Reset");
@@ -414,28 +511,34 @@ void GameScene::update(float timestep)
 
     if (_turns == 0)
     {
-
+        _restartbutton->activate();
+        _score_number->setText(to_string(_score));
         if (_score < _onestar_threshold)
         {
-            _endgame_text->setText("You Lose");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_empty"));
+            _star2->setTexture(_textures.at("star_empty"));
+            _star3->setTexture(_textures.at("star_empty"));
         }
         else if (_score >= _onestar_threshold && _score < _twostar_threshold)
         {
-            _endgame_text->setText("You Win *");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_full"));
+            _star2->setTexture(_textures.at("star_empty"));
+            _star3->setTexture(_textures.at("star_empty"));
         }
         else if (_score >= _twostar_threshold && _score < _threestar_threshold)
         {
-            _endgame_text->setText("You Win **");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_full"));
+            _star2->setTexture(_textures.at("star_full"));
+            _star3->setTexture(_textures.at("star_empty"));
         }
         else
         {
-            _endgame_text->setText("You Win ***");
-            _endgame_text->setForeground(Color4::RED);
+            _star1->setTexture(_textures.at("star_full"));
+            _star2->setTexture(_textures.at("star_full"));
+            _star3->setTexture(_textures.at("star_full"));
         }
-         _restartbutton->setVisible(true);
+        
+        _resultLayout->setVisible(true);
         return;
     }
     Vec2 pos = _input.getPosition();
@@ -606,11 +709,11 @@ void GameScene::reset()
 void GameScene::setActive(bool value)
 {
     _active = value;
-    //    if (value && ! _restartbutton->isActive()) {
-    //        _restartbutton->activate();
-    //    } else if (!value && _restartbutton->isActive()) {
-    //        _restartbutton->deactivate();
-    //    }
+//        if (value && ! _restartbutton->isActive()) {
+//            _restartbutton->activate();
+//        } else if (!value && _restartbutton->isActive()) {
+//            _restartbutton->deactivate();
+//        }
 }
 
 void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {

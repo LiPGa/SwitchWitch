@@ -40,6 +40,8 @@ protected:
     std::shared_ptr<cugl::JsonValue> _constants;
     /** The JSON value with all of the board members */
     std::shared_ptr<cugl::JsonValue> _boardMembers;
+    /** The JSON value for the levels */
+    std::shared_ptr<cugl::JsonValue> _boardJson;
     
     // current level, corresponds to board's ID.
     int _currLevel;
@@ -54,6 +56,8 @@ protected:
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
     // hash map for units with different types
     std::unordered_map<std::string, std::shared_ptr<Unit>> _unitTypes;
+    // hash map for unit probabilities
+    std::unordered_map<std::string, int> _probability;
     
 #pragma mark State Varibales
     /** Possible states of the level.
@@ -123,6 +127,8 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
+    std::shared_ptr<scene2::SceneNode> _resultLayout;
+
 
     // std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;
     // std::shared_ptr<cugl::scene2::SceneNode> _replacementBoardNodeS;
@@ -134,20 +140,28 @@ protected:
     std::shared_ptr<cugl::Texture> _background;
     /** The top UI backgrounnd image */
     std::shared_ptr<cugl::Texture> _topuibackground;
+    /** The result menu image */
+    std::shared_ptr<cugl::Texture> _resultmenubackground;
     /** The text with the current remaining turns */
     std::shared_ptr<cugl::scene2::Label> _turn_text;
     /** The text with the current score */
     std::shared_ptr<cugl::scene2::Label> _score_text;
+    /** The text with the final score */
+    std::shared_ptr<cugl::scene2::Label> _score_number;
+
+    /** The images of the final stars*/
+    std::shared_ptr<cugl::scene2::PolygonNode> _star1;
+    std::shared_ptr<cugl::scene2::PolygonNode> _star2;
+    std::shared_ptr<cugl::scene2::PolygonNode> _star3;
+    
     /** The text above the replacement board */
     std::shared_ptr<cugl::scene2::Label> _replace_text;
-    // std::shared_ptr<cugl::TextLayout> _score_text;
-    /** Win/Lose text */
-    std::shared_ptr<cugl::scene2::Label> _endgame_text;
     /** The button to restart  a game */
     std::shared_ptr<cugl::scene2::Button> _restartbutton;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
+    
 
     /** Whther the player pressed restart button*/
     bool didRestart = false;
@@ -237,17 +251,17 @@ public:
      * @param value whether the scene is currently active
      */
     virtual void setActive(bool value) override;
-
+    
     /**
      * Sets the board that will be played using JSON
-     * 
+     *
      * @param the JSON representation of the board.
      */
     void setBoard(shared_ptr<cugl::JsonValue> boardJSON);
-
+    
     /**
      * Returns the current state the game is in.
-     * 
+     *
      * @returns the current state
      */
     bool goToLevelEditor() { return _input.isEscapeDown(); }
