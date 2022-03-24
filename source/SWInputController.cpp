@@ -140,7 +140,8 @@ void InputController::update()
     _playDown = keys->keyPressed(KeyCode::ENTER) || keys->keyPressed(KeyCode::KEYPAD_ENTER);
     _debugDown = keys->keyPressed(KeyCode::D) && keys->keyDown(KeyCode::LEFT_CTRL);
     _resetDown = keys->keyPressed(KeyCode::R);
-
+    _escapeDown = keys->keyPressed(KeyCode::ESCAPE);
+    
     _currDown = _mouseDown;
     _currPos = _mousePos;
 #endif

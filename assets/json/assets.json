@@ -308,6 +308,229 @@
                     }
                 }
             }
+        },
+        "level-editor" : {
+            "comment"   : "The scene graph definition for the text field demo",
+            "type"      : "Node",
+            "format"    : {
+                "type" : "Anchored"
+            },
+            "children"  : {
+                "id-field"  : {
+                    "type"   : "TextField",
+                    "data"   : {
+                        "font"       : "pixel32",
+                        "text"       : "0",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [170,40],
+                        "anchor"     : [0.5,0.5],
+                        "cursor"     : true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.05,
+                        "x_offset" : 0.05
+                    }
+                },
+                "id-label"  : {
+                    "type"   : "Label",
+                    "data"   : {
+                        "font"       : "pixel32",
+                        "text"       : "LevID:",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [100,40],
+                        "anchor"     : [1,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.05,
+                        "x_offset" : -0.2
+                    }
+                },
+                "turn-field"  : {
+                    "type"   : "TextField",
+                    "data"   : {
+                        "font"       : "pixel32",
+                        "text"       : "0",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [170,40],
+                        "anchor"     : [0.5,0.5],
+                        "cursor"     : true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.15,
+                        "x_offset" : 0.05
+                    }
+                },
+                "turn-label"  : {
+                    "type"   : "Label",
+                    "data"   : {
+                        "font"       : "pixel32",
+                        "text"       : "Turns:",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [100,40],
+                        "anchor"     : [1,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "top",
+                        "y_offset" : -0.15,
+                        "x_offset" : -0.2
+                    }
+                },
+                "one-star-score-field"  : {
+                    "type"   : "TextField",
+                    "data"   : {
+                        "font"       : "pixel32",
+                        "text"       : "0",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [170,40],
+                        "anchor"     : [0.5,0.5],
+                        "cursor"     : true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.15,
+                        "x_offset" : 0.05
+                    }
+                },
+                "one-star-score-label"  : {
+                    "type"   : "Label",
+                    "data"   : {
+                        "font"       : "pixel32",
+                        "text"       : "1 Star",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [100,40],
+                        "anchor"     : [1,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.15,
+                        "x_offset" : -0.2
+                    }
+                },
+                "two-star-score-field"  : {
+                    "type"   : "TextField",
+                    "data"   : {
+                        "font"       : "pixel32",
+                        "text"       : "0",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [170,40],
+                        "anchor"     : [0.5,0.5],
+                        "cursor"     : true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.1,
+                        "x_offset" : 0.05
+                    }
+                },
+                "two-star-score-label"  : {
+                    "type"   : "Label",
+                    "data"   : {
+                        "font"       : "pixel32",
+                        "text"       : "2 Star",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [100,40],
+                        "anchor"     : [1,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.1,
+                        "x_offset" : -0.2
+                    }
+                },
+                "three-star-score-field"  : {
+                    "type"   : "TextField",
+                    "data"   : {
+                        "font"       : "pixel32",
+                        "text"       : "0",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [170,40],
+                        "anchor"     : [0.5,0.5],
+                        "cursor"     : true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.05,
+                        "x_offset" : 0.05
+                    }
+                },
+                "three-star-score-label"  : {
+                    "type"   : "Label",
+                    "data"   : {
+                        "font"       : "pixel32",
+                        "text"       : "3 Star",
+                        "foreground" : "#ffffff",
+                        "background" : "#000000",
+                        "size"       : [100,40],
+                        "anchor"     : [1,0.5]
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "bottom",
+                        "y_offset" : 0.05,
+                        "x_offset" : -0.2
+                    }
+                },
+                "save": {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key"     : "textbutton",
+                        "variables" : {
+                            "size": [70,50],
+                            "text": "Save",
+                            "color": "#000088"
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "right",
+                        "y_anchor" : "top",
+                        "x_offset" : -0.1,
+                        "y_offset" : -0.15
+                    }
+                },
+                "play": {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key"     : "textbutton",
+                        "variables" : {
+                            "size": [70,50],
+                            "text": "Play",
+                            "color": "#000088"
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "right",
+                        "y_anchor" : "top",
+                        "x_offset" : -0.1,
+                        "y_offset" : -0.05
+                    }
+                }
+            }
         }
     }
 }

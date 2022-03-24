@@ -32,6 +32,9 @@ protected:
 
     State _currentState;
 
+    /** The scale which all textures must conform to */
+    Size _scale;
+
     /** The asset manager for this game mode. */
     std::shared_ptr<cugl::AssetManager> _assets;
 
@@ -49,8 +52,10 @@ protected:
 
     // CONSTANTS
     int _sceneHeight;
-    int _boardSize;
-    int _squareSize;
+    int _boardWidth;
+    int _boardHeight;
+    int _defaultSquareSize;
+    int _squareSizeAdjustedForScale;
 
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
@@ -66,17 +71,28 @@ protected:
     shared_ptr<Square> _selectedSquare;
     shared_ptr<Square> _selectedUnitFromSelectionBoard;
 
-    int numberOfTurns;
-    int id;
-    int winCondition;
+    int _numberOfTurns;
+    int _id;
+    int _oneStarCondition;
+    int _twoStarCondition;
+    int _threeStarCondition;
+
+    bool _playPressed;
 
 #pragma mark -
 #pragma mark View Variables
-    // VIEW
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _selectionBoardNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
+    std::shared_ptr<cugl::scene2::TextField> _levelIDText;
+    std::shared_ptr<cugl::scene2::TextField> _turnText;
+    std::shared_ptr<cugl::scene2::TextField> _oneStarScoreText;
+    std::shared_ptr<cugl::scene2::TextField> _twoStarScoreText;
+    std::shared_ptr<cugl::scene2::TextField> _threeStarScoreText;
+    std::shared_ptr<cugl::scene2::Button> _playButton;
+    std::shared_ptr<cugl::scene2::Button> _saveButton;
 
 #pragma mark -
 public:
@@ -128,16 +144,18 @@ public:
     void update(float timestep) override;
 
     /**
-     * Draws all this scene to the given SpriteBatch.
+     * Sets whether the scene is currently active
      *
-     * The default implementation of this method simply draws the scene graph
-     * to the sprite batch.  By overriding it, you can do custom drawing
-     * in its place.
-     *
-     * @param batch     The SpriteBatch to draw with.
+     * @param value whether the scene is currently active
      */
-    void render(const std::shared_ptr<cugl::SpriteBatch>& batch) override;
+    virtual void setActive(bool value) override;
 
+    /**
+     * Returns the JSON value of the board.
+     */
+    shared_ptr<cugl::JsonValue> getBoardAsJSON();
+
+    bool goToGameScene() { return _input.isPlayDown() || _playPressed; }
 private:
     /**
      * Get the pattern for a unit provided its type and color
@@ -147,6 +165,22 @@ private:
      */
     std::string getUnitType(std::string type, std::string color);
 
+    /**
+     * Returns if the string is an integer.
+     * 
+     * @returns true if string is an integer.
+     */
+    bool isInteger(const std::string& s);
+
+    /**
+     * Called whenever the user is doing a text input. 
+     */
+    void whenDoingTextInput();
+
+    /**
+     * Saves the JSON value in the level directory
+     */
+    void saveBoardAsJSON();
 };
 
 #endif /* __SW_GAME_SCENE_H__ */

@@ -162,11 +162,12 @@ public:
      */
     vector<shared_ptr<Square>> getAttackedSquares(cugl::Vec2 pos);
 
-private: 
     /**
      * Flattens two coordinate number as one number. Used for organizing the _matrix.
      */
     int flattenPos(int x, int y) { return x * _rows + y; }
+
+private: 
     /**
      * Helper function for finding attacked squares.
      */

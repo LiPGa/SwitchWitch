@@ -25,25 +25,13 @@ using namespace std;
 #pragma mark -
 #pragma mark Level Layout
 
-// Lock the screen size to fixed height regardless of aspect ratio
-#define SCENE_HEIGHT 720
-
-/** How big the unit radius should be */
-#define UNIT_SIZE 50
-
-/** How big the square width should be */
-#define SQUARE_SIZE 128
-
-/** How big the board is*/
-#define BOARD_WIDTH 5
-
-#define BOARD_HEIGHT 5
-
-#define SELECTION_BOARD_WIDTH 2
-#define SELECTION_BOARD_HEIGHT 10
+#define SELECTION_BOARD_WIDTH 12
+#define SELECTION_BOARD_HEIGHT 2
 
 /** How to reduce the scale of textures for select*/
 #define SELECTION_BOARD_SCALE 0.5
+
+#define SELECTION_BOARD_Y_OFFSET -0.275
 
 #pragma mark Asset Constants
 
@@ -69,12 +57,13 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     // GetJSONValuesFromAssets
     _constants = assets->get<JsonValue>("constants");
     _boardMembers = assets->get<JsonValue>("boardMember");
-    _boardJson = assets->get<JsonValue>("board");
 
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
-    _boardSize = _constants->getInt("board-size");
-    _squareSize = _constants->getInt("square-size");
+    vector<int> boardSize = _constants->get("board-size")->asIntArray();
+    _boardWidth = boardSize.at(0);
+    _boardHeight = boardSize.at(1);
+    _defaultSquareSize = _constants->getInt("square-size");
 
     // Initialize Scene
     dimen *= _sceneHeight / dimen.height;
@@ -84,6 +73,13 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _input.init();
 
     _currentState = State::NOTHING;
+    _playPressed = false;
+
+    // Get the background image and constant values
+    auto background = assets->get<Texture>("background");
+    _backgroundNode = scene2::PolygonNode::allocWithTexture(background);
+    _scale = getSize() / background->getSize();
+    _backgroundNode->setScale(_scale);
 
     // Get Textures
     // preload all the textures into a hashmap
@@ -93,28 +89,106 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         _textures.insert({ textureName, _assets->get<Texture>(textureName) });
     }
 
-    // layout
-    _layout = scene2::AnchoredLayout::alloc();
-
     // set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+    // Allocate Layout
+    _layout = scene2::AnchoredLayout::alloc();
+    _guiNode->setLayout(_layout);
+    addChild(_backgroundNode);
+    _backgroundNode->setAnchor(Vec2::ZERO);
 
+    _numberOfTurns = 0;
+    _id = 0;
+    _oneStarCondition = 0;
+    _twoStarCondition = 0;
+    _threeStarCondition = 0;
+
+    // set up text fields
+    auto textField = _assets->get<scene2::SceneNode>("level-editor");
+    textField->setContentSize(dimen);
+    textField->doLayout();
+    addChild(textField);
+    _levelIDText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor_id-field"));
+    _oneStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor_one-star-score-field"));
+    _twoStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor_two-star-score-field"));
+    _threeStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor_three-star-score-field"));
+    _turnText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor_turn-field"));
+    _levelIDText->addTypeListener([this](const std::string& name, const std::string& value) {
+        whenDoingTextInput();
+        if (value.empty()) return;
+        if (!isInteger(value)) _levelIDText->setText(to_string(_id));
+     });
+    _levelIDText->addExitListener([this](const std::string& name, const std::string& value) {
+        if (isInteger(value)) _id = stoi(value);
+        else _levelIDText->setText(to_string(_id));
+        });
+    _oneStarScoreText->addTypeListener([this](const std::string& name, const std::string& value) {
+        whenDoingTextInput();
+        if (value.empty()) return;
+        if (!isInteger(value)) _oneStarScoreText->setText(to_string(_oneStarCondition));
+    });
+    _oneStarScoreText->addExitListener([this](const std::string& name, const std::string& value) {
+        if (isInteger(value)) _oneStarCondition = stoi(value);
+        else _oneStarScoreText->setText(to_string(_oneStarCondition));
+        });
+    _twoStarScoreText->addTypeListener([this](const std::string& name, const std::string& value) {
+        whenDoingTextInput();
+        if (value.empty()) return;
+        if (!isInteger(value)) _twoStarScoreText->setText(to_string(_twoStarCondition));
+        });
+    _twoStarScoreText->addExitListener([this](const std::string& name, const std::string& value) {
+        if (isInteger(value)) _twoStarCondition = stoi(value);
+        else _twoStarScoreText->setText(to_string(_twoStarCondition));
+        });
+    _threeStarScoreText->addTypeListener([this](const std::string& name, const std::string& value) {
+        whenDoingTextInput();
+        if (value.empty()) return;
+        if (!isInteger(value)) _threeStarScoreText->setText(to_string(_threeStarCondition));
+        });
+    _threeStarScoreText->addExitListener([this](const std::string& name, const std::string& value) {
+        if (isInteger(value)) _threeStarCondition = stoi(value);
+        else _threeStarScoreText->setText(to_string(_threeStarCondition));
+        });
+    _turnText->addTypeListener([this](const std::string& name, const std::string& value) {
+        whenDoingTextInput();
+        if (value.empty()) return;
+        if (!isInteger(value)) _turnText->setText(to_string(_numberOfTurns));
+        });
+    _turnText->addExitListener([this](const std::string& name, const std::string& value) {
+        if(isInteger(value)) _numberOfTurns = stoi(value);
+        else _turnText->setText(to_string(_numberOfTurns));
+        });
+
+    // Initialize Buttons
+    _playButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("level-editor_play"));
+    _saveButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("level-editor_save"));
+    _saveButton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            saveBoardAsJSON();
+        }
+        });
+    _playButton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _playPressed = true;
+        }
+        });
     // Initialize Board
-    _board = Board::alloc(BOARD_HEIGHT, BOARD_WIDTH);
+    _board = Board::alloc(_boardHeight, _boardWidth);
 
     /// Initialize Selection Board
     _selectionBoard = Board::alloc(SELECTION_BOARD_HEIGHT, SELECTION_BOARD_WIDTH);
 
     // Set the view of the board.
-    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, BOARD_WIDTH * SQUARE_SIZE, BOARD_HEIGHT * SQUARE_SIZE));
+    _squareSizeAdjustedForScale = int(_defaultSquareSize * min(_scale.width, _scale.height));
+    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth * _squareSizeAdjustedForScale, _boardHeight * _squareSizeAdjustedForScale));
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
     _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
 
     // Set the view of the select board.
-    _selectionBoardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, SQUARE_SIZE, BOARD_HEIGHT * SQUARE_SIZE));
-    _layout->addRelative("selectionBoardNode", cugl::scene2::Layout::Anchor::MIDDLE_LEFT, Vec2(SQUARE_SIZE / getSize().width, 0));
+    _selectionBoardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth * _squareSizeAdjustedForScale, _squareSizeAdjustedForScale));
+    _layout->addRelative("selectionBoardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, SELECTION_BOARD_Y_OFFSET));
     _selectionBoardNode->setTexture(_textures.at("transparent"));
     _selectionBoard->setViewNode(_selectionBoardNode);
     _guiNode->addChildWithName(_selectionBoardNode, "selectionBoardNode");
@@ -145,11 +219,12 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     }
 
     // Create the squares & units and put them in the map
-    for (int i = 0; i < _boardSize; i++) {
-        for (int j = 0; j < _boardSize; ++j) {
+    for (int i = 0; i < _boardWidth; i++) {
+        for (int j = 0; j < _boardHeight; ++j) {
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
-            auto squarePosition = (Vec2(i, j));
-            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE) + Vec2::ONE * (SQUARE_SIZE / 2));
+            auto squarePosition = Vec2(i, j);
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
+            squareNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _board->getViewNode()->addChild(squareNode);
@@ -174,8 +249,8 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         for (int j = 0; j < SELECTION_BOARD_HEIGHT; ++j) {
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
             auto squarePosition = (Vec2(i, j));
-            squareNode->setScale(SELECTION_BOARD_SCALE);
-            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * SQUARE_SIZE * SELECTION_BOARD_SCALE) + Vec2::ONE * (SQUARE_SIZE * SELECTION_BOARD_SCALE / 2));
+            squareNode->setScale(((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize) * SELECTION_BOARD_SCALE);
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale * SELECTION_BOARD_SCALE) + Vec2::ONE * (_squareSizeAdjustedForScale * SELECTION_BOARD_SCALE / 2));
             shared_ptr<Square> sq = _selectionBoard->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _selectionBoard->getViewNode()->addChild(squareNode);
@@ -192,7 +267,9 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         i++;
     }
 
-    // Create the squares & units for the selection board and put them on the map.
+    _guiNode->doLayout();
+    addChild(_guiNode);
+
     reset();
     return true;
 }
@@ -203,6 +280,19 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
  */
 std::string LevelEditorScene::getUnitType(std::string type, std::string color) {
     return type + "-" + color;
+}
+
+bool LevelEditorScene::isInteger(const std::string& s) {
+    if (s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+'))) return false;
+    char* p;
+    strtol(s.c_str(), &p, 10);
+    return (*p == 0);
+}
+
+void LevelEditorScene::whenDoingTextInput() {
+    _currentState = State::CHANGING_INFO;
+    if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
+    _selectedSquare = NULL;
 }
 
 /**
@@ -231,18 +321,14 @@ void LevelEditorScene::update(float timestep)
     // Read the input
     _input.update();
     Vec2 pos = _input.getPosition();
-    Vec2 boardPos = _boardNode->worldToNodeCoords(pos);
-    Vec2 selectionBoardPos = _selectionBoardNode->worldToNodeCoords(pos);
-    /*
-     * The mouse position is measured with the top left of the screen being the origin
-     * while the origin of the board is on the bottom left.
-     * The extra calculation on y is meant to convert the mouse position as if its origin is on the bottom left.
-     */
+    Vec3 worldCoordinate = screenToWorldCoords(pos);
+    Vec2 boardPos = _boardNode->worldToNodeCoords(worldCoordinate);
+    Vec2 selectionBoardPos = _selectionBoardNode->worldToNodeCoords(worldCoordinate);
     
     if (_input.didPress())
     {
-        Vec2 squarePos = Vec2(int(boardPos.x) / SQUARE_SIZE, BOARD_HEIGHT - 1 - (int(boardPos.y) / SQUARE_SIZE));
-        Vec2 selectionSquarePos = Vec2(int(selectionBoardPos.x) / int(SQUARE_SIZE * SELECTION_BOARD_SCALE), SELECTION_BOARD_HEIGHT - 1 - (int(selectionBoardPos.y) / int(SQUARE_SIZE * SELECTION_BOARD_SCALE)));
+        Vec2 squarePos = Vec2(int(boardPos.x / (_squareSizeAdjustedForScale)), int(boardPos.y / (_squareSizeAdjustedForScale)));
+        Vec2 selectionSquarePos = Vec2(int(selectionBoardPos.x / (_squareSizeAdjustedForScale * SELECTION_BOARD_SCALE)), int(selectionBoardPos.y / (_squareSizeAdjustedForScale * SELECTION_BOARD_SCALE)));
         if (_board->doesSqaureExist(squarePos) && boardPos.x>=0 && boardPos.y>=0)
         {
             _currentState = State::CHANGING_BOARD;
@@ -251,7 +337,7 @@ void LevelEditorScene::update(float timestep)
                 if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
                 _selectedSquare = squareOnMouse;
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
-                if (_selectedUnitFromSelectionBoard != NULL) {
+                if (_selectedUnitFromSelectionBoard != NULL && _selectedUnitFromSelectionBoard->getUnit() != NULL) {
                     auto unit = _selectedSquare->getUnit();
                     auto unitThatWillReplace = _selectedUnitFromSelectionBoard->getUnit();
                     unit->setBasicAttack(unitThatWillReplace->getBasicAttack());
@@ -260,9 +346,13 @@ void LevelEditorScene::update(float timestep)
                 }
             }
             else {
-                _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
+                if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
                 _selectedSquare = NULL;
             }
+        }
+        else {
+            if (_selectedSquare != NULL) _selectedSquare->getViewNode()->setTexture(_textures.at("square"));
+            _selectedSquare = NULL;
         }
         if (_selectionBoard->doesSqaureExist(selectionSquarePos) && selectionBoardPos.x >= 0 && selectionBoardPos.y >= 0) {
             _currentState = State::CHANGING_BOARD;
@@ -276,7 +366,7 @@ void LevelEditorScene::update(float timestep)
                 _selectedUnitFromSelectionBoard->getViewNode()->setTexture(_textures.at("square"));
                 _selectedUnitFromSelectionBoard = NULL;
             }
-        }    
+        }
     }
     if (_selectedSquare != NULL && State::CHANGING_BOARD) {
         auto unit = _selectedSquare->getUnit();
@@ -295,27 +385,109 @@ void LevelEditorScene::update(float timestep)
         }
         unit->getViewNode()->setTexture(_textures.at(getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))));
     }
-    // Layout everything
-    _layout->layout(_guiNode.get());
+    if (_input.isSaveDown()) {
+        saveBoardAsJSON();
+        
+    }
+    
 }
 
 #pragma mark -
 #pragma mark Rendering
+
+
 /**
- * Draws all this scene to the given SpriteBatch.
+ * Sets whether the scene is currently active
  *
- * The default implementation of this method simply draws the scene graph
- * to the sprite batch.  By overriding it, you can do custom drawing
- * in its place.
- *
- * @param batch     The SpriteBatch to draw with.
+ * @param value whether the scene is currently active
  */
-void LevelEditorScene::render(const std::shared_ptr<cugl::SpriteBatch>& batch)
-{
-    // For now we render 3152-style
-    // DO NOT DO THIS IN YOUR FINAL GAME
-    batch->begin(getCamera()->getCombined());
-    std::shared_ptr<Vec2> commonOffset = make_shared<Vec2>(getSize() / 2);
-    _guiNode->render(batch);
-    batch->end();
+void LevelEditorScene::setActive(bool value) {
+    _active = value;
+    _playPressed = false;
+    if (value) {
+        Input::activate<TextInput>();
+    }
+    if (value && !_levelIDText->isActive()) {
+        _levelIDText->activate();
+    }
+    else if (!value && _levelIDText->isActive()) {
+        _levelIDText->deactivate();
+    }
+    if (value && !_oneStarScoreText->isActive()) {
+        _oneStarScoreText->activate();
+    }
+    else if (!value && _oneStarScoreText->isActive()) {
+        _oneStarScoreText->deactivate();
+    }
+    if (value && !_twoStarScoreText->isActive()) {
+        _twoStarScoreText->activate();
+    }
+    else if (!value && _twoStarScoreText->isActive()) {
+        _twoStarScoreText->deactivate();
+    }
+    if (value && !_threeStarScoreText->isActive()) {
+        _threeStarScoreText->activate();
+    }
+    else if (!value && _threeStarScoreText->isActive()) {
+        _threeStarScoreText->deactivate();
+    }
+    if (value && !_turnText->isActive()) {
+        _turnText->activate();
+    }
+    else if (!value && _turnText->isActive()) {
+        _turnText->deactivate();
+    }
+    if (value) {
+        _playButton->activate();
+        _saveButton->activate();
+    }
+    else {
+        _playButton->deactivate();
+        _saveButton->deactivate();
+        // If any were pressed, reset them
+        _playButton->setDown(false);
+        _saveButton->setDown(false);
+    }
+    if (!value) {
+        Input::deactivate<TextInput>();
+    }
+}
+
+/**
+ * Returns the JSON value of the board.
+ */
+shared_ptr<cugl::JsonValue> LevelEditorScene::getBoardAsJSON() {
+    shared_ptr<cugl::JsonValue> boardJSON = cugl::JsonValue::allocObject();
+    boardJSON->appendChild("id", cugl::JsonValue::alloc((long int)_id));
+    boardJSON->appendChild("total-swap-allowed", cugl::JsonValue::alloc((long int)_numberOfTurns));
+    boardJSON->appendChild("one-star-condition", cugl::JsonValue::alloc((long int)_oneStarCondition));
+    boardJSON->appendChild("two-star-condition", cugl::JsonValue::alloc((long int)_twoStarCondition));
+    boardJSON->appendChild("three-star-condition", cugl::JsonValue::alloc((long int)_threeStarCondition));
+    shared_ptr<cugl::JsonValue> squareOccupantArray = cugl::JsonValue::allocArray();
+    for (shared_ptr<Square> square : _board->getAllSquares()) {
+        auto unit = square->getUnit();
+        auto unitJSON = cugl::JsonValue::allocObject();
+        unitJSON->appendChild("type", cugl::JsonValue::alloc("unit"));
+        unitJSON->appendChild("sub-type", cugl::JsonValue::alloc(unit->getSubType()));
+        unitJSON->appendChild("color", cugl::JsonValue::alloc(Unit::colorToString(unit->getColor())));
+        auto unitDirectionJSON = cugl::JsonValue::allocArray();
+        unitDirectionJSON->appendChild(cugl::JsonValue::alloc(unit->getDirection().x));
+        unitDirectionJSON->appendChild(cugl::JsonValue::alloc(unit->getDirection().y));
+        unitJSON->appendChild("direction", unitDirectionJSON);
+        squareOccupantArray->appendChild(unitJSON);
+    }
+    boardJSON->appendChild("board-members", squareOccupantArray);
+    return boardJSON;
+}
+
+/**
+ * Saves the JSON value in the application save directory
+ */
+void LevelEditorScene::saveBoardAsJSON() {
+    std::ostringstream fileName;
+    fileName << "board" << _id << ".json";
+    vector<string> path = {Application::get()->getSaveDirectory(), fileName.str()};
+    CULog("The file path is: %s", filetool::join_path(path).c_str());
+    shared_ptr<cugl::JsonWriter> saveDirectory = cugl::JsonWriter::alloc(filetool::join_path(path));
+    saveDirectory->writeJson(getBoardAsJSON());
 }

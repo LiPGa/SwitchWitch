@@ -49,6 +49,7 @@ protected:
     int _sceneHeight;
     int _boardWidth;
     int _boardHeight;
+    int _defaultSquareSize;
     int _squareSizeAdjustedForScale;
     
     // hash map for unit textures
@@ -250,6 +251,20 @@ public:
      * @param value whether the scene is currently active
      */
     virtual void setActive(bool value) override;
+    
+    /**
+     * Sets the board that will be played using JSON
+     *
+     * @param the JSON representation of the board.
+     */
+    void setBoard(shared_ptr<cugl::JsonValue> boardJSON);
+    
+    /**
+     * Returns the current state the game is in.
+     *
+     * @returns the current state
+     */
+    bool goToLevelEditor() { return _input.isEscapeDown(); }
 
 private:
     /**
