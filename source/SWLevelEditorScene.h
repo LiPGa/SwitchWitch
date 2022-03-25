@@ -85,8 +85,9 @@ protected:
 #pragma mark View Variables
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
-    std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
-    std::shared_ptr<cugl::scene2::SceneNode> _textEditNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _rootNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _buttonsNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _infoNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _selectionBoardNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::TextField> _levelIDText;
@@ -99,6 +100,8 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _nextButton;
     std::shared_ptr<cugl::scene2::Button> _backButton;
     std::shared_ptr<cugl::scene2::Button> _deleteButton;
+    std::shared_ptr<cugl::scene2::Button> _infoButton;
+    std::shared_ptr<cugl::scene2::Button> _boardButton;
     std::shared_ptr<cugl::scene2::Label> _turnTextLabel;
 
 #pragma mark -
@@ -195,6 +198,10 @@ private:
     shared_ptr<Board> allocBasicBoard(bool withView);
 
     void updateBoardNode();
+
+    void showInfo();
+
+    void showBoard();
 };
 
 #endif /* __SW_GAME_SCENE_H__ */

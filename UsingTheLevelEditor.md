@@ -22,11 +22,19 @@ Editing the number of turns, score, or level id is done by clicking on one of th
 **Note: If a level with the same id already exists in the save directory, it will automatically replace the level.** 
 
 ## Saving
-Saving a level is done by clicking on the save button or pressing ctrl+S. The board will be saved in the assets folder.
+Saving a level is done by clicking on the save button or pressing ctrl+S.
+
+### For Mac
 The path the Json files are located is specific to the user. You might need to read the print statement to see where it is.
 e.g. 2022-03-23 16:32:39.118067-0400 SwitchWitch (Mac)[30277:10179121] INFO: The file path is: /Users/zhangyihan/Library/Application Support/GDIAC/Switch Witch//board6.json
 When I tested it it seems like I could not find the folder from my computer UI. So if that happens, You can access the folder by opening the terminal (for a mac user) and then do the command: "cd /Users/zhangyihan/Library/Application Support/GDIAC/Switch Witch" and then do "open ." which will open the folder. 
 One thing that need to be careful is that if there is a pre-existing json file then saving the current json file will not replace the previous one and thus has no effect. You might need to manually delete it yourself and then click the 'save' button.
 
+### For Windows
+To retrieve the json file. Open Run by going to the search bar and searching run on your computer. Once opened, type in "appdata". Then AppData/Roaming/GDIAC/Switch Witch. The saved file should be there.
+
 ## Playing
 Play a level by pressing ENTER or pressing the play button. This will automatically take you to the game scene. Return to the level editor by pressing ESCAPE.
+
+
+# Creating New Units
