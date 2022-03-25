@@ -504,7 +504,7 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
-    if (_turns == 0 and didRestart == true){
+    if (_turns == 0 && didRestart == true){
         CULog("Reset");
         reset();
     }
@@ -747,7 +747,7 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _board->getViewNode()->addChild(squareNode);
-            //            // Generate unit for this square
+            // Generate unit for this square
             auto unitSubType = unitsInBoard.at(_board->flattenPos(i, j)).at(0);
             auto unitColor = unitsInBoard.at(_board->flattenPos(i, j)).at(1);
             std:string unitPattern = getUnitType(unitSubType, unitColor);

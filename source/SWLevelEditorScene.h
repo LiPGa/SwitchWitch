@@ -64,7 +64,8 @@ protected:
 
 #pragma mark Model Variables
     /** Boards */
-    shared_ptr<Board> _board;
+    vector<shared_ptr<Board>> _boards;
+    shared_ptr<Board> _currentBoard;
     shared_ptr<Board> _selectionBoard;
 
     /** Square that is currently being selected by the player */
@@ -78,12 +79,14 @@ protected:
     int _threeStarCondition;
 
     bool _playPressed;
+    int _currentBoardTurn;
 
 #pragma mark -
 #pragma mark View Variables
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _textEditNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _selectionBoardNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::TextField> _levelIDText;
@@ -93,6 +96,10 @@ protected:
     std::shared_ptr<cugl::scene2::TextField> _threeStarScoreText;
     std::shared_ptr<cugl::scene2::Button> _playButton;
     std::shared_ptr<cugl::scene2::Button> _saveButton;
+    std::shared_ptr<cugl::scene2::Button> _nextButton;
+    std::shared_ptr<cugl::scene2::Button> _backButton;
+    std::shared_ptr<cugl::scene2::Button> _deleteButton;
+    std::shared_ptr<cugl::scene2::Label> _turnTextLabel;
 
 #pragma mark -
 public:
@@ -181,6 +188,13 @@ private:
      * Saves the JSON value in the level directory
      */
     void saveBoardAsJSON();
+
+    /**
+     * Allocates a basic board with the first unit of boardMember.json. 
+     */
+    shared_ptr<Board> allocBasicBoard(bool withView);
+
+    void updateBoardNode();
 };
 
 #endif /* __SW_GAME_SCENE_H__ */
