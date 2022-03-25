@@ -148,6 +148,12 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text with the final score */
     std::shared_ptr<cugl::scene2::Label> _score_number;
+    /** The score meter with the current score */
+    std::shared_ptr<cugl::scene2::ProgressBar> _scoreMeter;
+//    /** The images of the stars above the score meter */
+    std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar1;
+    std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar2;
+    std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar3;
 
     /** The images of the final stars*/
     std::shared_ptr<cugl::scene2::PolygonNode> _star1;
