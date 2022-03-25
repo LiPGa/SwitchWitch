@@ -137,6 +137,7 @@ void SwitchWitchApp::update(float timestep) {
         else {
             _loading.dispose(); // Permanently disables the input listeners in this mode
             _mainMenu.init(_assets);
+            _levelMap.init(_assets);
             _gameplay.init(_assets);
             _levelEditor.init(_assets);
             _mainMenu.setActive(true);
@@ -146,11 +147,12 @@ void SwitchWitchApp::update(float timestep) {
     case MENU:
         _mainMenu.update(timestep);
         switch (_mainMenu.getChoice()) {
-        case MainMenuScene::Choice::GAME:
+        case MainMenuScene::Choice::MAP:
             _mainMenu.setActive(false);
-            _gameplay.setActive(true);
-            _gameplay.setBoard(_assets->get<JsonValue>("board"));
-            _scene = State::GAME;
+//            _gameplay.setActive(true);
+//            _gameplay.setBoard(_assets->get<JsonValue>("board"));
+            _levelMap.setActive(true);
+            _scene = State::MAP;
             break;
         case MainMenuScene::Choice::EDITOR:
             _mainMenu.setActive(false);
@@ -162,6 +164,14 @@ void SwitchWitchApp::update(float timestep) {
             break;
         }
         break;
+    case MAP:
+            _levelMap.update(timestep);
+//            if (_levelMap.goToGameScene()) {
+//                _scene = State::GAME;
+//                _gameplay.setBoard(_levelEditor.getBoardAsJSON());
+//                _levelMap.setActive(false);
+//                _gameplay.setActive(true);
+//            }
     case GAME:
         _gameplay.update(timestep);
         if (_gameplay.goToLevelEditor()) {

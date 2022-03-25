@@ -18,6 +18,7 @@
 #include "SWLoadingScene.h"
 #include "SWLevelEditorScene.h"
 #include "SWMainMenuScene.h"
+#include "SWLevelMapScene.hpp"
 
 
 /**
@@ -33,6 +34,7 @@ protected:
         LOAD,
         /** The main menu scene */
         MENU,
+        MAP,
         /** The scene to edit a level */
         EDITOR,
         /** The scene to play the game */
@@ -50,6 +52,8 @@ protected:
     // Player modes
     /** The controller for the main menu */
     MainMenuScene _mainMenu;
+    /** The primary controller for the level map */
+    LevelMapScene _levelMap;
     /** The primary controller for the game world */
     GameScene _gameplay;
     /** The controller for the level editor */

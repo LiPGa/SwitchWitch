@@ -16,6 +16,9 @@
 		14553A0827E10E4A003BD8E7 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = 14553A0727E10E4A003BD8E7 /* widgets */; };
 		14553A0927E10E4A003BD8E7 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = 14553A0727E10E4A003BD8E7 /* widgets */; };
 		14553A0A27E10E4A003BD8E7 /* widgets in Resources */ = {isa = PBXBuildFile; fileRef = 14553A0727E10E4A003BD8E7 /* widgets */; };
+		14EA959E27ED73BA00E2C137 /* SWLevelMapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14EA959C27ED73BA00E2C137 /* SWLevelMapScene.cpp */; };
+		14EA959F27ED73BA00E2C137 /* SWLevelMapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14EA959C27ED73BA00E2C137 /* SWLevelMapScene.cpp */; };
+		14EA95A027ED73BA00E2C137 /* SWLevelMapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14EA959C27ED73BA00E2C137 /* SWLevelMapScene.cpp */; };
 		75C0E5B927C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
 		75C0E5BA27C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
 		75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
@@ -140,6 +143,8 @@
 		14553A0227E10CB9003BD8E7 /* SWMainMenuScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWMainMenuScene.cpp; sourceTree = "<group>"; };
 		14553A0627E10CCE003BD8E7 /* SWMainMenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMainMenuScene.h; sourceTree = "<group>"; };
 		14553A0727E10E4A003BD8E7 /* widgets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = widgets; sourceTree = "<group>"; };
+		14EA959C27ED73BA00E2C137 /* SWLevelMapScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWLevelMapScene.cpp; sourceTree = "<group>"; };
+		14EA959D27ED73BA00E2C137 /* SWLevelMapScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWLevelMapScene.hpp; sourceTree = "<group>"; };
 		14FEEBAE27DC100F00B9DBA8 /* SWSquareOccupant.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWSquareOccupant.hpp; sourceTree = "<group>"; };
 		75C0E5B727C47440006BB1D0 /* SWBoard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWBoard.cpp; sourceTree = "<group>"; };
 		75C0E5B827C47440006BB1D0 /* SWBoard.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWBoard.hpp; sourceTree = "<group>"; };
@@ -388,6 +393,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				14EA959D27ED73BA00E2C137 /* SWLevelMapScene.hpp */,
+				14EA959C27ED73BA00E2C137 /* SWLevelMapScene.cpp */,
 				14553A0627E10CCE003BD8E7 /* SWMainMenuScene.h */,
 				14553A0227E10CB9003BD8E7 /* SWMainMenuScene.cpp */,
 				14553A0127E10CA6003BD8E7 /* SWLevelEditorScene.h */,
@@ -601,6 +608,7 @@
 				75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
 				14553A0027E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */,
 				DB5871F927D92E160023672B /* SWGameScene.cpp in Sources */,
+				14EA95A027ED73BA00E2C137 /* SWLevelMapScene.cpp in Sources */,
 				DB5871FC27D92E160023672B /* SWLoadingScene.cpp in Sources */,
 				DB5871F627D92E160023672B /* SWApp.cpp in Sources */,
 				EB9CDA3925D0EAB100EE1A09 /* main.cpp in Sources */,
@@ -618,6 +626,7 @@
 				75C0E5C727C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
 				145539FF27E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */,
 				DB5871F827D92E160023672B /* SWGameScene.cpp in Sources */,
+				14EA959F27ED73BA00E2C137 /* SWLevelMapScene.cpp in Sources */,
 				DB5871FB27D92E160023672B /* SWLoadingScene.cpp in Sources */,
 				DB5871F527D92E160023672B /* SWApp.cpp in Sources */,
 				EB7454AE1D74D891002FBAE6 /* main.cpp in Sources */,
@@ -635,6 +644,7 @@
 				75C0E5C627C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
 				145539FE27E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */,
 				DB5871F727D92E160023672B /* SWGameScene.cpp in Sources */,
+				14EA959E27ED73BA00E2C137 /* SWLevelMapScene.cpp in Sources */,
 				DB5871FA27D92E160023672B /* SWLoadingScene.cpp in Sources */,
 				DB5871F427D92E160023672B /* SWApp.cpp in Sources */,
 				EB2BE9B61D74952A002FE78B /* main.cpp in Sources */,

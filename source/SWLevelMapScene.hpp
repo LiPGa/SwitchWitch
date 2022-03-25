@@ -1,15 +1,15 @@
 //
-//  NLMenuScene.h
-//  Network Lab
+//  SWLevelMapScene.hpp
+//  SwitchWitch
 //
-//  This class presents the initial menu scene.  It allows the player to
-//  choose to be a host or a client.
+//  Created by Ashley on 3/24/22.
+//  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
 //
-//  Author: Walker White, Aidan Hobler
-//  Version: 2/8/22
-//
-#ifndef __SW_MAIN_MENU_SCENE_H__
-#define __SW_MAIN_MENU_SCENE_H__
+
+#ifndef SWLevelMapScene_hpp
+#define SWLevelMapScene_hpp
+
+#include <stdio.h>
 #include <cugl/cugl.h>
 #include <vector>
 
@@ -21,7 +21,7 @@
  * listeners on the scene graph.  We only need getters so that the main
  * application can retrieve the state and communicate it to other scenes.
  */
-class MainMenuScene : public cugl::Scene2 {
+class LevelMapScene : public cugl::Scene2 {
 public:
     /**
      * The menu choice.
@@ -32,8 +32,8 @@ public:
     enum Choice {
         /** User has not yet made a choice */
         NONE,
-        /** User wants to enter the level map */
-        MAP,
+        /** User wants to play the game */
+        GAME,
         /** User wants to use the editor */
         EDITOR
     };
@@ -41,12 +41,13 @@ public:
 protected:
     /** The asset manager for this scene. */
     std::shared_ptr<cugl::AssetManager> _assets;
-    /** The menu button for starting a game */
-    std::shared_ptr<cugl::scene2::Button> _gamebutton;
-    /** The menu button for level editor */
-    std::shared_ptr<cugl::scene2::Button> _editorbutton;
+    /** The vector of levels to choose */
+    vector<std::shared_ptr<cugl::scene2::Button>> levels;
+//    /** The menu button for level editor */
+//    std::shared_ptr<cugl::scene2::Button> _editorbutton;
     /** The player menu choice */
-    Choice _choice;
+    std::shared_ptr<cugl::scene2::Button> _chosenLevel;
+    
 
 public:
 #pragma mark -
@@ -57,7 +58,7 @@ public:
      * This constructor does not allocate any objects or start the game.
      * This allows us to use the object without a heap pointer.
      */
-    MainMenuScene() : cugl::Scene2() {}
+    LevelMapScene() : cugl::Scene2() {}
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -65,7 +66,7 @@ public:
      * This method is different from dispose() in that it ALSO shuts off any
      * static resources, like the input controller.
      */
-    ~MainMenuScene() { dispose(); }
+    ~LevelMapScene() { dispose(); }
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -100,14 +101,14 @@ public:
     virtual void setActive(bool value) override;
 
     /**
-     * Returns the user's menu choice.
+     * Returns the user's chosen level.
      *
      * This will return NONE if the user had no yet made a choice.
      *
-     * @return the user's menu choice.
+     * @return the user's chosen level.
      */
-    Choice getChoice() const { return _choice; }
+    Choice getLevel() const;
 
 };
 
-#endif /* __NL_MENU_SCENE_H__ */
+#endif /* SWLevelMapScene_hpp */

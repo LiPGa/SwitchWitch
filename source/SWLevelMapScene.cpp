@@ -1,18 +1,14 @@
 //
-//  NLMenuScene.h
-//  Network Lab
+//  SWLevelMapScene.cpp
+//  SwitchWitch
 //
-//  This class presents the initial menu scene.  It allows the player to
-//  choose to be a host or a client.
+//  Created by Ashley on 3/24/22.
+//  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
 //
-//  Author: Walker White, Aidan Hobler
-//  Version: 2/8/22
-//
-#include <cugl/cugl.h>
-#include <iostream>
-#include <sstream>
 
-#include "SWMainMenuScene.h"
+
+
+#include "SWLevelMapScene.hpp"
 
 using namespace cugl;
 using namespace std;
@@ -40,7 +36,7 @@ using namespace std;
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool MainMenuScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
+bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     dimen *= SCENE_HEIGHT / dimen.height;
@@ -58,26 +54,26 @@ bool MainMenuScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     std::shared_ptr<scene2::SceneNode> scene = _assets->get<scene2::SceneNode>("menu");
     scene->setContentSize(dimen);
     scene->doLayout(); // Repositions the HUD
-    _choice = Choice::NONE;
-    _gamebutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_host"));
-    _editorbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_join"));
+//    _choice = Choice::NONE;
+//    _gamebutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_host"));
+//    _editorbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_join"));
 
     std::string titleMsg = strtool::format("Switch Witch");
     auto titleLabel = scene2::Label::allocWithText(titleMsg, assets->get<Font>("title32"));
     scene->addChild(titleLabel);
 
     // Program the buttons
-    _gamebutton->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _choice = Choice::MAP;
-        }
-        });
-    _editorbutton->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _choice = Choice::EDITOR;
-        }
-        });
-    addChild(scene);
+//    _gamebutton->addListener([this](const std::string& name, bool down) {
+//        if (down) {
+//            _choice = Choice::GAME;
+//        }
+//        });
+//    _editorbutton->addListener([this](const std::string& name, bool down) {
+//        if (down) {
+//            _choice = Choice::EDITOR;
+//        }
+//        });
+    //addChild(scene);
     setActive(false);
     return true;
 }
@@ -85,7 +81,7 @@ bool MainMenuScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
-void MainMenuScene::dispose() {
+void LevelMapScene::dispose() {
     if (_active) {
         removeAllChildren();
         _active = false;
@@ -102,21 +98,22 @@ void MainMenuScene::dispose() {
  *
  * @param value whether the scene is currently active
  */
-void MainMenuScene::setActive(bool value) {
+void LevelMapScene::setActive(bool value) {
     if (isActive() != value) {
         Scene2::setActive(value);
-        if (value) {
-            _choice = NONE;
-            _gamebutton->activate();
-            _editorbutton->activate();
-        }
-        else {
-            CULog("Menu button deactivated");
-            _gamebutton->deactivate();
-            _editorbutton->deactivate();
-            // If any were pressed, reset them
-            _gamebutton->setDown(false);
-            _editorbutton->setDown(false);
-        }
+//        if (value) {
+//            _choice = NONE;
+//            _gamebutton->activate();
+//            _editorbutton->activate();
+//        }
+//        else {
+//            CULog("Menu button desactivated");
+//            _gamebutton->deactivate();
+//            _editorbutton->deactivate();
+//            // If any were pressed, reset them
+//            _gamebutton->setDown(false);
+//            _editorbutton->setDown(false);
+//        }
     }
 }
+
