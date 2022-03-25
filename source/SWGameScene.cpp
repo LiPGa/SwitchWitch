@@ -163,7 +163,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Create and layout the score meter
     
-    _scoreMeter = scene2::ProgressBar::alloc(_assets->get<Texture>("scoremeter_background"), _assets->get<Texture>("scoremeter_foreground"), Size(97, 15));
+    _scoreMeter = scene2::ProgressBar::allocWithCaps(_assets->get<Texture>("scoremeter_background"), _assets->get<Texture>("scoremeter_foreground"), _assets->get<Texture>("scoremeter_endcap_left"), _assets->get<Texture>("scoremeter_endcap_right"), Size(97, 15));
+    _scoreMeter->setProgress(0.0);
 //    _scoreMeter->setPosition(Vec2(0, 0));
     _layout->addAbsolute("scoreMeter", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 6, -0.87 * (_topuibackgroundNode->getSize().height)));
 //    _layout->addRelative("scoreMeter", cugl::scene2::Layout::Anchor::CENTER_FILL, Vec2(0, 0));
@@ -174,22 +175,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _scoreMeterStar2->setScale(0.15f);
     _scoreMeterStar3 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_empty"));
     _scoreMeterStar3->setScale(0.15f);
-    _layout->addAbsolute("scoreMeterStar1", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 -_topuibackgroundNode->getSize().width / 6 + _scoreMeter->getSize().width * (static_cast<float>(_onestar_threshold) / _threestar_threshold),
+    _layout->addAbsolute("scoreMeterStar1", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 -_topuibackgroundNode->getSize().width / 6 + 18 + (_scoreMeter->getSize().width - 14) * (static_cast<float>(_onestar_threshold) / _threestar_threshold),
                                                                                            20 + -0.85 * (_topuibackgroundNode->getSize().height)));
-    _layout->addAbsolute("scoreMeterStar2", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 -_topuibackgroundNode->getSize().width / 6 + _scoreMeter->getSize().width * (static_cast<float>(_twostar_threshold) / _threestar_threshold),
+    _layout->addAbsolute("scoreMeterStar2", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 -_topuibackgroundNode->getSize().width / 6 + 18 + (_scoreMeter->getSize().width - 14) * (static_cast<float>(_twostar_threshold) / _threestar_threshold),
                                                                                            20 + -0.85 * (_topuibackgroundNode->getSize().height)));
-    _layout->addAbsolute("scoreMeterStar3", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 -_topuibackgroundNode->getSize().width / 6 + _scoreMeter->getSize().width,
+    _layout->addAbsolute("scoreMeterStar3", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 -_topuibackgroundNode->getSize().width / 6 + (_scoreMeter->getSize().width),
                                                                                            20 + -0.85 * (_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_scoreMeterStar1, "scoreMeterStar1");
     _guiNode->addChildWithName(_scoreMeterStar2, "scoreMeterStar2");
     _guiNode->addChildWithName(_scoreMeterStar3, "scoreMeterStar3");
     std::string scoreMsg = strtool::format("%d", _score);
     _score_text = scene2::Label::allocWithText(scoreMsg, assets->get<Font>("pixel32"));
-    _score_text->setScale(0.4);
+    _score_text->setScale(0.35);
     _score_text->setHorizontalAlignment(HorizontalAlign::RIGHT);
     _score_text->setAnchor(Vec2(1.0, 0.5));
     _score_text->setForeground(Color4::WHITE);
-    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(_scoreMeter->getSize().width - 5 -_topuibackgroundNode->getSize().width / 7, _scoreMeter->getSize().height / 2 + -0.87 * (_topuibackgroundNode->getSize().height)));
+    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7 + 12,
+                                                                                      _scoreMeter->getSize().height / 2 + -0.87 * (_topuibackgroundNode->getSize().height)));
+//    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_LEFT, Vec2(20, 20));
     _guiNode->addChildWithName(_score_text, "score_text");
     
 
@@ -640,13 +643,19 @@ void GameScene::update(float timestep)
         }
     }
     // Update the score meter
+    if (_score >= _onestar_threshold) _scoreMeterStar1->setTexture(_assets->get<Texture>("star_full"));
+    if (_score >= _twostar_threshold) _scoreMeterStar2->setTexture(_assets->get<Texture>("star_full"));
+    if (_score >= _threestar_threshold) _scoreMeterStar3->setTexture(_assets->get<Texture>("star_full"));
     if (_score < _threestar_threshold) {
         _scoreMeter->setProgress(static_cast<float>(_score) / _threestar_threshold);
-        if (_score >= _onestar_threshold) _scoreMeterStar1->setTexture(_assets->get<Texture>("star_full"));
-        if (_score >= _twostar_threshold) _scoreMeterStar2->setTexture(_assets->get<Texture>("star_full"));
+        _layout->remove("score_text");
+        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7 + 12 + (static_cast<float>(_score) / _threestar_threshold) * (_scoreMeter->getWidth() - 14),
+                                                                                          _scoreMeter->getSize().height / 2 + -0.87 * (_topuibackgroundNode->getSize().height)));
     } else {
         _scoreMeter->setProgress(1.0f);
-        _scoreMeterStar3->setTexture(_assets->get<Texture>("star_full"));
+        _layout->remove("score_text");
+        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7 + (_scoreMeter->getWidth() - 2),
+                                                                                          _scoreMeter->getSize().height / 2 + -0.87 * (_topuibackgroundNode->getSize().height)));
     }
     _score_text->setText(strtool::format("%d", _score), true);
 //    if ((_prev_score < 9 && _score > 9) || (_prev_score < 99 && _score > 99))
