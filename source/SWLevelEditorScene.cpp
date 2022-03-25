@@ -95,7 +95,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     addChild(_backgroundNode);
     _backgroundNode->setAnchor(Vec2::ZERO);
 
-    _numberOfTurns = 1;
+    _numberOfTurns = 0;
     _id = 0;
     _oneStarCondition = 10;
     _twoStarCondition = 10;
@@ -127,12 +127,12 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         });
     _nextButton->addListener([this](const std::string& name, bool down) {
         if (down) {
-            if (_currentBoardTurn + 1 == _numberOfTurns) {
+            if (_currentBoardTurn == _numberOfTurns) {
                 _numberOfTurns++;
                 _boards.push_back(allocBasicBoard(true));
             } 
             _currentBoardTurn++;
-            _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn + 1, _numberOfTurns));
+            _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn, _numberOfTurns));
             _currentBoard = _boards[_currentBoardTurn];
             updateBoardNode();
         }
@@ -140,18 +140,18 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _backButton->addListener([this](const std::string& name, bool down) {
         if (down) {
             if (_currentBoardTurn > 0) _currentBoardTurn--;
-            _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn + 1, _numberOfTurns));
+            _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn, _numberOfTurns));
             _currentBoard = _boards[_currentBoardTurn];
             updateBoardNode();
         }
         });
     _deleteButton->addListener([this](const std::string& name, bool down) {
         if (down) {
-            if (_numberOfTurns > 1) {
+            if (_numberOfTurns > 0) {
                 _numberOfTurns--;
                 _boards.erase(_boards.begin() + _currentBoardTurn);
             }
-            _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn + 1, _numberOfTurns));
+            _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn, _numberOfTurns));
             _currentBoard = _boards[_currentBoardTurn];
             updateBoardNode();
         }

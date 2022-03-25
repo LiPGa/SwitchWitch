@@ -17,9 +17,20 @@ Colors are changed by selecting a square on the board and pressing one of the bu
 The direction the unit is facing is changed by selecting a square on the board and pressing one of the directional buttons or WSAD.
 
 ## Editing Level Variables
-Editing the number of turns, score, or level id is done by clicking on one of the text input's (black boxes) next to the attribute you want to change.
+Press the Info button to access the level variables. Here, you can change the id and score thresholds.
 
 **Note: If a level with the same id already exists in the save directory, it will automatically replace the level.** 
+
+## Editing replacement.
+Press the **next button** to load up a new board. This board represents the next set of units that will replace the units in the previous board if they are killed. Pressing the next button will automatically increase the turn counter.
+
+Press the **back button** to go to the previous board configuration.
+
+Press the **delete button** to remove the current board. This also automatically reduces the number of turns by 1. By deleting the current board, all board configurations will shift to the left by 1. For example, if the board configuration that is used for the 1st unit replacemment is deleted, then the 2nd unit replacement board will be used for the 1st unit replacement and so on and so forth.
+
+Which board represents which point in unit replacement can be seen in the bottom left corner. 0/0 is the initial state. This means that only the initial configuration of the board exists. Therefore, there is no turns that the player can do. Once the next button is pressed the counter increases by 1/1. This means that you are currently looking at the 1st unit replacement board, meaning that for all units on the initial board, when they are killed they will be replaced by the unit on the square in the 1st unit replcaement board.
+
+**In order to add random uints** place the R token on the square.
 
 ## Saving
 Saving a level is done by clicking on the save button or pressing ctrl+S.
@@ -38,3 +49,53 @@ Play a level by pressing ENTER or pressing the play button. This will automatica
 
 
 # Creating New Units
+Follow these steps to create a new unit
+1. Add a unit in boardMember.json. All units must have the exact following format for it to work:
+```json
+    "[unitType]": {
+        "texture-red": "[unitType]-red",
+        "texture-blue": "[unitType]-blue",
+        "texture-green": "[unitType]-green",
+        "basic-attack": [[1,0]],
+        "special-attack":[],
+        "probability-respawn": 90
+    },
+```
+For attacks, all attacks must be in the form of an array with the elements of the array representing vectors. 
+The square that is attacked is the sum of the position of the square the unit is on plus the vector. 
+For example, a basic unit has a basic-attack of [1,0]. If this basic unit is at square [3,2] it will attack square [4,2].
+**Note:** The attack information should be inputted assuming that the unit is facing the right.
+The game will rotate the vectors depending on the direction automatically.
+**Example:** 
+```json
+    "three-way": {
+        "texture-red": "three-way-red",
+        "texture-blue": "three-way-blue",
+        "texture-green": "three-way-green",
+        "basic-attack": [[1,0]],
+        "special-attack": [[1,1], [1,0], [1,-1]],
+        "probability-respawn": 4
+    },
+```
+2. Add the unit textures into the assets folder. Every unit should have three textures depending on the color. All textures should use "_" instead of space.
+3. Add the textures into assets.json. All textures should have this format under the "textures" tag.
+```json
+"[texture-Name]": {
+    "file": "textures/[texture_Name].png"
+},
+```
+The tag for the texture should use "-" instead of space. While the actual file name should use "_".
+**Example:** 
+```json
+"basic-red": {
+    "file": "textures/red_unit.png"
+},
+"basic-blue": {
+    "file": "textures/blue_unit.png"
+},
+"basic-green": {
+    "file": "textures/orange_unit.png"
+},
+```
+4. Add the texture references in constants.json. It should be under the "textures" tag. 
+The name of the texture must be the same as the tag for the texture in assets.
