@@ -23,6 +23,15 @@
         "transparent": {
             "file": "textures/transparent_texture.png"
         },
+        "random-red": {
+            "file": "textures/random_red.png"
+        },
+        "random-green": {
+            "file": "textures/random_green.png"
+        },
+        "random-blue": {
+            "file": "textures/random_blue.png"
+        },
         "basic-red": {
             "file": "textures/red_unit.png"
         },

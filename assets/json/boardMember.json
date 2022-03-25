@@ -8,6 +8,14 @@
             "special-attack":[],
             "probability-respawn": 90
         },
+        "random": {
+            "texture-red": "random-red",
+            "texture-blue": "random-blue",
+            "texture-green": "random-green",
+            "basic-attack": [[1,0]],
+            "special-attack":[],
+            "probability-respawn": 0
+        },
         "three-way": {
             "texture-red": "three-way-red",
             "texture-blue": "three-way-blue",

@@ -298,6 +298,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         auto square = _selectionBoard->getAllSquares()[i];
         auto unitType = element.second;        
         square->setUnit(unitType);
+        auto test = getUnitType(unitType->getSubType(), Unit::colorToString(unitType->getColor()));
         auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(getUnitType(unitType->getSubType(), Unit::colorToString(unitType->getColor()))));
         square->getUnit()->setViewNode(unitNode);
         square->getViewNode()->addChild(unitNode);
