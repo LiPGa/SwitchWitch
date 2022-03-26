@@ -48,6 +48,16 @@ protected:
     /** The player menu choice */
     std::shared_ptr<cugl::scene2::Button> _chosenLevel;
     
+    
+    // VIEW
+    std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
+    std::shared_ptr<cugl::Texture> _background;
+    std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
+    
+    cugl::Size _scale;
+    
+    
+    
 
 public:
 #pragma mark -
@@ -108,7 +118,17 @@ public:
      * @return the user's chosen level.
      */
     Choice getLevel() const;
-
+    
+    /**
+     * Draws all this scene to the given SpriteBatch.
+     *
+     * The default implementation of this method simply draws the scene graph
+     * to the sprite batch.  By overriding it, you can do custom drawing
+     * in its place.
+     *
+     * @param batch     The SpriteBatch to draw with.
+     */
+    void render(const std::shared_ptr<cugl::SpriteBatch> &batch) override;
 };
 
 #endif /* SWLevelMapScene_hpp */

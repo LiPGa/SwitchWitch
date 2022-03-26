@@ -51,16 +51,27 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _assets = assets;
 
     // Acquire the scene built by the asset loader and resize it the scene
-    std::shared_ptr<scene2::SceneNode> scene = _assets->get<scene2::SceneNode>("menu");
-    scene->setContentSize(dimen);
-    scene->doLayout(); // Repositions the HUD
+//    std::shared_ptr<scene2::SceneNode> scene = _assets->get<scene2::SceneNode>("menu");
+//    scene->setContentSize(dimen);
+//    scene->doLayout(); // Repositions the HUD
+    
+    // Set up GUI
+    _background = assets->get<Texture>("level_map");
+    _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
+    _scale = getSize() / _background->getSize();
+    _backgroundNode->setScale(_scale);
+    _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+    addChild(_guiNode);
+    _guiNode->addChild(_backgroundNode);
+    _backgroundNode->setAnchor(Vec2::ZERO);
+    
 //    _choice = Choice::NONE;
 //    _gamebutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_host"));
 //    _editorbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_join"));
 
-    std::string titleMsg = strtool::format("Switch Witch");
-    auto titleLabel = scene2::Label::allocWithText(titleMsg, assets->get<Font>("title32"));
-    scene->addChild(titleLabel);
+//    std::string titleMsg = strtool::format("Switch Witch");
+//    auto titleLabel = scene2::Label::allocWithText(titleMsg, assets->get<Font>("title32"));
+    //scene->addChild(titleLabel);
 
     // Program the buttons
 //    _gamebutton->addListener([this](const std::string& name, bool down) {
@@ -115,5 +126,11 @@ void LevelMapScene::setActive(bool value) {
 //            _editorbutton->setDown(false);
 //        }
     }
+}
+
+void LevelMapScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch) {
+    batch->begin(getCamera()->getCombined());
+    _guiNode->render(batch);
+    batch->end();
 }
 
