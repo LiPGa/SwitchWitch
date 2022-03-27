@@ -87,7 +87,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // GetJSONValuesFromAssets
     _constants = assets->get<JsonValue>("constants");
     _boardMembers = assets->get<JsonValue>("boardMember");
-    _boardJson = assets->get<JsonValue>("board");
+    if (_boardJson == nullptr) _boardJson = assets->get<JsonValue>("board");
 
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
@@ -125,8 +125,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     int probabilitySum = 0;
     for (string probabilityName : probabilityVec)
     {
-        probabilitySum += _boardMembers-> get("unit") -> get(probabilityName) -> get("probability-respawn") -> asInt();
+        int respawnProb = _boardMembers-> get("unit") -> get(probabilityName) -> get("probability-respawn") -> asInt();
+        probabilitySum += respawnProb;
         _probability.insert({probabilityName, probabilitySum});
+        _unitRespawnProbabilities.insert({probabilityName, static_cast<float>(respawnProb)});
     }
 
     // Get the background image and constant values
@@ -156,13 +158,14 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Initialize Board
     _board = Board::alloc(_boardHeight, _boardWidth);
-    _currLevel = _boardJson->getInt("id");
-    _turns = _boardJson->getInt("total-swap-allowed");
-    _max_turns = _boardJson->getInt("total-swap-allowed");
+    _replacementBoard = Board::alloc(_boardHeight, _boardWidth);
+//    _currLevel = _boardJson->getInt("id");
+//    _turns = _boardJson->getInt("total-swap-allowed");
+//    _max_turns = _boardJson->getInt("total-swap-allowed");
     // thresholds for the star system
-    _onestar_threshold = _boardJson->getInt("one-star-condition");
-    _twostar_threshold = _boardJson->getInt("two-star-condition");
-    _threestar_threshold = _boardJson->getInt("three-star-condition");
+//    _onestar_threshold = _boardJson->getInt("one-star-condition");
+//    _twostar_threshold = _boardJson->getInt("two-star-condition");
+//    _threestar_threshold = _boardJson->getInt("three-star-condition");
 
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("%d/%d", _turns, _max_turns);
@@ -216,57 +219,90 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Get the sub-type and color of the unit for every unit in this level
     // Get the direction of the unit for every unit in this level and save in a vector
-    auto unitsInBoardJson = _boardJson->get("board-members")->children();
-    vector<Vec2> unitsDirInBoard;
-    vector<vector<std::string>> unitsInBoard;
-    for (auto child : unitsInBoardJson)
-    {
-        auto unitDirArray = child->get("direction")->asFloatArray();
-        unitsDirInBoard.push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
-        auto unitColor = child->getString("color");
-        auto unitSubType = child->getString("sub-type");
-        vector<std::string> info{unitSubType, unitColor};
-        unitsInBoard.push_back(info);
-    }
-
-    // Create the squares & units and put them in the map
-    for (int i = 0; i < _boardWidth; i++)
-    {
-        for (int j = 0; j < _boardHeight; ++j)
-        {
-            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
-            auto squarePosition = Vec2(i, j);
-
-            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale * 1.2) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
-            squareNode->setScale(_scale.width);
-            shared_ptr<Square> sq = _board->getSquare(squarePosition);
-            sq->setViewNode(squareNode);
-            _board->getViewNode()->addChild(squareNode);
-            //            // Generate unit for this square
-            auto unitSubType = unitsInBoard.at(_boardWidth * (_boardHeight - j - 1) + i).at(0);
-            auto unitColor = unitsInBoard.at(_boardWidth * (_boardHeight - j - 1) + i).at(1);
-        std:
-            string unitPattern = getUnitType(unitSubType, unitColor);
-            Vec2 unitDirection = unitsDirInBoard.at(_boardWidth * (_boardHeight - j - 1) + i);
-            auto unitTemplate = _unitTypes.at(unitSubType);
-            Unit::Color c = Unit::stringToColor(unitColor);
-            shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
-            sq->setUnit(unit);
-            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
-            unit->setViewNode(unitNode);
-            if (unitSubType != "basic")
-            {
-                unit->setSpecial(true);
-            }
-            else
-            {
-                unit->setSpecial(false);
-            }
-            // unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-            squareNode->addChild(unitNode);
-            updateSquareTexture(sq, _textures);
-        }
-    }
+//    auto layersInBoardJson = _boardJson->get("board-members")->children();
+//    auto layersInBoardJson = _boardJson->get("board-members");
+//    vector<Vec2> unitsDirInBoard;
+//    vector<vector<std::string>> unitsInBoard;
+//    for (int i = 0; i<=5;i++){
+//
+//            auto currentLayer = layersInBoardJson[0];
+//            for (auto child : currentLayer.allocArray())
+//            {
+//                auto unitDirArray = child->get("direction")->asFloatArray();
+//                unitsDirInBoard.push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
+//                auto unitColor = child->getString("color");
+//                auto unitSubType = child->getString("sub-type");
+//                vector<std::string> info{unitSubType, unitColor};
+//                unitsInBoard.push_back(info);
+//            }
+//
+//    }
+//    auto layersInBoardJson = _boardJson->get("board-members")->children();
+//    vector<vector<Vec2>> unitsDirInBoard;
+//    vector<vector<vector<std::string>>> unitsInBoard;
+//    int layerIndex = 0;
+//    for (auto layer : layersInBoardJson)
+//    {
+//        vector<Vec2> layerDir;
+//        unitsDirInBoard.push_back(layerDir);
+//        vector<vector<std::string>> layerUnit;
+//        unitsInBoard.push_back(layerUnit);
+//        for (auto child : layer->children())
+//        {
+//            auto unitDirArray = child->get("direction")->asFloatArray();
+//            unitsDirInBoard[layerIndex].push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
+//            auto unitColor = child->getString("color");
+//            auto unitSubType = child->getString("sub-type");
+//            vector<std::string> info{unitSubType, unitColor};
+//            unitsInBoard[layerIndex].push_back(info);
+//        }
+//        layerIndex++;
+//    }
+//
+//    // Create the squares & units and put them in the map
+//    for (int i = 0; i < _boardWidth; i++)
+//    {
+//        vector<int> cellDepths;
+//        for (int j = 0; j < _boardHeight; ++j)
+//        {
+//            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
+//            auto squarePosition = Vec2(i, j);
+//
+//            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale * 1.2) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
+//            squareNode->setScale(_scale.width);
+//            shared_ptr<Square> sq = _board->getSquare(squarePosition);
+//            sq->setViewNode(squareNode);
+//            _board->getViewNode()->addChild(squareNode);
+//            //            // Generate unit for this square
+//            auto unitSubType = unitsInBoard[0].at(_boardWidth * (_boardHeight - j - 1) + i).at(0);
+//            auto unitColor = unitsInBoard[0].at(_boardWidth * (_boardHeight - j - 1) + i).at(1);
+//        std:
+//            string unitPattern = getUnitType(unitSubType, unitColor);
+//            Vec2 unitDirection = unitsDirInBoard[0].at(_boardWidth * (_boardHeight - j - 1) + i);
+//            auto unitTemplate = _unitTypes.at(unitSubType);
+//            Unit::Color c = Unit::stringToColor(unitColor);
+//            shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
+//            sq->setUnit(unit);
+//            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
+//            unit->setViewNode(unitNode);
+//            if (unitSubType != "basic")
+//            {
+//                unit->setSpecial(true);
+//            }
+//            else
+//            {
+//                unit->setSpecial(false);
+//            }
+//            // unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+//            squareNode->addChild(unitNode);
+//            updateSquareTexture(sq, _textures);
+//
+//            // Initalize _currentCellLayer to vector of zeroes (all cells start with their first-depth unit)
+//            cellDepths.push_back(0);
+//        }
+//        _currentCellLayer.push_back(cellDepths);
+//    }
+    setBoard(_boardJson);
 
     _resultLayout = assets->get<scene2::SceneNode>("result");
     _resultLayout->setContentSize(dimen);
@@ -330,77 +366,113 @@ bool GameScene::isSafe(cugl::Vec2 pos, cugl::Vec2 specialPosition[])
     return false;
 }
 
+std::string GameScene::generateRandomUnitType(std::map<std::string, float> probs) {
+    float total = 0.0;
+    for (auto const& type : probs) {
+        total += type.second;
+    }
+    float randomChoice = total * ((double) rand() / (RAND_MAX));
+    float i = 0.0;
+    for (auto const& type : probs) {
+        if (i + type.second >= randomChoice) return type.first;
+        i += type.second;
+    }
+    return ""; // Unreachable
+}
+
+Unit::Color GameScene::generateRandomUnitColor(std::map<Unit::Color, float> probs) {
+    float total = 0.0;
+    for (auto const& type : probs) {
+        total += type.second;
+    }
+    float randomChoice = total * ((double) rand() / (RAND_MAX));
+    float i = 0.0;
+    for (auto const& type : probs) {
+        if (i + type.second >= randomChoice) return type.first;
+        i += type.second;
+    }
+    return Unit::Color(0); // Unreachable
+}
+
+Vec2 GameScene::generateRandomDirection() {
+    vector<cugl::Vec2> allDirs = Unit::getAllPossibleDirections();
+    return allDirs[rand() % allDirs.size()];
+}
+
+
+void GameScene::refreshUnitAndSquareView(shared_ptr<Square> sq) {
+    auto unit = sq->getUnit();
+    auto unitNode = unit->getViewNode();
+    std::string unitSubtype = unit->getSubType();
+    unitNode->setTexture(_textures[getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))]);
+    if (unitSubtype != "basic") unit->setSpecial(true);
+    else unit->setSpecial(false);
+    if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+    updateSquareTexture(sq, _textures);
+}
 /**
- * Generate a unit with random color, attack, and direction on the given square.
+ * Generate a unit on the given square.
  *
- * @param sq    The given square
- * @param squareNode    The given squareNode
+ * @param sq    The given square pointer
+ * @param unitType  The type of unit to generate
+ * @param color  The color of the unit to generate
+ * @param dir  The direction of the unit to generate
  */
-void GameScene::generateUnit(shared_ptr<Square> sq)
+void GameScene::generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::Color color, Vec2 dir)
 {
     // Set Unit Information
     auto unit = sq->getUnit();
-    unit->setDirection(Unit::getAllPossibleDirections()[rand() % 4]);
-    unit->setColor(Unit::Color(rand() % 3));
-    // TODO: Probabilities need to be inbedded in JSON.
-    // TODO: Relation between probabilities and unitSubTypes stored in some kind of data structure.
-    auto unitSelectRandomNumber = rand() % 100;
-    std::string unitSubTypeSelected;
-    if (unitSelectRandomNumber < _probability["basic"]){
-        unitSubTypeSelected = "basic";
-    }
-    else if (unitSelectRandomNumber < _probability["two-forward"]) {
-        unitSubTypeSelected = "two-forward";
-    }
-    else if (unitSelectRandomNumber < _probability["three-way"]) {
-        unitSubTypeSelected = "three-way";
-    }
-    else if (unitSelectRandomNumber < _probability["diagonal"]) {
-        unitSubTypeSelected = "diagonal";
-    }
-    
-//    int basicUnitSpawnProbabilityPrecentage = 90;
-//    int twoForwardAttackSpawnProbabilityPrecentage = 4;
-//    int threeWayAttackSpawnProbabilityPrecentage = 4;
-//    int diagonalAttackSpawnProbabilityPrecentage = 2;
-//    auto unitSelectRandomNumber = rand() % 100;
-//
-//    std::string unitSubTypeSelected;
-//    if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage)
-//    {
-//        unitSubTypeSelected = "basic";
-//    }
-//    else if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage + twoForwardAttackSpawnProbabilityPrecentage)
-//    {
-//        unitSubTypeSelected = "two-forward";
-//    }
-//    else if (unitSelectRandomNumber < basicUnitSpawnProbabilityPrecentage + twoForwardAttackSpawnProbabilityPrecentage + threeWayAttackSpawnProbabilityPrecentage)
-//    {
-//        unitSubTypeSelected = "three-way";
-//    }
-//    else
-//    {
-//        unitSubTypeSelected = "diagonal";
-//    }
-        
+    unit->setDirection(dir);
+    unit->setColor(color);
+    std::string unitSubTypeSelected = unitType;
     auto unitSelected = _unitTypes[unitSubTypeSelected];
     unit->setSubType(unitSelected->getSubType());
     unit->setBasicAttack(unitSelected->getBasicAttack());
     unit->setSpecialAttack(unitSelected->getSpecialAttack());
 
-    // Update Unit Node
-    auto unitNode = unit->getViewNode();
-    unitNode->setTexture(_textures[getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))]);
-    // unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-    if (unitSubTypeSelected != "basic")
-    {
-        unit->setSpecial(true);
+//    refreshUnitAndSquareView(sq);
+}
+
+std::map<Unit::Color, float> GameScene::generateColorProbabilities() {
+    std::map<Unit::Color, float> probs = {
+        { Unit::Color(0), 0.0 },
+        { Unit::Color(1), 0.0 },
+        { Unit::Color(2), 0.0 }
+    };
+    std::map<Unit::Color, int> colorCounts = {
+        { Unit::Color(0), 0 },
+        { Unit::Color(1), 0 },
+        { Unit::Color(2), 0 }
+    };
+    int totalUnitCount = 0;
+    vector<std::shared_ptr<Square>> allSquares = _board->getAllSquares();
+    for (auto sq : allSquares) {
+        std::shared_ptr<Unit> unit = sq->getUnit();
+        Unit::Color unitColor = unit->getColor();
+        colorCounts.at(unitColor) = colorCounts.at(unitColor) + 1;
+        totalUnitCount++;
     }
-    else
-    {
-        unit->setSpecial(false);
+    float cumulativeProb = 0.0;
+    for (auto const& color : colorCounts) {
+        float inverseProbability = static_cast<float>(totalUnitCount) / color.second;
+        colorCounts.at(color.first) = inverseProbability;
+        cumulativeProb += inverseProbability;
     }
-    updateSquareTexture(sq, _textures);
+    for (auto const& color : probs) {
+        probs.at(color.first) = colorCounts.at(color.first) / cumulativeProb;
+    }
+    return probs;
+}
+
+void GameScene::copySquareData(std::shared_ptr<Square> from, std::shared_ptr<Square> to) {
+    to->setPosition(from->getPosition());
+    std::shared_ptr<Unit> fromUnit = from->getUnit();
+    std::shared_ptr<Unit> toUnit = to->getUnit();
+    toUnit->setColor(fromUnit->getColor());
+    toUnit->setDirection(fromUnit->getDirection());
+    toUnit->setSpecial(fromUnit->isSpecial());
+    toUnit->setSpecialAttack(fromUnit->getSpecialAttack());
+    toUnit->setSubType(fromUnit->getSubType());
 }
 
 /**
@@ -608,6 +680,7 @@ void GameScene::update(float timestep)
         }
         else if (_input.didRelease())
         {
+            std::map<Unit::Color, float> colorProbabilities = generateColorProbabilities();
             for (shared_ptr<Square> squares : _board->getAllSquares())
             {
                 updateSquareTexture(squares, _textures);
@@ -629,7 +702,26 @@ void GameScene::update(float timestep)
                 // remove the attacked squares
                 for (shared_ptr<Square> attackedSquare : _attackedSquares)
                 {
-                    generateUnit(attackedSquare);
+                    Vec2 squarePos = attackedSquare->getPosition();
+                    std::shared_ptr<Square> replacementSquare = _replacementBoard->getSquare(squarePos);
+                    copySquareData(replacementSquare, attackedSquare);
+                    _currentCellLayer[squarePos.x][squarePos.y]++;
+                    int currentCellDepth = _currentCellLayer[squarePos.x][squarePos.y];
+                    int cellIndexInOneDimensionalBoard = _board->flattenPos(squarePos.x, squarePos.y);
+                    CUAssert(currentCellDepth < unitsInBoard.size()); // The number of turns should be strictly less than the depth of the board!
+                    auto unitSubType = unitsInBoard[currentCellDepth].at(cellIndexInOneDimensionalBoard).at(0);
+                    if (unitSubType != "random") { // If lookup is non-random
+                        auto unitColor = unitsInBoard[currentCellDepth].at(cellIndexInOneDimensionalBoard).at(1);
+                        auto unitDirection = unitsDirInBoard[currentCellDepth].at(cellIndexInOneDimensionalBoard);
+                        std:string unitPattern = getUnitType(unitSubType, unitColor);
+                        generateUnit(replacementSquare, unitSubType, Unit::stringToColor(unitColor), unitDirection);
+                    } else { // Else generate random unit
+                        auto randomUnitSubType = generateRandomUnitType(_unitRespawnProbabilities);
+                        auto randomDirection = generateRandomDirection();
+                        auto randomColor = generateRandomUnitColor(colorProbabilities);
+                        generateUnit(replacementSquare, randomUnitSubType, randomColor, randomDirection);
+                    }
+                    refreshUnitAndSquareView(attackedSquare);
                 }
 
                 _turns--;
@@ -674,17 +766,26 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     if (_debug)
     {
         batch->setColor(Color4::RED);
+        std::shared_ptr<Square> replacementSquare = _selectedSquare == NULL ? NULL : _replacementBoard->getSquare(_selectedSquare->getPosition());
         std::string unitType = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->getSubType();
         std::string unitColor = _selectedSquare == NULL ? "" : Unit::colorToString(_selectedSquare->getUnit()->getColor());
+        std::string replacementType = replacementSquare == NULL ? "" : replacementSquare->getUnit()->getSubType();
+        std::string replacementColor = replacementSquare == NULL ? "" : Unit::colorToString(replacementSquare->getUnit()->getColor());
         auto direction = _selectedSquare == NULL ? Vec2::ZERO : _selectedSquare->getUnit()->getDirection();
+        auto replacementDirection = replacementSquare == NULL ? Vec2::ZERO : replacementSquare->getUnit()->getDirection();
         std::ostringstream unitDirection;
+        std::ostringstream replacementUnitDirection;
         unitDirection << "(" << int(direction.x) << ", " << int(direction.y) << ")";
+        replacementUnitDirection << "(" << int(replacementDirection.x) << ", " << int(replacementDirection.y) << ")";
         batch->drawText(unitType, _turn_text->getFont(), Vec2(50, getSize().height - 100));
         batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
-        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
-                                                                                                 : "isSpecial() = false";
-        batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+//        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
+//                                                                                                 : "isSpecial() = false";
+//        batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+        batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 300));
+        batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 350));
     }
 
     batch->end();
@@ -717,6 +818,20 @@ void GameScene::setActive(bool value)
 }
 
 void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
+    
+    // Clear all board data vectors of any existing data
+//    for (int i = 0; i < unitsDirInBoard.size(); i++) {
+//        unitsDirInBoard[i].clear();
+//    }
+//    for (int i = 0; i < unitsInBoard.size(); i++) {
+//        for (int j = 0; j < unitsInBoard[i].size(); j++) {
+//            unitsInBoard[i][j].clear();
+//        }
+//    }
+    unitsDirInBoard.clear();
+    unitsInBoard.clear();
+    _currentCellLayer.clear();
+    
     // Get the sub-type and color of the unit for every unit in this level
     // Get the direction of the unit for every unit in this level and save in a vector
     _currLevel = boardJSON->getInt("id");
@@ -726,41 +841,99 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
     _onestar_threshold = boardJSON->getInt("one-star-condition");
     _twostar_threshold = boardJSON->getInt("two-star-condition");
     _threestar_threshold = boardJSON->getInt("three-star-condition");
-    auto unitsInBoardJson = boardJSON->get("board-members")->children();
-    vector<Vec2> unitsDirInBoard;
-    vector<vector<std::string>> unitsInBoard;
-    for (auto child : unitsInBoardJson) {
-        auto unitDirArray = child->get("direction")->asFloatArray();
-        unitsDirInBoard.push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
-        auto unitColor = child->getString("color");
-        auto unitSubType = child->getString("sub-type");
-        vector<std::string> info{ unitSubType, unitColor };
-        unitsInBoard.push_back(info);
+//    auto unitsInBoardJson = boardJSON->get("board-members")->children();
+//    vector<Vec2> unitsDirInBoard;
+//    vector<vector<std::string>> unitsInBoard;
+//    for (auto child : unitsInBoardJson) {
+//        auto unitDirArray = child->get("direction")->asFloatArray();
+//        unitsDirInBoard.push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
+//        auto unitColor = child->getString("color");
+//        auto unitSubType = child->getString("sub-type");
+//        vector<std::string> info{ unitSubType, unitColor };
+//        unitsInBoard.push_back(info);
+//    }
+//
+    auto layersInBoardJson = boardJSON->get("board-members")->children();
+//    vector<vector<Vec2>> unitsDirInBoard;
+//    vector<vector<vector<std::string>>> unitsInBoard;
+    int layerIndex = 0;
+    for (auto layer : layersInBoardJson)
+    {
+        vector<Vec2> layerDir;
+        unitsDirInBoard.push_back(layerDir);
+        vector<vector<std::string>> layerUnit;
+        unitsInBoard.push_back(layerUnit);
+        for (auto child : layer->children())
+        {
+            auto unitDirArray = child->get("direction")->asFloatArray();
+            unitsDirInBoard[layerIndex].push_back(Vec2(unitDirArray.at(0), unitDirArray.at(1)));
+            auto unitColor = child->getString("color");
+            auto unitSubType = child->getString("sub-type");
+            vector<std::string> info{unitSubType, unitColor};
+            unitsInBoard[layerIndex].push_back(info);
+        }
+        layerIndex++;
     }
+    
+    map<Unit::Color, float> startingColorProbabilities = {
+        { Unit::Color(0), 0.33 },
+        { Unit::Color(1), 0.33 },
+        { Unit::Color(2), 0.33 }
+    };
+    
     // Create the squares & units and put them in the map
+    _board->getViewNode()->removeAllChildren();
     for (int i = 0; i < _boardWidth; i++) {
+        vector<int> cellDepths;
         for (int j = 0; j < _boardHeight; ++j) {
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
             auto squarePosition = Vec2(i, j);
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale*1.2) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
             squareNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
+            shared_ptr<Square> replacementSq = _replacementBoard->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _board->getViewNode()->addChild(squareNode);
             // Generate unit for this square
-            auto unitSubType = unitsInBoard.at(_board->flattenPos(i, j)).at(0);
-            auto unitColor = unitsInBoard.at(_board->flattenPos(i, j)).at(1);
-            std:string unitPattern = getUnitType(unitSubType, unitColor);
-            Vec2 unitDirection = unitsDirInBoard.at(_board->flattenPos(i, j));
+            auto unitSubType = unitsInBoard[0].at(_board->flattenPos(i, j)).at(0);
+            auto unitColor = unitsInBoard[0].at(_board->flattenPos(i, j)).at(1);
+            Vec2 unitDirection = unitsDirInBoard[0].at(_board->flattenPos(i, j));
+            Vec2 replacementUnitDirection = unitsDirInBoard[1].at(_replacementBoard->flattenPos(i, j));
+            if (unitSubType == "random") {
+                unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
+                unitColor = Unit::colorToString(generateRandomUnitColor(startingColorProbabilities));
+                unitDirection = generateRandomDirection();
+            }
+            auto replacementUnitSubType = unitsInBoard[1].at(_replacementBoard->flattenPos(i, j)).at(0);
+            auto replacementUnitColor = unitsInBoard[1].at(_replacementBoard->flattenPos(i, j)).at(1);
+            if (replacementUnitSubType == "random") {
+                replacementUnitSubType = generateRandomUnitType(_unitRespawnProbabilities);
+                replacementUnitColor = Unit::colorToString(generateRandomUnitColor(startingColorProbabilities));
+                replacementUnitDirection = generateRandomDirection();
+            }
+            std::string unitPattern = getUnitType(unitSubType, unitColor);
+            std::string replacementUnitPattern = getUnitType(replacementUnitSubType, replacementUnitColor);
             auto unitTemplate = _unitTypes.at(unitSubType);
+            auto replacementUnitTemplate = _unitTypes.at(replacementUnitSubType);
             Unit::Color c = Unit::stringToColor(unitColor);
+            Unit::Color replacementC = Unit::stringToColor(replacementUnitColor);
             shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
+            shared_ptr<Unit> replacementUnit = Unit::alloc(replacementUnitSubType, replacementC, replacementUnitTemplate->getBasicAttack(), replacementUnitTemplate->getSpecialAttack(), replacementUnitDirection);
             sq->setUnit(unit);
+            replacementSq->setUnit(replacementUnit);
             auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
             unit->setViewNode(unitNode);
-            unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+            if (unitSubType != "basic") unit->setSpecial(true);
+            else unit->setSpecial(false);
+            if (replacementUnitSubType != "basic") replacementUnit->setSpecial(true);
+            else unit->setSpecial(false);
+            if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
+            updateSquareTexture(sq, _textures);
+            // Initalize _currentCellLayer to vector of zeroes (all cells start with their first-depth unit)
+            cellDepths.push_back(0);
         }
+        _currentCellLayer.push_back(cellDepths);
     }
     _layout->layout(_guiNode.get());
 }
