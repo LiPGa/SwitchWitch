@@ -483,8 +483,9 @@ shared_ptr<Board> LevelEditorScene::allocBasicBoard(bool withView) {
                 sq->setViewNode(squareNode);
             }
             // Generate unit for this square
-            auto unitTemplateBeginning = _unitTypes.begin();
-            auto unitSubType = unitTemplateBeginning->first;
+//            auto unitTemplateBeginning = _unitTypes.at("random");
+//            auto unitSubType = unitTemplateBeginning->first;
+            std::string unitSubType = "random";
             auto unitColor = "red";
             std:string unitPattern = getUnitType(unitSubType, unitColor);
             Vec2 unitDirection = Unit::getDefaultDirection();

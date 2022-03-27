@@ -784,12 +784,12 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         batch->drawText(unitType, _turn_text->getFont(), Vec2(50, getSize().height - 100));
         batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
-        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
-                                                                                                 : "isSpecial() = false";
-        batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
-//        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 250));
-//        batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 300));
-//        batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 350));
+//        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
+//                                                                                                 : "isSpecial() = false";
+//        batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+        batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 300));
+        batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 350));
     }
 
     batch->end();

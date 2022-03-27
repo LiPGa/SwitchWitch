@@ -6,7 +6,7 @@
             "texture-green": "basic-green",
             "basic-attack": [[1,0]],
             "special-attack":[],
-            "probability-respawn": 40
+            "probability-respawn": 100
         },
         "random": {
             "texture-red": "random-red",
@@ -22,7 +22,7 @@
             "texture-green": "three-way-green",
             "basic-attack": [[1,0]],
             "special-attack": [[1,1], [1,0], [1,-1]],
-            "probability-respawn": 20
+            "probability-respawn": 0
         },
         "diagonal": {
             "texture-red": "diagonal-red",
@@ -30,7 +30,7 @@
             "texture-green": "diagonal-green",
             "basic-attack": [[1,0]],
             "special-attack": [[1,1], [-1,1], [1,-1], [-1,-1]],
-            "probability-respawn": 20
+            "probability-respawn": 0
         },
         "two-forward": {
             "texture-red": "two-forward-red",
@@ -38,7 +38,7 @@
             "texture-green": "two-forward-green",
             "basic-attack": [[1,0]],
             "special-attack": [[1,0], [2,0]],
-            "probability-respawn": 20
+            "probability-respawn": 0
         }
     }
 }
