@@ -16,6 +16,7 @@
 #include <vector>
 #include <map>
 #include <unordered_set>
+#include <time.h>
 #include "SWSquare.hpp"
 #include "SWUnit.hpp"
 #include "SWBoard.hpp"

@@ -78,7 +78,7 @@ void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::stri
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
-    _debug = false;
+    _debug = true;
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     if (assets == nullptr)
@@ -110,6 +110,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _assets = assets;
     _score = 0;
     _prev_score = 0;
+    
+    // Seed the random number generator to a new seed
+    srand(static_cast<int>(time(NULL)));
 
     // Get Textures
     // Preload all the textures into a hashmap
@@ -721,6 +724,7 @@ void GameScene::update(float timestep)
                         auto randomColor = generateRandomUnitColor(colorProbabilities);
                         generateUnit(replacementSquare, randomUnitSubType, randomColor, randomDirection);
                     }
+                    // Check every attacked square if indicator should show
                     refreshUnitAndSquareView(attackedSquare);
                 }
 
@@ -780,12 +784,12 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         batch->drawText(unitType, _turn_text->getFont(), Vec2(50, getSize().height - 100));
         batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
-//        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
-//                                                                                                 : "isSpecial() = false";
-//        batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
-        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 250));
-        batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 300));
-        batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 350));
+        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
+                                                                                                 : "isSpecial() = false";
+        batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+//        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+//        batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 300));
+//        batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 350));
     }
 
     batch->end();
@@ -926,7 +930,7 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
             if (unitSubType != "basic") unit->setSpecial(true);
             else unit->setSpecial(false);
             if (replacementUnitSubType != "basic") replacementUnit->setSpecial(true);
-            else unit->setSpecial(false);
+            else replacementUnit->setSpecial(false);
             if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
             updateSquareTexture(sq, _textures);
