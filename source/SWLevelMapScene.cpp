@@ -65,6 +65,18 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _guiNode->addChild(_backgroundNode);
     _backgroundNode->setAnchor(Vec2::ZERO);
     
+    cugl::scene2::Button _levelOne =
+    scene2::Button();
+    
+    
+
+    
+    
+    
+    _layout = scene2::AnchoredLayout::alloc();
+    
+    
+    
 //    _choice = Choice::NONE;
 //    _gamebutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_host"));
 //    _editorbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_join"));

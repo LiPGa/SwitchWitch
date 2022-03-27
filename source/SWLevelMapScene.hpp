@@ -46,15 +46,18 @@ protected:
 //    /** The menu button for level editor */
 //    std::shared_ptr<cugl::scene2::Button> _editorbutton;
     /** The player menu choice */
-    std::shared_ptr<cugl::scene2::Button> _chosenLevel;
+    std::shared_ptr<cugl::scene2::Button> _levelOne;
+    
     
     
     // VIEW
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::Texture> _background;
+    std::shared_ptr<cugl::Texture> _levelOneTexture;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
-    
+    std::shared_ptr<cugl::scene2::PolygonNode> _levelOneNode;
     cugl::Size _scale;
+    std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     
     
     

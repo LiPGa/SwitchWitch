@@ -88,6 +88,13 @@
         },
         "star_empty":{
             "file": "textures/star-empty.png"
+        },
+        "level_map":{
+            "file": "textures/background-full-screen.png"
+        },
+        "level_one":{
+            "file":
+                "textures/level-one.png"
         }
     },
     "fonts": {
@@ -123,7 +130,8 @@
     "widgets": {
         "textbutton": "widgets/textbutton.json",
         "retrybutton": "widgets/retrybutton.json",
-        "resultmenu": "widgets/resultmenu.json"
+        "resultmenu": "widgets/resultmenu.json",
+        "levelbutton": "widgets/levelbutton.json"
     },
     "jsons": {
         "constants": "json/constants.json",
@@ -252,6 +260,36 @@
                 }
             }
         },
+        "map": {
+            "type": "Node",
+            "format": {
+                "type": "Float",
+                "orientation": "vertical",
+                "x_alignment": "center",
+                "y_alignment": "middle"
+            },
+            "children": {
+                "levelone": {
+                    "type": "Widget",
+                    "data": {
+                        "key": "levelbutton",
+                        "variables": {
+                            "size": [
+                                400,
+                                400
+                            ],
+                            "texture": "level-one"
+                        }
+                    },
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "middle",
+                        "x_offset": -0.01,
+                        "y_offset": 0
+                    }
+                }
+            }
+        },
         "menu": {
             "type": "Node",
             "format": {
@@ -315,7 +353,7 @@
             "format"    : {
                 "type" : "Anchored"
             },
-            "children"  : {
+        "children"  : {
                 "id-field"  : {
                     "type"   : "TextField",
                     "data"   : {

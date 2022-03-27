@@ -205,6 +205,9 @@ void SwitchWitchApp::draw() {
     case LOAD:
         _loading.render(_batch);
         break;
+    case MAP:
+        _levelMap.render(_batch);
+        break;
     case MENU:
         _mainMenu.render(_batch);
         break;
