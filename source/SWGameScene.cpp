@@ -117,7 +117,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _audioQueue = AudioEngine::get()->getMusicQueue();
         _audioQueue->play(_assets->get<Sound>("track_1"), false, .3, false);
     }
-
+   
     didRestart = false;
     
     // Get Textures
@@ -538,6 +538,11 @@ int GameScene::calculateScore(int colorNum, int basicUnitsNum, int specialUnitsN
  */
 void GameScene::update(float timestep)
 {
+    //if (_audioQueue->getState() == cugl::AudioEngine::State::INACTIVE) {
+      //  _audioQueue->play(_assets->get<Sound>("track_1"), false, .3, false);
+    //}
+    _audioQueue->setLoop(true);
+
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
