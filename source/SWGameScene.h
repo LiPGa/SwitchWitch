@@ -19,6 +19,7 @@
 #include "SWUnit.hpp"
 #include "SWBoard.hpp"
 #include "SWInputController.h"
+#include <cugl/audio/CUAudioEngine.h>
 
 /**
  * This class is the primary gameplay constroller.
@@ -181,7 +182,7 @@ protected:
     std::shared_ptr<cugl::Texture> _swapSquareTexture;
 
 #pragma mark -
-
+    std::shared_ptr<cugl::AudioQueue> _audioQueue;
 public:
 #pragma mark -
 #pragma mark Constructors

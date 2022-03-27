@@ -102,15 +102,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     if (!Scene2::init(dimen))
         return false;
 
+    
+
     // Start up the input handler
     _input.init();
 
     // Initialize Variables
-    didRestart = false;
+    
     _assets = assets;
     _score = 0;
     _prev_score = 0;
 
+    if (!didRestart) {
+        _audioQueue = AudioEngine::get()->getMusicQueue();
+        _audioQueue->play(_assets->get<Sound>("track_1"), false, .3, false);
+    }
+
+    didRestart = false;
+    
     // Get Textures
     // Preload all the textures into a hashmap
     vector<string> textureVec = _constants->get("textures")->asStringArray();
@@ -532,7 +541,7 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
-    if (_turns == 0 and didRestart == true){
+    if (_turns == 0 && didRestart == true){
         CULog("Reset");
         reset();
     }
