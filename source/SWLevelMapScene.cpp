@@ -73,13 +73,15 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     addChild(_scrollPane);
     _currentState = NOACTION;
     
-    _levelsNode = _assets->get<scene2::SceneNode>("map");
+    _levelsNode = _assets->get<scene2::SceneNode>("levels");
     _levelsNode->setContentSize(dimen);
     _levelsNode->doLayout();
     _scrollPane->addChild(_levelsNode);
-    _levelsNode->setVisible(false);
+    _levelsNode->setVisible(true);
     
-    _levelOne = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_level1"));
+    _levelOne = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("levels_level1"));
+    
+    _levelOne->setVisible(true);
     
     _levelOne->addListener([this](const std::string& name, bool down) {
         if (down) {
@@ -88,30 +90,8 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     });
     
     
-    _layout = scene2::AnchoredLayout::alloc();
-    
-    
-    
-//    _choice = Choice::NONE;
-//    _gamebutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_host"));
-//    _editorbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("menu_join"));
+//    _layout = scene2::AnchoredLayout::alloc();
 
-//    std::string titleMsg = strtool::format("Switch Witch");
-//    auto titleLabel = scene2::Label::allocWithText(titleMsg, assets->get<Font>("title32"));
-    //scene->addChild(titleLabel);
-
-    // Program the buttons
-//    _gamebutton->addListener([this](const std::string& name, bool down) {
-//        if (down) {
-//            _choice = Choice::GAME;
-//        }
-//        });
-//    _editorbutton->addListener([this](const std::string& name, bool down) {
-//        if (down) {
-//            _choice = Choice::EDITOR;
-//        }
-//        });
-    //addChild(scene);
     setActive(false);
     return true;
 }
