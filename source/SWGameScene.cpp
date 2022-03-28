@@ -78,7 +78,7 @@ void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::stri
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
-    _debug = false;
+    _debug = true;
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     if (assets == nullptr)
@@ -720,7 +720,6 @@ void GameScene::update(float timestep)
                         generateUnit(replacementSquare, unitSubType, Unit::stringToColor(unitColor), unitDirection);
                     } else { // Else generate random unit
                         auto randomUnitSubType = generateRandomUnitType(_unitRespawnProbabilities);
-                        unitSubType = randomUnitSubType;
                         auto randomDirection = generateRandomDirection();
                         auto randomColor = generateRandomUnitColor(colorProbabilities);
                         generateUnit(replacementSquare, randomUnitSubType, randomColor, randomDirection);
@@ -728,6 +727,8 @@ void GameScene::update(float timestep)
                     // Check every attacked square if indicator should show
                     auto upcomingUnitType = unitsInBoard[currentCellDepth+1].at(cellIndexInOneDimensionalBoard).at(0);
                     auto upcomingUnitColor = unitsInBoard[currentCellDepth+1].at(cellIndexInOneDimensionalBoard).at(1);
+                    auto unitNode = attackedSquare->getUnit()->getViewNode();
+                    attackedSquare->getViewNode()->removeChild(unitNode);
                     attackedSquare->getViewNode()->removeChildByName("indicatorNode");
                     if (upcomingUnitType != "basic") {
                         // add the new special unit indicator
@@ -735,6 +736,7 @@ void GameScene::update(float timestep)
                         auto indicatorNode = scene2::PolygonNode::allocWithTexture(_textures.at(borderColor));
                         attackedSquare->getViewNode()->addChildWithName(indicatorNode, "indicatorNode");
                     }
+                    attackedSquare->getViewNode()->addChild(unitNode);
                     refreshUnitAndSquareView(attackedSquare);
                 }
 
