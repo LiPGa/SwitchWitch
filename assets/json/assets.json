@@ -90,7 +90,7 @@
             "file": "textures/star-empty.png"
         },
         "level_map":{
-            "file": "textures/background-full-screen.png"
+            "file": "textures/background-full-screen-button.png"
         },
         "level_one":{
             "file":
@@ -266,26 +266,19 @@
                 "type": "Float",
                 "orientation": "vertical",
                 "x_alignment": "center",
-                "y_alignment": "middle"
+                "y_alignment": "bottom"
             },
             "children": {
-                "levelone": {
+                "level1": {
                     "type": "Widget",
                     "data": {
-                        "key": "levelbutton",
-                        "variables": {
-                            "size": [
-                                400,
-                                400
-                            ],
-                            "texture": "level-one"
-                        }
+                        "key": "levelbutton"
                     },
                     "layout": {
                         "x_anchor": "center",
-                        "y_anchor": "middle",
-                        "x_offset": -0.01,
-                        "y_offset": 0
+                        "y_anchor": "bottom",
+                        "x_offset": -0.2,
+                        "y_offset": -0.3
                     }
                 }
             }

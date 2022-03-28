@@ -46,7 +46,11 @@ protected:
 //    /** The menu button for level editor */
 //    std::shared_ptr<cugl::scene2::Button> _editorbutton;
     /** The player menu choice */
+    std::shared_ptr<cugl::scene2::SceneNode> _levelsNode;
     std::shared_ptr<cugl::scene2::Button> _levelOne;
+    //std::shared_ptr<scene2::SceneNode> _levelsLayout;
+
+    bool start_ok = false;
     
     
     
@@ -120,7 +124,7 @@ public:
      *
      * @return the user's chosen level.
      */
-    Choice getLevel() const;
+    bool getStartStatus() const { return start_ok; }
     
     /**
      * Draws all this scene to the given SpriteBatch.

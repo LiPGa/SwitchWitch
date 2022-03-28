@@ -166,12 +166,12 @@ void SwitchWitchApp::update(float timestep) {
         break;
     case MAP:
             _levelMap.update(timestep);
-//            if (_levelMap.goToGameScene()) {
-//                _scene = State::GAME;
-//                _gameplay.setBoard(_levelEditor.getBoardAsJSON());
-//                _levelMap.setActive(false);
-//                _gameplay.setActive(true);
-//            }
+            if (_levelMap.getStartStatus()) {
+                _scene = State::GAME;
+                _gameplay.setBoard(_levelEditor.getBoardAsJSON());
+                _levelMap.setActive(false);
+                _gameplay.setActive(true);
+            }
     case GAME:
         _gameplay.update(timestep);
         if (_gameplay.goToLevelEditor()) {

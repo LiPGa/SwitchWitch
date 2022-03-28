@@ -56,6 +56,7 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 //    scene->doLayout(); // Repositions the HUD
     
     // Set up GUI
+    start_ok = false;
     _background = assets->get<Texture>("level_map");
     _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
     _scale = getSize() / _background->getSize();
@@ -65,12 +66,19 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _guiNode->addChild(_backgroundNode);
     _backgroundNode->setAnchor(Vec2::ZERO);
     
-    cugl::scene2::Button _levelOne =
-    scene2::Button();
+    _levelsNode = _assets->get<scene2::SceneNode>("map");
+    _levelsNode->setContentSize(dimen);
+    _levelsNode->doLayout();
+    _guiNode->addChild(_levelsNode);
+    _levelsNode->setVisible(false);
     
+    _levelOne = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_level1"));
     
-
-    
+    _levelOne->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            start_ok = true;
+        }
+    });
     
     
     _layout = scene2::AnchoredLayout::alloc();
@@ -124,19 +132,16 @@ void LevelMapScene::dispose() {
 void LevelMapScene::setActive(bool value) {
     if (isActive() != value) {
         Scene2::setActive(value);
-//        if (value) {
-//            _choice = NONE;
-//            _gamebutton->activate();
-//            _editorbutton->activate();
-//        }
-//        else {
-//            CULog("Menu button desactivated");
-//            _gamebutton->deactivate();
-//            _editorbutton->deactivate();
-//            // If any were pressed, reset them
-//            _gamebutton->setDown(false);
-//            _editorbutton->setDown(false);
-//        }
+        if (value) {
+            start_ok = false;
+            _levelOne->activate();
+        }
+        else {
+            CULog("Menu button desactivated");
+            _levelOne->deactivate();
+            // If any were pressed, reset them
+            _levelOne->setDown(false);
+        }
     }
 }
 
