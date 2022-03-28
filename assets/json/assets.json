@@ -20,6 +20,15 @@
         "square-attacked": {
             "file": "textures/square_attacked.png"
         },
+        "border-red": {
+            "file": "textures/border_red.png"
+        },
+        "border-green": {
+            "file": "textures/border_green.png"
+        },
+        "border-blue": {
+            "file": "textures/border_blue.png"
+        },
         "transparent": {
             "file": "textures/transparent_texture.png"
         },

@@ -78,7 +78,7 @@ void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::stri
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
-    _debug = true;
+    _debug = false;
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     if (assets == nullptr)
@@ -720,11 +720,21 @@ void GameScene::update(float timestep)
                         generateUnit(replacementSquare, unitSubType, Unit::stringToColor(unitColor), unitDirection);
                     } else { // Else generate random unit
                         auto randomUnitSubType = generateRandomUnitType(_unitRespawnProbabilities);
+                        unitSubType = randomUnitSubType;
                         auto randomDirection = generateRandomDirection();
                         auto randomColor = generateRandomUnitColor(colorProbabilities);
                         generateUnit(replacementSquare, randomUnitSubType, randomColor, randomDirection);
                     }
                     // Check every attacked square if indicator should show
+                    auto upcomingUnitType = unitsInBoard[currentCellDepth+1].at(cellIndexInOneDimensionalBoard).at(0);
+                    auto upcomingUnitColor = unitsInBoard[currentCellDepth+1].at(cellIndexInOneDimensionalBoard).at(1);
+                    attackedSquare->getViewNode()->removeChildByName("indicatorNode");
+                    if (upcomingUnitType != "basic") {
+                        // add the new special unit indicator
+                        string borderColor = getUnitType("border", upcomingUnitColor);
+                        auto indicatorNode = scene2::PolygonNode::allocWithTexture(_textures.at(borderColor));
+                        attackedSquare->getViewNode()->addChildWithName(indicatorNode, "indicatorNode");
+                    }
                     refreshUnitAndSquareView(attackedSquare);
                 }
 
@@ -787,9 +797,9 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
                                                                                                  : "isSpecial() = false";
         batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
-//        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 250));
-//        batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 300));
-//        batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 350));
+        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 300));
+        batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 350));
+        batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 400));
     }
 
     batch->end();
@@ -932,6 +942,12 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
             if (replacementUnitSubType != "basic") replacementUnit->setSpecial(true);
             else replacementUnit->setSpecial(false);
             if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+            if (replacementUnitSubType != "basic") {
+                // add a border to the square if the upcoming unit is a special unit
+                string borderColor = getUnitType("border", replacementUnitColor);
+                auto indicatorNode = scene2::PolygonNode::allocWithTexture(_textures.at(borderColor));
+                squareNode->addChildWithName(indicatorNode, "indicatorNode");
+            }
             squareNode->addChild(unitNode);
             updateSquareTexture(sq, _textures);
             // Initalize _currentCellLayer to vector of zeroes (all cells start with their first-depth unit)
