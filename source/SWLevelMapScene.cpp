@@ -48,6 +48,7 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     }
 
     // Start up the input handler
+    _input.init();
     _assets = assets;
 
     // Acquire the scene built by the asset loader and resize it the scene
@@ -57,19 +58,25 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     
     // Set up GUI
     start_ok = false;
-    _background = assets->get<Texture>("level_map");
-    _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
-    _scale = getSize() / _background->getSize();
-    _backgroundNode->setScale(_scale);
-    _guiNode = scene2::SceneNode::allocWithBounds(getSize());
-    addChild(_guiNode);
-    _guiNode->addChild(_backgroundNode);
-    _backgroundNode->setAnchor(Vec2::ZERO);
+//    _background = assets->get<Texture>("level_map");
+//    _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
+//    _scale = getSize() / _background->getSize();
+//    _backgroundNode->setScale(_scale);
+//    _guiNode = scene2::SceneNode::allocWithBounds(getSize());
+//    addChild(_guiNode);
+//    _guiNode->addChild(_backgroundNode);
+//    _backgroundNode->setAnchor(Vec2::ZERO);
+//
+    _scrollPane = std::dynamic_pointer_cast<scene2::ScrollPane>(_assets->get<scene2::SceneNode>("level-map"));
+    _scrollPane->setContentSize(dimen);
+    CULog("getSize: %f, %f", getSize().width, getSize().height);
+    addChild(_scrollPane);
+    _currentState = NOACTION;
     
     _levelsNode = _assets->get<scene2::SceneNode>("map");
     _levelsNode->setContentSize(dimen);
     _levelsNode->doLayout();
-    _guiNode->addChild(_levelsNode);
+    _scrollPane->addChild(_levelsNode);
     _levelsNode->setVisible(false);
     
     _levelOne = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_level1"));
@@ -145,9 +152,37 @@ void LevelMapScene::setActive(bool value) {
     }
 }
 
+void LevelMapScene::update(float dt) {
+    _input.update();
+
+    // Process the toggled key commands
+    Vec2 pos = _input.getPosition();
+    if (_currentState == SCROLLING) {
+        Vec2 prevPos = _input.getPrevious();
+        Vec2 moveDist = Vec2(pos.x-prevPos.x, prevPos.y-pos.y);
+        Vec2 anchor = _input.getPosition();
+        anchor = _scrollPane->worldToNodeCoords(anchor);
+        anchor /= _scrollPane->getContentSize();
+        if (anchor != _scrollPane->getAnchor()) {
+            _scrollPane->setAnchor(anchor);
+        }
+        _scrollPane->applyPan(moveDist);
+    }
+    if (_input.isDown()) {
+        if (_currentState == NOACTION) {
+            _currentState = SCROLLING;
+        }
+    } else {
+        if (_currentState == SCROLLING) {
+            _currentState = NOACTION;
+        }
+    }
+}
+
+
 void LevelMapScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch) {
     batch->begin(getCamera()->getCombined());
-    _guiNode->render(batch);
+    _scrollPane->render(batch);
     batch->end();
 }
 

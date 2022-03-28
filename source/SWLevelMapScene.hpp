@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <cugl/cugl.h>
 #include <vector>
+#include "SWInputController.h"
 
 
 /**
@@ -37,6 +38,22 @@ public:
         /** User wants to use the editor */
         EDITOR
     };
+    
+#pragma mark State Varibales
+    /** Possible states of the level.
+     * Name of state is describing what the current state of the game is waiting for.
+     * For example, the selecting_unit state means the game is waiting for the player to select a unit.
+     */
+    enum State
+    {
+        /** User has not yet made a move */
+        NOACTION,
+        /** User is scrolling the screen */
+        SCROLLING
+    };
+    
+    /** The current state of the selection process*/
+    State _currentState;
 
 protected:
     /** The asset manager for this scene. */
@@ -52,10 +69,12 @@ protected:
 
     bool start_ok = false;
     
-    
+    // CONTROLLERS are attached directly to the scene (no pointers)
+    InputController _input;
     
     // VIEW
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
+    std::shared_ptr<cugl::scene2::ScrollPane> _scrollPane;
     std::shared_ptr<cugl::Texture> _background;
     std::shared_ptr<cugl::Texture> _levelOneTexture;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
@@ -125,6 +144,17 @@ public:
      * @return the user's chosen level.
      */
     bool getStartStatus() const { return start_ok; }
+    
+#pragma mark -
+#pragma mark Gameplay Handling
+    /**
+     * The method called to update the game mode.
+     *
+     * This method contains any gameplay code that is not an OpenGL call.
+     *
+     * @param timestep  The amount of time (in seconds) since the last frame
+     */
+    void update(float timestep) override;
     
     /**
      * Draws all this scene to the given SpriteBatch.

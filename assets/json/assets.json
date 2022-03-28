@@ -90,7 +90,7 @@
             "file": "textures/star-empty.png"
         },
         "level_map":{
-            "file": "textures/background-full-screen-button.png"
+            "file": "textures/main_menu_full.png"
         },
         "level_one":{
             "file":
@@ -139,6 +139,34 @@
         "board": "json/board.json"
     },
     "scene2s": {
+        "level-map": {
+            "type"      : "Scroll",
+            "data" : {
+                "interior"  : [0,0,332,1696],
+                "constrain" : true,
+                "mask"      : false,
+                "pan"       : [0,0],
+                "zoom min"  : 0.5,
+                "zoom max"  : 2.0
+            },
+            "children":  {
+                "background" : {
+                    "type":    "Solid",
+                    "comment": "This is the debugging background",
+                    "data": {
+                        "texture" : "level_map",
+                        "scale"   : 0.2951
+                    },
+                    "layout" : {
+                        "y_anchor": "middle",
+                        "x_anchor": "center"
+                    },
+                    "format"    : {
+                        "type" : "Anchored"
+                    }
+                }
+            }
+        },
         "result": {
             "type": "Node",
             "format": {
