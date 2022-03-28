@@ -485,12 +485,12 @@
 				TargetAttributes = {
 					EB22BF5D25D0E8BC002ACE41 = {
 						CreatedOnToolsVersion = 12.4;
-						DevelopmentTeam = 8PY6L96N4T;
+						DevelopmentTeam = 857UYV938U;
 						ProvisioningStyle = Automatic;
 					};
 					EB74548B1D74D75C002FBAE6 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 4WBNK62USC;
+						DevelopmentTeam = 857UYV938U;
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -666,13 +666,13 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8PY6L96N4T;
+				DEVELOPMENT_TEAM = 857UYV938U;
 				INFOPLIST_FILE = "$(SRCROOT)/../cugl/build-apple/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.sim.SwitchWitch;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.sim.SwitchWitch.ashley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -691,12 +691,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8PY6L96N4T;
+				DEVELOPMENT_TEAM = 857UYV938U;
 				INFOPLIST_FILE = "$(SRCROOT)/../cugl/build-apple/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.sim.SwitchWitch;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.sim.SwitchWitch.ashley;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -712,12 +712,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4WBNK62USC;
+				DEVELOPMENT_TEAM = 857UYV938U;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.Yihan.SwitchWitch;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.ashley.SwitchWitch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -733,12 +733,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4WBNK62USC;
+				DEVELOPMENT_TEAM = 857UYV938U;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.Yihan.SwitchWitch;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.ashley.SwitchWitch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
