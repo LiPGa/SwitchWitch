@@ -130,6 +130,23 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
             if (_currentBoardTurn == _numberOfTurns) {
                 _numberOfTurns++;
                 _boards.push_back(allocBasicBoard(true));
+                for (int i = 0; i < _boardWidth; i++) {
+                    for (int j = 0; j < _boardHeight; ++j) {
+                        auto squarePosition = Vec2(i, j);
+                        if (_currentBoard->getSquare(squarePosition)->getUnit()->getSubType() == "empty") {
+                            std::string unitSubType = "empty";
+                            auto unitColor = "red";
+                            std:string unitPattern = getUnitType(unitSubType, unitColor);
+                            Vec2 unitDirection = Unit::getDefaultDirection();
+                            auto unitTemplate = _unitTypes.at(unitSubType);
+                            Unit::Color c = Unit::stringToColor(unitColor);
+                            shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection);
+                            _boards[_currentBoardTurn + 1]->getSquare(squarePosition)->setUnit(unit);
+                            auto unitNode = _currentBoard->getSquare(squarePosition)->getUnit()->getViewNode();
+                            unit->setViewNode(unitNode);
+                        }
+                    }
+                }
             } 
             _currentBoardTurn++;
             _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn, _numberOfTurns));
@@ -210,7 +227,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         });
 
     // Initialize Turn Counter
-    std::string turnMsg = strtool::format("For turn: %d/%d", _currentBoardTurn + 1, _numberOfTurns);
+    std::string turnMsg = strtool::format("For turn: %d/%d", _currentBoardTurn, _numberOfTurns);
     _turnTextLabel = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
     _turnTextLabel->setContentSize(Vec2(getSize().width, _turnTextLabel->getContentHeight()));
     _rootNode->addChild(_turnTextLabel);
@@ -483,8 +500,6 @@ shared_ptr<Board> LevelEditorScene::allocBasicBoard(bool withView) {
                 sq->setViewNode(squareNode);
             }
             // Generate unit for this square
-//            auto unitTemplateBeginning = _unitTypes.at("random");
-//            auto unitSubType = unitTemplateBeginning->first;
             std::string unitSubType = "random";
             auto unitColor = "red";
             std:string unitPattern = getUnitType(unitSubType, unitColor);

@@ -16,6 +16,14 @@
             "special-attack":[],
             "probability-respawn": 0
         },
+        "empty": {
+            "texture-red": "empty-red",
+            "texture-blue": "empty-blue",
+            "texture-green": "empty-green",
+            "basic-attack": [[1,0]],
+            "special-attack":[],
+            "probability-respawn": 0
+        },
         "three-way": {
             "texture-red": "three-way-red",
             "texture-blue": "three-way-blue",

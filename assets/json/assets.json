@@ -41,6 +41,15 @@
         "random-blue": {
             "file": "textures/random_blue.png"
         },
+        "empty-red": {
+            "file": "textures/empty_red.png"
+        },
+        "empty-green": {
+            "file": "textures/empty_red.png"
+        },
+        "empty-blue": {
+            "file": "textures/empty_red.png"
+        },
         "basic-red": {
             "file": "textures/red_unit.png"
         },

@@ -109,9 +109,9 @@ protected:
     /** _currentCellLayer[i][j] is the current unit lookup depth at cell [i, j] in the board */
     vector<vector<int>> _currentCellLayer;
     /** Directions of all units at each layer */
-    vector<vector<Vec2>> unitsDirInBoard;
+    vector<vector<Vec2>> _unitsDirInBoard;
     /** Types of all units at each layer */
-    vector<vector<vector<std::string>>> unitsInBoard;
+    vector<vector<vector<std::string>>> _unitsInBoard;
 
 #pragma mark -
 #pragma mark Model Variables
@@ -379,14 +379,6 @@ private:
      * Among the 8 squares around a special unit, there can be at most one other special unit
      */
     bool isSafe(cugl::Vec2 pos,cugl::Vec2 specialPosition[]);
-    
-
-//    void replaceUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
-//
-//    void replaceUnitNoDelete(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode, int i);
-//
-//    std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> generateUnitDontSet();
-
 };
 
 #endif /* __SW_GAME_SCENE_H__ */
