@@ -140,6 +140,7 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
     std::shared_ptr<scene2::SceneNode> _resultLayout;
+    std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
 
 
     // std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;

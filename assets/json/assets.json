@@ -86,6 +86,9 @@
         "two-forward-red": {
             "file": "textures/two_forward_red_unit.png"
         },
+        "next-three-way-blue":{
+            "file": "textures/next_three_way_blue.png"
+        },
         "special_up_square": {
             "file": "textures/up.png"
         },

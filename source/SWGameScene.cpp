@@ -78,7 +78,7 @@ void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::stri
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
-    _debug = true;
+    _debug = false;
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     if (assets == nullptr)
@@ -180,7 +180,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChildWithName(_turn_text, "turn_text");
 
     // Create and layout the score meter
-    
+
     _scoreMeter = scene2::ProgressBar::allocWithCaps(_assets->get<Texture>("scoremeter_background"), _assets->get<Texture>("scoremeter_foreground"), _assets->get<Texture>("scoremeter_endcap_left"), _assets->get<Texture>("scoremeter_endcap_right"), Size(97, 15));
     _scoreMeter->setProgress(0.0);
 //    _scoreMeter->setPosition(Vec2(0, 0));
@@ -251,6 +251,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     }
 
     setBoard(_boardJson);
+    // Create the upcoming special unit indicator
+    _upcomingUnitNode = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("next-three-way-blue"));
+    _guiNode->addChild(_upcomingUnitNode);
+    _upcomingUnitNode->setVisible(false);
 
     _resultLayout = assets->get<scene2::SceneNode>("result");
     _resultLayout->setContentSize(dimen);
@@ -524,9 +528,28 @@ void GameScene::update(float timestep)
                 _selectedSquare = squareOnMouse;
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
                 _currentState = SELECTING_SWAP;
+                auto upcomingUnitType =_selectedSquare->getUnit()->getSubType();
+                auto upcomingSquarePos = _selectedSquare->getViewNode()->getPosition();
+                if (upcomingUnitType!="basic"){
+//                    string borderColor = getUnitType("border", replacementUnitColor);
+//                    auto indicatorNode = scene2::PolygonNode::allocWithTexture(_textures.at(borderColor));
+//                    squareNode->addChildWithName(indicatorNode, "indicatorNode");
+                    CULog("selected %s", upcomingUnitType.c_str());
+                    CULog("%d %d", upcomingSquarePos.x, upcomingSquarePos.y);
+//                    _selectedSquare->getViewNode()->setTexture(_textures.at("next-three-way-blue"));
+                    _upcomingUnitNode->setTexture(_textures.at("next-three-way-blue"));
+                    _upcomingUnitNode->setScale(0.3);
+//                    auto squarePosition = _selectedSquare->getViewNode()->get
+                    _upcomingUnitNode->setPosition(upcomingSquarePos);
+                    _upcomingUnitNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
+                    _upcomingUnitNode->setVisible(true);
+//                    _upcomingUnitNode->setPosition(<#const Vec2 &position#>)
+                }
             }
             else if (_currentState == SELECTING_SWAP && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1)
             {
+                _upcomingUnitNode->setVisible(false);
+
                 _attackedColorNum = 0;
                 _attackedBasicNum = 0;
                 _attackedSpecialNum = 0;
@@ -550,7 +573,7 @@ void GameScene::update(float timestep)
                     auto attackedUnit = attackedSquares->getUnit();
                     attackedColors.insert(attackedUnit->getColor());
 
-                    if (attackedUnit->getSpecialAttack().size() == 0)
+                    if (not attackedUnit->isSpecial())
                         _attackedBasicNum++;
                     else
                         _attackedSpecialNum++;
@@ -559,6 +582,8 @@ void GameScene::update(float timestep)
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
             {
+                _upcomingUnitNode->setVisible(false);
+
                 _currentState = SELECTING_SWAP;
                 // If we are de-confirming a swap, we must undo the swap.
                 _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
@@ -575,6 +600,7 @@ void GameScene::update(float timestep)
     }
     else if (_input.didRelease())
     {
+        _upcomingUnitNode->setVisible(false);
 
         for (shared_ptr<Square> squares : _board->getAllSquares())
         {
