@@ -26,6 +26,9 @@ private:
     /** The Polygon-Node that represents this square */
     shared_ptr<cugl::scene2::PolygonNode> _viewNode;
 
+    /** If the square is interactable */
+    bool _interactable;
+
 public:
 #pragma mark Constructors
     /**
@@ -120,6 +123,20 @@ public:
      * @param value the unit on this ship
      */
     void setUnit(shared_ptr<Unit> unit) { _unit = unit; }
+
+    /**
+     * Returns if the square is interactable
+     * 
+     * @return if the square is interactable
+     */
+    bool isInteractable() { return _interactable; }
+
+    /**
+     * Sets if the square is interactable
+     *
+     * @param interactable
+     */
+    void setInteractable(bool interactable) { _interactable = interactable; }
     
     /**
      * Returns the Polygon-Node that represents the square's view.

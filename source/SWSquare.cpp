@@ -18,6 +18,7 @@ using namespace cugl;
  */
 bool Square::initWithPos(const cugl::Vec2& pos) {
 	this->_pos = pos;
+    this->_interactable = true;
     return true;
 }
 
@@ -30,5 +31,6 @@ bool Square::initWithPos(const cugl::Vec2& pos) {
  */
 bool Square::initWithPosAndUnit(const cugl::Vec2& pos, shared_ptr<Unit> unit) {
     this->_unit = unit;
+    this->_interactable = true;
     return initWithPos(pos);
 }

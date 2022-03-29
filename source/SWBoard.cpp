@@ -87,7 +87,8 @@ void Board::switchUnits(cugl::Vec2 pos1, cugl::Vec2 pos2){
 void Board::switchAndRotateUnits(cugl::Vec2 pos1, cugl::Vec2 pos2) {
     Vec2 positionOneUnitDirection = getSquare(pos2)->getPosition() - getSquare(pos1)->getPosition();
     getSquare(pos1)->getUnit()->setDirection(positionOneUnitDirection);
-    getSquare(pos2)->getUnit()->setDirection(-1 * positionOneUnitDirection);
+    // The following line is commented out for alpha release (to test only changing direction of originally selected unit). 
+//    getSquare(pos2)->getUnit()->setDirection(-1 * positionOneUnitDirection);
     switchUnits(pos1, pos2);
 }
 

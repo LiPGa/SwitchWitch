@@ -14,7 +14,9 @@
 #define __SW_GAME_SCENE_H__
 #include <cugl/cugl.h>
 #include <vector>
+#include <map>
 #include <unordered_set>
+#include <time.h>
 #include "SWSquare.hpp"
 #include "SWUnit.hpp"
 #include "SWBoard.hpp"
@@ -57,8 +59,10 @@ protected:
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
     // hash map for units with different types
     std::unordered_map<std::string, std::shared_ptr<Unit>> _unitTypes;
-    // hash map for unit probabilities
+    // hash map for cumulative unit probabilities
     std::unordered_map<std::string, int> _probability;
+    // Mapping between unit subtypes and respawn probabilities
+    std::map<std::string, float> _unitRespawnProbabilities;
     
 #pragma mark State Varibales
     /** Possible states of the level.
@@ -102,6 +106,13 @@ protected:
     int _attackedBasicNum;
     /** The number of special units killed */
     int _attackedSpecialNum;
+    
+    /** _currentCellLayer[i][j] is the current unit lookup depth at cell [i, j] in the board */
+    vector<vector<int>> _currentCellLayer;
+    /** Directions of all units at each layer */
+    vector<vector<Vec2>> _unitsDirInBoard;
+    /** Types of all units at each layer */
+    vector<vector<vector<std::string>>> _unitsInBoard;
 
 #pragma mark -
 #pragma mark Model Variables
@@ -272,8 +283,48 @@ public:
      * @returns the current state
      */
     bool goToLevelEditor() { return _input.isEscapeDown(); }
+    
+    /** Sets the cugl::JsonValue that the gamescene reads the board population data from */
+    void setBoardJSON(std::shared_ptr<cugl::JsonValue> v) { _boardJson = v; }
+    
+    /**
+     * Copies model data including unit from one square to another square.
+     * Only copies model data, does not manipulate view variables.
+     *
+     * @param from  The square model from which to copy data
+     * @param to  The square model to which data should be copied
+     */
+    static void copySquareData(std::shared_ptr<Square> from, std::shared_ptr<Square> to);
 
 private:
+    /**
+     * Generate a random unit type with the given probabilities
+     * @param probs    A mapping between unit type and probability. Probabilities should sum to 1.0
+     * @return  The randomly generated unit type as a string
+     */
+    std::string generateRandomUnitType(std::map<std::string, float> probs);
+    
+    /**
+     * Generate a random color with the given probabilities
+     * @param probs  A mapping between Unit::Color and probability. Probabilities should sum to 1.0
+     * @return  The randomly generated Unit::Color
+     */
+    Unit::Color generateRandomUnitColor(std::map<Unit::Color, float> probs);
+    
+    /**
+     * Generate a uniformly-random direction
+     * @return The random direction as a Vec2
+     */
+    Vec2 generateRandomDirection();
+    
+    /**
+     * Generates a mapping between Unit::Color and the probability that the color should be respawned.
+     * Scans the current board to tally current color counts, and returns probabilities based on the inverted relative sums.
+     * @return The mapping between Unit::Color and probabilities
+     */
+    std::map<Unit::Color, float> generateColorProbabilities();
+    
+    
     /**
      * Get the pattern for a unit provided its type and color
      * @param type     The sub-type of the unit
@@ -313,13 +364,20 @@ private:
     int calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum);
     
     /**
-     * Generate a unit basic or special with random color and direction on the given square.
+     * Generate a unit on the given square.
      *
-     * @param sq    The given square
-     * @param squareNode    The given squareNode
-     *
+     * @param sq    The given square pointer
+     * @param unitType  The type of unit to generate
+     * @param color  The color of the unit to generate
+     * @param dir  The direction of the unit to generate
      */
-    void generateUnit(shared_ptr<Square> sq);
+    void generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::Color color, Vec2 dir);
+    
+    /**
+     * Update the view for a  square and its unit, based on the model for that unit.
+     * @param sq  The square model to update the view of
+     */
+    void refreshUnitAndSquareView(shared_ptr<Square> sq);
 
     
     /**
@@ -328,14 +386,6 @@ private:
      * Among the 8 squares around a special unit, there can be at most one other special unit
      */
     bool isSafe(cugl::Vec2 pos,cugl::Vec2 specialPosition[]);
-    
-
-//    void replaceUnit(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode);
-//
-//    void replaceUnitNoDelete(shared_ptr<Square> sq, shared_ptr<scene2::PolygonNode> squareNode, int i);
-//
-//    std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>> generateUnitDontSet();
-
 };
 
 #endif /* __SW_GAME_SCENE_H__ */
