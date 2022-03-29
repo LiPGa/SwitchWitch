@@ -29,6 +29,54 @@
         "border-blue": {
             "file": "textures/border_blue.png"
         },
+        "square-up-red": {
+            "file": "textures/square_up_red.png"
+        },
+        "square-down-red": {
+            "file": "textures/square_down_red.png"
+        },
+        "square-left-red": {
+            "file": "textures/square_left_red.png"
+        },
+        "square-right-red": {
+            "file": "textures/square_right_red.png"
+        },
+        "square-up-blue": {
+            "file": "textures/square_up_blue.png"
+        },
+        "square-down-blue": {
+            "file": "textures/square_down_blue.png"
+        },
+        "square-left-blue": {
+            "file": "textures/square_left_blue.png"
+        },
+        "square-right-blue": {
+            "file": "textures/square_right_blue.png"
+        },
+        "square-up-green": {
+            "file": "textures/square_up_orange.png"
+        },
+        "square-down-green": {
+            "file": "textures/square_down_orange.png"
+        },
+        "square-left-green": {
+            "file": "textures/square_left_orange.png"
+        },
+        "square-right-green": {
+            "file": "textures/square_right_orange.png"
+        },
+        "arrow-up": {
+            "file": "textures/arrow_up.png"
+        },
+        "arrow-down": {
+            "file": "textures/arrow_down.png"
+        },
+        "arrow-right": {
+            "file": "textures/arrow_right.png"
+        },
+        "arrow-left": {
+            "file": "textures/arrow_left.png"
+        },
         "transparent": {
             "file": "textures/transparent_texture.png"
         },

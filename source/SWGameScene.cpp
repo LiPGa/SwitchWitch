@@ -38,31 +38,34 @@ using namespace std;
  * @param square         the square being set
  * @param textures       the texture map being used
  */
-void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures)
+void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, shared_ptr<Board> replacementBoard)
 {
-    if (square->getUnit()->isSpecial())
+    Vec2 squarePos = square->getPosition();
+    shared_ptr<Unit> currentUnit = square->getUnit();
+    shared_ptr<Unit> replacementUnit = replacementBoard->getSquare(squarePos)->getUnit();
+    std::string color = Unit::colorToString(replacementUnit->getColor());
+    string currentDirection = Unit::directionToString(currentUnit->getDirection());
+    string replacementDirection = Unit::directionToString(replacementUnit->getDirection());
+    string sqTexture;
+    
+    
+    if (currentUnit->isSpecial() && replacementUnit->getSubType() == "basic")
     {
-        if (square->getUnit()->getDirection() == Vec2(0, 1))
-        {
-            square->getViewNode()->setTexture(textures.at("special_up_square"));
-        }
-        else if (square->getUnit()->getDirection() == Vec2(0, -1))
-        {
-            square->getViewNode()->setTexture(textures.at("special_down_square"));
-        }
-        else if (square->getUnit()->getDirection() == Vec2(1, 0))
-        {
-            square->getViewNode()->setTexture(textures.at("special_right_square"));
-        }
-        else
-        {
-            square->getViewNode()->setTexture(textures.at("special_left_square"));
-        }
+        sqTexture = "special_" + currentDirection + "_square";
+    }
+    else if (currentUnit->isSpecial() && replacementUnit->getSubType() != "basic")
+    {
+        sqTexture = "arrow-" + currentDirection;
+    }
+    else if (!currentUnit->isSpecial() && replacementUnit->getSubType() != "basic")
+    {
+        sqTexture = "square-" + replacementDirection + "-" + color;
     }
     else
     {
-        square->getViewNode()->setTexture(textures.at("square"));
+        sqTexture="square";
     }
+    square->getViewNode()->setTexture(textures.at(sqTexture));
 }
 
 /**
@@ -316,7 +319,7 @@ void GameScene::refreshUnitAndSquareView(shared_ptr<Square> sq) {
     if (unitSubtype != "basic") unit->setSpecial(true);
     else unit->setSpecial(false);
     if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-    updateSquareTexture(sq, _textures);
+    updateSquareTexture(sq, _textures, _replacementBoard);
 }
 /**
  * Generate a unit on the given square.
@@ -382,6 +385,7 @@ void GameScene::copySquareData(std::shared_ptr<Square> from, std::shared_ptr<Squ
     toUnit->setSpecialAttack(fromUnit->getSpecialAttack());
     toUnit->setSubType(fromUnit->getSubType());
 }
+
 
 /**
  * Disposes of all (non-static) resources allocated to this mode.
@@ -524,7 +528,7 @@ void GameScene::update(float timestep)
                 _swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
                 for (shared_ptr<Square> squares : _board->getAllSquares())
                 {
-                    updateSquareTexture(squares, _textures);
+                    updateSquareTexture(squares, _textures, _replacementBoard);
                 }
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
             }
@@ -536,7 +540,7 @@ void GameScene::update(float timestep)
 
         for (shared_ptr<Square> squares : _board->getAllSquares())
         {
-            updateSquareTexture(squares, _textures);
+            updateSquareTexture(squares, _textures,_replacementBoard);
         }
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable() && _currentState == CONFIRM_SWAP)
         {
@@ -586,20 +590,6 @@ void GameScene::update(float timestep)
                 std:string unitPattern = getUnitType(unitSubType, unitColor);
                     generateUnit(replacementSquare, unitSubType, Unit::stringToColor(unitColor), unitDirection);
                 }
-                // Check every attacked square if indicator should show
-                auto upcomingUnit = replacementSquare->getUnit();
-                auto upcomingUnitType = upcomingUnit->getSubType();
-                auto upcomingUnitColor = upcomingUnit->getColor();
-                auto unitNode = attackedSquare->getUnit()->getViewNode();
-                attackedSquare->getViewNode()->removeChild(unitNode);
-                attackedSquare->getViewNode()->removeChildByName("indicatorNode");
-                if (upcomingUnitType != "basic") {
-                    // add the new special unit indicator
-                    string borderColor = getUnitType("border", upcomingUnitColor);
-                    auto indicatorNode = scene2::PolygonNode::allocWithTexture(_textures.at(borderColor));
-                    attackedSquare->getViewNode()->addChildWithName(indicatorNode, "indicatorNode");
-                }
-                attackedSquare->getViewNode()->addChild(unitNode);
                 refreshUnitAndSquareView(attackedSquare);
             }
 
@@ -799,14 +789,7 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
             if (replacementUnitSubType != "basic") replacementUnit->setSpecial(true);
             else replacementUnit->setSpecial(false);
             if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-            if (replacementUnitSubType != "basic") {
-                // add a border to the square if the upcoming unit is a special unit
-                string borderColor = getUnitType("border", replacementUnitColor);
-                auto indicatorNode = scene2::PolygonNode::allocWithTexture(_textures.at(borderColor));
-                squareNode->addChildWithName(indicatorNode, "indicatorNode");
-            }
             squareNode->addChild(unitNode);
-            updateSquareTexture(sq, _textures);
             // Initalize _currentCellLayer to vector of zeroes (all cells start with their first-depth unit)
             cellDepths.push_back(0);
         }
