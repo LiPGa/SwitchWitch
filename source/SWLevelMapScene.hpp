@@ -65,7 +65,7 @@ protected:
     /** The player menu choice */
     std::shared_ptr<cugl::scene2::SceneNode> _levelsNode;
     std::shared_ptr<cugl::scene2::Button> _levelOne;
-    //std::shared_ptr<scene2::SceneNode> _levelsLayout;
+    //std::shared_ptr<scene2::SceneNode> _level1Node;
 
     bool start_ok = false;
     
@@ -78,7 +78,7 @@ protected:
     std::shared_ptr<cugl::Texture> _background;
     std::shared_ptr<cugl::Texture> _levelOneTexture;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
-    std::shared_ptr<cugl::scene2::PolygonNode> _levelOneNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _levelOneNode;
     cugl::Size _scale;
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     

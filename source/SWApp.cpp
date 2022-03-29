@@ -177,12 +177,12 @@ void SwitchWitchApp::update(float timestep) {
     case GAME:
         CULog("%s", "inside game");
         _gameplay.update(timestep);
-//        if (_gameplay.goToLevelEditor()) {
-//            CULog("%s", "inside level editor");
-//            _scene = State::EDITOR;
-//            _gameplay.setActive(false);
-//            _levelEditor.setActive(true);
-        //}
+        if (_gameplay.goToLevelEditor()) {
+            CULog("%s", "inside level editor");
+            _scene = State::EDITOR;
+            _gameplay.setActive(false);
+            _levelEditor.setActive(true);
+        }
         break;
     case EDITOR:
         _levelEditor.update(timestep);

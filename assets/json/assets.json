@@ -139,7 +139,7 @@
         "board": "json/board.json"
     },
     "scene2s": {
-        "level-map": {
+        "map": {
             "type"      : "Scroll",
             "data" : {
                 "interior"  : [0,0,332,1696],
@@ -163,6 +163,39 @@
                     },
                     "format"    : {
                         "type" : "Anchored"
+                    },
+                    "children": {
+                        "levels": {
+                            "type": "Node",
+                            "format": {
+                                "type": "Float",
+                                "orientation": "vertical",
+                                "x_alignment": "center",
+                                "y_alignment": "bottom"
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "bottom",
+                                "x_offset": -280,
+                                "y_offset": 250,
+                                "absolute": true
+                            },
+                            "children": {
+                                "level1": {
+                                    "type": "Widget",
+                                    "data": {
+                                        "key": "levelbutton"
+                                    },
+                                    "layout": {
+                                        "x_anchor": "center",
+                                        "y_anchor": "bottom",
+                                        "x_offset": 0,
+                                        "y_offset": 0,
+                                        "absolute": true
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -284,29 +317,6 @@
                                 "y_offset": 0.2
                             }
                         }
-                    }
-                }
-            }
-        },
-        "levels": {
-            "type": "Node",
-            "format": {
-                "type": "Float",
-                "orientation": "vertical",
-                "x_alignment": "center",
-                "y_alignment": "bottom"
-            },
-            "children": {
-                "level1": {
-                    "type": "Widget",
-                    "data": {
-                        "key": "levelbutton"
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "bottom",
-                        "x_offset": -0.2,
-                        "y_offset": -0.3
                     }
                 }
             }

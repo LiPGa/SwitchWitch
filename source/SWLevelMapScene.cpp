@@ -50,46 +50,36 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // Start up the input handler
     _input.init();
     _assets = assets;
-
-    // Acquire the scene built by the asset loader and resize it the scene
-//    std::shared_ptr<scene2::SceneNode> scene = _assets->get<scene2::SceneNode>("menu");
-//    scene->setContentSize(dimen);
-//    scene->doLayout(); // Repositions the HUD
     
     // Set up GUI
     start_ok = false;
-//    _background = assets->get<Texture>("level_map");
-//    _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
-//    _scale = getSize() / _background->getSize();
-//    _backgroundNode->setScale(_scale);
-//    _guiNode = scene2::SceneNode::allocWithBounds(getSize());
-//    addChild(_guiNode);
-//    _guiNode->addChild(_backgroundNode);
-//    _backgroundNode->setAnchor(Vec2::ZERO);
-//
-    _scrollPane = std::dynamic_pointer_cast<scene2::ScrollPane>(_assets->get<scene2::SceneNode>("level-map"));
+
+    _scrollPane = std::dynamic_pointer_cast<scene2::ScrollPane>(_assets->get<scene2::SceneNode>("map"));
     _scrollPane->setContentSize(dimen);
+//    _scrollPane->doLayout();
     CULog("getSize: %f, %f", getSize().width, getSize().height);
-    addChild(_scrollPane);
+    
     _currentState = NOACTION;
     
-    _backgroundNode = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("level-map_background"));
-    
-    _levelsNode = _assets->get<scene2::SceneNode>("levels");
-    _levelsNode->setContentSize(dimen);
+    _levelsNode = _assets->get<scene2::SceneNode>("map_background_levels");
+    _levelsNode->setContentSize(Application::get()->getDisplaySize());
     _levelsNode->doLayout();
-    _backgroundNode->addChild(_levelsNode);
     _levelsNode->setVisible(true);
     
-    _levelOne = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("levels_level1"));
+//    _levelOneNode = _assets->get<scene2::SceneNode>("map_background_levels_level1");
+    //_levelOneNode->setContentSize(dimen);
+//    _levelOne->setContentSize(Application::get()->getDisplaySize());
+//    _levelOneNode->doLayout();
+//    _levelOneNode->setVisible(true);
     
-    _levelOne->setVisible(true);
-    
+    _levelOne = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_levels_level1"));
     _levelOne->addListener([this](const std::string& name, bool down) {
         if (down) {
             start_ok = true;
         }
     });
+    
+    addChild(_scrollPane);
     
     
 //    _layout = scene2::AnchoredLayout::alloc();
