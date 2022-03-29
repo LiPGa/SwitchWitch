@@ -140,10 +140,6 @@
         }
     },
     "sounds": {
-        "track_1": {
-            "type": "sample",
-            "file": "sounds/switch_witch_theme_1.ogg"
-        },
         "laser": {
             "type": "sample",
             "file": "sounds/laser.ogg",
