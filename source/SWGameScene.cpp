@@ -554,6 +554,7 @@ void GameScene::update(float timestep)
         auto squareOnMouse = _board->getSquare(squarePos);
         if (_input.isDown())
         {
+            CULog("%u", _currentState);
             if (_currentState == SELECTING_UNIT)
             {
                 _selectedSquare = squareOnMouse;

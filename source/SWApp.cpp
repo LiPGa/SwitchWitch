@@ -129,6 +129,7 @@ void SwitchWitchApp::onResume() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void SwitchWitchApp::update(float timestep) {
+    CULog("current scene is %u", _scene);
     switch (_scene) {
     case LOAD:
         if (_loading.isActive()) {
@@ -167,18 +168,21 @@ void SwitchWitchApp::update(float timestep) {
     case MAP:
             _levelMap.update(timestep);
             if (_levelMap.getStartStatus()) {
-                _scene = State::GAME;
-                _gameplay.setBoard(_levelEditor.getBoardAsJSON());
+                //_gameplay.setBoard(_assets->get<JsonValue>("board"));
                 _levelMap.setActive(false);
                 _gameplay.setActive(true);
+                _scene = State::GAME;
             }
+            break;
     case GAME:
+        CULog("%s", "inside game");
         _gameplay.update(timestep);
-        if (_gameplay.goToLevelEditor()) {
-            _scene = State::EDITOR;
-            _gameplay.setActive(false);
-            _levelEditor.setActive(true);
-        }
+//        if (_gameplay.goToLevelEditor()) {
+//            CULog("%s", "inside level editor");
+//            _scene = State::EDITOR;
+//            _gameplay.setActive(false);
+//            _levelEditor.setActive(true);
+        //}
         break;
     case EDITOR:
         _levelEditor.update(timestep);
