@@ -57,7 +57,7 @@ void SwitchWitchApp::onStartup() {
     // Queue up the other assets (EMPTY in this case)
     _assets->loadDirectoryAsync("json/assets.json",nullptr);
     
-    AudioEngine::start();
+//    AudioEngine::start();
     Application::onStartup(); // YOU MUST END with call to parent
 }
 
@@ -188,7 +188,8 @@ void SwitchWitchApp::update(float timestep) {
         _levelEditor.update(timestep);
         if (_levelEditor.goToGameScene()) {
             _scene = State::GAME;
-            _gameplay.setBoard(_levelEditor.getBoardAsJSON());
+            _gameplay.setBoardJSON(_levelEditor.getBoardAsJSON());
+            _gameplay.reset();
             _levelEditor.setActive(false);
             _gameplay.setActive(true);
         }
