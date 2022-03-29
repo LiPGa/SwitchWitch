@@ -254,10 +254,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     }
 
     setBoard(_boardJson);
-    // Create the upcoming special unit indicator
-    _upcomingUnitNode = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("next-three-way-blue"));
-    _guiNode->addChild(_upcomingUnitNode);
-    _upcomingUnitNode->setVisible(false);
 
     _resultLayout = assets->get<scene2::SceneNode>("result");
     _resultLayout->setContentSize(dimen);
@@ -539,15 +535,14 @@ void GameScene::update(float timestep)
 //                    auto indicatorNode = scene2::PolygonNode::allocWithTexture(_textures.at(borderColor));
 //                    squareNode->addChildWithName(indicatorNode, "indicatorNode");
                     CULog("selected %s", upcomingUnitType.c_str());
-                    CULog("%d %d", upcomingSquarePos.x, upcomingSquarePos.y);
-//                    _selectedSquare->getViewNode()->setTexture(_textures.at("next-three-way-blue"));
+                    CULog("%f %f", squarePos.x, squarePos.y);
+                    CULog("%f %f", boardPos.x, boardPos.y);
+                    CULog("%f %f", upcomingSquarePos.x, upcomingSquarePos.y);
+                    
                     _upcomingUnitNode->setTexture(_textures.at("next-three-way-blue"));
-                    _upcomingUnitNode->setScale(0.3);
-//                    auto squarePosition = _selectedSquare->getViewNode()->get
-                    _upcomingUnitNode->setPosition(upcomingSquarePos);
+                    _upcomingUnitNode->setPosition(upcomingSquarePos + Vec2(0, _squareSizeAdjustedForScale));
                     _upcomingUnitNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
                     _upcomingUnitNode->setVisible(true);
-//                    _upcomingUnitNode->setPosition(<#const Vec2 &position#>)
                 }
             }
             else if (_currentState == SELECTING_SWAP && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1)
@@ -877,6 +872,10 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
         }
         _currentCellLayer.push_back(cellDepths);
     }
+    // Create the upcoming special unit indicator
+    _upcomingUnitNode = scene2::PolygonNode::allocWithTexture(_textures.at("next-three-way-blue"));
+    _boardNode->addChild(_upcomingUnitNode);
+    _upcomingUnitNode->setVisible(false);
     _layout->layout(_guiNode.get());
 }
 
