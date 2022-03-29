@@ -120,8 +120,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     srand(static_cast<int>(time(NULL)));
 
     if (!didRestart) {
-        _audioQueue = AudioEngine::get()->getMusicQueue();
-        _audioQueue->play(_assets->get<Sound>("track_1"), false, .3, false);
+//        _audioQueue = AudioEngine::get()->getMusicQueue();
+//        _audioQueue->play(_assets->get<Sound>("track_1"), false, .3, false);
     }
    
     didRestart = false;
@@ -466,7 +466,7 @@ void GameScene::update(float timestep)
     //if (_audioQueue->getState() == cugl::AudioEngine::State::INACTIVE) {
       //  _audioQueue->play(_assets->get<Sound>("track_1"), false, .3, false);
     //}
-    _audioQueue->setLoop(true);
+//    _audioQueue->setLoop(true);
 
     // Read the keyboard for each controller.
     // Read the input
