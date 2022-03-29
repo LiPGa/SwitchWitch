@@ -21,6 +21,7 @@
 #include "SWUnit.hpp"
 #include "SWBoard.hpp"
 #include "SWInputController.h"
+#include <cugl/audio/CUAudioEngine.h>
 
 /**
  * This class is the primary gameplay constroller.
@@ -159,6 +160,12 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text with the final score */
     std::shared_ptr<cugl::scene2::Label> _score_number;
+    /** The score meter with the current score */
+    std::shared_ptr<cugl::scene2::ProgressBar> _scoreMeter;
+//    /** The images of the stars above the score meter */
+    std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar1;
+    std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar2;
+    std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar3;
 
     /** The images of the final stars*/
     std::shared_ptr<cugl::scene2::PolygonNode> _star1;
@@ -186,7 +193,7 @@ protected:
     std::shared_ptr<cugl::Texture> _swapSquareTexture;
 
 #pragma mark -
-
+    std::shared_ptr<cugl::AudioQueue> _audioQueue;
 public:
 #pragma mark -
 #pragma mark Constructors

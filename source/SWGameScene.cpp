@@ -105,11 +105,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     if (!Scene2::init(dimen))
         return false;
 
+    
+
     // Start up the input handler
     _input.init();
 
     // Initialize Variables
-    didRestart = false;
+    
     _assets = assets;
     _score = 0;
     _prev_score = 0;
@@ -117,6 +119,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Seed the random number generator to a new seed
     srand(static_cast<int>(time(NULL)));
 
+    if (!didRestart) {
+        _audioQueue = AudioEngine::get()->getMusicQueue();
+        _audioQueue->play(_assets->get<Sound>("track_1"), false, .3, false);
+    }
+   
+    didRestart = false;
+    
     // Get Textures
     // Preload all the textures into a hashmap
     vector<string> textureVec = _constants->get("textures")->asStringArray();
@@ -174,11 +183,39 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChildWithName(_turn_text, "turn_text");
 
     // Create and layout the score meter
-    std::string scoreMsg = strtool::format("Score %d", _score);
+    
+    _scoreMeter = scene2::ProgressBar::allocWithCaps(_assets->get<Texture>("scoremeter_background"), _assets->get<Texture>("scoremeter_foreground"), _assets->get<Texture>("scoremeter_endcap_left"), _assets->get<Texture>("scoremeter_endcap_right"), Size(97, 15));
+    _scoreMeter->setProgress(0.0);
+//    _scoreMeter->setPosition(Vec2(0, 0));
+    _layout->addAbsolute("scoreMeter", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 6, -0.87 * (_topuibackgroundNode->getSize().height)));
+//    _layout->addRelative("scoreMeter", cugl::scene2::Layout::Anchor::CENTER_FILL, Vec2(0, 0));
+    _guiNode->addChildWithName(_scoreMeter, "scoreMeter");
+    _scoreMeterStar1 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_empty"));
+    _scoreMeterStar1->setScale(0.15f);
+    _scoreMeterStar2 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_empty"));
+    _scoreMeterStar2->setScale(0.15f);
+    _scoreMeterStar3 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_empty"));
+    _scoreMeterStar3->setScale(0.15f);
+    _layout->addAbsolute("scoreMeterStar1", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 -_topuibackgroundNode->getSize().width / 6 + 18 + (_scoreMeter->getSize().width - 14) * (static_cast<float>(_onestar_threshold) / _threestar_threshold),
+                                                                                           20 + -0.85 * (_topuibackgroundNode->getSize().height)));
+    _layout->addAbsolute("scoreMeterStar2", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 -_topuibackgroundNode->getSize().width / 6 + 18 + (_scoreMeter->getSize().width - 14) * (static_cast<float>(_twostar_threshold) / _threestar_threshold),
+                                                                                           20 + -0.85 * (_topuibackgroundNode->getSize().height)));
+    _layout->addAbsolute("scoreMeterStar3", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 -_topuibackgroundNode->getSize().width / 6 + (_scoreMeter->getSize().width),
+                                                                                           20 + -0.85 * (_topuibackgroundNode->getSize().height)));
+    _guiNode->addChildWithName(_scoreMeterStar1, "scoreMeterStar1");
+    _guiNode->addChildWithName(_scoreMeterStar2, "scoreMeterStar2");
+    _guiNode->addChildWithName(_scoreMeterStar3, "scoreMeterStar3");
+    std::string scoreMsg = strtool::format("%d", _score);
     _score_text = scene2::Label::allocWithText(scoreMsg, assets->get<Font>("pixel32"));
-    _score_text->setScale(0.75);
-    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -0.85 * (_topuibackgroundNode->getSize().height)));
+    _score_text->setScale(0.35);
+    _score_text->setHorizontalAlignment(HorizontalAlign::RIGHT);
+    _score_text->setAnchor(Vec2(1.0, 0.5));
+    _score_text->setForeground(Color4::WHITE);
+    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7 + 12,
+                                                                                      _scoreMeter->getSize().height / 2 + -0.87 * (_topuibackgroundNode->getSize().height)));
+//    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_LEFT, Vec2(20, 20));
     _guiNode->addChildWithName(_score_text, "score_text");
+    
 
     // Set the view of the board.
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height);
@@ -426,6 +463,11 @@ int GameScene::calculateScore(int colorNum, int basicUnitsNum, int specialUnitsN
  */
 void GameScene::update(float timestep)
 {
+    //if (_audioQueue->getState() == cugl::AudioEngine::State::INACTIVE) {
+      //  _audioQueue->play(_assets->get<Sound>("track_1"), false, .3, false);
+    //}
+    _audioQueue->setLoop(true);
+
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
@@ -600,12 +642,26 @@ void GameScene::update(float timestep)
         _currentState = SELECTING_UNIT;
     }
     // Update the score meter
-    _score_text->setText(strtool::format("Score %d", _score), true);
-    if ((_prev_score < 9 && _score > 9) || (_prev_score < 99 && _score > 99))
-    {
+    if (_score >= _onestar_threshold) _scoreMeterStar1->setTexture(_assets->get<Texture>("star_full"));
+    if (_score >= _twostar_threshold) _scoreMeterStar2->setTexture(_assets->get<Texture>("star_full"));
+    if (_score >= _threestar_threshold) _scoreMeterStar3->setTexture(_assets->get<Texture>("star_full"));
+    if (_score < _threestar_threshold) {
+        _scoreMeter->setProgress(static_cast<float>(_score) / _threestar_threshold);
         _layout->remove("score_text");
-        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -0.85 * (_topuibackgroundNode->getSize().height)));
+        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7 + 12 + (static_cast<float>(_score) / _threestar_threshold) * (_scoreMeter->getWidth() - 14),
+                                                                                          _scoreMeter->getSize().height / 2 + -0.87 * (_topuibackgroundNode->getSize().height)));
+    } else {
+        _scoreMeter->setProgress(1.0f);
+        _layout->remove("score_text");
+        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7 + (_scoreMeter->getWidth() - 2),
+                                                                                          _scoreMeter->getSize().height / 2 + -0.87 * (_topuibackgroundNode->getSize().height)));
     }
+    _score_text->setText(strtool::format("%d", _score), true);
+//    if ((_prev_score < 9 && _score > 9) || (_prev_score < 99 && _score > 99))
+//    {
+//        _layout->remove("score_text");
+//        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -0.85 * (_topuibackgroundNode->getSize().height)));
+//    }
     // Update the remaining turns
     _turn_text->setText(strtool::format("%d/%d", _turns, _max_turns));
 
