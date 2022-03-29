@@ -206,35 +206,17 @@
                         "type" : "Anchored"
                     },
                     "children": {
-                        "levels": {
-                            "type": "Node",
-                            "format": {
-                                "type": "Float",
-                                "orientation": "vertical",
-                                "x_alignment": "center",
-                                "y_alignment": "bottom"
+                        "level1": {
+                            "type": "Widget",
+                            "data": {
+                                "key": "levelbutton"
                             },
                             "layout": {
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
-                                "x_offset": -350,
-                                "y_offset": 400,
-                                "absolute": true
-                            },
-                            "children": {
-                                "level1": {
-                                    "type": "Widget",
-                                    "data": {
-                                        "key": "levelbutton"
-                                    },
-                                    "layout": {
-                                        "x_anchor": "center",
-                                        "y_anchor": "bottom",
-                                        "x_offset": 0,
-                                        "y_offset": 0,
-                                        "absolute": true
-                                    }
-                                }
+                                "x_offset": -0.075,
+                                "y_offset": 0.1,
+                                "absolute": false
                             }
                         }
                     }

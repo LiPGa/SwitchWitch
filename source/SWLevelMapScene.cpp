@@ -61,10 +61,10 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     
     _currentState = NOACTION;
     
-    _levelsNode = _assets->get<scene2::SceneNode>("map_background_levels");
-    _levelsNode->setContentSize(Application::get()->getDisplaySize());
-    //_levelsNode->doLayout();
-    _levelsNode->setVisible(true);
+//    _levelsNode = _assets->get<scene2::SceneNode>("map_background_levels");
+//    _levelsNode->setContentSize(Application::get()->getDisplaySize());
+//    //_levelsNode->doLayout();
+//    _levelsNode->setVisible(true);
     
 //    _levelOneNode = _assets->get<scene2::SceneNode>("map_background_levels_level1");
     //_levelOneNode->setContentSize(dimen);
@@ -72,7 +72,7 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 //    _levelOneNode->doLayout();
 //    _levelOneNode->setVisible(true);
     
-    _levelOne = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_levels_level1"));
+    _levelOne = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level1"));
     _levelOne->addListener([this](const std::string& name, bool down) {
         if (down) {
             start_ok = true;
