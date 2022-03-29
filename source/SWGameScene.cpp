@@ -587,8 +587,9 @@ void GameScene::update(float timestep)
                     generateUnit(replacementSquare, unitSubType, Unit::stringToColor(unitColor), unitDirection);
                 }
                 // Check every attacked square if indicator should show
-                auto upcomingUnitType = _unitsInBoard[currentCellDepth + 1].at(cellIndexInOneDimensionalBoard).at(0);
-                auto upcomingUnitColor = _unitsInBoard[currentCellDepth + 1].at(cellIndexInOneDimensionalBoard).at(1);
+                auto upcomingUnit = replacementSquare->getUnit();
+                auto upcomingUnitType = upcomingUnit->getSubType();
+                auto upcomingUnitColor = upcomingUnit->getColor();
                 auto unitNode = attackedSquare->getUnit()->getViewNode();
                 attackedSquare->getViewNode()->removeChild(unitNode);
                 attackedSquare->getViewNode()->removeChildByName("indicatorNode");
