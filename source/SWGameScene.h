@@ -387,6 +387,15 @@ private:
      * Among the 8 squares around a special unit, there can be at most one other special unit
      */
     bool isSafe(cugl::Vec2 pos,cugl::Vec2 specialPosition[]);
+    
+    /**
+     * Set the indicator color and facing direction
+     *
+     * @param currentUnit the current unit that will be replaced
+     * @param upcomingUnit the special unit that will replace the current unit
+     * @return indicatorTexture The corresponding indicator texture name
+     */
+    std::string setIndicator(shared_ptr<Unit> currentUnit, shared_ptr<Unit> upcomingUnit);
 };
 
 #endif /* __SW_GAME_SCENE_H__ */
