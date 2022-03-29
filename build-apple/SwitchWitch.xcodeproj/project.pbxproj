@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14031E8927F390ED009971D0 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 14031E8527F390ED009971D0 /* levels */; };
+		14031E8A27F390ED009971D0 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 14031E8527F390ED009971D0 /* levels */; };
+		14031E8B27F390ED009971D0 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 14031E8527F390ED009971D0 /* levels */; };
 		145539FE27E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */; };
 		145539FF27E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */; };
 		14553A0027E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */; };
@@ -138,6 +141,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14031E8527F390ED009971D0 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; path = levels; sourceTree = "<group>"; };
 		145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWLevelEditorScene.cpp; sourceTree = "<group>"; };
 		14553A0127E10CA6003BD8E7 /* SWLevelEditorScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWLevelEditorScene.h; sourceTree = "<group>"; };
 		14553A0227E10CB9003BD8E7 /* SWMainMenuScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SWMainMenuScene.cpp; sourceTree = "<group>"; };
@@ -292,6 +296,7 @@
 		EB2BE9B71D749870002FE78B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				14031E8527F390ED009971D0 /* levels */,
 				14553A0727E10E4A003BD8E7 /* widgets */,
 				EBFE7C041E19B496001007C2 /* json */,
 				EB51310B27A2328A00E255AA /* fonts */,
@@ -558,6 +563,7 @@
 				EB22BF9625D0EA50002ACE41 /* json in Resources */,
 				EB51311227A2328A00E255AA /* sounds in Resources */,
 				EB22BF9725D0EA51002ACE41 /* textures in Resources */,
+				14031E8B27F390ED009971D0 /* levels in Resources */,
 				EB51310F27A2328A00E255AA /* fonts in Resources */,
 				EB22BF9025D0EA49002ACE41 /* iOS.xcassets in Resources */,
 				EB22BF9125D0EA49002ACE41 /* Landscape.storyboard in Resources */,
@@ -574,6 +580,7 @@
 				EB7454AB1D74D846002FBAE6 /* iOS.xcassets in Resources */,
 				EB51311127A2328A00E255AA /* sounds in Resources */,
 				EB7454AC1D74D846002FBAE6 /* Landscape.storyboard in Resources */,
+				14031E8A27F390ED009971D0 /* levels in Resources */,
 				EB51310E27A2328A00E255AA /* fonts in Resources */,
 				EBFE7C051E19B496001007C2 /* json in Resources */,
 				EB7454AD1D74D846002FBAE6 /* Portrait.storyboard in Resources */,
@@ -588,6 +595,7 @@
 				14553A0827E10E4A003BD8E7 /* widgets in Resources */,
 				EB51311027A2328A00E255AA /* sounds in Resources */,
 				EBFE7C091E19B4AC001007C2 /* json in Resources */,
+				14031E8927F390ED009971D0 /* levels in Resources */,
 				EB2BE9BB1D7498D2002FE78B /* textures in Resources */,
 				EBBF189B1D74904A008E2001 /* Mac.xcassets in Resources */,
 				EB51310D27A2328A00E255AA /* fonts in Resources */,
@@ -802,7 +810,7 @@
 				HEADER_SEARCH_PATHS = "$(CUGL_INCLUDES)";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "";

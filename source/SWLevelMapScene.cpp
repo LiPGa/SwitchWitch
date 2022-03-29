@@ -56,14 +56,14 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 
     _scrollPane = std::dynamic_pointer_cast<scene2::ScrollPane>(_assets->get<scene2::SceneNode>("map"));
     _scrollPane->setContentSize(dimen);
-//    _scrollPane->doLayout();
+    _scrollPane->doLayout();
     CULog("getSize: %f, %f", getSize().width, getSize().height);
     
     _currentState = NOACTION;
     
     _levelsNode = _assets->get<scene2::SceneNode>("map_background_levels");
     _levelsNode->setContentSize(Application::get()->getDisplaySize());
-    _levelsNode->doLayout();
+    //_levelsNode->doLayout();
     _levelsNode->setVisible(true);
     
 //    _levelOneNode = _assets->get<scene2::SceneNode>("map_background_levels_level1");

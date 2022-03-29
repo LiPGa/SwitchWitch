@@ -78,7 +78,7 @@ void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::stri
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
-    _debug = true;
+    _debug = false;
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     if (assets == nullptr)
@@ -87,7 +87,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // GetJSONValuesFromAssets
     _constants = assets->get<JsonValue>("constants");
     _boardMembers = assets->get<JsonValue>("boardMember");
-    if (_boardJson == nullptr) _boardJson = assets->get<JsonValue>("board");
+    
+    if (_boardJson == nullptr) _boardJson = assets->get<JsonValue>("level1");
 
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
@@ -250,7 +251,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _unitTypes.insert({child->key(), unit});
     }
 
-    setBoard(_boardJson);
+    importLevel(_boardJson);
 
     _resultLayout = assets->get<scene2::SceneNode>("result");
     _resultLayout->setContentSize(dimen);
@@ -870,5 +871,10 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
     }
     _layout->layout(_guiNode.get());
 }
+
+void GameScene::importLevel(shared_ptr<cugl::JsonValue> levelJSON) {
+    setBoard(levelJSON);
+}
+
 
 

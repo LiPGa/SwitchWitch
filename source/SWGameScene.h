@@ -277,6 +277,8 @@ public:
      */
     void setBoard(shared_ptr<cugl::JsonValue> boardJSON);
     
+    void importLevel(shared_ptr<cugl::JsonValue> levelJSON);
+    
     /**
      * Returns the current state the game is in.
      *

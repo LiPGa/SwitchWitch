@@ -171,7 +171,13 @@
     "jsons": {
         "constants": "json/constants.json",
         "boardMember": "json/boardMember.json",
-        "board": "json/board.json"
+        "board": "json/board.json",
+        "level1": "levels/board1.json",
+        "level2": "levels/board2.json",
+        "level3": "levels/board3.json",
+        "level4": "levels/board4.json",
+        "level5": "levels/board5.json",
+        "level6": "levels/board6.json"
     },
     "scene2s": {
         "map": {
@@ -211,8 +217,8 @@
                             "layout": {
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
-                                "x_offset": -280,
-                                "y_offset": 250,
+                                "x_offset": -350,
+                                "y_offset": 400,
                                 "absolute": true
                             },
                             "children": {
