@@ -283,16 +283,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, int leve
             didRestart = true;
         }
     });
-//    _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
-//    _backbutton->deactivate();
-//    _backbutton->setDown(false);
-//    _backbutton->addListener([this](const std::string& name, bool down) {
-//        CULog("pressed");
-//        if (down) {
-//            CULog("down");
-//            didGoToLevelMap = true;
-//        }
-//    });
+    _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
+    _backbutton->deactivate();
+    _backbutton->setDown(false);
+    _backbutton->addListener([this](const std::string& name, bool down) {
+        CULog("pressed");
+        if (down) {
+            CULog("down");
+            didGoToLevelMap = true;
+        }
+    });
     return true;
 }
 
@@ -451,7 +451,7 @@ void GameScene::dispose()
     {
         removeAllChildren();
         _restartbutton = nullptr;
-//        _backbutton = nullptr;
+        _backbutton = nullptr;
         _active = false;
     }
 }
@@ -504,7 +504,7 @@ void GameScene::update(float timestep)
     if (_turns == 0)
     {
         _restartbutton->activate();
-//        _backbutton->activate();
+        _backbutton->activate();
         _score_number->setText(to_string(_score));
         if (_score < _onestar_threshold)
         {

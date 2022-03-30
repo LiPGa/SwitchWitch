@@ -190,12 +190,13 @@ void SwitchWitchApp::update(float timestep) {
             _gameplay.setActive(false);
             _levelEditor.setActive(true);
         }
-//        if (_gameplay.goToLevelMap()){
-//            CULog("%s", "inside level map");
-//            _scene = State::MAP;
-//            _gameplay.setActive(false);
-//            _levelMap.setActive(true);
-//        }
+        if (_gameplay.goToLevelMap()){
+            CULog("%s", "inside level map");
+            _scene = State::MAP;
+            _gameplay.setActive(false);
+            _gameplay.reset();
+            _levelMap.setActive(true);
+        }
         break;
     }
     case EDITOR: {
