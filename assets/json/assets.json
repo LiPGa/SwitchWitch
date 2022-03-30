@@ -158,8 +158,8 @@
         "result_btn_retry": {
             "file": "textures/result-btn-retry.png"
         },
-        "result_btn_play": {
-            "file": "textures/result-btn-play.png"
+        "result_btn_exit": {
+            "file": "textures/result-btn-exit.png"
         },
         "star_full": {
             "file": "textures/star-full.png"
@@ -235,6 +235,7 @@
     "widgets": {
         "textbutton": "widgets/textbutton.json",
         "retrybutton": "widgets/retrybutton.json",
+        "exitbutton": "widgets/exitbutton.json",
         "resultmenu": "widgets/resultmenu.json",
         "levelbutton": "widgets/levelbutton.json"
     },
@@ -542,8 +543,21 @@
                             },
                             "layout": {
                                 "y_anchor": "bottom",
-                                "x_anchor": "center",
-                                "y_offset": 0.2
+                                "x_anchor": "left",
+                                "x_offset": 0.3,
+                                "y_offset": 0.15
+                            }
+                        },
+                        "exit": {
+                            "type": "Widget",
+                            "data": {
+                                "key": "exitbutton"
+                            },
+                            "layout": {
+                                "y_anchor": "bottom",
+                                "x_anchor": "right",
+                                "x_offset": -0.3,
+                                "y_offset": 0.15
                             }
                         }
                     }
