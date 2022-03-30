@@ -745,10 +745,12 @@ void GameScene::reset()
     //    _endgame_text->setForeground(Color4::CLEAR);
     //    _turns = _boardJson->getInt("total-swap-allowed");
     //    _score = 0;
+    int curr = _level;
     removeChild(_guiNode);
-    init(_assets, _level);
-//    string level_name = "level" + std::to_string(_level);
-//    importLevel(_assets->get<JsonValue>(level_name));
+    CULog("current level is %d", _level);
+    init(_assets, curr);
+    string level_name = "level" + std::to_string(_level);
+    importLevel(_assets->get<JsonValue>(level_name));
 }
 
 /**
