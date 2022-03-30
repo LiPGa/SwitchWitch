@@ -55,7 +55,6 @@ bool MainMenuScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _assets = assets;
 
     // Acquire the scene built by the asset loader and resize it the scene
-    // Acquire the scene built by the asset loader and resize it the scene
     std::shared_ptr<scene2::SceneNode> scene = _assets->get<scene2::SceneNode>("menu");
     scene->setContentSize(dimen);
     scene->doLayout(); // Repositions the HUD
@@ -70,7 +69,7 @@ bool MainMenuScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     // Program the buttons
     _gamebutton->addListener([this](const std::string& name, bool down) {
         if (down) {
-            _choice = Choice::GAME;
+            _choice = Choice::MAP;
         }
         });
     _editorbutton->addListener([this](const std::string& name, bool down) {
@@ -112,7 +111,7 @@ void MainMenuScene::setActive(bool value) {
             _editorbutton->activate();
         }
         else {
-            CULog("Menu button desactivated");
+            CULog("Menu button deactivated");
             _gamebutton->deactivate();
             _editorbutton->deactivate();
             // If any were pressed, reset them

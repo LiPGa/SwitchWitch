@@ -180,6 +180,10 @@ protected:
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
     
+    int _level;
+    
+    bool _levelSelected;
+    
 
     /** Whther the player pressed restart button*/
     bool didRestart = false;
@@ -276,6 +280,12 @@ public:
      * @param the JSON representation of the board.
      */
     void setBoard(shared_ptr<cugl::JsonValue> boardJSON);
+    
+    void setLevel(int i) {_level = i;}
+    
+    void setLevelSelect(bool b) {_levelSelected = b;}
+    
+    void importLevel(shared_ptr<cugl::JsonValue> levelJSON);
     
     /**
      * Returns the current state the game is in.
