@@ -134,8 +134,8 @@
         "two-forward-red": {
             "file": "textures/two_forward_red_unit.png"
         },
-        "next-three-way-blue":{
-            "file": "textures/next_three_way_blue.png"
+        "next-special-square":{
+            "file": "textures/next_special_square.png"
         },
         "special_up_square": {
             "file": "textures/up.png"
@@ -178,6 +178,9 @@
         },
         "scoremeter_endcap_right": {
             "file": "textures/scoremeter_endcap_right.png"
+        },
+        "bubble":{
+            "file": "textures/bubble.png"
         }
     },
     "fonts": {

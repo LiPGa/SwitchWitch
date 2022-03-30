@@ -52,7 +52,9 @@
         "special_left_square",
         "special_right_square",
         "star_empty",
-        "star_full"
+        "star_full",
+        "bubble",
+        "next-special-square"
     ],
     "probability-respawn": [
         "basic",

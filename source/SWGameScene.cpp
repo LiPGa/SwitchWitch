@@ -60,6 +60,7 @@ void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::stri
     else if (!currentUnit->isSpecial() && replacementUnit->getSubType() != "basic")
     {
         sqTexture = "square-" + replacementDirection + "-" + color;
+        // sqTexture = "next-special-square";
     }
     else
     {
@@ -528,27 +529,34 @@ void GameScene::update(float timestep)
                 _selectedSquare = squareOnMouse;
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
                 _currentState = SELECTING_SWAP;
-                auto upcomingUnitType =_selectedSquare->getUnit()->getSubType();
+                
+                std::shared_ptr<Square> replacementSquare = _selectedSquare == NULL ? NULL : _replacementBoard->getSquare(_selectedSquare->getPosition());
+                auto upcomingUnitType = replacementSquare->getUnit()->getSubType();
+                auto upcomingUnitColor = Unit::colorToString(replacementSquare->getUnit()->getColor());
+                auto upcomingUnitDirection =Unit::directionToString(replacementSquare->getUnit()->getDirection());
                 auto upcomingSquarePos = _selectedSquare->getViewNode()->getPosition();
-                if (upcomingUnitType!="basic"){
-//                    string borderColor = getUnitType("border", replacementUnitColor);
-//                    auto indicatorNode = scene2::PolygonNode::allocWithTexture(_textures.at(borderColor));
-//                    squareNode->addChildWithName(indicatorNode, "indicatorNode");
-                    CULog("selected %s", upcomingUnitType.c_str());
-                    CULog("%f %f", squarePos.x, squarePos.y);
-                    CULog("%f %f", boardPos.x, boardPos.y);
-                    CULog("%f %f", upcomingSquarePos.x, upcomingSquarePos.y);
-                    
-                    _upcomingUnitNode->setTexture(_textures.at("next-three-way-blue"));
+                if (upcomingUnitType != "basic"){
+//                    CULog(("special-"+upcomingUnitDirection+"square").c_str());
                     _upcomingUnitNode->setPosition(upcomingSquarePos + Vec2(0, _squareSizeAdjustedForScale));
                     _upcomingUnitNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
+                    auto upcomingDirectionNode = scene2::PolygonNode::allocWithTexture(_textures.at("special_"+upcomingUnitDirection+"_square"));
+//                    CULog("%f %f", upcomingDirectionNode->getPosition().x, upcomingDirectionNode->getPosition().y)
+                    upcomingDirectionNode->setPosition(Vec2(81+_squareSizeAdjustedForScale/2,81+_squareSizeAdjustedForScale));
+                    upcomingDirectionNode->setScale(0.8f);
+                    _upcomingUnitNode->addChild(upcomingDirectionNode);
+                    auto upcomingTextureNode = scene2::PolygonNode::allocWithTexture(_textures.at(upcomingUnitType + "-" + upcomingUnitColor));
+                    upcomingTextureNode->setScale(0.8f);
+                    upcomingTextureNode->setPosition(Vec2(81+_squareSizeAdjustedForScale/2,81+_squareSizeAdjustedForScale));
+                    _upcomingUnitNode->addChild(upcomingTextureNode);
+                    
                     _upcomingUnitNode->setVisible(true);
                 }
             }
             else if (_currentState == SELECTING_SWAP && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1)
             {
                 _upcomingUnitNode->setVisible(false);
-
+                _upcomingUnitNode->removeAllChildren();
+                
                 _attackedColorNum = 0;
                 _attackedBasicNum = 0;
                 _attackedSpecialNum = 0;
@@ -582,6 +590,7 @@ void GameScene::update(float timestep)
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
             {
                 _upcomingUnitNode->setVisible(false);
+                _upcomingUnitNode->removeAllChildren();
 
                 _currentState = SELECTING_SWAP;
                 // If we are de-confirming a swap, we must undo the swap.
@@ -600,6 +609,7 @@ void GameScene::update(float timestep)
     else if (_input.didRelease())
     {
         _upcomingUnitNode->setVisible(false);
+        _upcomingUnitNode->removeAllChildren();
 
         for (shared_ptr<Square> squares : _board->getAllSquares())
         {
@@ -873,7 +883,7 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
         _currentCellLayer.push_back(cellDepths);
     }
     // Create the upcoming special unit indicator
-    _upcomingUnitNode = scene2::PolygonNode::allocWithTexture(_textures.at("next-three-way-blue"));
+    _upcomingUnitNode = scene2::PolygonNode::allocWithTexture(_textures.at("bubble"));
     _boardNode->addChild(_upcomingUnitNode);
     _upcomingUnitNode->setVisible(false);
     _layout->layout(_guiNode.get());
