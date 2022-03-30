@@ -190,6 +190,10 @@
             "file":
                 "textures/level-five.png"
         },
+        "level_six":{
+            "file":
+                "textures/level-six.png"
+        },
         "scoremeter_background": {
             "file": "textures/scoremeter_background.png"
         },
@@ -298,8 +302,8 @@
                             "layout" : {
                                 "x_anchor" : "center",
                                 "y_anchor" : "bottom",
-                                "x_offset" : 0,
-                                "y_offset" : 0.2,
+                                "x_offset" : -0.03,
+                                "y_offset" : 0.12,
                                 "absolute" : false
                             }
                         },
@@ -325,7 +329,7 @@
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
                                 "x_offset": 0.2,
-                                "y_offset": 0.3,
+                                "y_offset": 0.2,
                                 "absolute": false
                             }
                         },
@@ -350,8 +354,8 @@
                             "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
-                                "x_offset": 0.3,
-                                "y_offset": 0.4,
+                                "x_offset": 0.28,
+                                "y_offset": 0.35,
                                 "absolute": false
                             }
                         },
@@ -377,7 +381,7 @@
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
                                 "x_offset": 0,
-                                "y_offset": -0.1,
+                                "y_offset": -0.07,
                                 "absolute": false
                             }
                         },
@@ -402,21 +406,34 @@
                             "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
-                                "x_offset": -0.075,
-                                "y_offset": 0,
+                                "x_offset": -0.15,
+                                "y_offset": 0.095,
                                 "absolute": false
                             }
                         },
-                        "level6": {
-                            "type": "Widget",
-                            "data": {
-                                "key": "levelbutton"
+                        "level6"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
                             },
-                            "layout": {
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {
+                                        "texture"  : "level_six"
+                                    }
+                                }
+                            },
+                            "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
-                                "x_offset": -0.05,
-                                "y_offset": 0.1,
+                                "x_offset": -0.07,
+                                "y_offset": 0.25,
                                 "absolute": false
                             }
                         }

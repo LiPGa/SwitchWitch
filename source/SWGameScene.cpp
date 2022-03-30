@@ -80,7 +80,7 @@ void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::stri
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
+bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, int level_num)
 {
     _debug = false;
     // Initialize the scene to a locked width
@@ -94,7 +94,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     
     _levelSelected = false;
     
-    _level = 1;
+    _level = level_num;
     
     string level_name = "level" + std::to_string(_level);
     if (_boardJson == nullptr) _boardJson = assets->get<JsonValue>(level_name);
@@ -778,8 +778,12 @@ void GameScene::reset()
     //    _endgame_text->setForeground(Color4::CLEAR);
     //    _turns = _boardJson->getInt("total-swap-allowed");
     //    _score = 0;
+    int curr = _level;
     removeChild(_guiNode);
-    init(_assets);
+    CULog("current level is %d", _level);
+    init(_assets, curr);
+    string level_name = "level" + std::to_string(_level);
+    importLevel(_assets->get<JsonValue>(level_name));
 }
 
 /**
