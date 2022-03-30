@@ -88,7 +88,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _constants = assets->get<JsonValue>("constants");
     _boardMembers = assets->get<JsonValue>("boardMember");
     
-    if (_boardJson == nullptr) _boardJson = assets->get<JsonValue>("level1");
+    _levelSelected = false;
+    
+    _level = 1;
+    
+    string level_name = "level" + std::to_string(_level);
+    if (_boardJson == nullptr) _boardJson = assets->get<JsonValue>(level_name);
 
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
@@ -468,6 +473,13 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
+    
+    string level_name = "level" + std::to_string(_level);
+    
+    if (_levelSelected) {
+        importLevel(_assets->get<JsonValue>(level_name));
+    }
+    
     if (_turns == 0 && didRestart == true){
         CULog("Reset");
         reset();
@@ -874,6 +886,7 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
 
 void GameScene::importLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     setBoard(levelJSON);
+    _levelSelected = false;
 }
 
 

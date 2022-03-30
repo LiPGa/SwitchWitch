@@ -27,8 +27,8 @@
                     "patch" : {
                         "type" : "NinePatch",
                         "data": {
-                            "texture":  "level_one",
-                            "anchor"   : [0.5, 0.5]
+                            "anchor"   : [0.5, 0.5],
+                            "texture": "level_one"
                         },
                         "layout" : {
                             "x_anchor" : "fill",

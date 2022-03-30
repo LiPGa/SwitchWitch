@@ -131,7 +131,7 @@ void SwitchWitchApp::onResume() {
 void SwitchWitchApp::update(float timestep) {
     CULog("current scene is %u", _scene);
     switch (_scene) {
-    case LOAD:
+        case LOAD: {
         if (_loading.isActive()) {
             _loading.update(timestep);
         }
@@ -145,7 +145,8 @@ void SwitchWitchApp::update(float timestep) {
             _scene = State::MENU;
         }
         break;
-    case MENU:
+    }
+    case MENU: {
         _mainMenu.update(timestep);
         switch (_mainMenu.getChoice()) {
         case MainMenuScene::Choice::MAP:
@@ -165,16 +166,22 @@ void SwitchWitchApp::update(float timestep) {
             break;
         }
         break;
-    case MAP:
-            _levelMap.update(timestep);
-            if (_levelMap.getStartStatus()) {
+    }
+    case MAP: {
+            //_levelMap.update(timestep);
+            int level_num = _levelMap.getLevel();
+            if (level_num > 0) {
                 //_gameplay.setBoard(_assets->get<JsonValue>("board"));
                 _levelMap.setActive(false);
+                _gameplay.setLevel(level_num);
+                _gameplay.setLevelSelect(true);
+                CULog("%d", level_num);
                 _gameplay.setActive(true);
                 _scene = State::GAME;
             }
             break;
-    case GAME:
+    }
+    case GAME: {
         CULog("%s", "inside game");
         _gameplay.update(timestep);
         if (_gameplay.goToLevelEditor()) {
@@ -184,7 +191,8 @@ void SwitchWitchApp::update(float timestep) {
             _levelEditor.setActive(true);
         }
         break;
-    case EDITOR:
+    }
+    case EDITOR: {
         _levelEditor.update(timestep);
         if (_levelEditor.goToGameScene()) {
             _scene = State::GAME;
@@ -194,6 +202,7 @@ void SwitchWitchApp::update(float timestep) {
             _gameplay.setActive(true);
         }
     }
+}
 }
 
 /**

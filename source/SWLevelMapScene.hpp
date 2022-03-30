@@ -52,6 +52,17 @@ public:
         SCROLLING
     };
     
+    enum Level
+    {
+        NO_LEVEL,
+        LEVEL_ONE,
+        LEVEL_TWO,
+        LEVEL_THREE,
+        LEVEL_FOUR,
+        LEVEL_FIVE,
+        LEVEL_SIX
+    };
+    
     /** The current state of the selection process*/
     State _currentState;
 
@@ -63,9 +74,16 @@ protected:
 //    /** The menu button for level editor */
 //    std::shared_ptr<cugl::scene2::Button> _editorbutton;
     /** The player menu choice */
-    std::shared_ptr<cugl::scene2::SceneNode> _levelsNode;
-    std::shared_ptr<cugl::scene2::Button> _levelOne;
+    //std::shared_ptr<cugl::scene2::SceneNode> _levelsNode;
+    std::shared_ptr<cugl::scene2::Button> _level1;
+    std::shared_ptr<cugl::scene2::Button> _level2;
+    std::shared_ptr<cugl::scene2::Button> _level3;
+    std::shared_ptr<cugl::scene2::Button> _level4;
+    std::shared_ptr<cugl::scene2::Button> _level5;
+    std::shared_ptr<cugl::scene2::Button> _level6;
     //std::shared_ptr<scene2::SceneNode> _level1Node;
+    
+    Level _chosenLevel;
 
     bool start_ok = false;
     
@@ -73,12 +91,12 @@ protected:
     InputController _input;
     
     // VIEW
-    std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
+    //std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::scene2::ScrollPane> _scrollPane;
     std::shared_ptr<cugl::Texture> _background;
-    std::shared_ptr<cugl::Texture> _levelOneTexture;
-    std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
-    std::shared_ptr<cugl::scene2::SceneNode> _levelOneNode;
+    //std::shared_ptr<cugl::Texture> _levelOneTexture;
+    //std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
+    //std::shared_ptr<cugl::scene2::SceneNode> _levelOneNode;
     cugl::Size _scale;
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     
@@ -143,7 +161,7 @@ public:
      *
      * @return the user's chosen level.
      */
-    bool getStartStatus() const { return start_ok; }
+    Level getLevel() const { return _chosenLevel; }
     
 #pragma mark -
 #pragma mark Gameplay Handling
