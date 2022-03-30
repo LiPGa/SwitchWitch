@@ -32,8 +32,8 @@ public:
     enum Choice {
         /** User has not yet made a choice */
         NONE,
-        /** User wants to play the game */
-        GAME,
+        /** User wants to enter the level map */
+        MAP,
         /** User wants to use the editor */
         EDITOR
     };
@@ -41,9 +41,9 @@ public:
 protected:
     /** The asset manager for this scene. */
     std::shared_ptr<cugl::AssetManager> _assets;
-    /** The menu button for hosting a game */
+    /** The menu button for starting a game */
     std::shared_ptr<cugl::scene2::Button> _gamebutton;
-    /** The menu button for joining a game */
+    /** The menu button for level editor */
     std::shared_ptr<cugl::scene2::Button> _editorbutton;
     /** The player menu choice */
     Choice _choice;

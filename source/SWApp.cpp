@@ -129,28 +129,32 @@ void SwitchWitchApp::onResume() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void SwitchWitchApp::update(float timestep) {
+    CULog("current scene is %u", _scene);
     switch (_scene) {
-    case LOAD:
+        case LOAD: {
         if (_loading.isActive()) {
             _loading.update(timestep);
         }
         else {
             _loading.dispose(); // Permanently disables the input listeners in this mode
             _mainMenu.init(_assets);
+            _levelMap.init(_assets);
             _gameplay.init(_assets);
             _levelEditor.init(_assets);
             _mainMenu.setActive(true);
             _scene = State::MENU;
         }
         break;
-    case MENU:
+    }
+    case MENU: {
         _mainMenu.update(timestep);
         switch (_mainMenu.getChoice()) {
-        case MainMenuScene::Choice::GAME:
+        case MainMenuScene::Choice::MAP:
             _mainMenu.setActive(false);
-            _gameplay.setActive(true);
-            _gameplay.setBoard(_assets->get<JsonValue>("board"));
-            _scene = State::GAME;
+//            _gameplay.setActive(true);
+//            _gameplay.setBoard(_assets->get<JsonValue>("board"));
+            _levelMap.setActive(true);
+            _scene = State::MAP;
             break;
         case MainMenuScene::Choice::EDITOR:
             _mainMenu.setActive(false);
@@ -162,15 +166,33 @@ void SwitchWitchApp::update(float timestep) {
             break;
         }
         break;
-    case GAME:
+    }
+    case MAP: {
+            //_levelMap.update(timestep);
+            int level_num = _levelMap.getLevel();
+            if (level_num > 0) {
+                //_gameplay.setBoard(_assets->get<JsonValue>("board"));
+                _levelMap.setActive(false);
+                _gameplay.setLevel(level_num);
+                _gameplay.setLevelSelect(true);
+                CULog("%d", level_num);
+                _gameplay.setActive(true);
+                _scene = State::GAME;
+            }
+            break;
+    }
+    case GAME: {
+        CULog("%s", "inside game");
         _gameplay.update(timestep);
         if (_gameplay.goToLevelEditor()) {
+            CULog("%s", "inside level editor");
             _scene = State::EDITOR;
             _gameplay.setActive(false);
             _levelEditor.setActive(true);
         }
         break;
-    case EDITOR:
+    }
+    case EDITOR: {
         _levelEditor.update(timestep);
         if (_levelEditor.goToGameScene()) {
             _scene = State::GAME;
@@ -180,6 +202,7 @@ void SwitchWitchApp::update(float timestep) {
             _gameplay.setActive(true);
         }
     }
+}
 }
 
 /**
@@ -195,6 +218,9 @@ void SwitchWitchApp::draw() {
     switch (_scene) {
     case LOAD:
         _loading.render(_batch);
+        break;
+    case MAP:
+        _levelMap.render(_batch);
         break;
     case MENU:
         _mainMenu.render(_batch);

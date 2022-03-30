@@ -91,7 +91,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // GetJSONValuesFromAssets
     _constants = assets->get<JsonValue>("constants");
     _boardMembers = assets->get<JsonValue>("boardMember");
-    if (_boardJson == nullptr) _boardJson = assets->get<JsonValue>("board");
+    
+    _levelSelected = false;
+    
+    _level = 1;
+    
+    string level_name = "level" + std::to_string(_level);
+    if (_boardJson == nullptr) _boardJson = assets->get<JsonValue>(level_name);
 
     // Initialize Constants
     _sceneHeight = _constants->getInt("scene-height");
@@ -254,7 +260,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _unitTypes.insert({child->key(), unit});
     }
 
-    setBoard(_boardJson);
+    importLevel(_boardJson);
 
     _resultLayout = assets->get<scene2::SceneNode>("result");
     _resultLayout->setContentSize(dimen);
@@ -472,6 +478,13 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
+    
+    string level_name = "level" + std::to_string(_level);
+    
+    if (_levelSelected) {
+        importLevel(_assets->get<JsonValue>(level_name));
+    }
+    
     if (_turns == 0 && didRestart == true){
         CULog("Reset");
         reset();
@@ -888,5 +901,11 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
     _upcomingUnitNode->setVisible(false);
     _layout->layout(_guiNode.get());
 }
+
+void GameScene::importLevel(shared_ptr<cugl::JsonValue> levelJSON) {
+    setBoard(levelJSON);
+    _levelSelected = false;
+}
+
 
 
