@@ -188,6 +188,9 @@ protected:
 
     /** Whther the player pressed restart button*/
     bool didRestart = false;
+    
+    /** Whther the player pressed exit button*/
+    bool didGoToLevelMap;
 
 #pragma mark -
 #pragma mark Texture Variables
@@ -294,6 +297,13 @@ public:
      * @returns the current state
      */
     bool goToLevelEditor() { return _input.isEscapeDown(); }
+    
+    /**
+     * Returns the current state the game is in.
+     *
+     * @returns the current state
+     */
+    bool goToLevelMap() { return didGoToLevelMap; }
     
     /** Sets the cugl::JsonValue that the gamescene reads the board population data from */
     void setBoardJSON(std::shared_ptr<cugl::JsonValue> v) { _boardJson = v; }
