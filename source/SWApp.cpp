@@ -139,7 +139,7 @@ void SwitchWitchApp::update(float timestep) {
             _loading.dispose(); // Permanently disables the input listeners in this mode
             _mainMenu.init(_assets);
             _levelMap.init(_assets);
-            _gameplay.init(_assets);
+            _gameplay.init(_assets, 1);
             _levelEditor.init(_assets);
             _mainMenu.setActive(true);
             _scene = State::MENU;
