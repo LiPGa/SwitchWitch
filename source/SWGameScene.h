@@ -175,8 +175,10 @@ protected:
     
     /** The text above the replacement board */
     std::shared_ptr<cugl::scene2::Label> _replace_text;
-    /** The button to restart  a game */
+    /** The button to restart a game */
     std::shared_ptr<cugl::scene2::Button> _restartbutton;
+    /** The button to go back to level map */
+    std::shared_ptr<cugl::scene2::Button> _backbutton;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
@@ -190,7 +192,7 @@ protected:
     bool didRestart = false;
     
     /** Whther the player pressed exit button*/
-    bool didGoToLevelMap;
+    bool didGoToLevelMap = false;
 
 #pragma mark -
 #pragma mark Texture Variables
