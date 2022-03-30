@@ -127,6 +127,18 @@
             "file":
                 "textures/level-two.png"
         },
+        "level_three":{
+            "file":
+                "textures/level-three.png"
+        },
+        "level_four":{
+            "file":
+                "textures/level-four.png"
+        },
+        "level_five":{
+            "file":
+                "textures/level-five.png"
+        },
         "scoremeter_background": {
             "file": "textures/scoremeter_background.png"
         },
@@ -210,25 +222,51 @@
                         "type" : "Anchored"
                     },
                     "children": {
-                        "level1": {
-                            "type": "Widget",
-                            "data": {
-                                "key": "levelbutton"
+                        "level1"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
                             },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "bottom",
-                                "x_offset": 0,
-                                "y_offset": 0.2,
-                                "absolute": false
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {
+                                        "texture"  : "level_one"
+                                    }
+                                }
+                            },
+                            "layout" : {
+                                "x_anchor" : "center",
+                                "y_anchor" : "bottom",
+                                "x_offset" : 0,
+                                "y_offset" : 0.2,
+                                "absolute" : false
                             }
                         },
-                        "level2": {
-                            "type": "Widget",
-                            "data": {
-                                "key": "levelbutton"
+                        "level2"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
                             },
-                            "layout": {
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {
+                                        "texture"  : "level_two"
+                                    }
+                                }
+                            },
+                            "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
                                 "x_offset": 0.2,
@@ -236,12 +274,25 @@
                                 "absolute": false
                             }
                         },
-                        "level3": {
-                            "type": "Widget",
-                            "data": {
-                                "key": "levelbutton"
+                        "level3"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
                             },
-                            "layout": {
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {
+                                        "texture"  : "level_three"
+                                    }
+                                }
+                            },
+                            "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
                                 "x_offset": 0.3,
@@ -249,12 +300,25 @@
                                 "absolute": false
                             }
                         },
-                        "level4": {
-                            "type": "Widget",
-                            "data": {
-                                "key": "levelbutton"
+                        "level4"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
                             },
-                            "layout": {
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {
+                                        "texture"  : "level_four"
+                                    }
+                                }
+                            },
+                            "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
                                 "x_offset": 0,
@@ -262,12 +326,25 @@
                                 "absolute": false
                             }
                         },
-                        "level5": {
-                            "type": "Widget",
-                            "data": {
-                                "key": "levelbutton"
+                        "level5"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
                             },
-                            "layout": {
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {
+                                        "texture"  : "level_five"
+                                    }
+                                }
+                            },
+                            "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
                                 "x_offset": -0.075,
