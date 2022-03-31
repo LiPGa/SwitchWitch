@@ -193,6 +193,7 @@
     <ClInclude Include="..\..\source\SWGameScene.h" />
     <ClInclude Include="..\..\source\SWInputController.h" />
     <ClInclude Include="..\..\source\SWLevelEditorScene.h" />
+    <ClInclude Include="..\..\source\SWLevelMapScene.hpp" />
     <ClInclude Include="..\..\source\SWLoadingScene.h" />
     <ClInclude Include="..\..\source\SWMainMenuScene.h" />
     <ClInclude Include="..\..\source\SWSquare.hpp" />
@@ -218,6 +219,7 @@
     <ClCompile Include="..\..\source\SWGameScene.cpp" />
     <ClCompile Include="..\..\source\SWInputController.cpp" />
     <ClCompile Include="..\..\source\SWLevelEditorScene.cpp" />
+    <ClCompile Include="..\..\source\SWLevelMapScene.cpp" />
     <ClCompile Include="..\..\source\SWLoadingScene.cpp" />
     <ClCompile Include="..\..\source\SWMainMenuScene.cpp" />
     <ClCompile Include="..\..\source\SWSquare.cpp" />

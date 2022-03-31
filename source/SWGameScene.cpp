@@ -441,20 +441,6 @@ void GameScene::dispose()
 
 #pragma mark -
 #pragma mark Gameplay Handling
-/**
- * Returns the score based on the units that have been attacked.
- *
- * The score = the # of units killed times the # of colors killed times the # of special units killed.
- *
- * @param colorNum     The number of colors killed
- * @param basicUnitsNum    The number of basic units killed
- * @param specialUnitsNum The number of special units killed
- * @return The score of this attack
- */
-int GameScene::calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum)
-{
-    return colorNum * (basicUnitsNum + specialUnitsNum) * (specialUnitsNum > 0 ? specialUnitsNum : 1);
-}
 
 /**
  * The method called to update the game mode.
@@ -540,9 +526,7 @@ void GameScene::update(float timestep)
             }
             else if (_currentState == SELECTING_SWAP && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1)
             {
-                _attackedColorNum = 0;
-                _attackedBasicNum = 0;
-                _attackedSpecialNum = 0;
+                _attackedUnits = 0;
 
                 _currentState = CONFIRM_SWAP;
                 _swappingSquare = squareOnMouse;
@@ -562,11 +546,7 @@ void GameScene::update(float timestep)
 
                     auto attackedUnit = attackedSquares->getUnit();
                     attackedColors.insert(attackedUnit->getColor());
-
-                    if (attackedUnit->getSpecialAttack().size() == 0)
-                        _attackedBasicNum++;
-                    else
-                        _attackedSpecialNum++;
+                    _attackedUnits++;
                 }
                 _attackedColorNum = (int)attackedColors.size();
             }
@@ -660,7 +640,7 @@ void GameScene::update(float timestep)
 
             _turns--;
             _prev_score = _score;
-            _score += calculateScore(_attackedColorNum, _attackedBasicNum, _attackedSpecialNum);
+            _score += _attackedUnits;
         }
         _currentState = SELECTING_UNIT;
     }

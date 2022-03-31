@@ -102,10 +102,8 @@ protected:
 
     /** The number of colors killed */
     int _attackedColorNum;
-    /** The number of basic units killed */
-    int _attackedBasicNum;
-    /** The number of special units killed */
-    int _attackedSpecialNum;
+    /** The number of units killed */
+    int _attackedUnits;
     
     /** _currentCellLayer[i][j] is the current unit lookup depth at cell [i, j] in the board */
     vector<vector<int>> _currentCellLayer;
@@ -360,18 +358,6 @@ private:
             return getUnitType(type, "blue");
         }
     }
-    
-    /**
-     * Returns the score based on the units that have been attacked.
-     *
-     * The score = the # of units killed times the # of colors killed times the # of special units killed.
-     *
-     * @param colorNum     The number of colors killed
-     * @param basicUnitsNum    The number of basic units killed
-     * @param specialUnitsNum The number of special units killed
-     * @return    The score of this attack
-     */
-    int calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum);
     
     /**
      * Generate a unit on the given square.
