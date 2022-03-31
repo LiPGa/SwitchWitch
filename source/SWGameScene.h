@@ -45,6 +45,7 @@ protected:
     std::shared_ptr<cugl::JsonValue> _boardMembers;
     /** The JSON value for the levels */
     std::shared_ptr<cugl::JsonValue> _boardJson;
+    std::shared_ptr<cugl::JsonValue> _levelJson;
     
     // current level, corresponds to board's ID.
     int _currLevel;
@@ -261,7 +262,7 @@ public:
      * Resets the status of the game so that we can play again.
      */
 
-    void reset() override;
+    void reset(std::shared_ptr<cugl::JsonValue> boardJSON);
     
     /**
      * Sets whether the scene is currently active

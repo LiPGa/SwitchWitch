@@ -482,7 +482,7 @@ void GameScene::update(float timestep)
     
     if (_turns == 0 && didRestart == true){
         CULog("Reset");
-        reset();
+        reset(_boardJson);
     }
 
     if (_turns == 0)
@@ -740,7 +740,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 /**
  * Resets the status of the game so that we can play again.
  */
-void GameScene::reset()
+void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
 {
     //    _endgame_text->setForeground(Color4::CLEAR);
     //    _turns = _boardJson->getInt("total-swap-allowed");
