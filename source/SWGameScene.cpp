@@ -532,9 +532,7 @@ void GameScene::update(float timestep)
                 _swappingSquare = squareOnMouse;
                 // Rotation and Swapping of Model
                 // We do this so that we can show the attack preview, without changing the actual positional view of units.
-                _selectedSquareOriginalDirection = _selectedSquare->getUnit()->getDirection();
-                _swappingSquareOriginalDirection = _swappingSquare->getUnit()->getDirection();
-                _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+                _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 squareOnMouse->getViewNode()->setTexture(_textures.at("square-swap"));
                 _attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
 
@@ -555,8 +553,6 @@ void GameScene::update(float timestep)
                 _currentState = SELECTING_SWAP;
                 // If we are de-confirming a swap, we must undo the swap.
                 _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
-                _selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
-                _swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
                 for (shared_ptr<Square> squares : _board->getAllSquares())
                 {
                     updateSquareTexture(squares, _textures);
