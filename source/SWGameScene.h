@@ -141,6 +141,7 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
     std::shared_ptr<scene2::SceneNode> _resultLayout;
+    std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
 
 
     // std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;
@@ -175,8 +176,10 @@ protected:
     
     /** The text above the replacement board */
     std::shared_ptr<cugl::scene2::Label> _replace_text;
-    /** The button to restart  a game */
+    /** The button to restart a game */
     std::shared_ptr<cugl::scene2::Button> _restartbutton;
+    /** The button to go back to level map */
+    std::shared_ptr<cugl::scene2::Button> _backbutton;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
@@ -188,6 +191,9 @@ protected:
 
     /** Whther the player pressed restart button*/
     bool didRestart = false;
+    
+    /** Whther the player pressed exit button*/
+    bool didGoToLevelMap = false;
 
 #pragma mark -
 #pragma mark Texture Variables
@@ -295,6 +301,13 @@ public:
      */
     bool goToLevelEditor() { return _input.isEscapeDown(); }
     
+    /**
+     * Returns the current state the game is in.
+     *
+     * @returns the current state
+     */
+    bool goToLevelMap() { return didGoToLevelMap; }
+    
     /** Sets the cugl::JsonValue that the gamescene reads the board population data from */
     void setBoardJSON(std::shared_ptr<cugl::JsonValue> v) { _boardJson = v; }
     
@@ -397,6 +410,15 @@ private:
      * Among the 8 squares around a special unit, there can be at most one other special unit
      */
     bool isSafe(cugl::Vec2 pos,cugl::Vec2 specialPosition[]);
+    
+    /**
+     * Set the indicator color and facing direction
+     *
+     * @param currentUnit the current unit that will be replaced
+     * @param upcomingUnit the special unit that will replace the current unit
+     * @return indicatorTexture The corresponding indicator texture name
+     */
+    std::string setIndicator(shared_ptr<Unit> currentUnit, shared_ptr<Unit> upcomingUnit);
 };
 
 #endif /* __SW_GAME_SCENE_H__ */

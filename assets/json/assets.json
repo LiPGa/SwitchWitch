@@ -29,6 +29,54 @@
         "border-blue": {
             "file": "textures/border_blue.png"
         },
+        "square-up-red": {
+            "file": "textures/square_up_red.png"
+        },
+        "square-down-red": {
+            "file": "textures/square_down_red.png"
+        },
+        "square-left-red": {
+            "file": "textures/square_left_red.png"
+        },
+        "square-right-red": {
+            "file": "textures/square_right_red.png"
+        },
+        "square-up-blue": {
+            "file": "textures/square_up_blue.png"
+        },
+        "square-down-blue": {
+            "file": "textures/square_down_blue.png"
+        },
+        "square-left-blue": {
+            "file": "textures/square_left_blue.png"
+        },
+        "square-right-blue": {
+            "file": "textures/square_right_blue.png"
+        },
+        "square-up-green": {
+            "file": "textures/square_up_orange.png"
+        },
+        "square-down-green": {
+            "file": "textures/square_down_orange.png"
+        },
+        "square-left-green": {
+            "file": "textures/square_left_orange.png"
+        },
+        "square-right-green": {
+            "file": "textures/square_right_orange.png"
+        },
+        "arrow-up": {
+            "file": "textures/arrow_up.png"
+        },
+        "arrow-down": {
+            "file": "textures/arrow_down.png"
+        },
+        "arrow-right": {
+            "file": "textures/arrow_right.png"
+        },
+        "arrow-left": {
+            "file": "textures/arrow_left.png"
+        },
         "transparent": {
             "file": "textures/transparent_texture.png"
         },
@@ -86,6 +134,9 @@
         "two-forward-red": {
             "file": "textures/two_forward_red_unit.png"
         },
+        "next-special-square":{
+            "file": "textures/next_special_square.png"
+        },
         "special_up_square": {
             "file": "textures/up.png"
         },
@@ -107,8 +158,8 @@
         "result_btn_retry": {
             "file": "textures/result-btn-retry.png"
         },
-        "result_btn_play": {
-            "file": "textures/result-btn-play.png"
+        "result_btn_exit": {
+            "file": "textures/result-btn-exit.png"
         },
         "star_full": {
             "file": "textures/star-full.png"
@@ -154,6 +205,9 @@
         },
         "scoremeter_endcap_right": {
             "file": "textures/scoremeter_endcap_right.png"
+        },
+        "bubble":{
+            "file": "textures/bubble.png"
         }
     },
     "fonts": {
@@ -185,6 +239,7 @@
     "widgets": {
         "textbutton": "widgets/textbutton.json",
         "retrybutton": "widgets/retrybutton.json",
+        "exitbutton": "widgets/exitbutton.json",
         "resultmenu": "widgets/resultmenu.json",
         "levelbutton": "widgets/levelbutton.json"
     },
@@ -505,8 +560,21 @@
                             },
                             "layout": {
                                 "y_anchor": "bottom",
-                                "x_anchor": "center",
-                                "y_offset": 0.2
+                                "x_anchor": "left",
+                                "x_offset": 0.3,
+                                "y_offset": 0.15
+                            }
+                        },
+                        "exit": {
+                            "type": "Widget",
+                            "data": {
+                                "key": "exitbutton"
+                            },
+                            "layout": {
+                                "y_anchor": "bottom",
+                                "x_anchor": "right",
+                                "x_offset": -0.3,
+                                "y_offset": 0.15
                             }
                         }
                     }
