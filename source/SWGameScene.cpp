@@ -780,6 +780,7 @@ void GameScene::reset()
     //    _score = 0;
     int curr = _level;
     removeChild(_guiNode);
+    didGoToLevelMap = false;
     CULog("current level is %d", _level);
     init(_assets, curr);
     string level_name = "level" + std::to_string(_level);
@@ -794,9 +795,6 @@ void GameScene::reset()
 void GameScene::setActive(bool value)
 {
     _active = value;
-    if (value == false) {
-        didGoToLevelMap = false;
-    }
 //        if (value && ! _restartbutton->isActive()) {
 //            _restartbutton->activate();
 //        } else if (!value && _restartbutton->isActive()) {
