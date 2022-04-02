@@ -773,6 +773,20 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
 /**
  * Resets the status of the game so that we can play again.
  */
+void GameScene::reset()
+{
+    int curr = _level;
+    removeChild(_guiNode);
+    didGoToLevelMap = false;
+    CULog("current level is %d", _level);
+    init(_assets, curr);
+    string level_name = "level" + std::to_string(_level);
+    importLevel(_assets->get<JsonValue>(level_name));
+}
+
+/**
+ * Resets the status of the game with the board JSON.
+ */
 void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
 {
     //    _endgame_text->setForeground(Color4::CLEAR);

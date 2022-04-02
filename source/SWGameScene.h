@@ -267,7 +267,11 @@ public:
     /**
      * Resets the status of the game so that we can play again.
      */
+    void reset() override;
 
+    /**
+     * Resets the status of the game with the board JSON.
+     */
     void reset(std::shared_ptr<cugl::JsonValue> boardJSON);
     
     /**
