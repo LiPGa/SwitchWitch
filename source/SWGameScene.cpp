@@ -38,31 +38,35 @@ using namespace std;
  * @param square         the square being set
  * @param textures       the texture map being used
  */
-void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures)
+void updateSquareTexture(shared_ptr<Square> square, std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, shared_ptr<Board> replacementBoard)
 {
-    if (square->getUnit()->isSpecial())
+    Vec2 squarePos = square->getPosition();
+    shared_ptr<Unit> currentUnit = square->getUnit();
+    shared_ptr<Unit> replacementUnit = replacementBoard->getSquare(squarePos)->getUnit();
+    std::string color = Unit::colorToString(replacementUnit->getColor());
+    string currentDirection = Unit::directionToString(currentUnit->getDirection());
+    string replacementDirection = Unit::directionToString(replacementUnit->getDirection());
+    string sqTexture;
+    
+    
+    if (currentUnit->isSpecial() && replacementUnit->getSubType() == "basic")
     {
-        if (square->getUnit()->getDirection() == Vec2(0, 1))
-        {
-            square->getViewNode()->setTexture(textures.at("special_up_square"));
-        }
-        else if (square->getUnit()->getDirection() == Vec2(0, -1))
-        {
-            square->getViewNode()->setTexture(textures.at("special_down_square"));
-        }
-        else if (square->getUnit()->getDirection() == Vec2(1, 0))
-        {
-            square->getViewNode()->setTexture(textures.at("special_right_square"));
-        }
-        else
-        {
-            square->getViewNode()->setTexture(textures.at("special_left_square"));
-        }
+        sqTexture = "special_" + currentDirection + "_square";
+    }
+    else if (currentUnit->isSpecial() && replacementUnit->getSubType() != "basic")
+    {
+        sqTexture = "arrow-" + currentDirection;
+    }
+    else if (!currentUnit->isSpecial() && replacementUnit->getSubType() != "basic")
+    {
+        sqTexture = "square-" + replacementDirection + "-" + color;
+        // sqTexture = "next-special-square";
     }
     else
     {
-        square->getViewNode()->setTexture(textures.at("square"));
+        sqTexture="square";
     }
+    square->getViewNode()->setTexture(textures.at(sqTexture));
 }
 
 /**
@@ -128,6 +132,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, int leve
     }
    
     didRestart = false;
+    didGoToLevelMap = false;
     
     // Get Textures
     // Preload all the textures into a hashmap
@@ -186,7 +191,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, int leve
     _guiNode->addChildWithName(_turn_text, "turn_text");
 
     // Create and layout the score meter
-    
+
     _scoreMeter = scene2::ProgressBar::allocWithCaps(_assets->get<Texture>("scoremeter_background"), _assets->get<Texture>("scoremeter_foreground"), _assets->get<Texture>("scoremeter_endcap_left"), _assets->get<Texture>("scoremeter_endcap_right"), Size(97, 15));
     _scoreMeter->setProgress(0.0);
 //    _scoreMeter->setPosition(Vec2(0, 0));
@@ -278,6 +283,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets, int leve
             didRestart = true;
         }
     });
+    _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
+    _backbutton->deactivate();
+    _backbutton->setDown(false);
+    _backbutton->addListener([this](const std::string& name, bool down) {
+        CULog("pressed");
+        if (down) {
+            CULog("down");
+            didGoToLevelMap = true;
+        }
+    });
     return true;
 }
 
@@ -359,7 +374,7 @@ void GameScene::refreshUnitAndSquareView(shared_ptr<Square> sq) {
     if (unitSubtype != "basic") unit->setSpecial(true);
     else unit->setSpecial(false);
     if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-    updateSquareTexture(sq, _textures);
+    updateSquareTexture(sq, _textures, _replacementBoard);
 }
 /**
  * Generate a unit on the given square.
@@ -426,6 +441,7 @@ void GameScene::copySquareData(std::shared_ptr<Square> from, std::shared_ptr<Squ
     toUnit->setSubType(fromUnit->getSubType());
 }
 
+
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
@@ -435,6 +451,7 @@ void GameScene::dispose()
     {
         removeAllChildren();
         _restartbutton = nullptr;
+        _backbutton = nullptr;
         _active = false;
     }
 }
@@ -459,7 +476,6 @@ void GameScene::update(float timestep)
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
-    
     string level_name = "level" + std::to_string(_level);
     
     if (_levelSelected) {
@@ -468,12 +484,13 @@ void GameScene::update(float timestep)
     
     if (_turns == 0 && didRestart == true){
         CULog("Reset");
-        reset();
+        reset(_boardJson);
     }
 
     if (_turns == 0)
     {
         _restartbutton->activate();
+        _backbutton->activate();
         _score_number->setText(to_string(_score));
         if (_score < _onestar_threshold)
         {
@@ -523,10 +540,37 @@ void GameScene::update(float timestep)
                 _selectedSquare = squareOnMouse;
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
                 _currentState = SELECTING_SWAP;
+                
+                std::shared_ptr<Square> replacementSquare = _selectedSquare == NULL ? NULL : _replacementBoard->getSquare(_selectedSquare->getPosition());
+                auto upcomingUnitType = replacementSquare->getUnit()->getSubType();
+                auto upcomingUnitColor = Unit::colorToString(replacementSquare->getUnit()->getColor());
+                auto upcomingUnitDirection =Unit::directionToString(replacementSquare->getUnit()->getDirection());
+                auto upcomingSquarePos = _selectedSquare->getViewNode()->getPosition();
+                if (upcomingUnitType != "basic"){
+//                    CULog(("special-"+upcomingUnitDirection+"square").c_str());
+                    _upcomingUnitNode->setPosition(upcomingSquarePos + Vec2(0, _squareSizeAdjustedForScale));
+                    _upcomingUnitNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
+                    auto upcomingDirectionNode = scene2::PolygonNode::allocWithTexture(_textures.at("special_"+upcomingUnitDirection+"_square"));
+//                    CULog("%f %f", upcomingDirectionNode->getPosition().x, upcomingDirectionNode->getPosition().y)
+                    upcomingDirectionNode->setPosition(Vec2(81+_squareSizeAdjustedForScale/2,81+_squareSizeAdjustedForScale));
+                    upcomingDirectionNode->setScale(0.8f);
+                    _upcomingUnitNode->addChild(upcomingDirectionNode);
+                    auto upcomingTextureNode = scene2::PolygonNode::allocWithTexture(_textures.at(upcomingUnitType + "-" + upcomingUnitColor));
+                    upcomingTextureNode->setScale(0.8f);
+                    upcomingTextureNode->setPosition(Vec2(81+_squareSizeAdjustedForScale/2,81+_squareSizeAdjustedForScale));
+                    _upcomingUnitNode->addChild(upcomingTextureNode);
+                    
+                    _upcomingUnitNode->setVisible(true);
+                }
             }
             else if (_currentState == SELECTING_SWAP && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1)
             {
-                _attackedUnits = 0;
+                _upcomingUnitNode->setVisible(false);
+                _upcomingUnitNode->removeAllChildren();
+                
+                _attackedColorNum = 0;
+                _attackedBasicNum = 0;
+                _attackedSpecialNum = 0;
 
                 _currentState = CONFIRM_SWAP;
                 _swappingSquare = squareOnMouse;
@@ -544,18 +588,25 @@ void GameScene::update(float timestep)
 
                     auto attackedUnit = attackedSquares->getUnit();
                     attackedColors.insert(attackedUnit->getColor());
-                    _attackedUnits++;
+
+                    if (not attackedUnit->isSpecial())
+                        _attackedBasicNum++;
+                    else
+                        _attackedSpecialNum++;
                 }
                 _attackedColorNum = (int)attackedColors.size();
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
             {
+                _upcomingUnitNode->setVisible(false);
+                _upcomingUnitNode->removeAllChildren();
+
                 _currentState = SELECTING_SWAP;
                 // If we are de-confirming a swap, we must undo the swap.
                 _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 for (shared_ptr<Square> squares : _board->getAllSquares())
                 {
-                    updateSquareTexture(squares, _textures);
+                    updateSquareTexture(squares, _textures, _replacementBoard);
                 }
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
             }
@@ -564,10 +615,12 @@ void GameScene::update(float timestep)
     }
     else if (_input.didRelease())
     {
+        _upcomingUnitNode->setVisible(false);
+        _upcomingUnitNode->removeAllChildren();
 
         for (shared_ptr<Square> squares : _board->getAllSquares())
         {
-            updateSquareTexture(squares, _textures);
+            updateSquareTexture(squares, _textures,_replacementBoard);
         }
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable() && _currentState == CONFIRM_SWAP)
         {
@@ -617,20 +670,6 @@ void GameScene::update(float timestep)
                 std:string unitPattern = getUnitType(unitSubType, unitColor);
                     generateUnit(replacementSquare, unitSubType, Unit::stringToColor(unitColor), unitDirection);
                 }
-                // Check every attacked square if indicator should show
-                auto upcomingUnit = replacementSquare->getUnit();
-                auto upcomingUnitType = upcomingUnit->getSubType();
-                auto upcomingUnitColor = upcomingUnit->getColor();
-                auto unitNode = attackedSquare->getUnit()->getViewNode();
-                attackedSquare->getViewNode()->removeChild(unitNode);
-                attackedSquare->getViewNode()->removeChildByName("indicatorNode");
-                if (upcomingUnitType != "basic") {
-                    // add the new special unit indicator
-                    string borderColor = getUnitType("border", upcomingUnitColor);
-                    auto indicatorNode = scene2::PolygonNode::allocWithTexture(_textures.at(borderColor));
-                    attackedSquare->getViewNode()->addChildWithName(indicatorNode, "indicatorNode");
-                }
-                attackedSquare->getViewNode()->addChild(unitNode);
                 refreshUnitAndSquareView(attackedSquare);
             }
 
@@ -718,11 +757,26 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
  */
 void GameScene::reset()
 {
+    int curr = _level;
+    removeChild(_guiNode);
+    didGoToLevelMap = false;
+    CULog("current level is %d", _level);
+    init(_assets, curr);
+    string level_name = "level" + std::to_string(_level);
+    importLevel(_assets->get<JsonValue>(level_name));
+}
+
+/**
+ * Resets the status of the game with the board JSON.
+ */
+void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
+{
     //    _endgame_text->setForeground(Color4::CLEAR);
     //    _turns = _boardJson->getInt("total-swap-allowed");
     //    _score = 0;
     int curr = _level;
     removeChild(_guiNode);
+    didGoToLevelMap = false;
     CULog("current level is %d", _level);
     init(_assets, curr);
     string level_name = "level" + std::to_string(_level);
@@ -848,19 +902,16 @@ void GameScene::setBoard(shared_ptr<cugl::JsonValue> boardJSON) {
             if (replacementUnitSubType != "basic") replacementUnit->setSpecial(true);
             else replacementUnit->setSpecial(false);
             if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-            if (replacementUnitSubType != "basic") {
-                // add a border to the square if the upcoming unit is a special unit
-                string borderColor = getUnitType("border", replacementUnitColor);
-                auto indicatorNode = scene2::PolygonNode::allocWithTexture(_textures.at(borderColor));
-                squareNode->addChildWithName(indicatorNode, "indicatorNode");
-            }
             squareNode->addChild(unitNode);
-            updateSquareTexture(sq, _textures);
             // Initalize _currentCellLayer to vector of zeroes (all cells start with their first-depth unit)
             cellDepths.push_back(0);
         }
         _currentCellLayer.push_back(cellDepths);
     }
+    // Create the upcoming special unit indicator
+    _upcomingUnitNode = scene2::PolygonNode::allocWithTexture(_textures.at("bubble"));
+    _boardNode->addChild(_upcomingUnitNode);
+    _upcomingUnitNode->setVisible(false);
     _layout->layout(_guiNode.get());
 }
 

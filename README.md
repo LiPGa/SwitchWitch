@@ -23,6 +23,13 @@ The objective of this technical prototype is to solve the main challenge of our 
 
 Further we need to integrate animation and music, refine the replacement algorithm and design new levels for our game.
 
+### Alpha Release
+Tasks fininshed in this sprint:
+1. In-game level editor with [instruction](https://github.com/HaruhiAisaka/SwitchWitch/blob/master/UsingTheLevelEditor.md)
+2. Level map UI
+3. Score-meter and game termination UI
+
+
 ## **Nintendon’t** Team
 
 **Maxim Baduk** - User Research Lead - mb2474@cornell.edu

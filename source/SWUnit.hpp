@@ -146,6 +146,20 @@ public:
             return "red";
         }
     }
+    
+    /**
+     * Returns the string data representation of the direction
+     *
+     * @param c the direction
+     * @returns the string of the direction
+     */
+    static std::string directionToString(cugl::Vec2 d)
+    {
+        if (d == Vec2(1,0)) {return "right";}
+        else if (d == Vec2(-1,0)) {return "left";}
+        else if (d== Vec2(0,1)) {return "up";}
+        else {return "down";}
+    }
 
     /**
      * Returns the color representation of a string that represents a color according to JSON conventions
