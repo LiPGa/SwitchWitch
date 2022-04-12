@@ -40,10 +40,12 @@ bool Level::init(int rows, int columns, shared_ptr<JsonValue> levelJSON) {
     oneStarThreshold = levelJSON->getInt("one-star-condition");
     twoStarThreshold = levelJSON->getInt("two-star-condition");
     threeStarThreshold = levelJSON->getInt("three-star-condition");
+    kingThreshold = levelJSON->getInt("king-threshold");
     auto layersInBoardJson = levelJSON->get("board-members")->children();
+    
     for (auto layer : layersInBoardJson)
     {
-        auto board = Board::alloc(rows, columns);
+        auto board = Board::alloc(columns, rows);
         auto units = layer->children();
         for (auto i = 0; i < units.size(); i++) {
             auto sq = board->getAllSquares()[i];
@@ -68,7 +70,7 @@ shared_ptr<JsonValue> Level::convertToJSON() {
     boardJSON->appendChild("one-star-condition", cugl::JsonValue::alloc((long int)oneStarThreshold));
     boardJSON->appendChild("two-star-condition", cugl::JsonValue::alloc((long int)twoStarThreshold));
     boardJSON->appendChild("three-star-condition", cugl::JsonValue::alloc((long int)threeStarThreshold));
-    //boardJSON->appendChild("king-threshold", cugl::JsonValue::alloc((long int)kingThreshold));
+    boardJSON->appendChild("king-threshold", cugl::JsonValue::alloc((long int)kingThreshold));
     shared_ptr<cugl::JsonValue> boardArray = cugl::JsonValue::allocArray();
     for (shared_ptr<Board> board : _boards) {
         shared_ptr<cugl::JsonValue> squareOccupantArray = cugl::JsonValue::allocArray();

@@ -87,6 +87,8 @@ protected:
     int _score;
     /** The previous score of the player */
     int _prevScore;
+    /** Whether the king has been killed */
+    bool _kingKilled;
     
     /** The current level being played */
     shared_ptr<Level> _level;
@@ -277,6 +279,7 @@ public:
     /** Sets the cugl::JsonValue that the gamescene reads the board population data from */
     void setBoardJSON(std::shared_ptr<cugl::JsonValue> v) { _boardJson = v; }
 
+    shared_ptr<Level> getLevel() { return _level; }
 private:
     /**
      * Generate a random unit type with the given probabilities

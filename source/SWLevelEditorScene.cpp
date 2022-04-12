@@ -163,6 +163,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _oneStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_one-star-score-field"));
     _twoStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_two-star-score-field"));
     _threeStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_three-star-score-field"));
+    _kingThresholdText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_king-field"));
     _levelIDText->addTypeListener([this](const std::string& name, const std::string& value) {
         if (value.empty()) return;
         if (!isInteger(value)) _levelIDText->setText(to_string(_level->levelID));
@@ -194,6 +195,14 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _threeStarScoreText->addExitListener([this](const std::string& name, const std::string& value) {
         if (isInteger(value)) _level->threeStarThreshold = stoi(value);
         else _threeStarScoreText->setText(to_string(_level->threeStarThreshold));
+        });
+    _kingThresholdText->addTypeListener([this](const std::string& name, const std::string& value) {
+        if (value.empty()) return;
+        if (!isInteger(value)) _kingThresholdText->setText(to_string(_level->kingThreshold));
+        });
+    _kingThresholdText->addExitListener([this](const std::string& name, const std::string& value) {
+        if (isInteger(value)) _level->kingThreshold = stoi(value);
+        else _kingThresholdText->setText(to_string(_level->kingThreshold));
         });
     _boardButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level-editor-info_board"));
     _boardButton->addListener([this](const std::string& name, bool down) {
@@ -366,7 +375,7 @@ void LevelEditorScene::update(float timestep)
                 _selectedSquare = squareOnMouse;
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
                 if (_selectedUnitFromSelectionBoard != NULL && _selectedUnitFromSelectionBoard->getUnit() != NULL) {
-                    auto unit = _level->getBoard(_currentBoardTurn)->getSquare(squarePos)->getUnit();
+                    auto unit = currentBoard->getSquare(squarePos)->getUnit();
                     auto unitThatWillReplace = _selectedUnitFromSelectionBoard->getUnit();
                     unit->setBasicAttack(unitThatWillReplace->getBasicAttack());
                     unit->setSpecialAttack(unitThatWillReplace->getSpecialAttack());
@@ -396,7 +405,7 @@ void LevelEditorScene::update(float timestep)
         }
     }
     if (_selectedSquare != NULL && State::CHANGING_BOARD) {
-        auto unit = _level->getBoard(_currentBoardTurn)->getSquare(_selectedSquare->getPosition())->getUnit();
+        auto unit = currentBoard->getSquare(_selectedSquare->getPosition())->getUnit();
         if (_input.isDirectionKeyDown()) {
             unit->setDirection(_input.directionPressed());
         }
@@ -513,6 +522,7 @@ void LevelEditorScene::showBoard() {
     _oneStarScoreText->deactivate();
     _twoStarScoreText->deactivate();
     _threeStarScoreText->deactivate();
+    _kingThresholdText->deactivate();
 
     _buttonsNode->setVisible(true);
     _boardNode->setVisible(true);
@@ -527,6 +537,7 @@ void LevelEditorScene::showInfo() {
     _oneStarScoreText->activate();
     _twoStarScoreText->activate();
     _threeStarScoreText->activate();
+    _kingThresholdText->activate();
 
     _playButton->deactivate();
     _saveButton->deactivate();
@@ -548,4 +559,17 @@ void LevelEditorScene::showInfo() {
     _infoNode->setVisible(true);
     _boardButton->activate();
     _currentState = CHANGING_INFO;
+}
+
+void LevelEditorScene::setLevel(shared_ptr<Level> level) {
+    _level = level;
+    _currentBoardTurn = 0;
+    _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn, _level->maxTurns));
+    
+    _levelIDText->setText(to_string(_level->levelID));
+    _kingThresholdText->setText(to_string(_level->kingThreshold));
+    _oneStarScoreText->setText(to_string(_level->oneStarThreshold));
+    _twoStarScoreText->setText(to_string(_level->twoStarThreshold));
+    _threeStarScoreText->setText(to_string(_level->threeStarThreshold));
+    updateBoardNode();
 }

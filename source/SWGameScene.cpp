@@ -526,6 +526,12 @@ void GameScene::update(float timestep)
             // remove the attacked squares
             for (shared_ptr<Square> attackedSquare : _attackedSquares)
             {
+                if (attackedSquare->getUnit()->getSubType() == "king" && !_level->didGoOverKingThreshold(_attackedSquares.size())) {
+                    continue;
+                }
+                else {
+                    _kingKilled = true;
+                }
                 // Replace Unit
                 Vec2 squarePos = attackedSquare->getPosition();
                 int currentDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
@@ -666,6 +672,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     vector<int> vector(_boardWidth * _boardHeight, 0);
     _currentReplacementDepth = vector;
     _score = 0;
+    _kingKilled = _level->kingThreshold != 0;
     _turns = _level->maxTurns;
 
     map<Unit::Color, float> startingColorProbabilities = {

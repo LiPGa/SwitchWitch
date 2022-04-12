@@ -4,6 +4,7 @@
 	"one-star-condition":	16,
 	"two-star-condition":	32,
 	"three-star-condition":	54,
+	"king-threshold": 0,
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"two-forward",

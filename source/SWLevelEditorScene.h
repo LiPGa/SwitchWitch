@@ -77,6 +77,7 @@ protected:
     std::shared_ptr<cugl::scene2::TextField> _oneStarScoreText;
     std::shared_ptr<cugl::scene2::TextField> _twoStarScoreText;
     std::shared_ptr<cugl::scene2::TextField> _threeStarScoreText;
+    std::shared_ptr<cugl::scene2::TextField> _kingThresholdText;
     std::shared_ptr<cugl::scene2::Button> _playButton;
     std::shared_ptr<cugl::scene2::Button> _saveButton;
     std::shared_ptr<cugl::scene2::Button> _nextButton;
@@ -147,7 +148,7 @@ public:
      */
     shared_ptr<JsonValue> getLevelAsJSON() { return _level->convertToJSON(); }
 
-    void setLevel(shared_ptr<Level> level) { _level = level; }
+    void setLevel(shared_ptr<Level> level);
 
     bool goToGameScene() { return _input.isPlayDown() || _playPressed; }
 

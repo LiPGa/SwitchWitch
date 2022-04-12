@@ -24,6 +24,14 @@
             "special-attack":[],
             "probability-respawn": 0
         },
+        "king": {
+            "texture-red": "king-red",
+            "texture-blue": "king-blue",
+            "texture-green": "king-green",
+            "basic-attack": [],
+            "special-attack":[],
+            "probability-respawn": 0
+        },
         "three-way": {
             "texture-red": "three-way-red",
             "texture-blue": "three-way-blue",
