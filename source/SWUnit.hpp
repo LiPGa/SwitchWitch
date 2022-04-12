@@ -86,6 +86,8 @@ public:
      */
     bool init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool _special = false);
 
+
+    bool init(const std::string subtype, const Color color, cugl::Vec2 direction, bool special);
 #pragma mark -
 #pragma mark Static Constructors
     /**
@@ -100,6 +102,18 @@ public:
     static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool special = false) {
         std::shared_ptr<Unit> result = std::make_shared<Unit>();
         return (result->init(subtype, color, basicAttack, specialAttack, direction, special) ? result : nullptr);
+    }
+
+    /**
+     * Returns a newly allocated unit without the attack information
+     *
+     * @param color the unit color
+     * @param direction the direction the unit is facing
+     * @return a newly allocated Unit.
+     */
+    static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, cugl::Vec2 direction, bool special = false) {
+        std::shared_ptr<Unit> result = std::make_shared<Unit>();
+        return (result->init(subtype, color, direction, special) ? result : nullptr);
     }
 
 #pragma mark -

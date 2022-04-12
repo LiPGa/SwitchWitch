@@ -20,6 +20,7 @@
 #include "SWSquare.hpp"
 #include "SWUnit.hpp"
 #include "SWBoard.hpp"
+#include "SWLevel.h"
 #include "SWInputController.h"
 #include <cugl/audio/CUAudioEngine.h>
 
@@ -39,10 +40,6 @@ protected:
     InputController _input;
 
     // MODELS should be shared pointers or a data structure of shared pointers
-    /** The JSON value with all of the constants */
-    std::shared_ptr<cugl::JsonValue> _constants;
-    /** The JSON value with all of the board members */
-    std::shared_ptr<cugl::JsonValue> _boardMembers;
     /** The JSON value for the levels */
     std::shared_ptr<cugl::JsonValue> _boardJson;
     std::shared_ptr<cugl::JsonValue> _levelJson;
@@ -50,7 +47,6 @@ protected:
     // current level, corresponds to board's ID.
     int _currLevel;
     // CONSTANTS
-    int _sceneHeight;
     int _boardWidth;
     int _boardHeight;
     int _defaultSquareSize;
@@ -87,42 +83,23 @@ protected:
 
     /** The current number of turns left for the player */
     int _turns;
-    /** The maximum number of turns  */
-    int _max_turns;
     /** The current score of the player */
     int _score;
-    /** one-star threshold */
-    int _onestar_threshold;
-    /** two-star threshold*/
-    int _twostar_threshold;
-    /** three-star threshold*/
-    int _threestar_threshold;
     /** The previous score of the player */
-    int _prev_score;
-
-
-    /** The number of colors killed */
-    int _attackedColorNum;
-    /** The number of basic units killed */
-    int _attackedBasicNum;
-    /** The number of special units killed */
-    int _attackedSpecialNum;
+    int _prevScore;
     
+    /** The current level being played */
+    shared_ptr<Level> _level;
     /** _currentCellLayer[i][j] is the current unit lookup depth at cell [i, j] in the board */
-    vector<vector<int>> _currentCellLayer;
-    /** Directions of all units at each layer */
-    vector<vector<Vec2>> _unitsDirInBoard;
-    /** Types of all units at each layer */
-    vector<vector<vector<std::string>>> _unitsInBoard;
+    vector<int> _currentReplacementDepth;
 
 #pragma mark -
 #pragma mark Model Variables
     /** The board */
     shared_ptr<Board> _board;
     /** The replacement units,unitNodes list */
-    shared_ptr<Board> _replacementBoard;
+    //shared_ptr<Board> _replacementBoard;
 
-    std::vector<std::pair<std::shared_ptr<Unit>, std::shared_ptr<scene2::PolygonNode>>> _replacementList;
     /** Square that is currently being selected by the player */
     shared_ptr<Square> _selectedSquare;
     /** Square that is currently being selected by the player to swap with the selectedSquare */
@@ -133,7 +110,6 @@ protected:
 
 #pragma mark -
 #pragma mark View Variables
-    // VIEW
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _replacementBoardNode;
@@ -142,10 +118,6 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
     std::shared_ptr<scene2::SceneNode> _resultLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
-
-
-    // std::shared_ptr<cugl::scene2::SceneNode> _boardNodeS;
-    // std::shared_ptr<cugl::scene2::SceneNode> _replacementBoardNodeS;
 
     int _replacementListLength;
     // VIEW items are going to be individual variables
@@ -183,17 +155,12 @@ protected:
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
-    
-    int _level;
-    
-    bool _levelSelected;
-    
 
     /** Whther the player pressed restart button*/
-    bool didRestart = false;
+    bool _didRestart = false;
     
     /** Whther the player pressed exit button*/
-    bool didGoToLevelMap = false;
+    bool _didGoToLevelMap = false;
 
 #pragma mark -
 #pragma mark Texture Variables
@@ -240,7 +207,7 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<cugl::AssetManager> &assets, int level_num);
+    bool init(const std::shared_ptr<cugl::AssetManager> &assets);
 
 #pragma mark -
 #pragma mark Gameplay Handling
@@ -290,13 +257,8 @@ public:
      *
      * @param the JSON representation of the board.
      */
-    void setBoard(shared_ptr<cugl::JsonValue> boardJSON);
-    
-    void setLevel(int i) {_level = i;}
-    
-    void setLevelSelect(bool b) {_levelSelected = b;}
-    
-    void importLevel(shared_ptr<cugl::JsonValue> levelJSON);
+    void setLevel(shared_ptr<cugl::JsonValue> levelJSON);
+
     
     /**
      * Returns the current state the game is in.
@@ -310,19 +272,10 @@ public:
      *
      * @returns the current state
      */
-    bool goToLevelMap() { return didGoToLevelMap; }
+    bool goToLevelMap() { return _didGoToLevelMap; }
     
     /** Sets the cugl::JsonValue that the gamescene reads the board population data from */
     void setBoardJSON(std::shared_ptr<cugl::JsonValue> v) { _boardJson = v; }
-    
-    /**
-     * Copies model data including unit from one square to another square.
-     * Only copies model data, does not manipulate view variables.
-     *
-     * @param from  The square model from which to copy data
-     * @param to  The square model to which data should be copied
-     */
-    static void copySquareData(std::shared_ptr<Square> from, std::shared_ptr<Square> to);
 
 private:
     /**
@@ -380,18 +333,6 @@ private:
     }
     
     /**
-     * Returns the score based on the units that have been attacked.
-     *
-     * The score = the # of units killed times the # of colors killed times the # of special units killed.
-     *
-     * @param colorNum     The number of colors killed
-     * @param basicUnitsNum    The number of basic units killed
-     * @param specialUnitsNum The number of special units killed
-     * @return    The score of this attack
-     */
-    int calculateScore(int colorNum, int basicUnitsNum, int specialUnitsNum);
-    
-    /**
      * Generate a unit on the given square.
      *
      * @param sq    The given square pointer
@@ -409,13 +350,6 @@ private:
 
     
     /**
-     * check if the given position is safe to hold a special unit
-     *
-     * Among the 8 squares around a special unit, there can be at most one other special unit
-     */
-    bool isSafe(cugl::Vec2 pos,cugl::Vec2 specialPosition[]);
-    
-    /**
      * Set the indicator color and facing direction
      *
      * @param currentUnit the current unit that will be replaced
@@ -423,6 +357,13 @@ private:
      * @return indicatorTexture The corresponding indicator texture name
      */
     std::string setIndicator(shared_ptr<Unit> currentUnit, shared_ptr<Unit> upcomingUnit);
+
+    /**
+     * sets the correct square texture for a unit.
+     * @param square         the square being set
+     * @param textures       the texture map being used
+     */
+    void GameScene::updateSquareTexture(shared_ptr<Square> square);
 };
 
 #endif /* __SW_GAME_SCENE_H__ */

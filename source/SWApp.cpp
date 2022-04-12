@@ -129,87 +129,77 @@ void SwitchWitchApp::onResume() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void SwitchWitchApp::update(float timestep) {
-//    CULog("current scene is %u", _scene);
     switch (_scene) {
-    case LOAD: {
-        if (_loading.isActive()) {
-            _loading.update(timestep);
-        }
-        else {
-            _loading.dispose(); // Permanently disables the input listeners in this mode
-            _mainMenu.init(_assets);
-            _levelMap.init(_assets);
-            _gameplay.init(_assets, 1);
-            _levelEditor.init(_assets);
-            _mainMenu.setActive(true);
-            _scene = State::MENU;
-        }
-        break;
-    }
-    case MENU: {
-        _mainMenu.update(timestep);
-        switch (_mainMenu.getChoice()) {
-        case MainMenuScene::Choice::MAP:
-            _mainMenu.setActive(false);
-//            _gameplay.setActive(true);
-//            _gameplay.setBoard(_assets->get<JsonValue>("board"));
-            _levelMap.setActive(true);
-            _scene = State::MAP;
-            break;
-        case MainMenuScene::Choice::EDITOR:
-            _mainMenu.setActive(false);
-            _levelEditor.setActive(true);
-            _scene = State::EDITOR;
-            break;
-        case MainMenuScene::Choice::NONE:
-            // DO NOTHING
-            break;
-        }
-        break;
-    }
-    case MAP: {
-            //_levelMap.update(timestep);
-            int level_num = _levelMap.getLevel();
-            if (level_num > 0) {
-                //_gameplay.setBoard(_assets->get<JsonValue>("board"));
-                _levelMap.setActive(false);
-                _gameplay.setLevel(level_num);
-                _gameplay.setLevelSelect(true);
-                CULog("%d", level_num);
-                _gameplay.setActive(true);
-                _scene = State::GAME;
+        case LOAD: {
+            if (_loading.isActive()) {
+                _loading.update(timestep);
+            }
+            else {
+                _loading.dispose(); // Permanently disables the input listeners in this mode
+                _mainMenu.init(_assets);
+                _levelMap.init(_assets);
+                _gameplay.init(_assets);
+                _levelEditor.init(_assets);
+                _mainMenu.setActive(true);
+                _scene = State::MENU;
             }
             break;
-    }
-    case GAME: {
-//        CULog("%s", "inside game");
-        _gameplay.update(timestep);
-        if (_gameplay.goToLevelEditor()) {
-            CULog("%s", "inside level editor");
-            _scene = State::EDITOR;
-            _gameplay.setActive(false);
-            _levelEditor.setActive(true);
         }
-        if (_gameplay.goToLevelMap()){
-            CULog("%s", "inside level map");
-            _scene = State::MAP;
-            _gameplay.setActive(false);
-            _gameplay.reset();
-            _levelMap.setActive(true);
+        case MENU: {
+            _mainMenu.update(timestep);
+            switch (_mainMenu.getChoice()) {
+            case MainMenuScene::Choice::MAP:
+                _mainMenu.setActive(false);
+                _levelMap.setActive(true);
+                _scene = State::MAP;
+                break;
+            case MainMenuScene::Choice::EDITOR:
+                _mainMenu.setActive(false);
+                _levelEditor.setActive(true);
+                _scene = State::EDITOR;
+                break;
+            case MainMenuScene::Choice::NONE:
+                // DO NOTHING
+                break;
+            }
+            break;
         }
-        break;
-    }
-    case EDITOR: {
-        _levelEditor.update(timestep);
-        if (_levelEditor.goToGameScene()) {
-            _scene = State::GAME;
-//            _gameplay.importLevel(_levelEditor.getBoardAsJSON());
-            _gameplay.reset(_levelEditor.getBoardAsJSON());
-            _levelEditor.setActive(false);
-            _gameplay.setActive(true);
+        case MAP: {
+                //_levelMap.update(timestep);
+                int level_num = _levelMap.getLevel();
+                if (level_num > 0) {
+                    _levelMap.setActive(false);
+                    _gameplay.setLevel(_assets->get<JsonValue>("level" + std::to_string(level_num)));
+                    _gameplay.setActive(true);
+                    _scene = State::GAME;
+                }
+                break;
+        }
+        case GAME: {
+            _gameplay.update(timestep);
+            if (_gameplay.goToLevelEditor()) {
+                _scene = State::EDITOR;
+                _gameplay.setActive(false);
+                _levelEditor.setActive(true);
+            }
+            if (_gameplay.goToLevelMap()){
+                _scene = State::MAP;
+                _gameplay.setActive(false);
+                _gameplay.reset();
+                _levelMap.setActive(true);
+            }
+            break;
+        }
+        case EDITOR: {
+            _levelEditor.update(timestep);
+            if (_levelEditor.goToGameScene()) {
+                _scene = State::GAME;
+                _gameplay.reset(_levelEditor.getLevelAsJSON());
+                _levelEditor.setActive(false);
+                _gameplay.setActive(true);
+            }
         }
     }
-}
 }
 
 /**
