@@ -801,42 +801,6 @@
                         "x_offset" : -0.2
                     }
                 },
-                "king-field"  : {
-                    "type"   : "TextField",
-                    "data"   : {
-                        "font"       : "pixel32",
-                        "text"       : "0",
-                        "foreground" : "#ffffff",
-                        "background" : "#000000",
-                        "size"       : [170,40],
-                        "anchor"     : [0.5,0.5],
-                        "cursor"     : true,
-                        "cursorcolor": "#ffffff"
-                    },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "y_offset" : -0.15,
-                        "x_offset" : 0.05
-                    }
-                },
-                "king-label"  : {
-                    "type"   : "Label",
-                    "data"   : {
-                        "font"       : "pixel32",
-                        "text"       : "KingThreshold:",
-                        "foreground" : "#ffffff",
-                        "background" : "#000000",
-                        "size"       : [100,40],
-                        "anchor"     : [1,0.5]
-                    },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "y_offset" : -0.15,
-                        "x_offset" : -0.2
-                    }
-                },
                 "one-star-score-field": {
                     "type": "TextField",
                     "data": {

@@ -108,7 +108,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         }
         });
     _playButton->addListener([this](const std::string& name, bool down) {
-        if (down) {
+        if (down && _level->maxTurns > 0) {
             _playPressed = true;
         }
         });
@@ -163,7 +163,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _oneStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_one-star-score-field"));
     _twoStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_two-star-score-field"));
     _threeStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_three-star-score-field"));
-    _kingThresholdText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_king-field"));
+    
     _levelIDText->addTypeListener([this](const std::string& name, const std::string& value) {
         if (value.empty()) return;
         if (!isInteger(value)) _levelIDText->setText(to_string(_level->levelID));
@@ -195,14 +195,6 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _threeStarScoreText->addExitListener([this](const std::string& name, const std::string& value) {
         if (isInteger(value)) _level->threeStarThreshold = stoi(value);
         else _threeStarScoreText->setText(to_string(_level->threeStarThreshold));
-        });
-    _kingThresholdText->addTypeListener([this](const std::string& name, const std::string& value) {
-        if (value.empty()) return;
-        if (!isInteger(value)) _kingThresholdText->setText(to_string(_level->kingThreshold));
-        });
-    _kingThresholdText->addExitListener([this](const std::string& name, const std::string& value) {
-        if (isInteger(value)) _level->kingThreshold = stoi(value);
-        else _kingThresholdText->setText(to_string(_level->kingThreshold));
         });
     _boardButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level-editor-info_board"));
     _boardButton->addListener([this](const std::string& name, bool down) {
@@ -310,6 +302,14 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _turnTextLabel->setContentSize(Vec2(getSize().width, _turnTextLabel->getContentHeight()));
     _rootNode->addChild(_turnTextLabel);
 
+    // Initialize Units Needed To Kill Counter
+    std::string unitsNeededToKillMsg = strtool::format("Units Needed To Kill: 00");
+    _unitsNeededToKillLabel = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
+    _unitsNeededToKillLabel->setContentSize(Vec2(getSize().width, _unitsNeededToKillLabel->getContentHeight()));
+    _layout->addRelative("unitsNeededToKillLabel", cugl::scene2::Layout::Anchor::BOTTOM_LEFT, Vec2(0, 0.075));
+    _rootNode->addChildWithName(_unitsNeededToKillLabel, "unitsNeededToKillLabel");
+    _unitsNeededToKillLabel->setVisible(false);
+
     _rootNode->doLayout();
     addChild(_rootNode);
 
@@ -322,7 +322,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
  *
  */
 std::string LevelEditorScene::getUnitType(std::string type, std::string color) {
-    return type + "-" + color;
+return type + "-" + color;
 }
 
 bool LevelEditorScene::isInteger(const std::string& s) {
@@ -406,19 +406,42 @@ void LevelEditorScene::update(float timestep)
     }
     if (_selectedSquare != NULL && State::CHANGING_BOARD) {
         auto unit = currentBoard->getSquare(_selectedSquare->getPosition())->getUnit();
-        if (_input.isDirectionKeyDown()) {
-            unit->setDirection(_input.directionPressed());
+        if (unit->getSubType() != "king") {
+            if (_input.isDirectionKeyDown()) {
+                unit->setDirection(_input.directionPressed());
+            }
+            if (_input.isRedDown()) {
+                unit->setColor(Unit::RED);
+            }
+            else if (_input.isGreenDown()) {
+                unit->setColor(Unit::GREEN);
+            }
+            else if (_input.isBlueDown()) {
+                unit->setColor(Unit::BLUE);
+            }
+            _unitsNeededToKillLabel->setVisible(false);
         }
-        if (_input.isRedDown()) {
-            unit->setColor(Unit::RED);            
-        }
-        else if (_input.isGreenDown()) {
-            unit->setColor(Unit::GREEN);
-        }
-        else if (_input.isBlueDown()) {
-            unit->setColor(Unit::BLUE);
+        else {
+            if (_input.isDirectionKeyDown()) {
+                auto neededToKill = unit->getUnitsNeededToKill();
+                if (_input.directionPressed() == Vec2(0, 1)) {
+                    neededToKill++;
+                }
+                else if (_input.directionPressed() == Vec2(0, -1) && neededToKill > 0) {
+                    neededToKill--;
+                }
+                unit->setUnitsNeededToKill(neededToKill);
+                auto test = unit->getUnitsNeededToKill();
+                auto test2 = unit->getUnitsNeededToKill();
+            }
+            _unitsNeededToKillLabel->setVisible(true);
+            std::string unitsNeededToKillMsg = strtool::format("Units Needed To Kill: %d", unit->getUnitsNeededToKill());
+            _unitsNeededToKillLabel->setText(unitsNeededToKillMsg);
         }
         updateBoardNode();
+    }
+    else {
+        _unitsNeededToKillLabel->setVisible(false);
     }
     if (_input.isSaveDown()) {
         saveBoardAsJSON();
@@ -522,7 +545,6 @@ void LevelEditorScene::showBoard() {
     _oneStarScoreText->deactivate();
     _twoStarScoreText->deactivate();
     _threeStarScoreText->deactivate();
-    _kingThresholdText->deactivate();
 
     _buttonsNode->setVisible(true);
     _boardNode->setVisible(true);
@@ -537,7 +559,7 @@ void LevelEditorScene::showInfo() {
     _oneStarScoreText->activate();
     _twoStarScoreText->activate();
     _threeStarScoreText->activate();
-    _kingThresholdText->activate();
+    
 
     _playButton->deactivate();
     _saveButton->deactivate();
@@ -567,7 +589,6 @@ void LevelEditorScene::setLevel(shared_ptr<Level> level) {
     _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn, _level->maxTurns));
     
     _levelIDText->setText(to_string(_level->levelID));
-    _kingThresholdText->setText(to_string(_level->kingThreshold));
     _oneStarScoreText->setText(to_string(_level->oneStarThreshold));
     _twoStarScoreText->setText(to_string(_level->twoStarThreshold));
     _threeStarScoreText->setText(to_string(_level->threeStarThreshold));

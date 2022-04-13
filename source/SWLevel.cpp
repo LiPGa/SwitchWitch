@@ -24,7 +24,6 @@ bool Level::init(int rows, int columns) {
     oneStarThreshold = 0;
     twoStarThreshold = 0;
     threeStarThreshold = 0;
-    kingThreshold = 0;
     return true;
 }
 
@@ -40,7 +39,7 @@ bool Level::init(int rows, int columns, shared_ptr<JsonValue> levelJSON) {
     oneStarThreshold = levelJSON->getInt("one-star-condition");
     twoStarThreshold = levelJSON->getInt("two-star-condition");
     threeStarThreshold = levelJSON->getInt("three-star-condition");
-    kingThreshold = levelJSON->getInt("king-threshold");
+    numOfKings = levelJSON->getInt("num-of-kings");
     auto layersInBoardJson = levelJSON->get("board-members")->children();
     
     for (auto layer : layersInBoardJson)
@@ -50,10 +49,12 @@ bool Level::init(int rows, int columns, shared_ptr<JsonValue> levelJSON) {
         for (auto i = 0; i < units.size(); i++) {
             auto sq = board->getAllSquares()[i];
             auto unitDirection = Vec2(units[i]->get("direction")->asFloatArray().at(0), units[i]->get("direction")->asFloatArray().at(1));
-            auto unitColor = units[i]->getString("color");
+            auto unitColorStr = units[i]->getString("color");
             auto unitSubType = units[i]->getString("sub-type");
+            auto unitsNeededToKill = units[i]->getInt("unitsNeededToKill");
             sq->setInteractable(unitSubType != "empty");
-            sq->setUnit(Unit::alloc(unitSubType, Unit::stringToColor(unitColor), unitDirection));
+            auto unitColor = unitSubType == "king" ? Unit::Color::NONE : Unit::stringToColor(unitColorStr);
+            sq->setUnit(Unit::alloc(unitSubType, unitColor, unitDirection, unitSubType != "basic" && unitSubType != "random", unitsNeededToKill));
         }
         addBoard(board);
     }
@@ -70,7 +71,7 @@ shared_ptr<JsonValue> Level::convertToJSON() {
     boardJSON->appendChild("one-star-condition", cugl::JsonValue::alloc((long int)oneStarThreshold));
     boardJSON->appendChild("two-star-condition", cugl::JsonValue::alloc((long int)twoStarThreshold));
     boardJSON->appendChild("three-star-condition", cugl::JsonValue::alloc((long int)threeStarThreshold));
-    boardJSON->appendChild("king-threshold", cugl::JsonValue::alloc((long int)kingThreshold));
+    numOfKings = 0;
     shared_ptr<cugl::JsonValue> boardArray = cugl::JsonValue::allocArray();
     for (shared_ptr<Board> board : _boards) {
         shared_ptr<cugl::JsonValue> squareOccupantArray = cugl::JsonValue::allocArray();
@@ -84,11 +85,14 @@ shared_ptr<JsonValue> Level::convertToJSON() {
             unitDirectionJSON->appendChild(cugl::JsonValue::alloc(unit->getDirection().x));
             unitDirectionJSON->appendChild(cugl::JsonValue::alloc(unit->getDirection().y));
             unitJSON->appendChild("direction", unitDirectionJSON);
+            unitJSON->appendChild("unitsNeededToKill", cugl::JsonValue::alloc((long int)unit->getUnitsNeededToKill()));
             squareOccupantArray->appendChild(unitJSON);
+            if (unit->getSubType() == "king") numOfKings++;
         }
         boardArray->appendChild(squareOccupantArray);
     }
     boardJSON->appendChild("board-members", boardArray);
+    boardJSON->appendChild("num-of-kings", cugl::JsonValue::alloc((long int)numOfKings));
     return boardJSON;
 }
 

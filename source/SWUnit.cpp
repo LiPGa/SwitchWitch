@@ -18,12 +18,13 @@ using namespace cugl;
  * @param direction the direction the unit is facing
  * @return true if initialization was successful.
  */
-bool Unit::init(const std::string subtype, const Color color, cugl::Vec2 direction, bool special)
+bool Unit::init(const std::string subtype, const Color color, cugl::Vec2 direction, bool special, int unitsNeededToKill)
 {
     this->_subtype = subtype;
     this->_color = color;
     this->_direction = direction;
     this->_is_special_unit = special;
+    this->_unitsNeededToKill = unitsNeededToKill;
     return true;
 }
 
@@ -36,7 +37,7 @@ bool Unit::init(const std::string subtype, const Color color, cugl::Vec2 directi
  * @param direction the direction the unit is facing
  * @return true if initialization was successful.
  */
-bool Unit::init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool special)
+bool Unit::init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool special, int unitsNeededToKill)
 {
     this->_subtype = subtype;
     this->_color = color;
@@ -44,6 +45,7 @@ bool Unit::init(const std::string subtype, const Color color, vector<cugl::Vec2>
     this->_direction = direction;
     this->_specialAttack = specialAttack;
     this->_is_special_unit = special;
+    this->_unitsNeededToKill = unitsNeededToKill;
     return true;
 }
 

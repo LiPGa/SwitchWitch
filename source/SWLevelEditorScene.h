@@ -86,6 +86,7 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _infoButton;
     std::shared_ptr<cugl::scene2::Button> _boardButton;
     std::shared_ptr<cugl::scene2::Label> _turnTextLabel;
+    std::shared_ptr<cugl::scene2::Label> _unitsNeededToKillLabel;
 
 #pragma mark -
 public:

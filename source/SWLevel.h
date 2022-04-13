@@ -34,8 +34,8 @@ public:
     int twoStarThreshold;
     /** three-star threshold*/
     int threeStarThreshold;
-    /** king threshold*/
-    int kingThreshold;
+    /** number of kings*/
+    int numOfKings;
 
 #pragma mark Constructors
     /**
@@ -140,14 +140,6 @@ public:
      * @return the number of stars
      */
     int getNumberOfStars(int score);
-
-    /**
-     * Returns wether the number of units killed in a turn did exceed the king threshold.
-     *
-     * @param number of units killed
-     * @return did go over king threshold
-     */
-    bool didGoOverKingThreshold(int unitsKilled) { return unitsKilled >= kingThreshold; }
 
     /**
      * Converts the level to a JsonValue

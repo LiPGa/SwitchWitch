@@ -88,7 +88,7 @@ protected:
     /** The previous score of the player */
     int _prevScore;
     /** Whether the king has been killed */
-    bool _kingKilled;
+    bool _kingsKilled;
     
     /** The current level being played */
     shared_ptr<Level> _level;
@@ -343,7 +343,7 @@ private:
      * @param color  The color of the unit to generate
      * @param dir  The direction of the unit to generate
      */
-    void generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::Color color, Vec2 dir);
+    void generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::Color color, Vec2 dir, int numberOfUnitsNeededToKill);
     
     /**
      * Update the view for a  square and its unit, based on the model for that unit.

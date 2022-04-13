@@ -273,6 +273,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
 {
     Vec2 squarePos = square->getPosition();
     shared_ptr<Unit> currentUnit = square->getUnit();
+    if (_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns) { return; }
     shared_ptr<Unit> replacementUnit = _level->getBoard(_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1)->getSquare(square->getPosition())->getUnit();
     std::string color = Unit::colorToString(replacementUnit->getColor());
     string currentDirection = Unit::directionToString(currentUnit->getDirection());
@@ -316,7 +317,7 @@ void GameScene::refreshUnitAndSquareView(shared_ptr<Square> sq) {
  * @param color  The color of the unit to generate
  * @param dir  The direction of the unit to generate
  */
-void GameScene::generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::Color color, Vec2 dir)
+void GameScene::generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::Color color, Vec2 dir, int numberOfUnitsNeededToKill)
 {
     // Set Unit Information
     auto unit = sq->getUnit();
@@ -327,6 +328,7 @@ void GameScene::generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::
     unit->setBasicAttack(unitSelected->getBasicAttack());
     unit->setSpecialAttack(unitSelected->getSpecialAttack());
     unit->setSpecial(unitType != "basic");
+    unit->setUnitsNeededToKill(numberOfUnitsNeededToKill);
 //    refreshUnitAndSquareView(sq);
 }
 
@@ -397,7 +399,7 @@ void GameScene::update(float timestep)
     _input.update();
     
     if (_turns == 0 && _didRestart == true){
-        reset(_boardJson);
+        reset(_levelJson);
     }
 
     if (_turns == 0)
@@ -523,14 +525,12 @@ void GameScene::update(float timestep)
             _selectedSquare->getViewNode()->addChild(swappedUnitNode);
             _swappingSquare->getViewNode()->addChild(selectedUnitNode);
 
+            _prevScore = _score;
             // remove the attacked squares
             for (shared_ptr<Square> attackedSquare : _attackedSquares)
             {
-                if (attackedSquare->getUnit()->getSubType() == "king" && !_level->didGoOverKingThreshold(_attackedSquares.size())) {
+                if (_attackedSquares.size() < attackedSquare->getUnit()->getUnitsNeededToKill()) {
                     continue;
-                }
-                else {
-                    _kingKilled = true;
                 }
                 // Replace Unit
                 Vec2 squarePos = attackedSquare->getPosition();
@@ -543,17 +543,15 @@ void GameScene::update(float timestep)
                 auto unitDirection = unitSubType == "random" ? generateRandomDirection() : replacementSquare->getUnit()->getDirection();
                 if (unitSubType == "random") unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
                 std:string unitPattern = getUnitType(unitSubType, unitColor);
-                generateUnit(attackedSquare, unitSubType, unitColor, unitDirection);
+                generateUnit(attackedSquare, unitSubType, unitColor, unitDirection, replacementSquare->getUnit()->getUnitsNeededToKill());
 
                 // Set empty squares to be uninteractable.
                 attackedSquare->setInteractable(unitSubType != "empty");
                 attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
                 refreshUnitAndSquareView(attackedSquare);
+                _score++;
             }
-
             _turns--;
-            _prevScore = _score;
-            _score += _attackedSquares.size();
         }
         _currentState = SELECTING_UNIT;
     }
@@ -668,11 +666,11 @@ void GameScene::setActive(bool value)
 }
 
 void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
+    _levelJson = levelJSON;
     _level = Level::alloc(_boardWidth, _boardHeight, levelJSON);
     vector<int> vector(_boardWidth * _boardHeight, 0);
     _currentReplacementDepth = vector;
     _score = 0;
-    _kingKilled = _level->kingThreshold != 0;
     _turns = _level->maxTurns;
 
     map<Unit::Color, float> startingColorProbabilities = {
@@ -707,7 +705,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             std::string unitPattern = getUnitType(unitSubType, unitColor);
             auto unitTemplate = _unitTypes.at(unitSubType);
             Unit::Color c = Unit::stringToColor(unitColor);
-            shared_ptr<Unit> newUnit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType != "basic");
+            shared_ptr<Unit> newUnit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType != "basic", unit->getUnitsNeededToKill());
             sq->setUnit(newUnit);
             auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
             newUnit->setViewNode(unitNode);
