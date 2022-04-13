@@ -366,7 +366,7 @@ private:
      * @param square         the square being set
      * @param textures       the texture map being used
      */
-    void GameScene::updateSquareTexture(shared_ptr<Square> square);
+    void updateSquareTexture(shared_ptr<Square> square);
 };
 
 #endif /* __SW_GAME_SCENE_H__ */

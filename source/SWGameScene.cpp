@@ -534,10 +534,9 @@ void GameScene::update(float timestep)
                 }
                 // Replace Unit
                 Vec2 squarePos = attackedSquare->getPosition();
-                int currentDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
-                std::shared_ptr<Square> replacementSquare = _level->getBoard(currentDepth)->getSquare(squarePos);
                 _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
-                int currentCellDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
+                int currentReplacementDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
+                std::shared_ptr<Square> replacementSquare = _level->getBoard(currentReplacementDepth)->getSquare(squarePos);
                 auto unitSubType = replacementSquare->getUnit()->getSubType();
                 auto unitColor = unitSubType == "random" ? generateRandomUnitColor(colorProbabilities) : replacementSquare->getUnit()->getColor();
                 auto unitDirection = unitSubType == "random" ? generateRandomDirection() : replacementSquare->getUnit()->getDirection();
