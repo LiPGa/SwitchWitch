@@ -380,6 +380,7 @@ void GameScene::dispose()
 
 #pragma mark -
 #pragma mark Gameplay Handling
+
 /**
  * The method called to update the game mode.
  *
@@ -472,9 +473,7 @@ void GameScene::update(float timestep)
                 _swappingSquare = squareOnMouse;
                 // Rotation and Swapping of Model
                 // We do this so that we can show the attack preview, without changing the actual positional view of units.
-                _selectedSquareOriginalDirection = _selectedSquare->getUnit()->getDirection();
-                _swappingSquareOriginalDirection = _swappingSquare->getUnit()->getDirection();
-                _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+                _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 squareOnMouse->getViewNode()->setTexture(_textures.at("square-swap"));
                 _attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
 
@@ -551,6 +550,8 @@ void GameScene::update(float timestep)
                 _score++;
             }
             _turns--;
+//             _prev_score = _score;
+//             _score += _attackedUnits;
         }
         _currentState = SELECTING_UNIT;
     }

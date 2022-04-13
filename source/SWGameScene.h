@@ -89,6 +89,11 @@ protected:
     int _prevScore;
     /** Whether the king has been killed */
     bool _kingsKilled;
+//     /** The number of colors killed */
+//     int _attackedColorNum;
+//     /** The number of units killed */
+//     int _attackedUnits;
+
     
     /** The current level being played */
     shared_ptr<Level> _level;
