@@ -22,6 +22,7 @@
 		14EA959E27ED73BA00E2C137 /* SWLevelMapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14EA959C27ED73BA00E2C137 /* SWLevelMapScene.cpp */; };
 		14EA959F27ED73BA00E2C137 /* SWLevelMapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14EA959C27ED73BA00E2C137 /* SWLevelMapScene.cpp */; };
 		14EA95A027ED73BA00E2C137 /* SWLevelMapScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14EA959C27ED73BA00E2C137 /* SWLevelMapScene.cpp */; };
+		75275E63280744940055E55A /* SWLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75275E5E2807448C0055E55A /* SWLevel.cpp */; };
 		75C0E5B927C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
 		75C0E5BA27C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
 		75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5B727C47440006BB1D0 /* SWBoard.cpp */; };
@@ -150,6 +151,8 @@
 		14EA959C27ED73BA00E2C137 /* SWLevelMapScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWLevelMapScene.cpp; sourceTree = "<group>"; };
 		14EA959D27ED73BA00E2C137 /* SWLevelMapScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWLevelMapScene.hpp; sourceTree = "<group>"; };
 		14FEEBAE27DC100F00B9DBA8 /* SWSquareOccupant.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWSquareOccupant.hpp; sourceTree = "<group>"; };
+		75275E5E2807448C0055E55A /* SWLevel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWLevel.cpp; sourceTree = "<group>"; };
+		75275E622807448C0055E55A /* SWLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWLevel.h; sourceTree = "<group>"; };
 		75C0E5B727C47440006BB1D0 /* SWBoard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWBoard.cpp; sourceTree = "<group>"; };
 		75C0E5B827C47440006BB1D0 /* SWBoard.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SWBoard.hpp; sourceTree = "<group>"; };
 		75C0E5BC27C47776006BB1D0 /* SWUnit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWUnit.cpp; sourceTree = "<group>"; };
@@ -398,6 +401,8 @@
 		EBBF18B11D749176008E2001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				75275E5E2807448C0055E55A /* SWLevel.cpp */,
+				75275E622807448C0055E55A /* SWLevel.h */,
 				14EA959D27ED73BA00E2C137 /* SWLevelMapScene.hpp */,
 				14EA959C27ED73BA00E2C137 /* SWLevelMapScene.cpp */,
 				14553A0627E10CCE003BD8E7 /* SWMainMenuScene.h */,
@@ -645,6 +650,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75275E63280744940055E55A /* SWLevel.cpp in Sources */,
 				75C0E5BE27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4960F27C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				14553A0327E10CB9003BD8E7 /* SWMainMenuScene.cpp in Sources */,
