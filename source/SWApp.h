@@ -22,7 +22,7 @@
 
 
 /**
- * This class represents the application root for the ship demo.
+ * This class represents the application root for Switch Witch.
  */
 class SwitchWitchApp : public cugl::Application {
 protected:
@@ -34,6 +34,7 @@ protected:
         LOAD,
         /** The main menu scene */
         MENU,
+        /** The level selection screen */
         MAP,
         /** The scene to edit a level */
         EDITOR,
@@ -52,7 +53,7 @@ protected:
     // Player modes
     /** The controller for the main menu */
     MainMenuScene _mainMenu;
-    /** The primary controller for the level map */
+    /** The primary controller for the level selection screen */
     LevelMapScene _levelMap;
     /** The primary controller for the game world */
     GameScene _gameplay;

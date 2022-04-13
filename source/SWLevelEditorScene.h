@@ -16,6 +16,7 @@
 #include "SWSquare.hpp"
 #include "SWUnit.hpp"
 #include "SWBoard.hpp"
+#include "SWLevel.h"
 #include "SWInputController.h"
 
 /**
@@ -35,26 +36,13 @@ protected:
     /** The scale which all textures must conform to */
     Size _scale;
 
-    /** The asset manager for this game mode. */
-    std::shared_ptr<cugl::AssetManager> _assets;
-
     // CONTROLLERS are attached directly to the scene (no pointers)
     /** The controller to manage the ship */
     InputController _input;
 
-    // MODELS should be shared pointers or a data structure of shared pointers
-    /** The JSON value with all of the constants */
-    std::shared_ptr<cugl::JsonValue> _constants;
-    /** The JSON value with all of the board members */
-    std::shared_ptr<cugl::JsonValue> _boardMembers;
-    /** The JSON value for the levels */
-    std::shared_ptr<cugl::JsonValue> _boardJson;
-
     // CONSTANTS
-    int _sceneHeight;
     int _boardWidth;
     int _boardHeight;
-    int _defaultSquareSize;
     int _squareSizeAdjustedForScale;
 
     // hash map for unit textures
@@ -64,19 +52,13 @@ protected:
 
 #pragma mark Model Variables
     /** Boards */
-    vector<shared_ptr<Board>> _boards;
-    shared_ptr<Board> _currentBoard;
+    shared_ptr<Level> _level;
+    shared_ptr<Board> _board;
     shared_ptr<Board> _selectionBoard;
 
     /** Square that is currently being selected by the player */
     shared_ptr<Square> _selectedSquare;
     shared_ptr<Square> _selectedUnitFromSelectionBoard;
-
-    int _numberOfTurns;
-    int _id;
-    int _oneStarCondition;
-    int _twoStarCondition;
-    int _threeStarCondition;
 
     bool _playPressed;
     int _currentBoardTurn;
@@ -95,6 +77,7 @@ protected:
     std::shared_ptr<cugl::scene2::TextField> _oneStarScoreText;
     std::shared_ptr<cugl::scene2::TextField> _twoStarScoreText;
     std::shared_ptr<cugl::scene2::TextField> _threeStarScoreText;
+    std::shared_ptr<cugl::scene2::TextField> _kingThresholdText;
     std::shared_ptr<cugl::scene2::Button> _playButton;
     std::shared_ptr<cugl::scene2::Button> _saveButton;
     std::shared_ptr<cugl::scene2::Button> _nextButton;
@@ -103,6 +86,7 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _infoButton;
     std::shared_ptr<cugl::scene2::Button> _boardButton;
     std::shared_ptr<cugl::scene2::Label> _turnTextLabel;
+    std::shared_ptr<cugl::scene2::Label> _unitsNeededToKillLabel;
 
 #pragma mark -
 public:
@@ -161,11 +145,14 @@ public:
     virtual void setActive(bool value) override;
 
     /**
-     * Returns the JSON value of the board.
+     * Gets the level as JSON
      */
-    shared_ptr<cugl::JsonValue> getBoardAsJSON();
+    shared_ptr<JsonValue> getLevelAsJSON() { return _level->convertToJSON(); }
+
+    void setLevel(shared_ptr<Level> level);
 
     bool goToGameScene() { return _input.isPlayDown() || _playPressed; }
+
 private:
     /**
      * Get the pattern for a unit provided its type and color
@@ -182,10 +169,6 @@ private:
      */
     bool isInteger(const std::string& s);
 
-    /**
-     * Called whenever the user is doing a text input. 
-     */
-    void whenDoingTextInput();
 
     /**
      * Saves the JSON value in the level directory
@@ -195,7 +178,7 @@ private:
     /**
      * Allocates a basic board with the first unit of boardMember.json. 
      */
-    shared_ptr<Board> allocBasicBoard(bool withView);
+    shared_ptr<Board> allocBasicBoard();
 
     void updateBoardNode();
 
