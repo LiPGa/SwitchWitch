@@ -76,6 +76,7 @@ bool InputController::init()
     }
     else if (touch)
     {
+        _touchKey = touch->acquireKey();
         touch->addBeginListener(_touchKey, [=](const cugl::TouchEvent &event, bool focus)
                                 { this->fingerDownCB(event, focus); });
         touch->addEndListener(_touchKey, [=](const cugl::TouchEvent &event, bool focus)
