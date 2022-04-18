@@ -472,13 +472,13 @@ void GameScene::update(float timestep)
                 _currentState = CONFIRM_SWAP;
                 _swappingSquare = squareOnMouse;
                 // Rotation and Swapping of Model
+                //_selectedSquareOriginalDirection = _selectedSquare->getUnit()->getDirection();
+                //_swappingSquareOriginalDirection = _swappingSquare->getUnit()->getDirection();
                 // We do this so that we can show the attack preview, without changing the actual positional view of units.
                 _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 squareOnMouse->getViewNode()->setTexture(_textures.at("square-swap"));
                 _attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
-
-                unordered_set<Unit::Color, hash<int>> attackedColors;
-
+                
                 for (shared_ptr<Square> attackedSquare : _attackedSquares)
                 {
                     attackedSquare->getViewNode()->setTexture(_textures.at("square-attacked"));
@@ -492,8 +492,8 @@ void GameScene::update(float timestep)
                 _currentState = SELECTING_SWAP;
                 // If we are de-confirming a swap, we must undo the swap.
                 _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
-                _selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
-                _swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
+                //_selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
+                //_swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
                 for (shared_ptr<Square> square : _board->getAllSquares())
                 {
                     updateSquareTexture(square);
@@ -605,25 +605,27 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     {
         batch->setColor(Color4::RED);
         std::shared_ptr<Square> replacementSquare = _selectedSquare == NULL ? NULL : _level->getBoard(_currentReplacementDepth[_board->flattenPos(_selectedSquare->getPosition().x, _selectedSquare->getPosition().y)] + 1)->getSquare(_selectedSquare->getPosition());
-        std::string unitType = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->getSubType();
-        std::string unitColor = _selectedSquare == NULL ? "" : Unit::colorToString(_selectedSquare->getUnit()->getColor());
+        std::string unitType = _selectedSquare == NULL ? "Unit Type: " : "Unit Type: " + _selectedSquare->getUnit()->getSubType();
+        std::string unitColor = _selectedSquare == NULL ? "Unit Color: " : "Unit Color: " + Unit::colorToString(_selectedSquare->getUnit()->getColor());
         std::string replacementType = replacementSquare == NULL ? "" : replacementSquare->getUnit()->getSubType();
         std::string replacementColor = replacementSquare == NULL ? "" : Unit::colorToString(replacementSquare->getUnit()->getColor());
         auto direction = _selectedSquare == NULL ? Vec2::ZERO : _selectedSquare->getUnit()->getDirection();
         auto replacementDirection = replacementSquare == NULL ? Vec2::ZERO : replacementSquare->getUnit()->getDirection();
         std::ostringstream unitDirection;
         std::ostringstream replacementUnitDirection;
-        unitDirection << "(" << int(direction.x) << ", " << int(direction.y) << ")";
+        unitDirection << "Unit Direction: (" << int(direction.x) << ", " << int(direction.y) << ")";
         replacementUnitDirection << "(" << int(replacementDirection.x) << ", " << int(replacementDirection.y) << ")";
         batch->drawText(unitType, _turn_text->getFont(), Vec2(50, getSize().height - 100));
         batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
         std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
                                                                                                  : "isSpecial() = false";
+        /*
         batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
         batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 300));
         batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 350));
         batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 400));
+        */
     }
 
     batch->end();
