@@ -235,22 +235,22 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     });
     
-    auto settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
-    settingsRestartBtn->setVisible(true);
-    settingsRestartBtn->activate();
-    settingsRestartBtn->setDown(false);
-    settingsRestartBtn->addListener([this](const std::string& name, bool down) {
+    _settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
+    _settingsRestartBtn->setVisible(true);
+    _settingsRestartBtn->deactivate();
+    _settingsRestartBtn->setDown(false);
+    _settingsRestartBtn->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didRestart = true;
             CULog("Pressed Settings restart button");
         }
     });
     
-    auto settingsBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_exit"));
-    settingsBackBtn->setVisible(true);
-    settingsBackBtn->activate();
-    settingsBackBtn->setDown(false);
-    settingsBackBtn->addListener([this](const std::string& name, bool down) {
+    _settingsBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_exit"));
+    _settingsBackBtn->setVisible(true);
+    _settingsBackBtn->deactivate();
+    _settingsBackBtn->setDown(false);
+    _settingsBackBtn->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didGoToLevelMap = true;
             CULog("Pressed Settings exit button");
@@ -471,7 +471,10 @@ void GameScene::update(float timestep)
     }
     
     if (_didPause == true) {
+        // Show settings screen
         _settingsMenuLayout->setVisible(true);
+        _settingsBackBtn->activate();
+        _settingsRestartBtn->activate();
         return;
     }
 

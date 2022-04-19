@@ -159,10 +159,12 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _replace_text;
     /** The button to restart a game */
     std::shared_ptr<cugl::scene2::Button> _restartbutton;
+    std::shared_ptr<cugl::scene2::Button> _settingsRestartBtn;
     /** The button to display settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsbutton;
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
+    std::shared_ptr<cugl::scene2::Button> _settingsBackBtn;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
