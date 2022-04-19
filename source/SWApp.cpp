@@ -57,7 +57,7 @@ void SwitchWitchApp::onStartup() {
     // Queue up the other assets (EMPTY in this case)
     _assets->loadDirectoryAsync("json/assets.json",nullptr);
     
-//    AudioEngine::start();
+    AudioEngine::start();
     Application::onStartup(); // YOU MUST END with call to parent
 }
 

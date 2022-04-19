@@ -143,7 +143,7 @@
         "two-forward-red": {
             "file": "textures/two_forward_red_unit.png"
         },
-        "next-special-square":{
+        "next-special-square": {
             "file": "textures/next_special_square.png"
         },
         "special_up_square": {
@@ -176,32 +176,26 @@
         "star_empty": {
             "file": "textures/star-empty.png"
         },
-        "level_map":{
+        "level_map": {
             "file": "textures/main_menu_full.png"
         },
-        "level_one":{
-            "file":
-                "textures/level-one.png"
+        "level_one": {
+            "file": "textures/level-one.png"
         },
-        "level_two":{
-            "file":
-                "textures/level-two.png"
+        "level_two": {
+            "file": "textures/level-two.png"
         },
-        "level_three":{
-            "file":
-                "textures/level-three.png"
+        "level_three": {
+            "file": "textures/level-three.png"
         },
-        "level_four":{
-            "file":
-                "textures/level-four.png"
+        "level_four": {
+            "file": "textures/level-four.png"
         },
-        "level_five":{
-            "file":
-                "textures/level-five.png"
+        "level_five": {
+            "file": "textures/level-five.png"
         },
-        "level_six":{
-            "file":
-                "textures/level-six.png"
+        "level_six": {
+            "file": "textures/level-six.png"
         },
         "scoremeter_background": {
             "file": "textures/scoremeter_background.png"
@@ -215,7 +209,7 @@
         "scoremeter_endcap_right": {
             "file": "textures/scoremeter_endcap_right.png"
         },
-        "bubble":{
+        "bubble": {
             "file": "textures/bubble.png"
         }
     },
@@ -233,6 +227,21 @@
         "laser": {
             "type": "sample",
             "file": "sounds/laser.ogg",
+            "volume": 0.5
+        },
+        "fire": {
+            "type": "sample",
+            "file": "sounds/fire.ogg",
+            "volume": 0.5
+        },
+        "normal": {
+            "type": "sample",
+            "file": "sounds/normal.ogg",
+            "volume": 0.5
+        },
+        "ice": {
+            "type": "sample",
+            "file": "sounds/ice.ogg",
             "volume": 0.5
         },
         "blast": {
@@ -334,7 +343,7 @@
                                     }
                                 }
                             },
-                            "layout" : {
+                            "layout": {
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
                                 "x_offset": 0.2,
@@ -360,7 +369,7 @@
                                     }
                                 }
                             },
-                            "layout" : {
+                            "layout": {
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
                                 "x_offset": 0.02,
@@ -386,7 +395,7 @@
                                     }
                                 }
                             },
-                            "layout" : {
+                            "layout": {
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
                                 "x_offset": 0.25,
@@ -404,15 +413,15 @@
                                 "anchor"   : [0.5,0.5],
                                 "scale"    : 1.25
                             },
-                            "children" : {
-                                "up"       : {
-                                    "type"   : "Image",
-                                    "data"   : {
-                                        "texture"  : "level_five"
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "level_five"
                                     }
                                 }
                             },
-                            "layout" : {
+                            "layout": {
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
                                 "x_offset": -0.12,
@@ -430,15 +439,15 @@
                                 "anchor"   : [0.5,0.5],
                                 "scale"    : 1.25
                             },
-                            "children" : {
-                                "up"       : {
-                                    "type"   : "Image",
-                                    "data"   : {
-                                        "texture"  : "level_six"
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "level_six"
                                     }
                                 }
                             },
-                            "layout" : {
+                            "layout": {
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
                                 "x_offset": 0.25,
@@ -647,158 +656,188 @@
                 }
             }
         },
-        "level-editor-board" : {
-            "comment"   : "The scene graph definition for the text field demo",
-            "type"      : "Node",
-            "format"    : {
-                "type" : "Anchored"
+        "level-editor-board": {
+            "comment": "The scene graph definition for the text field demo",
+            "type": "Node",
+            "format": {
+                "type": "Anchored"
             },
-            "children"  : {
+            "children": {
                 "save": {
-                    "type"   : "Widget",
-                    "data"   : {
-                        "key"     : "textbutton",
-                        "variables" : {
-                            "size": [70,50],
+                    "type": "Widget",
+                    "data": {
+                        "key": "textbutton",
+                        "variables": {
+                            "size": [
+                                70,
+                                50
+                            ],
                             "text": "Save",
                             "color": "#000088"
-                            }
+                        }
                     },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "x_offset" : 0.25,
-                        "y_offset" : -0.075
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "top",
+                        "x_offset": 0.25,
+                        "y_offset": -0.075
                     }
                 },
                 "play": {
-                    "type"   : "Widget",
-                    "data"   : {
-                        "key"     : "textbutton",
-                        "variables" : {
-                            "size": [70,50],
+                    "type": "Widget",
+                    "data": {
+                        "key": "textbutton",
+                        "variables": {
+                            "size": [
+                                70,
+                                50
+                            ],
                             "text": "Play",
                             "color": "#000088"
                         }
                     },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "x_offset" : 0,
-                        "y_offset" : -0.075
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "top",
+                        "x_offset": 0,
+                        "y_offset": -0.075
                     }
                 },
                 "info": {
-                    "type"   : "Widget",
-                    "data"   : {
-                        "key"     : "textbutton",
-                        "variables" : {
-                            "size": [70,50],
+                    "type": "Widget",
+                    "data": {
+                        "key": "textbutton",
+                        "variables": {
+                            "size": [
+                                70,
+                                50
+                            ],
                             "text": "Info",
                             "color": "#000088"
                         }
                     },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "x_offset" : -0.25,
-                        "y_offset" : -0.075
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "top",
+                        "x_offset": -0.25,
+                        "y_offset": -0.075
                     }
                 },
                 "next": {
-                    "type"   : "Widget",
-                    "data"   : {
-                        "key"     : "textbutton",
-                        "variables" : {
-                            "size": [70,50],
+                    "type": "Widget",
+                    "data": {
+                        "key": "textbutton",
+                        "variables": {
+                            "size": [
+                                70,
+                                50
+                            ],
                             "text": "Next",
                             "color": "#000088"
                         }
                     },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "x_offset" : 0.25,
-                        "y_offset" : -0.175
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "top",
+                        "x_offset": 0.25,
+                        "y_offset": -0.175
                     }
                 },
                 "back": {
-                    "type"   : "Widget",
-                    "data"   : {
-                        "key"     : "textbutton",
-                        "variables" : {
-                            "size": [70,50],
+                    "type": "Widget",
+                    "data": {
+                        "key": "textbutton",
+                        "variables": {
+                            "size": [
+                                70,
+                                50
+                            ],
                             "text": "Back",
                             "color": "#000088"
                         }
                     },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "x_offset" : 0,
-                        "y_offset" : -0.175
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "top",
+                        "x_offset": 0,
+                        "y_offset": -0.175
                     }
                 },
                 "delete": {
-                    "type"   : "Widget",
-                    "data"   : {
-                        "key"     : "textbutton",
-                        "variables" : {
-                            "size": [70,50],
+                    "type": "Widget",
+                    "data": {
+                        "key": "textbutton",
+                        "variables": {
+                            "size": [
+                                70,
+                                50
+                            ],
                             "text": "Delete",
                             "color": "#000088"
                         }
                     },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "x_offset" : -0.25,
-                        "y_offset" : -0.175
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "top",
+                        "x_offset": -0.25,
+                        "y_offset": -0.175
                     }
                 }
             }
         },
-        "level-editor-info" : {
-            "comment"   : "The scene graph definition for the text field demo",
-            "type"      : "Node",
-            "format"    : {
-                "type" : "Anchored"
+        "level-editor-info": {
+            "comment": "The scene graph definition for the text field demo",
+            "type": "Node",
+            "format": {
+                "type": "Anchored"
             },
-            "children"  : {
-                "id-field"  : {
-                    "type"   : "TextField",
-                    "data"   : {
-                        "font"       : "pixel32",
-                        "text"       : "0",
-                        "foreground" : "#ffffff",
-                        "background" : "#000000",
-                        "size"       : [170,40],
-                        "anchor"     : [0.5,0.5],
-                        "cursor"     : true,
+            "children": {
+                "id-field": {
+                    "type": "TextField",
+                    "data": {
+                        "font": "pixel32",
+                        "text": "0",
+                        "foreground": "#ffffff",
+                        "background": "#000000",
+                        "size": [
+                            170,
+                            40
+                        ],
+                        "anchor": [
+                            0.5,
+                            0.5
+                        ],
+                        "cursor": true,
                         "cursorcolor": "#ffffff"
                     },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "y_offset" : -0.05,
-                        "x_offset" : 0.05
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "top",
+                        "y_offset": -0.05,
+                        "x_offset": 0.05
                     }
                 },
-                "id-label"  : {
-                    "type"   : "Label",
-                    "data"   : {
-                        "font"       : "pixel32",
-                        "text"       : "LevID:",
-                        "foreground" : "#ffffff",
-                        "background" : "#000000",
-                        "size"       : [100,40],
-                        "anchor"     : [1,0.5]
+                "id-label": {
+                    "type": "Label",
+                    "data": {
+                        "font": "pixel32",
+                        "text": "LevID:",
+                        "foreground": "#ffffff",
+                        "background": "#000000",
+                        "size": [
+                            100,
+                            40
+                        ],
+                        "anchor": [
+                            1,
+                            0.5
+                        ]
                     },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "top",
-                        "y_offset" : -0.05,
-                        "x_offset" : -0.2
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "top",
+                        "y_offset": -0.05,
+                        "x_offset": -0.2
                     }
                 },
                 "one-star-score-field": {
@@ -946,20 +985,23 @@
                     }
                 },
                 "board": {
-                    "type"   : "Widget",
-                    "data"   : {
-                        "key"     : "textbutton",
-                        "variables" : {
-                            "size": [80,60],
+                    "type": "Widget",
+                    "data": {
+                        "key": "textbutton",
+                        "variables": {
+                            "size": [
+                                80,
+                                60
+                            ],
                             "text": "Board",
                             "color": "#000088"
                         }
                     },
-                    "layout" : {
-                        "x_anchor" : "right",
-                        "y_anchor" : "top",
-                        "x_offset" : -0.1,
-                        "y_offset" : -0.225
+                    "layout": {
+                        "x_anchor": "right",
+                        "y_anchor": "top",
+                        "x_offset": -0.1,
+                        "y_offset": -0.225
                     }
                 }
             }
