@@ -537,8 +537,8 @@
                         "size"    : [50, 50],
                         "visible"  : true,
                         "pushsize" : true,
-                        "anchor"   : [0,0.8],
-                        "scale"    : 1.25
+                        "anchor"   : [0,0],
+                        "scale"    : 1
                     },
                     "children" : {
                         "up"       : {
