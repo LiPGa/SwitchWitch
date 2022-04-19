@@ -98,7 +98,7 @@ protected:
     //std::shared_ptr<cugl::scene2::SceneNode> _levelOneNode;
     cugl::Size _scale;
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
-    
+    std::shared_ptr<cugl::AudioQueue> _audioQueue;
     
     
 

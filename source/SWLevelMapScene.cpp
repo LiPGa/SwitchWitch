@@ -136,6 +136,8 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 //    _layout = scene2::AnchoredLayout::alloc();
 
     setActive(false);
+    _audioQueue = AudioEngine::get()->getMusicQueue();
+    _audioQueue->play(_assets->get<Sound>("normal"), true, .3, false);
     return true;
 }
 
