@@ -176,6 +176,9 @@
         "settings_exit":{
             "file": "textures/settings-exit.png"
         },
+        "settings_close_btn":{
+            "file": "textures/settings-close.png"
+        },
         "result_background": {
             "file": "textures/result-background.png"
         },
@@ -575,6 +578,29 @@
                         "type": "Anchored"
                     },
                     "children": {
+                        "close":{
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [50, 50],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0,0.8],
+                                "scale"    : 0.4
+                            },
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {"texture"  : "settings_close_btn"}
+                                }
+                            },
+                            "layout" : {
+                                "x_anchor" : "right",
+                                "y_anchor" : "top",
+                                "x_offset" : -0.18,
+                                "y_offset" : -0.1
+                            }
+                        },
                         "sound": {
                             "type": "Image",
                             "data": {

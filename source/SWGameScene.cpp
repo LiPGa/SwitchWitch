@@ -246,6 +246,18 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     });
     
+    _settingsCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_close"));
+    _settingsCloseBtn->setVisible(true);
+    _settingsCloseBtn->deactivate();
+    _settingsCloseBtn->setDown(false);
+    _settingsCloseBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didPause = false;
+            _settingsMenuLayout->setVisible(false);
+            CULog("Pressed Settings restart button");
+        }
+    });
+    
     _settingsBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_exit"));
     _settingsBackBtn->setVisible(true);
     _settingsBackBtn->deactivate();
@@ -475,6 +487,7 @@ void GameScene::update(float timestep)
         _settingsMenuLayout->setVisible(true);
         _settingsBackBtn->activate();
         _settingsRestartBtn->activate();
+        _settingsCloseBtn->activate();
         return;
     }
 
