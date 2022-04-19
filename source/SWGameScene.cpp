@@ -126,6 +126,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _turn_text->setScale(0.75);
     _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -1.275 * (_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_turn_text, "turn_text");
+//
+//    // Create and layout unitsNeededToKill info
+//    auto units_needed_to_kill = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
+    
 
     // Create and layout the score meter
 
@@ -594,9 +598,16 @@ void GameScene::update(float timestep)
             // remove the attacked squares
             for (shared_ptr<Square> attackedSquare : _attackedSquares)
             {
+                auto attacked_unit = attackedSquare->getUnit();
                 if (_attackedSquares.size() < attackedSquare->getUnit()->getUnitsNeededToKill()) {
                     continue;
                 }
+                
+//                if (attacked_unit->getSubType()=="king") {
+//                    std::string unitsNeededToKill = strtool::format("%d/%d",_attackedSquares.size(),attacked_unit->getUnitsNeededToKill());
+//                    _info_text->setText(unitsNeededToKill);
+//                }
+                
                 // Replace Unit
                 Vec2 squarePos = attackedSquare->getPosition();
                 _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
@@ -613,6 +624,7 @@ void GameScene::update(float timestep)
                 attackedSquare->setInteractable(unitSubType != "empty");
                 attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
                 refreshUnitAndSquareView(attackedSquare);
+                if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
                 _score++;
             }
             _turns--;
@@ -665,6 +677,8 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // For now we render 3152-style
     // DO NOT DO THIS IN YOUR FINAL GAME
     batch->begin(getCamera()->getCombined());
+    batch->setColor(Color4::RED);
+    //_info_text->render(batch);
     _guiNode->render(batch);
 
     if (_debug)
@@ -764,6 +778,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             auto unitSubType = unit->getSubType();
             auto unitColor = Unit::colorToString(unit->getColor());
             Vec2 unitDirection = unit->getDirection();
+            
             if (unitSubType == "random") {
                 unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
                 unitColor = Unit::colorToString(generateRandomUnitColor(startingColorProbabilities));
@@ -781,6 +796,12 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             newUnit->setSpecial(unitSubType != "basic");
             if (_debug) unitNode->setAngle(newUnit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
+            
+            // load the ui for king unit
+//            auto unit_node = unit->getViewNode();
+            if (unitSubType == "king") {
+                loadKingUI(unit->getUnitsNeededToKill(), unit->getUnitsNeededToKill(), squarePosition, unitNode);
+            }
         }
     }
     // Create the upcoming special unit indicator
@@ -796,4 +817,15 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
         20 + -0.85 * (_topuibackgroundNode->getSize().height)));
     _layout->addAbsolute("scoreMeterStar3", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 - _topuibackgroundNode->getSize().width / 6 + (_scoreMeter->getSize().width),
         20 + -0.85 * (_topuibackgroundNode->getSize().height)));
+}
+
+void GameScene::loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> unitNode) {
+    std::string unitsNeededToKill = strtool::format("%d", goal);
+    _info_text = scene2::Label::allocWithText(unitsNeededToKill, _assets->get<Font>("pixel32"));
+    _info_text->setScale(3);
+    _info_text->setColor(Color4::RED);
+    _info_text->setPosition(Vec2(unitNode->getPosition().x+Vec2::ONE.x, unitNode->getPosition().y+Vec2::ONE.y));
+    unitNode->addChildWithName(_info_text, "info");
+//    CULog("text has priority of %f", _info_text->getPriority());
+//    CULog("unit has priority of %f", unitNode->getPriority());
 }

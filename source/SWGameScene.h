@@ -143,6 +143,7 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text with the final score */
     std::shared_ptr<cugl::scene2::Label> _score_number;
+    std::shared_ptr<cugl::scene2::Label> _info_text;
     /** The score meter with the current score */
     std::shared_ptr<cugl::scene2::ProgressBar> _scoreMeter;
 //    /** The images of the stars above the score meter */
@@ -348,6 +349,8 @@ private:
             return getUnitType(type, "blue");
         }
     }
+    
+    void loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> unitNode);
     
     /**
      * Generate a unit on the given square.
