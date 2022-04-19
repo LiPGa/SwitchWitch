@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1330"
+   LastUpgradeVersion = "1320"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
                BuildableName = "SwitchWitch (iOS).app"
-               BlueprintName = "SwitchWitch (iOS)"
+               BlueprintName = "SwitchWitch-ios"
                ReferencedContainer = "container:SwitchWitch.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,7 +46,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
             BuildableName = "SwitchWitch (iOS).app"
-            BlueprintName = "SwitchWitch (iOS)"
+            BlueprintName = "SwitchWitch-ios"
             ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
             BuildableName = "SwitchWitch (iOS).app"
-            BlueprintName = "SwitchWitch (iOS)"
+            BlueprintName = "SwitchWitch-ios"
             ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
