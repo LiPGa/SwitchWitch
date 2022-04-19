@@ -126,6 +126,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _turn_text->setScale(0.75);
     _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -1.275 * (_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_turn_text, "turn_text");
+//
+//    // Create and layout unitsNeededToKill info
+//    auto units_needed_to_kill = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
+    
 
     // Create and layout the score meter
 
@@ -697,6 +701,18 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             auto unitSubType = unit->getSubType();
             auto unitColor = Unit::colorToString(unit->getColor());
             Vec2 unitDirection = unit->getDirection();
+            
+            // load the ui for king unit
+            if (unitSubType == "king") {
+                std::string unitsNeededToKill = strtool::format("%d/%d",unit->getUnitsNeededToKill(),unit->getUnitsNeededToKill());
+                auto info_text = scene2::Label::allocWithText(unitsNeededToKill, _assets->get<Font>("pixel32"));
+                info_text->setScale(0.7);
+//                info_text->setRelativeColor(true);
+                info_text->setColor(Color4::RED);
+                info_text->setPosition(Vec2(squarePosition.x * _squareSizeAdjustedForScale * 1.2 + Vec2::ONE.x * _squareSizeAdjustedForScale * 1, squarePosition.y * _squareSizeAdjustedForScale * 1.2 + Vec2::ONE.y * (_squareSizeAdjustedForScale * 4)));
+                _guiNode->addChildWithName(info_text, "info_text");
+            }
+            
             if (unitSubType == "random") {
                 unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
                 unitColor = Unit::colorToString(generateRandomUnitColor(startingColorProbabilities));

@@ -24,10 +24,10 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"basic",
+				"sub-type":	"king",
 				"color":	"blue",
 				"direction":	[1, 0],
-				"unitsNeededToKill":	0
+				"unitsNeededToKill":	10
 			}, {
 				"type":	"unit",
 				"sub-type":	"two-forward",
@@ -1278,10 +1278,10 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"random",
+				"sub-type":	"king",
 				"color":	"red",
 				"direction":	[1, 0],
-				"unitsNeededToKill":	0
+				"unitsNeededToKill":	10
 			}, {
 				"type":	"unit",
 				"sub-type":	"random",
@@ -1301,5 +1301,5 @@
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
 			}]],
-	"num-of-kings":	0
+	"num-of-kings":	2
 }
