@@ -71,7 +71,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     _didRestart = false;
     _didGoToLevelMap = false;
-    
+    _didPause = false;
     // Get Textures
     // Preload all the textures into a hashmap
     vector<string> textureVec = constants->get("textures")->asStringArray();
@@ -158,6 +158,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     
 
     // Set the view of the board.
+    CULog("%d %d", _scale.width, _scale.height);
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height);
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth * _squareSizeAdjustedForScale, _boardHeight * _squareSizeAdjustedForScale));
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(-.05, -.1));
@@ -199,6 +200,17 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChild(_resultLayout);
     _resultLayout->setVisible(false);
     
+    _settingsLayout = assets->get<scene2::SceneNode>("settings");
+    _settingsLayout->setContentSize(dimen);
+    _settingsLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(_settingsLayout);
+    
+    _settingsMenuLayout = assets->get<scene2::SceneNode>("settings-menu");
+    _settingsMenuLayout->setContentSize(dimen);
+    _settingsMenuLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(_settingsMenuLayout);
+    _settingsMenuLayout->setVisible(false);
+    
     _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
     _star1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star1"));
     _star2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star2"));
@@ -211,6 +223,40 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _didRestart = true;
         }
     });
+    
+    _settingsbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings_btn"));
+    _settingsbutton->setVisible(true);
+    _settingsbutton->activate();
+    _settingsbutton->setDown(false);
+    _settingsbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didPause = true;
+            CULog("Pressed Pause/Settings button");
+        }
+    });
+    
+    auto settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
+    settingsRestartBtn->setVisible(true);
+    settingsRestartBtn->activate();
+    settingsRestartBtn->setDown(false);
+    settingsRestartBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didRestart = true;
+            CULog("Pressed Settings restart button");
+        }
+    });
+    
+    auto settingsBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_exit"));
+    settingsBackBtn->setVisible(true);
+    settingsBackBtn->activate();
+    settingsBackBtn->setDown(false);
+    settingsBackBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didGoToLevelMap = true;
+            CULog("Pressed Settings exit button");
+        }
+    });
+
     _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
     _backbutton->deactivate();
     _backbutton->setDown(false);
@@ -399,13 +445,13 @@ void GameScene::update(float timestep)
     // Read the input
     _input.update();
     
-    if (_turns == 0 && _didRestart == true){
-        reset(_levelJson);
-    }
+    if (_turns == 0 && _didRestart == true) reset(_levelJson);
+    if (_didRestart == true && _didPause == true) reset(_levelJson);
 
     if (_turns == 0)
     {
         // Show results screen
+        _resultLayout->setVisible(true);
         _restartbutton->activate();
         _backbutton->activate();
         _score_number->setText(to_string(_score));
@@ -421,7 +467,11 @@ void GameScene::update(float timestep)
         if (_level->getNumberOfStars(_score) >= 3) {
             _star3->setTexture(_textures.at("star_full"));
         }
-        _resultLayout->setVisible(true);
+        return;
+    }
+    
+    if (_didPause == true) {
+        _settingsMenuLayout->setVisible(true);
         return;
     }
 
@@ -648,6 +698,7 @@ void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
     //    _score = 0;
     removeChild(_guiNode);
     _didGoToLevelMap = false;
+    _didPause = false;
     init(_assets);
     setLevel(boardJSON);
 }

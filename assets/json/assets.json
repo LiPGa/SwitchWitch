@@ -161,6 +161,21 @@
         "button": {
             "file": "textures/button.png"
         },
+        "settings_btn": {
+            "file": "textures/settings-button.png"
+        },
+        "settings_background":{
+            "file": "textures/settings-background.png"
+        },
+        "settings_sound":{
+            "file": "textures/settings-sound.png"
+        },
+        "settings_restart":{
+            "file": "textures/settings-restart.png"
+        },
+        "settings_exit":{
+            "file": "textures/settings-exit.png"
+        },
         "result_background": {
             "file": "textures/result-background.png"
         },
@@ -249,7 +264,7 @@
         "textbutton": "widgets/textbutton.json",
         "retrybutton": "widgets/retrybutton.json",
         "exitbutton": "widgets/exitbutton.json",
-        "resultmenu": "widgets/resultmenu.json",
+        "settingsbutton": "widgets/settingsbutton.json",
         "levelbutton": "widgets/levelbutton.json"
     },
     "jsons": {
@@ -450,6 +465,106 @@
                 }
             }
         },
+        "settings":{
+            "type": "Node",
+            "format": {
+                "type": "Float",
+                "orientation": "vertical",
+                "x_alignment": "right",
+                "y_alignment": "top"
+            },
+            "children": {
+                "btn": {
+                    "type"   : "Button",
+                    "data"   : {
+                        "upnode"   : "up",
+                        "size"    : [50, 50],
+                        "visible"  : true,
+                        "pushsize" : true,
+                        "anchor"   : [0,0.8],
+                        "scale"    : 1.25
+                    },
+                    "children" : {
+                        "up"       : {
+                            "type"   : "Image",
+                            "data"   : {"texture"  : "settings_btn"}
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "right",
+                        "y_anchor" : "middle",
+                        "x_offset" : 0,
+                        "y_offset" : 0
+                    }
+                 }
+            }
+        },
+        "settings-menu": {
+            "type": "Node",
+            "format": {
+                "type": "Float",
+                "orientation": "vertical",
+                "x_alignment": "center",
+                "y_alignment": "middle"
+            },
+            "children": {
+                "board": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "settings_background",
+                        "scale": 0.5
+                    },
+                    "layout": {
+                        "y_anchor": "middle",
+                        "x_anchor": "center"
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    },
+                    "children": {
+                        "sound": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "settings_sound",
+                                "scale": 0.5
+                            },
+                            "layout": {
+                                "y_anchor": "middle",
+                                "x_anchor": "center",
+                                "x_offset": -0.3
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
+                        "restart": {
+                            "type": "Widget",
+                            "data": {
+                                "key": "retrybutton"
+                            },
+                            "layout": {
+                                "y_anchor": "middle",
+                                "x_anchor": "center",
+                                "x_offset": 0.0,
+                                "y_offset": -0.15
+                            }
+                        },
+                        "exit": {
+                            "type": "Widget",
+                            "data": {
+                                "key": "exitbutton"
+                            },
+                            "layout": {
+                                "y_anchor": "bottom",
+                                "x_anchor": "center",
+                                "x_offset": 0.0,
+                                "y_offset": 0.15
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "result": {
             "type": "Node",
             "format": {
@@ -473,6 +588,28 @@
                         "type": "Anchored"
                     },
                     "children": {
+                        "level":{
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel32",
+                                "text": "Level 1",
+                                "foreground": "#63351D",
+                                "halign": "top",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "scale": 1.0,
+                                "visible": true
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "top",
+                                "x_offset": 0.0,
+                                "y_offset": -0.15
+                            }
+                        },
                         "star1": {
                             "type": "Image",
                             "data": {
