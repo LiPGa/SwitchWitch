@@ -203,7 +203,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsLayout = assets->get<scene2::SceneNode>("settings");
     _settingsLayout->setContentSize(dimen);
     _settingsLayout->doLayout(); // Repositions the HUD
-    _settingsLayout->setPosition(Vec2(10, -82));
     _guiNode->addChild(_settingsLayout);
     
     _settingsMenuLayout = assets->get<scene2::SceneNode>("settings-menu");
