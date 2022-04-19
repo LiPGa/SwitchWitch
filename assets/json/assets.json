@@ -177,7 +177,7 @@
             "file": "textures/star-empty.png"
         },
         "level_map":{
-            "file": "textures/background-full-screen.png"
+            "file": "textures/main_menu_full.png"
         },
         "level_one":{
             "file":
