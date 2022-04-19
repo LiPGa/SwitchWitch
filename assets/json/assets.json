@@ -312,7 +312,7 @@
                                 "x_anchor" : "center",
                                 "y_anchor" : "bottom",
                                 "x_offset" : -0.03,
-                                "y_offset" : 0.12,
+                                "y_offset" : 0.1,
                                 "absolute" : false
                             }
                         },
@@ -363,7 +363,7 @@
                             "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
-                                "x_offset": 0.28,
+                                "x_offset": 0.02,
                                 "y_offset": 0.35,
                                 "absolute": false
                             }
@@ -389,8 +389,8 @@
                             "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
-                                "x_offset": 0,
-                                "y_offset": -0.07,
+                                "x_offset": 0.25,
+                                "y_offset": -0.02,
                                 "absolute": false
                             }
                         },
@@ -415,7 +415,7 @@
                             "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
-                                "x_offset": -0.15,
+                                "x_offset": -0.12,
                                 "y_offset": 0.095,
                                 "absolute": false
                             }
@@ -441,8 +441,8 @@
                             "layout" : {
                                 "x_anchor": "center",
                                 "y_anchor": "middle",
-                                "x_offset": -0.07,
-                                "y_offset": 0.25,
+                                "x_offset": 0.25,
+                                "y_offset": 0.23,
                                 "absolute": false
                             }
                         }
