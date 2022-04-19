@@ -702,17 +702,6 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             auto unitColor = Unit::colorToString(unit->getColor());
             Vec2 unitDirection = unit->getDirection();
             
-            // load the ui for king unit
-            if (unitSubType == "king") {
-                std::string unitsNeededToKill = strtool::format("%d/%d",unit->getUnitsNeededToKill(),unit->getUnitsNeededToKill());
-                auto info_text = scene2::Label::allocWithText(unitsNeededToKill, _assets->get<Font>("pixel32"));
-                info_text->setScale(0.7);
-//                info_text->setRelativeColor(true);
-                info_text->setColor(Color4::RED);
-                info_text->setPosition(Vec2(squarePosition.x * _squareSizeAdjustedForScale * 1.2 + Vec2::ONE.x * _squareSizeAdjustedForScale * 1, squarePosition.y * _squareSizeAdjustedForScale * 1.2 + Vec2::ONE.y * (_squareSizeAdjustedForScale * 4)));
-                _guiNode->addChildWithName(info_text, "info_text");
-            }
-            
             if (unitSubType == "random") {
                 unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
                 unitColor = Unit::colorToString(generateRandomUnitColor(startingColorProbabilities));
@@ -730,6 +719,21 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             newUnit->setSpecial(unitSubType != "basic");
             if (_debug) unitNode->setAngle(newUnit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
+            
+            // load the ui for king unit
+//            auto unit_node = unit->getViewNode();
+            if (unitSubType == "king") {
+                std::string unitsNeededToKill = strtool::format("%d/%d",unit->getUnitsNeededToKill(),unit->getUnitsNeededToKill());
+                auto info_text = scene2::Label::allocWithText(unitsNeededToKill, _assets->get<Font>("pixel32"));
+                info_text->setScale(1.2);
+//                info_text->setRelativeColor(true);
+                info_text->setColor(Color4::RED);
+                info_text->setPosition(Vec2(squarePosition.x * _squareSizeAdjustedForScale * 1.2, squarePosition.y * _squareSizeAdjustedForScale * 1.2));
+                unitNode->addChildWithName(info_text, "info_text");
+                info_text->setPriority(unitNode->getPriority()+1.0);
+            }
+            
+            
         }
     }
     // Create the upcoming special unit indicator
