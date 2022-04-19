@@ -14,7 +14,7 @@
         "data"   : {
             "upnode"  : "up",
             "anchor"  : [0.5,0.5],
-            "size"    : [300, 80],
+            "size"    : [240, 60],
             "scale": 0.5
         },
         "children": {
