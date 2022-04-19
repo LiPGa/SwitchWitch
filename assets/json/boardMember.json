@@ -6,7 +6,7 @@
             "texture-green": "basic-green",
             "basic-attack": [[1,0]],
             "special-attack":[],
-            "probability-respawn": 100
+            "probability-respawn": 0
         },
         "random": {
             "texture-red": "random-red",
@@ -30,7 +30,7 @@
             "texture-green": "king-green",
             "basic-attack": [],
             "special-attack":[],
-            "probability-respawn": 0
+            "probability-respawn": 100
         },
         "three-way": {
             "texture-red": "three-way-red",
