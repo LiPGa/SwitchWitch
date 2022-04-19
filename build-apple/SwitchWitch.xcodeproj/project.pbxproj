@@ -32,6 +32,7 @@
 		75C0E5C627C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
 		75C0E5C727C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
 		75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75C0E5C427C47EBD006BB1D0 /* SWSquare.cpp */; };
+		B4FD83F0280A148500B893E5 /* SWLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75275E5E2807448C0055E55A /* SWLevel.cpp */; };
 		DB5871F427D92E160023672B /* SWApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871EB27D92E150023672B /* SWApp.cpp */; };
 		DB5871F527D92E160023672B /* SWApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871EB27D92E150023672B /* SWApp.cpp */; };
 		DB5871F627D92E160023672B /* SWApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871EB27D92E150023672B /* SWApp.cpp */; };
@@ -500,7 +501,7 @@
 					};
 					EB74548B1D74D75C002FBAE6 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 2Z462C9P3J;
+						DevelopmentTeam = 4WBNK62USC;
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -632,6 +633,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4FD83F0280A148500B893E5 /* SWLevel.cpp in Sources */,
 				75C0E5BF27C47776006BB1D0 /* SWUnit.cpp in Sources */,
 				DBC4961027C861EC006BA4CA /* SWInputController.cpp in Sources */,
 				14553A0427E10CB9003BD8E7 /* SWMainMenuScene.cpp in Sources */,
@@ -726,12 +728,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 2Z462C9P3J;
+				DEVELOPMENT_TEAM = 4WBNK62USC;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.ashley.SwitchWitch1;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.Yihan2.SwitchWitch1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -747,12 +749,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 2Z462C9P3J;
+				DEVELOPMENT_TEAM = 4WBNK62USC;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.ashley.SwitchWitch1;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.Yihan2.SwitchWitch1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

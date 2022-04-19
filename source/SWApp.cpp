@@ -165,7 +165,7 @@ void SwitchWitchApp::update(float timestep) {
             break;
         }
         case MAP: {
-                //_levelMap.update(timestep);
+                _levelMap.update(timestep);
                 int level_num = _levelMap.getLevel();
                 if (level_num > 0) {
                     _levelMap.setActive(false);
