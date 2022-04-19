@@ -565,7 +565,7 @@
                     "type": "Image",
                     "data": {
                         "texture": "settings_background",
-                        "scale": 0.5
+                        "scale": 0.6
                     },
                     "layout": {
                         "y_anchor": "middle",
