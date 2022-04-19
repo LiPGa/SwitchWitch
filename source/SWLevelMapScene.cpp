@@ -200,7 +200,7 @@ void LevelMapScene::update(float dt) {
         } else if (moveDist.y + nodePos.y > 0) {
             moveDist.y = - nodePos.y;
         }
-        _scrollPane->setPosition(nodePos+moveDist);
+        _scrollPane->setPosition(nodePos+moveDist*0.4);
 //        _scrollPane->applyPan(moveDist);
     }
     if (_input.isDown()) {
