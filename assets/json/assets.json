@@ -822,7 +822,7 @@
                     "layout": {
                         "x_anchor": "center",
                         "y_anchor": "bottom",
-                        "y_offset": 0.15,
+                        "y_offset": 0.2,
                         "x_offset": 0.05
                     }
                 },
@@ -845,7 +845,7 @@
                     "layout": {
                         "x_anchor": "center",
                         "y_anchor": "bottom",
-                        "y_offset": 0.15,
+                        "y_offset": 0.2,
                         "x_offset": -0.2
                     }
                 },
@@ -870,7 +870,7 @@
                     "layout": {
                         "x_anchor": "center",
                         "y_anchor": "bottom",
-                        "y_offset": 0.1,
+                        "y_offset": 0.15,
                         "x_offset": 0.05
                     }
                 },
@@ -893,7 +893,7 @@
                     "layout": {
                         "x_anchor": "center",
                         "y_anchor": "bottom",
-                        "y_offset": 0.1,
+                        "y_offset": 0.15,
                         "x_offset": -0.2
                     }
                 },
@@ -918,7 +918,7 @@
                     "layout": {
                         "x_anchor": "center",
                         "y_anchor": "bottom",
-                        "y_offset": 0.05,
+                        "y_offset": 0.1,
                         "x_offset": 0.05
                     }
                 },
@@ -941,7 +941,7 @@
                     "layout": {
                         "x_anchor": "center",
                         "y_anchor": "bottom",
-                        "y_offset": 0.05,
+                        "y_offset": 0.1,
                         "x_offset": -0.2
                     }
                 },
@@ -960,6 +960,23 @@
                         "y_anchor" : "top",
                         "x_offset" : -0.1,
                         "y_offset" : -0.225
+                    }
+                },
+                "board-size": {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key"     : "textbutton",
+                        "variables" : {
+                            "size": [100,50],
+                            "text": "BoardSize",
+                            "color": "#000088"
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle",
+                        "x_offset" : 0,
+                        "y_offset" : 0
                     }
                 }
             }

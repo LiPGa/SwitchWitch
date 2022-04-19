@@ -50,7 +50,7 @@ public:
      * @param rows The number of rows on the board.
      * @param columns The number of columns on the board.
      */
-    bool init(int rows, int columns);
+    bool init(int columns, int rows);
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -63,13 +63,23 @@ public:
      * @param columns the number of columns on the board.
      * @return a newly allocated Board.
      */
-    static shared_ptr<Board> alloc(int rows, int columns) {
+    static shared_ptr<Board> alloc(int columns, int rows) {
         std::shared_ptr<Board> result = std::make_shared<Board>();
-        return (result->init(rows, columns) ? result : nullptr);
+        return (result->init(columns, rows) ? result : nullptr);
     }
 
 #pragma mark -
 #pragma mark Identifiers
+    /**
+     * Returns the number of rows.
+     */
+    int getNumberOfRows() { return _rows; }
+
+    /**
+     * Returns the number of columns.
+     */
+    int getNumberOfColumns() { return _columns; }
+
     /**
      * Returns if a square exists on the board.
      *

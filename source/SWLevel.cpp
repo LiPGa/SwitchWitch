@@ -16,7 +16,7 @@ using namespace cugl;
  * @param rows The number of rows on the board.
  * @param columns The number of columns on the board.
  */
-bool Level::init(int rows, int columns) {
+bool Level::init(int columns, int rows) {
     _rows = rows;
     _columns = columns;
     levelID = 0;
@@ -32,9 +32,12 @@ bool Level::init(int rows, int columns) {
  *
  * @param JSON values
  */
-bool Level::init(int rows, int columns, shared_ptr<JsonValue> levelJSON) {
+bool Level::init(shared_ptr<JsonValue> levelJSON) {
     levelID = levelJSON->getInt("id");
     maxTurns = levelJSON->getInt("total-swap-allowed");
+    // Rows and Columns
+    _rows = levelJSON->getInt("rows");
+    _columns = levelJSON->getInt("columns");
     // thresholds for the star system
     oneStarThreshold = levelJSON->getInt("one-star-condition");
     twoStarThreshold = levelJSON->getInt("two-star-condition");
@@ -44,7 +47,7 @@ bool Level::init(int rows, int columns, shared_ptr<JsonValue> levelJSON) {
     
     for (auto layer : layersInBoardJson)
     {
-        auto board = Board::alloc(columns, rows);
+        auto board = Board::alloc(_columns, _rows);
         auto units = layer->children();
         for (auto i = 0; i < units.size(); i++) {
             auto sq = board->getAllSquares()[i];
@@ -56,7 +59,7 @@ bool Level::init(int rows, int columns, shared_ptr<JsonValue> levelJSON) {
             auto unitColor = unitSubType == "king" ? Unit::Color::NONE : Unit::stringToColor(unitColorStr);
             sq->setUnit(Unit::alloc(unitSubType, unitColor, unitDirection, unitSubType != "basic" && unitSubType != "random", unitsNeededToKill));
         }
-        addBoard(board);
+        auto test = addBoard(board);
     }
     return true;
 }
@@ -67,6 +70,8 @@ bool Level::init(int rows, int columns, shared_ptr<JsonValue> levelJSON) {
 shared_ptr<JsonValue> Level::convertToJSON() {
     shared_ptr<cugl::JsonValue> boardJSON = cugl::JsonValue::allocObject();
     boardJSON->appendChild("id", cugl::JsonValue::alloc((long int)levelID));
+    boardJSON->appendChild("rows", cugl::JsonValue::alloc((long int)_rows));
+    boardJSON->appendChild("columns", cugl::JsonValue::alloc((long int)_columns));
     boardJSON->appendChild("total-swap-allowed", cugl::JsonValue::alloc((long int)maxTurns));
     boardJSON->appendChild("one-star-condition", cugl::JsonValue::alloc((long int)oneStarThreshold));
     boardJSON->appendChild("two-star-condition", cugl::JsonValue::alloc((long int)twoStarThreshold));
@@ -128,5 +133,6 @@ int Level::getNumberOfStars(int score) {
         return 0;
     }
 }
+
 
 #pragma mark -

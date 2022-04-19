@@ -21,8 +21,10 @@
 
 using namespace cugl;
 using namespace std;
+#define PADDING_SCALE = 1.2
 
 #pragma mark Constructors
+
 
 /**
  * Initializes the controller contents, and starts the game
@@ -50,8 +52,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Initialize Constants
     auto sceneHeight = constants->getInt("scene-height");
     vector<int> boardSize = constants->get("board-size")->asIntArray();
-    _boardWidth = boardSize.at(0);
-    _boardHeight = boardSize.at(1);
+    _maxBoardWidth = boardSize.at(0);
+    _maxBoardHeight = boardSize.at(1);
     _defaultSquareSize = constants->getInt("square-size");
 
     // Initialize Scene
@@ -118,7 +120,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _currentState = NOTHING;
 
     // Initialize Board
-    _board = Board::alloc(_boardHeight, _boardWidth);
+    _board = Board::alloc(_maxBoardWidth, _maxBoardHeight);
 
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("%d/%d", _turns, 100);
@@ -159,8 +161,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Set the view of the board.
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height);
-    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth * _squareSizeAdjustedForScale, _boardHeight * _squareSizeAdjustedForScale));
-    _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(-.05, -.1));
+    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _maxBoardWidth * _squareSizeAdjustedForScale, _maxBoardHeight * _squareSizeAdjustedForScale));
+    _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, -0.075));
     _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
@@ -273,7 +275,6 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
 {
     Vec2 squarePos = square->getPosition();
     shared_ptr<Unit> currentUnit = square->getUnit();
-    if (_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns) { return; }
     shared_ptr<Unit> replacementUnit = _level->getBoard(_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1)->getSquare(square->getPosition())->getUnit();
     std::string color = Unit::colorToString(replacementUnit->getColor());
     string currentDirection = Unit::directionToString(currentUnit->getDirection());
@@ -428,12 +429,11 @@ void GameScene::update(float timestep)
     Vec2 pos = _input.getPosition();
     Vec3 worldCoordinate = screenToWorldCoords(pos);
     Vec2 boardPos = _boardNode->worldToNodeCoords(worldCoordinate);
-    Vec2 squarePos = Vec2(int(boardPos.x / (_squareSizeAdjustedForScale * 1.2)), int(boardPos.y / (_squareSizeAdjustedForScale*1.2)));
+    Vec2 squarePos = Vec2(int(boardPos.x / (_squareSizeAdjustedForScale)), int(boardPos.y / (_squareSizeAdjustedForScale)));
     if (_input.isDebugDown())
     {
         _debug = !_debug;
     }
-
     if (_input.isDown())
     {
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable())
@@ -552,7 +552,7 @@ void GameScene::update(float timestep)
             _turns--;
 //             _prev_score = _score;
 //             _score += _attackedUnits;
-        }
+        }  
         _currentState = SELECTING_UNIT;
     }
     // Update the score meter
@@ -669,8 +669,8 @@ void GameScene::setActive(bool value)
 
 void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _levelJson = levelJSON;
-    _level = Level::alloc(_boardWidth, _boardHeight, levelJSON);
-    vector<int> vector(_boardWidth * _boardHeight, 0);
+    _level = Level::alloc(levelJSON);
+    vector<int> vector(_level->getNumberOfRows() * _level->getNumberOfColumns(), 0);
     _currentReplacementDepth = vector;
     _score = 0;
     _turns = _level->maxTurns;
@@ -680,14 +680,20 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
         { Unit::Color(1), 0.33 },
         { Unit::Color(2), 0.33 }
     };
-
     // Create the squares & units and put them in the map
     _board->getViewNode()->removeAllChildren();
-    for (int i = 0; i < _boardWidth; i++) {
-        for (int j = 0; j < _boardHeight; ++j) {
+
+    // Set the view of the board.
+    _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height) * (min((float)_maxBoardHeight / (float)_level->getNumberOfRows(), (float)_maxBoardWidth / (float)_level->getNumberOfColumns()));
+    auto width = _level->getNumberOfColumns() * _squareSizeAdjustedForScale;
+    auto height = _level->getNumberOfRows() * _squareSizeAdjustedForScale;
+    _boardNode->setPolygon(Rect(0, 0, _level->getNumberOfColumns() * _squareSizeAdjustedForScale, _level->getNumberOfRows() * _squareSizeAdjustedForScale));
+    _boardNode->setTexture(_textures.at("transparent"));
+    for (int i = 0; i < _level->getNumberOfColumns(); i++) {
+        for (int j = 0; j < _level->getNumberOfRows(); ++j) {
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
             auto squarePosition = Vec2(i, j);
-            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale * 1.2) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
             squareNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
