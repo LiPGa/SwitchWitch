@@ -10,8 +10,6 @@
 		14031E8927F390ED009971D0 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 14031E8527F390ED009971D0 /* levels */; };
 		14031E8A27F390ED009971D0 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 14031E8527F390ED009971D0 /* levels */; };
 		14031E8B27F390ED009971D0 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 14031E8527F390ED009971D0 /* levels */; };
-		1408859E280E41DE00BABDED /* SWLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75275E5E2807448C0055E55A /* SWLevel.cpp */; };
-		1408859F280E41DE00BABDED /* SWLevel.h in Sources */ = {isa = PBXBuildFile; fileRef = 75275E622807448C0055E55A /* SWLevel.h */; };
 		145539FE27E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */; };
 		145539FF27E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */; };
 		14553A0027E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 145539FD27E10C97003BD8E7 /* SWLevelEditorScene.cpp */; };
@@ -44,6 +42,7 @@
 		DB5871FA27D92E160023672B /* SWLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871F127D92E160023672B /* SWLoadingScene.cpp */; };
 		DB5871FB27D92E160023672B /* SWLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871F127D92E160023672B /* SWLoadingScene.cpp */; };
 		DB5871FC27D92E160023672B /* SWLoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB5871F127D92E160023672B /* SWLoadingScene.cpp */; };
+		DB5F95A3280F65F5008780FA /* SWLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75275E5E2807448C0055E55A /* SWLevel.cpp */; };
 		DBC4960F27C861EC006BA4CA /* SWInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBC4960D27C861EC006BA4CA /* SWInputController.cpp */; };
 		DBC4961027C861EC006BA4CA /* SWInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBC4960D27C861EC006BA4CA /* SWInputController.cpp */; };
 		DBC4961127C861EC006BA4CA /* SWInputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBC4960D27C861EC006BA4CA /* SWInputController.cpp */; };
@@ -171,7 +170,7 @@
 		DBC4960D27C861EC006BA4CA /* SWInputController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SWInputController.cpp; sourceTree = "<group>"; };
 		DBC4960E27C861EC006BA4CA /* SWInputController.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; path = SWInputController.h; sourceTree = "<group>"; };
 		EB07CFB021EFF3EF000CB3A3 /* DeviceMargins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DeviceMargins.plist; sourceTree = "<group>"; };
-		EB22BF5E25D0E8BC002ACE41 /* SwitchWitch (Sim).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwitchWitch (Sim).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB22BF5E25D0E8BC002ACE41 /* SwitchWitch-sim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwitchWitch-sim.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB2BE9B41D74952A002FE78B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EB2BE9BA1D7498D2002FE78B /* textures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = textures; sourceTree = "<group>"; };
 		EB2BE9BE1D749908002FE78B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -184,14 +183,14 @@
 		EB2BE9CE1D749953002FE78B /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		EB51310B27A2328A00E255AA /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		EB51310C27A2328A00E255AA /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = "<group>"; };
-		EB74548C1D74D75C002FBAE6 /* SwitchWitch (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwitchWitch (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB74548C1D74D75C002FBAE6 /* SwitchWitch-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwitchWitch-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB7454A61D74D846002FBAE6 /* iOS-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "iOS-Info.plist"; sourceTree = "<group>"; };
 		EB7454A71D74D846002FBAE6 /* iOS.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iOS.xcassets; sourceTree = "<group>"; };
 		EB7454A81D74D846002FBAE6 /* Landscape.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Landscape.storyboard; sourceTree = "<group>"; };
 		EB7454A91D74D846002FBAE6 /* Portrait.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Portrait.storyboard; sourceTree = "<group>"; };
 		EBB3D284201444B300E6A7CD /* CUGL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CUGL.xcodeproj; path = "../cugl/build-apple/CUGL.xcodeproj"; sourceTree = "<group>"; };
 		EBB3D29B201444F100E6A7CD /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		EBBF18911D74904A008E2001 /* SwitchWitch (Mac).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwitchWitch (Mac).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBBF18911D74904A008E2001 /* SwitchWitch-mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwitchWitch-mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBBF189A1D74904A008E2001 /* Mac.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Mac.xcassets; sourceTree = "<group>"; };
 		EBBF189F1D74904A008E2001 /* Mac-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mac-Info.plist"; sourceTree = "<group>"; };
 		EBC147141E27F07C005494CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -380,9 +379,9 @@
 		EBBF18921D74904A008E2001 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EBBF18911D74904A008E2001 /* SwitchWitch (Mac).app */,
-				EB74548C1D74D75C002FBAE6 /* SwitchWitch (iOS).app */,
-				EB22BF5E25D0E8BC002ACE41 /* SwitchWitch (Sim).app */,
+				EBBF18911D74904A008E2001 /* SwitchWitch-mac.app */,
+				EB74548C1D74D75C002FBAE6 /* SwitchWitch-ios.app */,
+				EB22BF5E25D0E8BC002ACE41 /* SwitchWitch-sim.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -436,9 +435,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EB22BF5D25D0E8BC002ACE41 /* SwitchWitch (Sim) */ = {
+		EB22BF5D25D0E8BC002ACE41 /* SwitchWitch-sim */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EB22BF7B25D0E8BD002ACE41 /* Build configuration list for PBXNativeTarget "SwitchWitch (Sim)" */;
+			buildConfigurationList = EB22BF7B25D0E8BD002ACE41 /* Build configuration list for PBXNativeTarget "SwitchWitch-sim" */;
 			buildPhases = (
 				EB22BF5A25D0E8BC002ACE41 /* Sources */,
 				EB22BF5B25D0E8BC002ACE41 /* Frameworks */,
@@ -448,14 +447,14 @@
 			);
 			dependencies = (
 			);
-			name = "SwitchWitch (Sim)";
+			name = "SwitchWitch-sim";
 			productName = "HelloWorld (Sim)";
-			productReference = EB22BF5E25D0E8BC002ACE41 /* SwitchWitch (Sim).app */;
+			productReference = EB22BF5E25D0E8BC002ACE41 /* SwitchWitch-sim.app */;
 			productType = "com.apple.product-type.application";
 		};
-		EB74548B1D74D75C002FBAE6 /* SwitchWitch (iOS) */ = {
+		EB74548B1D74D75C002FBAE6 /* SwitchWitch-ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "SwitchWitch (iOS)" */;
+			buildConfigurationList = EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "SwitchWitch-ios" */;
 			buildPhases = (
 				EB7454881D74D75C002FBAE6 /* Sources */,
 				EB7454891D74D75C002FBAE6 /* Frameworks */,
@@ -465,14 +464,14 @@
 			);
 			dependencies = (
 			);
-			name = "SwitchWitch (iOS)";
+			name = "SwitchWitch-ios";
 			productName = "CUGL Demo (iOS)";
-			productReference = EB74548C1D74D75C002FBAE6 /* SwitchWitch (iOS).app */;
+			productReference = EB74548C1D74D75C002FBAE6 /* SwitchWitch-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
-		EBBF18901D74904A008E2001 /* SwitchWitch (Mac) */ = {
+		EBBF18901D74904A008E2001 /* SwitchWitch-mac */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "SwitchWitch (Mac)" */;
+			buildConfigurationList = EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "SwitchWitch-mac" */;
 			buildPhases = (
 				EBBF188D1D74904A008E2001 /* Sources */,
 				EBBF188E1D74904A008E2001 /* Frameworks */,
@@ -482,9 +481,9 @@
 			);
 			dependencies = (
 			);
-			name = "SwitchWitch (Mac)";
+			name = "SwitchWitch-mac";
 			productName = "CUGL Demo";
-			productReference = EBBF18911D74904A008E2001 /* SwitchWitch (Mac).app */;
+			productReference = EBBF18911D74904A008E2001 /* SwitchWitch-mac.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -503,10 +502,11 @@
 					};
 					EB74548B1D74D75C002FBAE6 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 4WBNK62USC;
+						DevelopmentTeam = 857UYV938U;
 					};
 					EBBF18901D74904A008E2001 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 857UYV938U;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -530,9 +530,9 @@
 			);
 			projectRoot = "";
 			targets = (
-				EBBF18901D74904A008E2001 /* SwitchWitch (Mac) */,
-				EB74548B1D74D75C002FBAE6 /* SwitchWitch (iOS) */,
-				EB22BF5D25D0E8BC002ACE41 /* SwitchWitch (Sim) */,
+				EBBF18901D74904A008E2001 /* SwitchWitch-mac */,
+				EB74548B1D74D75C002FBAE6 /* SwitchWitch-ios */,
+				EB22BF5D25D0E8BC002ACE41 /* SwitchWitch-sim */,
 			);
 		};
 /* End PBXProject section */
@@ -623,6 +623,7 @@
 				75C0E5BB27C47440006BB1D0 /* SWBoard.cpp in Sources */,
 				75C0E5C827C47EBD006BB1D0 /* SWSquare.cpp in Sources */,
 				14553A0027E10C97003BD8E7 /* SWLevelEditorScene.cpp in Sources */,
+				DB5F95A3280F65F5008780FA /* SWLevel.cpp in Sources */,
 				DB5871F927D92E160023672B /* SWGameScene.cpp in Sources */,
 				14EA95A027ED73BA00E2C137 /* SWLevelMapScene.cpp in Sources */,
 				DB5871FC27D92E160023672B /* SWLoadingScene.cpp in Sources */,
@@ -730,12 +731,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4WBNK62USC;
+				DEVELOPMENT_TEAM = 857UYV938U;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.Yihan2.SwitchWitch1;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.ashley3333.SwitchWitch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -751,12 +752,12 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 4WBNK62USC;
+				DEVELOPMENT_TEAM = 857UYV938U;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/iOS-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.Yihan2.SwitchWitch1;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.cornell.gdiac.ios.ashley3333.SwitchWitch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -892,7 +893,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 857UYV938U;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -911,7 +912,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 857UYV938U;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/Mac-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -924,7 +925,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EB22BF7B25D0E8BD002ACE41 /* Build configuration list for PBXNativeTarget "SwitchWitch (Sim)" */ = {
+		EB22BF7B25D0E8BD002ACE41 /* Build configuration list for PBXNativeTarget "SwitchWitch-sim" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EB22BF7425D0E8BD002ACE41 /* Debug */,
@@ -933,7 +934,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "SwitchWitch (iOS)" */ = {
+		EB7454A01D74D75C002FBAE6 /* Build configuration list for PBXNativeTarget "SwitchWitch-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EB7454A11D74D75C002FBAE6 /* Debug */,
@@ -951,7 +952,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "SwitchWitch (Mac)" */ = {
+		EBBF18A21D74904A008E2001 /* Build configuration list for PBXNativeTarget "SwitchWitch-mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBBF18A31D74904A008E2001 /* Debug */,

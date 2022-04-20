@@ -60,7 +60,11 @@ public:
         LEVEL_THREE,
         LEVEL_FOUR,
         LEVEL_FIVE,
-        LEVEL_SIX
+        LEVEL_SIX,
+        LEVEL_SEVEN,
+        LEVEL_EIGHT,
+        LEVEL_NINE,
+        LEVEL_TEN
     };
     
     /** The current state of the selection process*/
@@ -81,6 +85,10 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _level4;
     std::shared_ptr<cugl::scene2::Button> _level5;
     std::shared_ptr<cugl::scene2::Button> _level6;
+    std::shared_ptr<cugl::scene2::Button> _level7;
+    std::shared_ptr<cugl::scene2::Button> _level8;
+    std::shared_ptr<cugl::scene2::Button> _level9;
+    std::shared_ptr<cugl::scene2::Button> _level10;
     //std::shared_ptr<scene2::SceneNode> _level1Node;
     
     Level _chosenLevel;
