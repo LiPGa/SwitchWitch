@@ -275,6 +275,10 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
 {
     Vec2 squarePos = square->getPosition();
     shared_ptr<Unit> currentUnit = square->getUnit();
+    if(_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns) {
+        square->getViewNode()->setTexture(_textures.at("square"));
+        return;
+    }
     shared_ptr<Unit> replacementUnit = _level->getBoard(_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1)->getSquare(square->getPosition())->getUnit();
     std::string color = Unit::colorToString(replacementUnit->getColor());
     string currentDirection = Unit::directionToString(currentUnit->getDirection());
@@ -635,7 +639,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
  */
 void GameScene::reset()
 {
-    reset(_assets->get<JsonValue>("level" + std::to_string(_level->levelID)));
+    reset(_levelJson);
 }
 
 /**
@@ -682,11 +686,10 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     };
     // Create the squares & units and put them in the map
     _board->getViewNode()->removeAllChildren();
-
+    _board = Board::alloc(_level->getNumberOfColumns(),_level->getNumberOfRows());
+    _board->setViewNode(_boardNode);
     // Set the view of the board.
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height) * (min((float)_maxBoardHeight / (float)_level->getNumberOfRows(), (float)_maxBoardWidth / (float)_level->getNumberOfColumns()));
-    auto width = _level->getNumberOfColumns() * _squareSizeAdjustedForScale;
-    auto height = _level->getNumberOfRows() * _squareSizeAdjustedForScale;
     _boardNode->setPolygon(Rect(0, 0, _level->getNumberOfColumns() * _squareSizeAdjustedForScale, _level->getNumberOfRows() * _squareSizeAdjustedForScale));
     _boardNode->setTexture(_textures.at("transparent"));
     for (int i = 0; i < _level->getNumberOfColumns(); i++) {

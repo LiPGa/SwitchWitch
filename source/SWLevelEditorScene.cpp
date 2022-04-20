@@ -659,6 +659,8 @@ void LevelEditorScene::showInfo() {
 void LevelEditorScene::setLevel(shared_ptr<Level> level) {
     _level = level;
     _currentBoardTurn = 0;
+    _rows = level->getNumberOfRows();
+    _columns = level->getNumberOfColumns();
     _turnTextLabel->setText(strtool::format("Board: %d/%d", _currentBoardTurn, _level->maxTurns));
     
     _levelIDText->setText(to_string(_level->levelID));
