@@ -189,21 +189,18 @@ void LevelMapScene::update(float dt) {
     if (_currentState == SCROLLING) {
         Vec2 prevPos = _input.getPrevious();
         Vec2 moveDist = Vec2(pos.x-prevPos.x, prevPos.y-pos.y);
-//        Vec2 anchor = _input.getPosition();
-//        anchor = _scrollPane->worldToNodeCoords(anchor);
-//        anchor /= _scrollPane->getContentSize();
-//        if (anchor != _scrollPane->getAnchor()) {
-//            _scrollPane->setAnchor(anchor);
-//        }
         Vec2 nodePos = _scrollPane->getPosition();
         moveDist.x = 0;
-        if (moveDist.y + nodePos.y < -_scrollPane->getContentSize().height) {
-            moveDist.y = -_scrollPane->getContentSize().height - nodePos.y;
-        } else if (moveDist.y + nodePos.y > 0) {
-            moveDist.y = - nodePos.y;
+//        CULog("scroll pane content size: %f", _scrollPane->getContentSize().height);
+//        CULog("scroll pane size: %f", _scrollPane->getSize().height);
+//        CULog("scroll pane bounding box: %f", _scrollPane->getBoundingBox().size.height);
+//        if (moveDist.y + nodePos.y < -_scrollPane->getContentSize().height) {
+        if (moveDist.y + nodePos.y < -2316+720) {
+            moveDist.y = -2316+720 - nodePos.y;
+        } else if (moveDist.y + nodePos.y > -10) {
+            moveDist.y = -10 - nodePos.y;
         }
         _scrollPane->setPosition(nodePos+moveDist*0.4);
-//        _scrollPane->applyPan(moveDist);
     }
     if (_input.isDown()) {
         if (_currentState == NOACTION) {
