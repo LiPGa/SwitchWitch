@@ -195,7 +195,7 @@
             "file": "textures/star-empty.png"
         },
         "level_map": {
-            "file": "textures/main_menu_full.png"
+            "file": "textures/background_scrollable.png"
         },
         "level_one": {
             "file": "textures/level-one.png"
@@ -294,12 +294,10 @@
         "map": {
             "type"      : "Scroll",
             "data" : {
-                "interior"  : [0,0,332,1696],
+                "interior"  : [0,0,332,2316],
                 "constrain" : true,
                 "mask"      : false,
-                "pan"       : [0,0],
-                "zoom min"  : 0.5,
-                "zoom max"  : 2.0
+                "pan"       : [0,0]
             },
             "children":  {
                 "background" : {
@@ -307,7 +305,7 @@
                     "comment": "This is the debugging background",
                     "data": {
                         "texture" : "level_map",
-                        "scale"   : 0.2951
+                        "scale"   : 0.2216
                     },
                     "layout" : {
                         "y_anchor": "middle",
@@ -338,8 +336,8 @@
                             "layout" : {
                                 "x_anchor" : "center",
                                 "y_anchor" : "bottom",
-                                "x_offset" : -0.03,
-                                "y_offset" : 0.1,
+                                "x_offset" : -0.1,
+                                "y_offset" : 0.06,
                                 "absolute" : false
                             }
                         },
@@ -364,8 +362,8 @@
                             "layout": {
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
-                                "x_offset": 0.2,
-                                "y_offset": 0.2,
+                                "x_offset": 0,
+                                "y_offset": 0.1,
                                 "absolute": false
                             }
                         },
@@ -390,8 +388,8 @@
                             "layout": {
                                 "x_anchor": "center",
                                 "y_anchor": "bottom",
-                                "x_offset": 0.02,
-                                "y_offset": 0.35,
+                                "x_offset": 0.16,
+                                "y_offset": 0.15,
                                 "absolute": false
                             }
                         },
@@ -415,9 +413,9 @@
                             },
                             "layout": {
                                 "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "x_offset": 0.25,
-                                "y_offset": -0.02,
+                                "y_anchor": "bottom",
+                                "x_offset": 0,
+                                "y_offset": 0.2,
                                 "absolute": false
                             }
                         },
@@ -441,9 +439,9 @@
                             },
                             "layout": {
                                 "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "x_offset": -0.12,
-                                "y_offset": 0.095,
+                                "y_anchor": "bottom",
+                                "x_offset": -0.03,
+                                "y_offset": 0.25,
                                 "absolute": false
                             }
                         },
@@ -467,9 +465,9 @@
                             },
                             "layout": {
                                 "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "x_offset": 0.25,
-                                "y_offset": 0.23,
+                                "y_anchor": "bottom",
+                                "x_offset": 0.15,
+                                "y_offset": 0.3,
                                 "absolute": false
                             }
                         }
