@@ -91,15 +91,14 @@ protected:
     InputController _input;
     
     // VIEW
-    //std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
-    std::shared_ptr<cugl::scene2::ScrollPane> _scrollPane;
+    std::shared_ptr<cugl::scene2::SceneNode> _scrollPane;
     std::shared_ptr<cugl::Texture> _background;
     //std::shared_ptr<cugl::Texture> _levelOneTexture;
     //std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     //std::shared_ptr<cugl::scene2::SceneNode> _levelOneNode;
     cugl::Size _scale;
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
-    
+    std::shared_ptr<cugl::AudioQueue> _audioQueue;
     
     
 

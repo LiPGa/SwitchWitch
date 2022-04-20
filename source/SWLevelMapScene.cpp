@@ -48,7 +48,7 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     }
 
     // Start up the input handler
-//    _input.init();
+    _input.init();
     _assets = assets;
     
     // Set up GUI
@@ -136,6 +136,8 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 //    _layout = scene2::AnchoredLayout::alloc();
 
     setActive(false);
+    _audioQueue = AudioEngine::get()->getMusicQueue();
+    _audioQueue->play(_assets->get<Sound>("normal"), true, .3, false);
     return true;
 }
 
@@ -187,13 +189,21 @@ void LevelMapScene::update(float dt) {
     if (_currentState == SCROLLING) {
         Vec2 prevPos = _input.getPrevious();
         Vec2 moveDist = Vec2(pos.x-prevPos.x, prevPos.y-pos.y);
-        Vec2 anchor = _input.getPosition();
-        anchor = _scrollPane->worldToNodeCoords(anchor);
-        anchor /= _scrollPane->getContentSize();
-        if (anchor != _scrollPane->getAnchor()) {
-            _scrollPane->setAnchor(anchor);
+//        Vec2 anchor = _input.getPosition();
+//        anchor = _scrollPane->worldToNodeCoords(anchor);
+//        anchor /= _scrollPane->getContentSize();
+//        if (anchor != _scrollPane->getAnchor()) {
+//            _scrollPane->setAnchor(anchor);
+//        }
+        Vec2 nodePos = _scrollPane->getPosition();
+        moveDist.x = 0;
+        if (moveDist.y + nodePos.y < -_scrollPane->getContentSize().height) {
+            moveDist.y = -_scrollPane->getContentSize().height - nodePos.y;
+        } else if (moveDist.y + nodePos.y > 0) {
+            moveDist.y = - nodePos.y;
         }
-        _scrollPane->applyPan(moveDist);
+        _scrollPane->setPosition(nodePos+moveDist);
+//        _scrollPane->applyPan(moveDist);
     }
     if (_input.isDown()) {
         if (_currentState == NOACTION) {
