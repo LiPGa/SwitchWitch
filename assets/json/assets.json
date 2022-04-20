@@ -294,8 +294,8 @@
         "level6": "levels/board6.json",
         "level7": "levels/board7.json",
         "level8": "levels/board8.json",
-        "level9": "levels/board6.json",
-        "level10": "levels/board6.json"
+        "level9": "levels/board9.json",
+        "level10": "levels/board10.json"
     },
     "scene2s": {
         "map": {
