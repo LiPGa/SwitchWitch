@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
-               BuildableName = "SwitchWitch (Sim).app"
-               BlueprintName = "SwitchWitch (Sim)"
+               BuildableName = "SwitchWitch-sim.app"
+               BlueprintName = "SwitchWitch-sim"
                ReferencedContainer = "container:SwitchWitch.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
-            BuildableName = "SwitchWitch (Sim).app"
-            BlueprintName = "SwitchWitch (Sim)"
+            BuildableName = "SwitchWitch-sim.app"
+            BlueprintName = "SwitchWitch-sim"
             ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EB22BF5D25D0E8BC002ACE41"
-            BuildableName = "SwitchWitch (Sim).app"
-            BlueprintName = "SwitchWitch (Sim)"
+            BuildableName = "SwitchWitch-sim.app"
+            BlueprintName = "SwitchWitch-sim"
             ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

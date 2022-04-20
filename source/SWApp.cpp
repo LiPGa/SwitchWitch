@@ -57,7 +57,7 @@ void SwitchWitchApp::onStartup() {
     // Queue up the other assets (EMPTY in this case)
     _assets->loadDirectoryAsync("json/assets.json",nullptr);
     
-//    AudioEngine::start();
+    AudioEngine::start();
     Application::onStartup(); // YOU MUST END with call to parent
 }
 
@@ -165,7 +165,7 @@ void SwitchWitchApp::update(float timestep) {
             break;
         }
         case MAP: {
-                //_levelMap.update(timestep);
+                _levelMap.update(timestep);
                 int level_num = _levelMap.getLevel();
                 if (level_num > 0) {
                     _levelMap.setActive(false);

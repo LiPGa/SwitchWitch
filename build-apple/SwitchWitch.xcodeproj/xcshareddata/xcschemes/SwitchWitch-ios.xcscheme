@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EBBF18901D74904A008E2001"
-               BuildableName = "SwitchWitch (Mac).app"
-               BlueprintName = "SwitchWitch (Mac)"
+               BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
+               BuildableName = "SwitchWitch-ios.app"
+               BlueprintName = "SwitchWitch-ios"
                ReferencedContainer = "container:SwitchWitch.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,9 +44,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EBBF18901D74904A008E2001"
-            BuildableName = "SwitchWitch (Mac).app"
-            BlueprintName = "SwitchWitch (Mac)"
+            BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
+            BuildableName = "SwitchWitch-ios.app"
+            BlueprintName = "SwitchWitch-ios"
             ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -61,9 +61,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EBBF18901D74904A008E2001"
-            BuildableName = "SwitchWitch (Mac).app"
-            BlueprintName = "SwitchWitch (Mac)"
+            BlueprintIdentifier = "EB74548B1D74D75C002FBAE6"
+            BuildableName = "SwitchWitch-ios.app"
+            BlueprintName = "SwitchWitch-ios"
             ReferencedContainer = "container:SwitchWitch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -81,6 +81,7 @@ protected:
     bool _mouseDown;
 
 protected:
+    /** The key for the touch listeners */
     Uint32 _touchKey;
     cugl::Vec2 _touchPos;
     bool _fingerDown;

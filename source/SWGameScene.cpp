@@ -71,7 +71,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     _didRestart = false;
     _didGoToLevelMap = false;
-    
+    _didPause = false;
     // Get Textures
     // Preload all the textures into a hashmap
     vector<string> textureVec = constants->get("textures")->asStringArray();
@@ -126,6 +126,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _turn_text->setScale(0.75);
     _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -1.275 * (_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_turn_text, "turn_text");
+//
+//    // Create and layout unitsNeededToKill info
+//    auto units_needed_to_kill = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
+    
 
     // Create and layout the score meter
 
@@ -158,6 +162,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     
 
     // Set the view of the board.
+    CULog("%d %d", _scale.width, _scale.height);
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height);
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth * _squareSizeAdjustedForScale, _boardHeight * _squareSizeAdjustedForScale));
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(-.05, -.1));
@@ -199,6 +204,17 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChild(_resultLayout);
     _resultLayout->setVisible(false);
     
+    _settingsLayout = assets->get<scene2::SceneNode>("settings");
+    _settingsLayout->setContentSize(dimen);
+    _settingsLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(_settingsLayout);
+    
+    _settingsMenuLayout = assets->get<scene2::SceneNode>("settings-menu");
+    _settingsMenuLayout->setContentSize(dimen);
+    _settingsMenuLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(_settingsMenuLayout);
+    _settingsMenuLayout->setVisible(false);
+    
     _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
     _star1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star1"));
     _star2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star2"));
@@ -211,6 +227,52 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _didRestart = true;
         }
     });
+    
+    _settingsbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings_btn"));
+    _settingsbutton->setVisible(true);
+    _settingsbutton->activate();
+    _settingsbutton->setDown(false);
+    _settingsbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didPause = true;
+            CULog("Pressed Pause/Settings button");
+        }
+    });
+    
+    _settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
+    _settingsRestartBtn->setVisible(true);
+    _settingsRestartBtn->deactivate();
+    _settingsRestartBtn->setDown(false);
+    _settingsRestartBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didRestart = true;
+            CULog("Pressed Settings restart button");
+        }
+    });
+    
+    _settingsCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_close"));
+    _settingsCloseBtn->setVisible(true);
+    _settingsCloseBtn->deactivate();
+    _settingsCloseBtn->setDown(false);
+    _settingsCloseBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didPause = false;
+            _settingsMenuLayout->setVisible(false);
+            CULog("Pressed Settings restart button");
+        }
+    });
+    
+    _settingsBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_exit"));
+    _settingsBackBtn->setVisible(true);
+    _settingsBackBtn->deactivate();
+    _settingsBackBtn->setDown(false);
+    _settingsBackBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didGoToLevelMap = true;
+            CULog("Pressed Settings exit button");
+        }
+    });
+
     _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
     _backbutton->deactivate();
     _backbutton->setDown(false);
@@ -399,13 +461,13 @@ void GameScene::update(float timestep)
     // Read the input
     _input.update();
     
-    if (_turns == 0 && _didRestart == true){
-        reset(_levelJson);
-    }
+    if (_turns == 0 && _didRestart == true) reset(_levelJson);
+    if (_didRestart == true && _didPause == true) reset(_levelJson);
 
     if (_turns == 0)
     {
         // Show results screen
+        _resultLayout->setVisible(true);
         _restartbutton->activate();
         _backbutton->activate();
         _score_number->setText(to_string(_score));
@@ -421,7 +483,15 @@ void GameScene::update(float timestep)
         if (_level->getNumberOfStars(_score) >= 3) {
             _star3->setTexture(_textures.at("star_full"));
         }
-        _resultLayout->setVisible(true);
+        return;
+    }
+    
+    if (_didPause == true) {
+        // Show settings screen
+        _settingsMenuLayout->setVisible(true);
+        _settingsBackBtn->activate();
+        _settingsRestartBtn->activate();
+        _settingsCloseBtn->activate();
         return;
     }
 
@@ -528,9 +598,16 @@ void GameScene::update(float timestep)
             // remove the attacked squares
             for (shared_ptr<Square> attackedSquare : _attackedSquares)
             {
+                auto attacked_unit = attackedSquare->getUnit();
                 if (_attackedSquares.size() < attackedSquare->getUnit()->getUnitsNeededToKill()) {
                     continue;
                 }
+                
+//                if (attacked_unit->getSubType()=="king") {
+//                    std::string unitsNeededToKill = strtool::format("%d/%d",_attackedSquares.size(),attacked_unit->getUnitsNeededToKill());
+//                    _info_text->setText(unitsNeededToKill);
+//                }
+                
                 // Replace Unit
                 Vec2 squarePos = attackedSquare->getPosition();
                 _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
@@ -547,6 +624,7 @@ void GameScene::update(float timestep)
                 attackedSquare->setInteractable(unitSubType != "empty");
                 attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
                 refreshUnitAndSquareView(attackedSquare);
+                if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
                 _score++;
             }
             _turns--;
@@ -599,6 +677,8 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
     // For now we render 3152-style
     // DO NOT DO THIS IN YOUR FINAL GAME
     batch->begin(getCamera()->getCombined());
+    batch->setColor(Color4::RED);
+    //_info_text->render(batch);
     _guiNode->render(batch);
 
     if (_debug)
@@ -648,6 +728,7 @@ void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
     //    _score = 0;
     removeChild(_guiNode);
     _didGoToLevelMap = false;
+    _didPause = false;
     init(_assets);
     setLevel(boardJSON);
 }
@@ -697,6 +778,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             auto unitSubType = unit->getSubType();
             auto unitColor = Unit::colorToString(unit->getColor());
             Vec2 unitDirection = unit->getDirection();
+            
             if (unitSubType == "random") {
                 unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
                 unitColor = Unit::colorToString(generateRandomUnitColor(startingColorProbabilities));
@@ -714,6 +796,12 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             newUnit->setSpecial(unitSubType != "basic");
             if (_debug) unitNode->setAngle(newUnit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
+            
+            // load the ui for king unit
+//            auto unit_node = unit->getViewNode();
+            if (unitSubType == "king") {
+                loadKingUI(unit->getUnitsNeededToKill(), unit->getUnitsNeededToKill(), squarePosition, unitNode);
+            }
         }
     }
     // Create the upcoming special unit indicator
@@ -729,4 +817,15 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
         20 + -0.85 * (_topuibackgroundNode->getSize().height)));
     _layout->addAbsolute("scoreMeterStar3", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(2 - _topuibackgroundNode->getSize().width / 6 + (_scoreMeter->getSize().width),
         20 + -0.85 * (_topuibackgroundNode->getSize().height)));
+}
+
+void GameScene::loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> unitNode) {
+    std::string unitsNeededToKill = strtool::format("%d", goal);
+    _info_text = scene2::Label::allocWithText(unitsNeededToKill, _assets->get<Font>("pixel32"));
+    _info_text->setScale(3);
+    _info_text->setColor(Color4::RED);
+    _info_text->setPosition(Vec2(unitNode->getPosition().x+Vec2::ONE.x, unitNode->getPosition().y+Vec2::ONE.y));
+    unitNode->addChildWithName(_info_text, "info");
+//    CULog("text has priority of %f", _info_text->getPriority());
+//    CULog("unit has priority of %f", unitNode->getPriority());
 }

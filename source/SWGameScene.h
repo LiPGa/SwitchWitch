@@ -124,6 +124,8 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
     std::shared_ptr<scene2::SceneNode> _resultLayout;
+    std::shared_ptr<scene2::SceneNode> _settingsLayout;
+    std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
 
     int _replacementListLength;
@@ -141,6 +143,7 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text with the final score */
     std::shared_ptr<cugl::scene2::Label> _score_number;
+    std::shared_ptr<cugl::scene2::Label> _info_text;
     /** The score meter with the current score */
     std::shared_ptr<cugl::scene2::ProgressBar> _scoreMeter;
 //    /** The images of the stars above the score meter */
@@ -157,15 +160,22 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _replace_text;
     /** The button to restart a game */
     std::shared_ptr<cugl::scene2::Button> _restartbutton;
+    std::shared_ptr<cugl::scene2::Button> _settingsRestartBtn;
+    /** The button to display settings menu */
+    std::shared_ptr<cugl::scene2::Button> _settingsbutton;
+    /** The button to close settings menu */
+    std::shared_ptr<cugl::scene2::Button> _settingsCloseBtn;
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
+    std::shared_ptr<cugl::scene2::Button> _settingsBackBtn;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
 
     /** Whther the player pressed restart button*/
     bool _didRestart = false;
-    
+    /** Whther the player pressed settings/pause button */
+    bool _didPause= false;
     /** Whther the player pressed exit button*/
     bool _didGoToLevelMap = false;
 
@@ -339,6 +349,8 @@ private:
             return getUnitType(type, "blue");
         }
     }
+    
+    void loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> unitNode);
     
     /**
      * Generate a unit on the given square.
