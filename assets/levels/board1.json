@@ -249,7 +249,7 @@
 				"sub-type":	"king",
 				"color":	"red",
 				"direction":	[1, 0],
-				"unitsNeededToKill":	2
+				"unitsNeededToKill":	1
 			}, {
 				"type":	"unit",
 				"sub-type":	"empty",

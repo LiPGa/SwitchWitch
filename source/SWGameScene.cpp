@@ -37,7 +37,7 @@ using namespace std;
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
-    _debug = true;
+    _debug = false;
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     if (assets == nullptr)
