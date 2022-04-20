@@ -18,7 +18,7 @@ using namespace cugl;
  * @param rows The number of rows on the board.
  * @param columns The number of columns on the board.
  */
-bool Board::init(int rows, int columns) {
+bool Board::init(int columns, int rows) {
     _matrix = vector<shared_ptr<Square>>(rows * columns);
     _rows = rows;
     _columns = columns;

@@ -26,7 +26,7 @@ using namespace std;
 #define SELECTION_BOARD_HEIGHT 2
 
 /** How to reduce the scale of textures for select*/
-#define SELECTION_BOARD_SCALE 1
+#define LEVEL_EDITOR_SQUARE_SCALE 0.8
 
 #define SELECTION_BOARD_Y_OFFSET -0.35
 
@@ -55,8 +55,11 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     // Initialize Constants
     int sceneHeight = constants->getInt("scene-height");
     vector<int> boardSize = constants->get("board-size")->asIntArray();
-    _boardWidth = boardSize.at(0);
-    _boardHeight = boardSize.at(1);
+    _maxBoardWidth = boardSize.at(0);
+    _maxBoardHeight = boardSize.at(1);
+    _pressedBoardSize = false;
+    _rows = _maxBoardHeight;
+    _columns = _maxBoardWidth;
     auto defaultSquareSize = constants->getInt("square-size");
     _currentBoardTurn = 0;
 
@@ -116,9 +119,9 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         if (down) {
             if (_currentBoardTurn == _level->maxTurns) {
                 _level->maxTurns++;
-                _level->addBoard(allocBasicBoard());
+                _level->addBoard(allocBasicBoard(_level->getNumberOfColumns(), _level->getNumberOfRows()));
                 // Make sure that empty squares are kept.
-                for (auto square : _board->getAllSquares()) {
+                for (auto square : _level->getBoard(_currentBoardTurn)->getAllSquares()) {
                     auto squarePosition = square->getPosition();
                     if (_level->getBoard(_currentBoardTurn)->getSquare(squarePosition)->getUnit()->getSubType() == "empty") {
                         _level->getBoard(_currentBoardTurn + 1)->getSquare(squarePosition)->getUnit()->setSubType("empty");
@@ -126,14 +129,14 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
                 }
             } 
             _currentBoardTurn++;
-            _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn, _level->maxTurns));
+            _turnTextLabel->setText(strtool::format("Board: %d/%d", _currentBoardTurn, _level->maxTurns));
             updateBoardNode();
         }
         });
     _backButton->addListener([this](const std::string& name, bool down) {
         if (down) {
             if (_currentBoardTurn > 0) _currentBoardTurn--;
-            _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn, _level->maxTurns));
+            _turnTextLabel->setText(strtool::format("Board: %d/%d", _currentBoardTurn, _level->maxTurns));
             updateBoardNode();
         }
         });
@@ -144,10 +147,11 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
                 _level->removeBoard(_currentBoardTurn);
                 _currentBoardTurn--;
             }
-            _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn, _level->maxTurns));
+            _turnTextLabel->setText(strtool::format("Board: %d/%d", _currentBoardTurn, _level->maxTurns));
             updateBoardNode();
         }
         });
+
     _infoButton->addListener([this](const std::string& name, bool down) {
         if (down) {
             showInfo();
@@ -163,7 +167,8 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _oneStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_one-star-score-field"));
     _twoStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_two-star-score-field"));
     _threeStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_three-star-score-field"));
-    
+    _changeBoardSizeButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level-editor-info_board-size"));
+
     _levelIDText->addTypeListener([this](const std::string& name, const std::string& value) {
         if (value.empty()) return;
         if (!isInteger(value)) _levelIDText->setText(to_string(_level->levelID));
@@ -202,6 +207,18 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
             showBoard();
         }
         });
+    _changeBoardSizeButton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _pressedBoardSize = !_pressedBoardSize && _currentState == CHANGING_INFO;
+            if (_pressedBoardSize) {
+                _changeBoardSizeButton->setColor(Color4::RED);
+            }
+            else {
+                _changeBoardSizeButton->setColor(Color4::BLUE);
+            }
+        }
+        });
+
 
     // Initialize units with different types
     // Children will be types "basic", "three-way", etc.
@@ -229,22 +246,22 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     }
 
     // Initialize Board
-    _board = allocBasicBoard();
+    _board = allocBasicBoard(_maxBoardWidth, _maxBoardHeight);
 
     /// Initialize Selection Board
-    _selectionBoard = Board::alloc(SELECTION_BOARD_HEIGHT, SELECTION_BOARD_WIDTH);
+    _selectionBoard = Board::alloc(SELECTION_BOARD_WIDTH, SELECTION_BOARD_HEIGHT);
 
     // Set the view of the board.
-    _squareSizeAdjustedForScale = int(defaultSquareSize * min(_scale.width, _scale.height));
-    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth * _squareSizeAdjustedForScale, _boardHeight * _squareSizeAdjustedForScale));
+    _squareSizeAdjustedForScale = int(defaultSquareSize * min(_scale.width, _scale.height) * LEVEL_EDITOR_SQUARE_SCALE);
+    _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _maxBoardWidth * _squareSizeAdjustedForScale, _maxBoardHeight * _squareSizeAdjustedForScale));
     _boardNode->setName("boardNode");
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
     _boardNode->setTexture(_textures.at("transparent"));
     _board->setViewNode(_boardNode);
     _rootNode->addChildWithName(_boardNode, "boardNode");
 
-    for (int i = 0; i < _boardWidth; i++) {
-        for (int j = 0; j < _boardHeight; ++j) {
+    for (int i = 0; i < _maxBoardWidth; i++) {
+        for (int j = 0; j < _maxBoardHeight; ++j) {
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
             auto squarePosition = Vec2(i, j);
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
@@ -263,7 +280,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     }
 
     // Set the view of the select board.
-    _selectionBoardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _boardWidth * _squareSizeAdjustedForScale, _squareSizeAdjustedForScale));
+    _selectionBoardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _maxBoardWidth * _squareSizeAdjustedForScale, _squareSizeAdjustedForScale));
     _layout->addRelative("selectionBoardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, SELECTION_BOARD_Y_OFFSET));
     _selectionBoardNode->setTexture(_textures.at("transparent"));
     _selectionBoard->setViewNode(_selectionBoardNode);
@@ -273,8 +290,8 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         for (int j = 0; j < SELECTION_BOARD_HEIGHT; ++j) {
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
             auto squarePosition = (Vec2(i, j));
-            squareNode->setScale(((float)_squareSizeAdjustedForScale / (float)defaultSquareSize) * SELECTION_BOARD_SCALE);
-            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale * SELECTION_BOARD_SCALE) + Vec2::ONE * (_squareSizeAdjustedForScale * SELECTION_BOARD_SCALE / 2));
+            squareNode->setScale(((float)_squareSizeAdjustedForScale / (float)defaultSquareSize));
+            squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
             shared_ptr<Square> sq = _selectionBoard->getSquare(squarePosition);
             sq->setViewNode(squareNode);
             _selectionBoard->getViewNode()->addChild(squareNode);
@@ -293,11 +310,11 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     }
 
     // Initialize Level
-    _level = Level::alloc(_boardWidth, _boardHeight);
-    _level->addBoard(allocBasicBoard());
+    _level = Level::alloc(_maxBoardWidth, _maxBoardHeight);
+    _level->addBoard(allocBasicBoard(_maxBoardWidth, _maxBoardHeight));
 
     // Initialize Turn Counter
-    std::string turnMsg = strtool::format("For turn: %d/%d", _currentBoardTurn, _level->maxTurns);
+    std::string turnMsg = strtool::format("Board: %d/%d", _currentBoardTurn, _level->maxTurns);
     _turnTextLabel = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
     _turnTextLabel->setContentSize(Vec2(getSize().width, _turnTextLabel->getContentHeight()));
     _rootNode->addChild(_turnTextLabel);
@@ -310,7 +327,14 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _rootNode->addChildWithName(_unitsNeededToKillLabel, "unitsNeededToKillLabel");
     _unitsNeededToKillLabel->setVisible(false);
 
-    _rootNode->doLayout();
+    // Initialize Text For Board Size
+    std::string boardSizeMessage = strtool::format("Size: %dx%d", _columns, _rows);
+    _boardSizeLabel = scene2::Label::allocWithText(boardSizeMessage, assets->get<Font>("pixel32"));
+    _boardSizeLabel->setContentSize(Vec2(getSize().width, _unitsNeededToKillLabel->getContentHeight()));
+    _layout->addRelative("boardSizeLabel", cugl::scene2::Layout::Anchor::BOTTOM_RIGHT, Vec2(-0.5, 0));
+    _rootNode->addChildWithName(_boardSizeLabel, "boardSizeLabel");
+    
+    
     addChild(_rootNode);
 
     reset();
@@ -366,8 +390,8 @@ void LevelEditorScene::update(float timestep)
     if (_input.didPress() && _currentState == CHANGING_BOARD)
     {
         Vec2 squarePos = Vec2(int(boardPos.x / (_squareSizeAdjustedForScale)), int(boardPos.y / (_squareSizeAdjustedForScale)));
-        Vec2 selectionSquarePos = Vec2(int(selectionBoardPos.x / (_squareSizeAdjustedForScale * SELECTION_BOARD_SCALE)), int(selectionBoardPos.y / (_squareSizeAdjustedForScale * SELECTION_BOARD_SCALE)));
-        if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0)
+        Vec2 selectionSquarePos = Vec2(int(selectionBoardPos.x / (_squareSizeAdjustedForScale)), int(selectionBoardPos.y / (_squareSizeAdjustedForScale)));
+        if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable())
         {
             auto squareOnMouse = _board->getSquare(squarePos);
             if (_selectedSquare != squareOnMouse) {
@@ -380,6 +404,7 @@ void LevelEditorScene::update(float timestep)
                     unit->setBasicAttack(unitThatWillReplace->getBasicAttack());
                     unit->setSpecialAttack(unitThatWillReplace->getSpecialAttack());
                     unit->setSubType(unitThatWillReplace->getSubType());
+                    updateBoardNode();
                 }
             }
             else {
@@ -404,20 +429,25 @@ void LevelEditorScene::update(float timestep)
             }
         }
     }
-    if (_selectedSquare != NULL && State::CHANGING_BOARD) {
+    if (_selectedSquare != NULL && _currentState == State::CHANGING_BOARD) {
         auto unit = currentBoard->getSquare(_selectedSquare->getPosition())->getUnit();
+        bool change = false;
         if (unit->getSubType() != "king") {
             if (_input.isDirectionKeyDown()) {
                 unit->setDirection(_input.directionPressed());
+                updateBoardNode();
             }
             if (_input.isRedDown()) {
                 unit->setColor(Unit::RED);
+                updateBoardNode();
             }
             else if (_input.isGreenDown()) {
                 unit->setColor(Unit::GREEN);
+                updateBoardNode();
             }
             else if (_input.isBlueDown()) {
                 unit->setColor(Unit::BLUE);
+                updateBoardNode();
             }
             _unitsNeededToKillLabel->setVisible(false);
         }
@@ -433,18 +463,41 @@ void LevelEditorScene::update(float timestep)
                 unit->setUnitsNeededToKill(neededToKill);
                 auto test = unit->getUnitsNeededToKill();
                 auto test2 = unit->getUnitsNeededToKill();
+                updateBoardNode();
             }
             _unitsNeededToKillLabel->setVisible(true);
             std::string unitsNeededToKillMsg = strtool::format("Units Needed To Kill: %d", unit->getUnitsNeededToKill());
             _unitsNeededToKillLabel->setText(unitsNeededToKillMsg);
         }
-        updateBoardNode();
+        
     }
     else {
         _unitsNeededToKillLabel->setVisible(false);
     }
     if (_input.isSaveDown()) {
         saveBoardAsJSON();
+    }
+    if (_pressedBoardSize) {
+        if (_input.directionPressed() == Vec2(0, 1) && _rows < _maxBoardHeight) {
+            _rows++;
+        }
+        else if (_input.directionPressed() == Vec2(0, -1) && _rows > 1) {
+            _rows--;
+        }
+        else if (_input.directionPressed() == Vec2(1, 0) && _columns < _maxBoardWidth) {
+            _columns++;
+        }
+        else if (_input.directionPressed() == Vec2(-1, 0) && _columns > 1) {
+            _columns--;
+        }
+        _boardSizeLabel->setText(strtool::format("Size: %dx%d", _columns, _rows));
+        if (_columns != _level->getNumberOfColumns() || _rows != _level->getNumberOfRows()) {
+            _boardSizeLabel->setColor(Color4::RED);
+        }
+        else {
+            _boardSizeLabel->setColor(Color4::BLACK);
+        }
+           
     }
     _layout->layout(_rootNode.get());
 }
@@ -485,11 +538,11 @@ void LevelEditorScene::setActive(bool value) {
     }
 }
 
-shared_ptr<Board> LevelEditorScene::allocBasicBoard() {
-    shared_ptr<Board> result = Board::alloc(_boardHeight, _boardWidth);
+shared_ptr<Board> LevelEditorScene::allocBasicBoard(int width, int height) {
+    shared_ptr<Board> result = Board::alloc(width, height);
     // Create the squares & units and put them in the map
-    for (int i = 0; i < _boardWidth; i++) {
-        for (int j = 0; j < _boardHeight; ++j) {
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; ++j) {
             auto squarePosition = Vec2(i, j);
             shared_ptr<Square> sq = result->getSquare(squarePosition);
             // Generate unit for this square
@@ -508,13 +561,20 @@ shared_ptr<Board> LevelEditorScene::allocBasicBoard() {
 
 void LevelEditorScene::updateBoardNode() {
     auto currentBoard = _level->getBoard(_currentBoardTurn);
-    for (int i = 0; i < _boardWidth; i++) {
-        for (int j = 0; j < _boardHeight; ++j) {
+    for (int i = 0; i < _maxBoardWidth; i++) {
+        for (int j = 0; j < _maxBoardHeight; ++j) {
             auto squarePosition = Vec2(i, j);
+            if (!currentBoard->doesSqaureExist(squarePosition)) {
+                _board->getSquare(squarePosition)->setInteractable(false);
+                _board->getSquare(squarePosition)->getViewNode()->setVisible(false);
+                continue;
+            }
             auto unit = currentBoard->getSquare(squarePosition)->getUnit();
             auto unitNode = _board->getSquare(squarePosition)->getUnit()->getViewNode();
             unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             unitNode->setTexture(_textures.at(getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))));
+            _board->getSquare(squarePosition)->setInteractable(true);
+            _board->getSquare(squarePosition)->getViewNode()->setVisible(true);
         }
     }
 }
@@ -540,6 +600,9 @@ void LevelEditorScene::showBoard() {
     _backButton->activate();
     _deleteButton->activate();
     _infoButton->activate();
+    _changeBoardSizeButton->deactivate();
+    
+    _changeBoardSizeButton->setDown(false);
 
     _levelIDText->deactivate();
     _oneStarScoreText->deactivate();
@@ -551,6 +614,14 @@ void LevelEditorScene::showBoard() {
     _selectionBoardNode->setVisible(true);
     _infoNode->setVisible(false);
     _currentState = CHANGING_BOARD;
+    _pressedBoardSize = false;
+    _changeBoardSizeButton->setColor(Color4::BLUE);
+    if (_rows != _level->getNumberOfRows() || _columns != _level->getNumberOfColumns()) {
+        // Initialize Level
+        auto newLevel = Level::alloc(_columns, _rows);
+        newLevel->addBoard(allocBasicBoard(_columns, _rows));
+        setLevel(newLevel);
+    }
 }
 
 void LevelEditorScene::showInfo() {
@@ -559,13 +630,14 @@ void LevelEditorScene::showInfo() {
     _oneStarScoreText->activate();
     _twoStarScoreText->activate();
     _threeStarScoreText->activate();
-    
+    _changeBoardSizeButton->activate();
 
     _playButton->deactivate();
     _saveButton->deactivate();
     _nextButton->deactivate();
     _backButton->deactivate();
     _deleteButton->deactivate();
+    
 
     // If any were pressed, reset them
     _playButton->setDown(false);
@@ -574,6 +646,7 @@ void LevelEditorScene::showInfo() {
     _backButton->setDown(false);
     _deleteButton->setDown(false);
     _infoButton->setDown(false);
+    _changeBoardSizeButton->setDown(false);
 
     _buttonsNode->setVisible(false);
     _boardNode->setVisible(false);
@@ -586,7 +659,9 @@ void LevelEditorScene::showInfo() {
 void LevelEditorScene::setLevel(shared_ptr<Level> level) {
     _level = level;
     _currentBoardTurn = 0;
-    _turnTextLabel->setText(strtool::format("For turn: %d/%d", _currentBoardTurn, _level->maxTurns));
+    _rows = level->getNumberOfRows();
+    _columns = level->getNumberOfColumns();
+    _turnTextLabel->setText(strtool::format("Board: %d/%d", _currentBoardTurn, _level->maxTurns));
     
     _levelIDText->setText(to_string(_level->levelID));
     _oneStarScoreText->setText(to_string(_level->oneStarThreshold));

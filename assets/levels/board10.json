@@ -1,5 +1,7 @@
 {
 	"id":	10,
+    "rows": 9,
+    "columns": 6,
 	"total-swap-allowed":	4,
 	"one-star-condition":	7,
 	"two-star-condition":	7,

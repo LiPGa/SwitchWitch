@@ -47,8 +47,8 @@ protected:
     // current level, corresponds to board's ID.
     int _currLevel;
     // CONSTANTS
-    int _boardWidth;
-    int _boardHeight;
+    int _maxBoardWidth;
+    int _maxBoardHeight;
     int _defaultSquareSize;
     int _squareSizeAdjustedForScale;
     
