@@ -51,8 +51,8 @@ protected:
     // current level, corresponds to board's ID.
     int _currLevel;
     // CONSTANTS
-    int _boardWidth;
-    int _boardHeight;
+    int _maxBoardWidth;
+    int _maxBoardHeight;
     int _defaultSquareSize;
     int _squareSizeAdjustedForScale;
     
@@ -130,6 +130,8 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
     std::shared_ptr<scene2::SceneNode> _resultLayout;
+    std::shared_ptr<scene2::SceneNode> _settingsLayout;
+    std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
 
     int _replacementListLength;
@@ -164,15 +166,22 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _replace_text;
     /** The button to restart a game */
     std::shared_ptr<cugl::scene2::Button> _restartbutton;
+    std::shared_ptr<cugl::scene2::Button> _settingsRestartBtn;
+    /** The button to display settings menu */
+    std::shared_ptr<cugl::scene2::Button> _settingsbutton;
+    /** The button to close settings menu */
+    std::shared_ptr<cugl::scene2::Button> _settingsCloseBtn;
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
+    std::shared_ptr<cugl::scene2::Button> _settingsBackBtn;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
 
     /** Whther the player pressed restart button*/
     bool _didRestart = false;
-    
+    /** Whther the player pressed settings/pause button */
+    bool _didPause= false;
     /** Whther the player pressed exit button*/
     bool _didGoToLevelMap = false;
 

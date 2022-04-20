@@ -18,12 +18,13 @@ using namespace cugl;
  * @param direction the direction the unit is facing
  * @return true if initialization was successful.
  */
-bool Unit::init(const std::string subtype, const Color color, cugl::Vec2 direction, bool special, int unitsNeededToKill)
+bool Unit::init(const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill)
 {
     this->_subtype = subtype;
     this->_color = color;
     this->_direction = direction;
     this->_is_special_unit = special;
+    this->_moveable = moveable;
     this->_unitsNeededToKill = unitsNeededToKill;
 //    this->_time_since_last_frame = fmod(((float) rand() / (RAND_MAX)), this->_time_per_frame); // Initalize a random animation offset
     return true;
@@ -38,13 +39,14 @@ bool Unit::init(const std::string subtype, const Color color, cugl::Vec2 directi
  * @param direction the direction the unit is facing
  * @return true if initialization was successful.
  */
-bool Unit::init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool special, int unitsNeededToKill)
+bool Unit::init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill)
 {
     this->_subtype = subtype;
     this->_color = color;
     this->_basicAttack = basicAttack;
     this->_direction = direction;
     this->_specialAttack = specialAttack;
+    this->_moveable = moveable;
     this->_is_special_unit = special;
     this->_unitsNeededToKill = unitsNeededToKill;
 //    this->_time_since_last_frame = fmod(((float) rand() / (RAND_MAX)), this->_time_per_frame); // Initalize a random animation offset

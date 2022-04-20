@@ -80,6 +80,9 @@ private:
     /** The number of units needed to be killed in order to kill this unit. This is specifically used for the king unit. */
     int _unitsNeededToKill;
 
+    /** Whether the unit is moveable */
+    bool _moveable;
+
 #pragma mark Constructors
 public:
     /**
@@ -106,10 +109,10 @@ public:
      * @param direction the direction the unit is facing
      * @return true if initialization was successful.
      */
-    bool init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool _special = false, int unitsNeededToKill = 0);
+    bool init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0);
 
 
-    bool init(const std::string subtype, const Color color, cugl::Vec2 direction, bool special, int unitsNeededToKill);
+    bool init(const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill);
 #pragma mark -
 #pragma mark Static Constructors
     /**
@@ -121,9 +124,9 @@ public:
      * @param direction the direction the unit is facing
      * @return a newly allocated Unit.
      */
-    static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool special = false, int unitsNeededToKill = 0) {
+    static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0) {
         std::shared_ptr<Unit> result = std::make_shared<Unit>();
-        return (result->init(subtype, color, basicAttack, specialAttack, direction, special, unitsNeededToKill) ? result : nullptr);
+        return (result->init(subtype, color, basicAttack, specialAttack, direction, moveable, special, unitsNeededToKill) ? result : nullptr);
     }
 
     /**
@@ -133,9 +136,9 @@ public:
      * @param direction the direction the unit is facing
      * @return a newly allocated Unit.
      */
-    static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, cugl::Vec2 direction, bool special = false, int unitsNeededToKill = 0) {
+    static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0) {
         std::shared_ptr<Unit> result = std::make_shared<Unit>();
-        return (result->init(subtype, color, direction, special, unitsNeededToKill) ? result : nullptr);
+        return (result->init(subtype, color, direction, moveable, special, unitsNeededToKill) ? result : nullptr);
     }
 
 #pragma mark -
@@ -361,6 +364,10 @@ public:
     @special     bool of whether or not a unit is special
     */
     void setSpecial(bool special) { _is_special_unit = special; };
+
+    bool isMoveable() { return _moveable; }
+
+    void setMoveable(bool moveable) { _moveable = moveable; }
 
     int getUnitsNeededToKill() { return _unitsNeededToKill; }
 

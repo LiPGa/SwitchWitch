@@ -19,7 +19,6 @@ private:
     /** Boards store the initial board and all replacement boards */
     vector<shared_ptr<Board>> _boards;
 
-
     int _rows;
     int _columns;
 
@@ -59,14 +58,14 @@ public:
      * @param rows The number of rows on the board.
      * @param columns The number of columns on the board.
      */
-    bool init(int rows, int columns);
+    bool init(int columns, int rows);
 
     /**
      * Initializes a level given JSON values
      *
      * @param JSON values
      */
-    bool init(int rows, int columns, shared_ptr<JsonValue> levelJSON);
+    bool init(shared_ptr<JsonValue> levelJSON);
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -79,9 +78,9 @@ public:
      * @param columns the number of columns on the board.
      * @return a newly allocated Board.
      */
-    static shared_ptr<Level> alloc(int rows, int columns) {
+    static shared_ptr<Level> alloc(int columns, int rows) {
         std::shared_ptr<Level> result = std::make_shared<Level>();
-        return (result->init(rows, columns) ? result : nullptr);
+        return (result->init(columns, rows) ? result : nullptr);
     }
 
     /**
@@ -92,17 +91,40 @@ public:
      * @param columns the number of columns on the board.
      * @return a newly allocated Board.
      */
-    static shared_ptr<Level> alloc(int rows, int columns, shared_ptr<JsonValue> levelJSON) {
+    static shared_ptr<Level> alloc(shared_ptr<JsonValue> levelJSON) {
         std::shared_ptr<Level> result = std::make_shared<Level>();
-        return (result->init(rows, columns, levelJSON) ? result : nullptr);
+        return (result->init(levelJSON) ? result : nullptr);
     }
 
 #pragma mark -
 #pragma mark Identifiers
     /**
-     * Adds a blank board to the level, increaseing the depth of the board.
+     * Get number of rows.
      */
-    void addBoard(shared_ptr<Board> board) { _boards.push_back(board); }
+    int getNumberOfRows() { return _rows; }
+
+    /**
+     * Get number of columns.
+     */
+    int getNumberOfColumns() { return _columns; }
+
+    /**
+     * Adds a blank board to the level, increaseing the depth of the level.
+     */
+    void addBlankBoard() { _boards.push_back(Board::alloc(_columns, _rows)); }
+
+    /**
+     * Adds a board to the level, increaseing the depth of the level. Returns whether the addition was successful.
+     */
+    bool addBoard(shared_ptr<Board> board) { 
+        bool valid = board->getNumberOfRows() == _rows && board->getNumberOfColumns() == _columns;
+        auto rows = board->getNumberOfRows();
+        auto columns = board->getNumberOfColumns();
+        if (valid) {
+            _boards.push_back(board);
+        }
+        return valid;
+    }
 
     /**
      * Removes a board at a certain depth

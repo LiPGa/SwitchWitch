@@ -41,8 +41,8 @@ protected:
     InputController _input;
 
     // CONSTANTS
-    int _boardWidth;
-    int _boardHeight;
+    int _maxBoardWidth;
+    int _maxBoardHeight;
     int _squareSizeAdjustedForScale;
 
     // hash map for unit textures
@@ -62,6 +62,9 @@ protected:
 
     bool _playPressed;
     int _currentBoardTurn;
+    bool _pressedBoardSize;
+    int _rows;
+    int _columns;
 
 #pragma mark -
 #pragma mark View Variables
@@ -85,8 +88,10 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _deleteButton;
     std::shared_ptr<cugl::scene2::Button> _infoButton;
     std::shared_ptr<cugl::scene2::Button> _boardButton;
+    std::shared_ptr<cugl::scene2::Button> _changeBoardSizeButton;
     std::shared_ptr<cugl::scene2::Label> _turnTextLabel;
     std::shared_ptr<cugl::scene2::Label> _unitsNeededToKillLabel;
+    std::shared_ptr<cugl::scene2::Label> _boardSizeLabel;
 
 #pragma mark -
 public:
@@ -178,7 +183,7 @@ private:
     /**
      * Allocates a basic board with the first unit of boardMember.json. 
      */
-    shared_ptr<Board> allocBasicBoard();
+    shared_ptr<Board> allocBasicBoard(int width, int height);
 
     void updateBoardNode();
 
