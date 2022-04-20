@@ -215,6 +215,9 @@
         "level_six": {
             "file": "textures/level-six.png"
         },
+        "locked_level": {
+            "file": "textures/level_locked.png"
+        },
         "scoremeter_background": {
             "file": "textures/scoremeter_background.png"
         },
@@ -288,7 +291,11 @@
         "level3": "levels/board3.json",
         "level4": "levels/board4.json",
         "level5": "levels/board5.json",
-        "level6": "levels/board6.json"
+        "level6": "levels/board6.json",
+        "level7": "levels/board6.json",
+        "level8": "levels/board6.json",
+        "level9": "levels/board6.json",
+        "level10": "levels/board6.json"
     },
     "scene2s": {
         "map": {
@@ -468,6 +475,110 @@
                                 "y_anchor": "bottom",
                                 "x_offset": 0.15,
                                 "y_offset": 0.3,
+                                "absolute": false
+                            }
+                        },
+                        "level7"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "bottom",
+                                "x_offset": -0.08,
+                                "y_offset": 0.38,
+                                "absolute": false
+                            }
+                        },
+                        "level8"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "bottom",
+                                "x_offset": -0.03,
+                                "y_offset": 0.43,
+                                "absolute": false
+                            }
+                        },
+                        "level9"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.17,
+                                "y_offset": -0.03,
+                                "absolute": false
+                            }
+                        },
+                        "level10"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.05,
+                                "y_offset": 0.02,
                                 "absolute": false
                             }
                         }
