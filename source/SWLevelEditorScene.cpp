@@ -255,7 +255,9 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
             // Generate unit for this square
             auto unit = sq->getUnit();
             std:string unitPattern = getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()));
-            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
+//            std::string unitIdleTextureName = unit->getSubType() + "-idle-" + Unit::colorToString(unit->getColor()));
+            auto unitNode = scene2::SpriteNode::alloc(_textures.at(unitPattern), 1, 1);
+//            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
             unit->setViewNode(unitNode);
             unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
@@ -286,7 +288,8 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         auto unitType = element.second;        
         square->setUnit(unitType);
         auto test = getUnitType(unitType->getSubType(), Unit::colorToString(unitType->getColor()));
-        auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(getUnitType(unitType->getSubType(), Unit::colorToString(unitType->getColor()))));
+//        auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(getUnitType(unitType->getSubType(), Unit::colorToString(unitType->getColor()))));
+        auto unitNode = scene2::SpriteNode::alloc(_textures.at(getUnitType(unitType->getSubType(), Unit::colorToString(unitType->getColor()))), 1, 1);
         square->getUnit()->setViewNode(unitNode);
         square->getViewNode()->addChild(unitNode);
         i++;

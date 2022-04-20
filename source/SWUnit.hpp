@@ -11,6 +11,7 @@
 
 #include <cugl/cugl.h>
 #include "SWSquareOccupant.hpp"
+#include <math.h>
 
 using namespace cugl;
 
@@ -27,6 +28,11 @@ public:
         GREEN,
         BLUE,
         NONE
+    };
+    
+    enum State
+    {
+        IDLE
     };
 
 private:
@@ -52,9 +58,21 @@ private:
 
     /** The color of this unit.*/
     Color _color;
+    
+    /** The state of this unit. */
+    State _state = IDLE;
+    
+    /** This map stores the corresponding sprite */
+    unordered_map<State, shared_ptr<cugl::scene2::SpriteNode>> spriteNodeMap;
 
-    /** The Polygon-Node that represents this unit */
-    shared_ptr<cugl::scene2::PolygonNode> _viewNode;
+    /** The Sprite-Node that represents this unit */
+    shared_ptr<cugl::scene2::SpriteNode> _viewNode;
+    
+    /** The elapsed time since the sprite frame was incremented */
+    float _time_since_last_frame = 0.0f;
+    
+    /** The amout of time every sprite frame should remain for */
+    float _time_per_frame = 0.5f;
 
     /**True if unit is a special unit, False otherwise*/
     bool _is_special_unit;
@@ -281,6 +299,19 @@ public:
      * @param c the color of the unit.
      */
     void setColor(Color c) { _color = c; }
+    
+    /**
+     * Returns the unit's state as a State enum.
+     * @return unit's state
+     */
+    State getState() { return _state; }
+
+    /**
+     * Sets the unit's state
+     *
+     * @param s the state of the unit.
+     */
+    void setState(State s) { _state = s; }
 
     /**
      * Returns the direction which the unit is currently facing.
@@ -304,18 +335,21 @@ public:
     float getAngleBetweenDirectionAndDefault();
 
     /**
-     * Returns the Polygon-Node that represents the unit's view.
+     * Returns the Sprite-Node that represents the unit's view.
      *
-     * @return unit's Polygon-Node
+     * @return unit's Sprite-Node
      */
-    shared_ptr<cugl::scene2::PolygonNode> getViewNode() { return _viewNode; }
-
+    shared_ptr<cugl::scene2::SpriteNode> getViewNode() { return _viewNode; }
+    
     /**
-     * Sets the Polygon-Node that represents the unit's view.
+     * Sets the Sprite-Node that represents the unit's view.
      *
-     * @param a polygon-node for the unit.
+     * @param a sprite-node for the unit.
      */
-    void setViewNode(shared_ptr<cugl::scene2::PolygonNode> viewNode) { _viewNode = viewNode; }
+    void setViewNode(shared_ptr<cugl::scene2::SpriteNode> viewNode) {
+        _viewNode = viewNode;
+//        _time_since_last_frame = 0.0f;
+    }
 
     /**
     Returns true if unit is a special unit
@@ -331,6 +365,11 @@ public:
     int getUnitsNeededToKill() { return _unitsNeededToKill; }
 
     void setUnitsNeededToKill(int numOfUnits) { _unitsNeededToKill = numOfUnits; }
+    
+    /**
+        Updates the animation frame of this unit.
+     */
+    void update(float dt);
 };
 
 #endif /* SWUnit_hpp */

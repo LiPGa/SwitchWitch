@@ -25,6 +25,7 @@ bool Unit::init(const std::string subtype, const Color color, cugl::Vec2 directi
     this->_direction = direction;
     this->_is_special_unit = special;
     this->_unitsNeededToKill = unitsNeededToKill;
+//    this->_time_since_last_frame = fmod(((float) rand() / (RAND_MAX)), this->_time_per_frame); // Initalize a random animation offset
     return true;
 }
 
@@ -46,6 +47,7 @@ bool Unit::init(const std::string subtype, const Color color, vector<cugl::Vec2>
     this->_specialAttack = specialAttack;
     this->_is_special_unit = special;
     this->_unitsNeededToKill = unitsNeededToKill;
+//    this->_time_since_last_frame = fmod(((float) rand() / (RAND_MAX)), this->_time_per_frame); // Initalize a random animation offset
     return true;
 }
 
@@ -89,4 +91,17 @@ vector<cugl::Vec2> Unit::getSpecialAttackRotated()
     std::transform(result.begin(), result.end(), result.begin(), [&](Vec2 vec)
                    { vec.rotate(getAngleBetweenDirectionAndDefault()); return Vec2(round(vec.x), round(vec.y)); });
     return result;
+}
+
+void Unit::update(float dt) {
+//    auto* _spriteNode = dynamic_cast<cugl::scene2::SpriteNode*>(_viewNode.get());
+//    if (_spriteNode) {
+    _time_since_last_frame += dt;
+    if (_time_since_last_frame > _time_per_frame) {
+        _time_since_last_frame = 0.0f;
+        int frame = _viewNode->getFrame() + 1;
+        if (frame >= _viewNode->getSize()) frame = 0;
+        _viewNode->setFrame(frame);
+    }
+//    }
 }

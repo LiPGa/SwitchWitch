@@ -13,6 +13,10 @@
 #ifndef __SW_GAME_SCENE_H__
 #define __SW_GAME_SCENE_H__
 #include <cugl/cugl.h>
+#include <cugl/scene2/actions/CUActionManager.h>
+#include <cugl/scene2/actions/CUMoveAction.h>
+#include <cugl/scene2/actions/CURotateAction.h>
+#include <cugl/scene2/actions/CUAnimateAction.h>
 #include <vector>
 #include <map>
 #include <unordered_set>
@@ -60,6 +64,8 @@ protected:
     std::unordered_map<std::string, int> _probability;
     // Mapping between unit subtypes and respawn probabilities
     std::map<std::string, float> _unitRespawnProbabilities;
+    
+//    std::unordered_map<std::string, std::shared_ptr<Action>> _actions;
     
 #pragma mark State Varibales
     /** Possible states of the level.

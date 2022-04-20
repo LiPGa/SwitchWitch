@@ -306,8 +306,19 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
 void GameScene::refreshUnitAndSquareView(shared_ptr<Square> sq) {
     auto unit = sq->getUnit();
     auto unitNode = unit->getViewNode();
+    std::string unitType = unit->getSubType();
+    std::string unitColor = Unit::colorToString(unit->getColor());
+    std::string unitIdleTextureName = unitType + "-idle-" + unitColor;
+    std::string unitDefaultTextureName = unitType + "-" + unitColor;
+    auto newViewNode = _textures.count(unitIdleTextureName) != 0 ?
+        scene2::SpriteNode::alloc(_textures.at(unitIdleTextureName), 1, 2) :
+        scene2::SpriteNode::alloc(_textures.at(unitDefaultTextureName), 1, 1);
+    auto newTexture = _textures.count(unitIdleTextureName) != 0 ?
+    _textures.at(unitIdleTextureName) : _textures.at(unitDefaultTextureName);
     std::string unitSubtype = unit->getSubType();
-    unitNode->setTexture(_textures[getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))]);
+//    unitNode->setTexture(_textures[getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))]);
+//    unit->setViewNode(newViewNode);
+    unitNode->setTexture(newTexture);
     if (unitSubtype != "basic") unit->setSpecial(true);
     else unit->setSpecial(false);
     if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
@@ -476,10 +487,11 @@ void GameScene::update(float timestep)
                 _currentState = CONFIRM_SWAP;
                 _swappingSquare = squareOnMouse;
                 // Rotation and Swapping of Model
-                //_selectedSquareOriginalDirection = _selectedSquare->getUnit()->getDirection();
-                //_swappingSquareOriginalDirection = _swappingSquare->getUnit()->getDirection();
+                _selectedSquareOriginalDirection = _selectedSquare->getUnit()->getDirection();
+                _swappingSquareOriginalDirection = _swappingSquare->getUnit()->getDirection();
                 // We do this so that we can show the attack preview, without changing the actual positional view of units.
-                _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+//                _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+                _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 squareOnMouse->getViewNode()->setTexture(_textures.at("square-swap"));
                 _attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
                 
@@ -496,8 +508,8 @@ void GameScene::update(float timestep)
                 _currentState = SELECTING_SWAP;
                 // If we are de-confirming a swap, we must undo the swap.
                 _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
-                //_selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
-                //_swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
+                _selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
+                _swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
                 for (shared_ptr<Square> square : _board->getAllSquares())
                 {
                     updateSquareTexture(square);
@@ -590,6 +602,12 @@ void GameScene::update(float timestep)
 //    }
     // Update the remaining turns
     _turn_text->setText(strtool::format("%d/%d", _turns, _level->maxTurns));
+    
+    // Animate all units
+    for (shared_ptr<Square> square : _board->getAllSquares())
+    {
+        square->getUnit()->update(timestep);
+    }
 
     // Layout everything
     _layout->layout(_guiNode.get());
@@ -720,11 +738,14 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             sq->setInteractable(unitSubType != "empty");
             sq->getViewNode()->setVisible(unitSubType != "empty");
             std::string unitPattern = getUnitType(unitSubType, unitColor);
+            std::string unitIdleTextureName = unitSubType + "-idle-" + unitColor;
             auto unitTemplate = _unitTypes.at(unitSubType);
             Unit::Color c = Unit::stringToColor(unitColor);
             shared_ptr<Unit> newUnit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType != "basic", unit->getUnitsNeededToKill());
             sq->setUnit(newUnit);
-            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
+            auto unitNode = _textures.count(unitIdleTextureName) != 0 ?
+                scene2::SpriteNode::alloc(_textures.at(unitIdleTextureName), 1, 2) :
+                scene2::SpriteNode::alloc(_textures.at(unitPattern), 1, 1);
             newUnit->setViewNode(unitNode);
             newUnit->setSpecial(unitSubType != "basic");
             if (_debug) unitNode->setAngle(newUnit->getAngleBetweenDirectionAndDefault());
