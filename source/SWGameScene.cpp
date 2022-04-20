@@ -37,7 +37,7 @@ using namespace std;
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
-    _debug = false;
+    _debug = true;
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
     if (assets == nullptr)
@@ -194,7 +194,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
 
         // store the default color:red for this type of unit
-        shared_ptr<Unit> unit = Unit::alloc(subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1));
+        shared_ptr<Unit> unit = Unit::alloc(subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1), subtypeString != "king");
         _unitTypes.insert({child->key(), unit});
     }
 
@@ -335,7 +335,10 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
 {
     Vec2 squarePos = square->getPosition();
     shared_ptr<Unit> currentUnit = square->getUnit();
-    if (_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns) { return; }
+    if (_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns) {
+        square->getViewNode()->setTexture(_textures.at("square"));
+        return;
+    }
     shared_ptr<Unit> replacementUnit = _level->getBoard(_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1)->getSquare(square->getPosition())->getUnit();
     std::string color = Unit::colorToString(replacementUnit->getColor());
     string currentDirection = Unit::directionToString(currentUnit->getDirection());
@@ -534,19 +537,22 @@ void GameScene::update(float timestep)
                     _upcomingUnitNode->setVisible(true);
                 }
             }
-            else if (_currentState == SELECTING_SWAP && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1)
+            else if (_currentState == SELECTING_SWAP && squareOnMouse->getPosition().distance(_selectedSquare->getPosition()) == 1 && _selectedSquare->getUnit()->isMoveable())
             {
+                if (!squareOnMouse->getUnit()->isMoveable()) return;
                 _upcomingUnitNode->setVisible(false);
                 _upcomingUnitNode->removeAllChildren();
 
                 _currentState = CONFIRM_SWAP;
                 _swappingSquare = squareOnMouse;
+                
                 // Rotation and Swapping of Model
-                //_selectedSquareOriginalDirection = _selectedSquare->getUnit()->getDirection();
-                //_swappingSquareOriginalDirection = _swappingSquare->getUnit()->getDirection();
+                _selectedSquareOriginalDirection = _selectedSquare->getUnit()->getDirection();
+                _swappingSquareOriginalDirection = _swappingSquare->getUnit()->getDirection();
                 // We do this so that we can show the attack preview, without changing the actual positional view of units.
                 _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 squareOnMouse->getViewNode()->setTexture(_textures.at("square-swap"));
+                _swappingSquare->getUnit()->setDirection(_swappingSquare->getPosition() - _selectedSquare->getPosition());
                 _attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
                 
                 for (shared_ptr<Square> attackedSquare : _attackedSquares)
@@ -562,7 +568,7 @@ void GameScene::update(float timestep)
                 _currentState = SELECTING_SWAP;
                 // If we are de-confirming a swap, we must undo the swap.
                 _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
-                //_selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
+                _selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
                 //_swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
                 for (shared_ptr<Square> square : _board->getAllSquares())
                 {
@@ -687,6 +693,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         std::shared_ptr<Square> replacementSquare = _selectedSquare == NULL ? NULL : _level->getBoard(_currentReplacementDepth[_board->flattenPos(_selectedSquare->getPosition().x, _selectedSquare->getPosition().y)] + 1)->getSquare(_selectedSquare->getPosition());
         std::string unitType = _selectedSquare == NULL ? "Unit Type: " : "Unit Type: " + _selectedSquare->getUnit()->getSubType();
         std::string unitColor = _selectedSquare == NULL ? "Unit Color: " : "Unit Color: " + Unit::colorToString(_selectedSquare->getUnit()->getColor());
+        std::string unitIsMoveable = _selectedSquare == NULL ? "Unit Moveable: " : (_selectedSquare->getUnit()->isMoveable() ? "true" : "false");
         std::string replacementType = replacementSquare == NULL ? "" : replacementSquare->getUnit()->getSubType();
         std::string replacementColor = replacementSquare == NULL ? "" : Unit::colorToString(replacementSquare->getUnit()->getColor());
         auto direction = _selectedSquare == NULL ? Vec2::ZERO : _selectedSquare->getUnit()->getDirection();
@@ -698,6 +705,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         batch->drawText(unitType, _turn_text->getFont(), Vec2(50, getSize().height - 100));
         batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
+        batch->drawText(unitIsMoveable, _turn_text->getFont(), Vec2(50, getSize().height - 250));
         std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
                                                                                                  : "isSpecial() = false";
         /*
@@ -789,7 +797,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             std::string unitPattern = getUnitType(unitSubType, unitColor);
             auto unitTemplate = _unitTypes.at(unitSubType);
             Unit::Color c = Unit::stringToColor(unitColor);
-            shared_ptr<Unit> newUnit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType != "basic", unit->getUnitsNeededToKill());
+            shared_ptr<Unit> newUnit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType!= "king", unitSubType != "basic", unit->getUnitsNeededToKill());
             sq->setUnit(newUnit);
             auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
             newUnit->setViewNode(unitNode);

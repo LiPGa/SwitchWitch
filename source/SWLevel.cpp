@@ -54,7 +54,7 @@ bool Level::init(int rows, int columns, shared_ptr<JsonValue> levelJSON) {
             auto unitsNeededToKill = units[i]->getInt("unitsNeededToKill");
             sq->setInteractable(unitSubType != "empty");
             auto unitColor = unitSubType == "king" ? Unit::Color::NONE : Unit::stringToColor(unitColorStr);
-            sq->setUnit(Unit::alloc(unitSubType, unitColor, unitDirection, unitSubType != "basic" && unitSubType != "random", unitsNeededToKill));
+            sq->setUnit(Unit::alloc(unitSubType, unitColor, unitDirection, unitSubType != "king", unitSubType != "basic" && unitSubType != "random" && unitSubType != "king", unitsNeededToKill));
         }
         addBoard(board);
     }
