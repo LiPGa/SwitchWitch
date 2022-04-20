@@ -195,7 +195,7 @@
             "file": "textures/star-empty.png"
         },
         "level_map": {
-            "file": "textures/main_menu_full.png"
+            "file": "textures/background_scrollable.png"
         },
         "level_one": {
             "file": "textures/level-one.png"
