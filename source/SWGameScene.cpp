@@ -523,7 +523,7 @@ void GameScene::update(float timestep)
                 auto upcomingUnitColor = Unit::colorToString(replacementSquare->getUnit()->getColor());
                 auto upcomingUnitDirection =Unit::directionToString(replacementSquare->getUnit()->getDirection());
                 auto upcomingSquarePos = _selectedSquare->getViewNode()->getPosition();
-                if (upcomingUnitType != "basic" && upcomingUnitType != "random"){
+                if (upcomingUnitType != "basic" && upcomingUnitType != "random" && upcomingUnitType != "empty") {
                     _upcomingUnitNode->setPosition(upcomingSquarePos + Vec2(0, _squareSizeAdjustedForScale));
                     _upcomingUnitNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
                     auto upcomingDirectionNode = scene2::PolygonNode::allocWithTexture(_textures.at("special_"+upcomingUnitDirection+"_square"));
@@ -694,6 +694,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         std::string unitType = _selectedSquare == NULL ? "Unit Type: " : "Unit Type: " + _selectedSquare->getUnit()->getSubType();
         std::string unitColor = _selectedSquare == NULL ? "Unit Color: " : "Unit Color: " + Unit::colorToString(_selectedSquare->getUnit()->getColor());
         std::string unitIsMoveable = _selectedSquare == NULL ? "Unit Moveable: " : (_selectedSquare->getUnit()->isMoveable() ? "true" : "false");
+        std::string squareIsInteractable = _selectedSquare == NULL ? "Interactable: " : (_selectedSquare->isInteractable() ? "true" : "false");
         std::string replacementType = replacementSquare == NULL ? "" : replacementSquare->getUnit()->getSubType();
         std::string replacementColor = replacementSquare == NULL ? "" : Unit::colorToString(replacementSquare->getUnit()->getColor());
         auto direction = _selectedSquare == NULL ? Vec2::ZERO : _selectedSquare->getUnit()->getDirection();
@@ -706,6 +707,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
         batch->drawText(unitIsMoveable, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+        batch->drawText(squareIsInteractable, _turn_text->getFont(), Vec2(50, getSize().height - 300));
         std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
                                                                                                  : "isSpecial() = false";
         /*
