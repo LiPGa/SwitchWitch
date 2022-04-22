@@ -30,7 +30,7 @@ using namespace std;
 #define PADDING_SCALE = 1.2
 
 ///** Define the time settings for animation */
-#define DURATION 10000.0f
+#define SWAP_DURATION 0.5f
 #define WALKPACE 100
 #define ACT_KEY  "current"
 #define ALT_KEY  "slide"
@@ -136,7 +136,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
 
     // Initialize state
-    _currentState = NOTHING;
+    _currentState = SELECTING_UNIT;
 
     // Initialize Board
     _board = Board::alloc(_maxBoardWidth, _maxBoardHeight);
@@ -303,10 +303,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     });
     
     // Unit movement
-    _moveleft = cugl::scene2::MoveBy::alloc(Vec2(-WALKPACE,0),DURATION);
-    _moveright = cugl::scene2::MoveBy::alloc(Vec2(WALKPACE,0),DURATION);
-    _moveup = cugl::scene2::MoveBy::alloc(Vec2(0,_squareSizeAdjustedForScale),DURATION);
-    _movedn = cugl::scene2::MoveBy::alloc(Vec2(0,_squareSizeAdjustedForScale),DURATION);
+//    _moveleft = cugl::scene2::MoveBy::alloc(Vec2(-WALKPACE,0),DURATION);
+//    _moveright = cugl::scene2::MoveBy::alloc(Vec2(WALKPACE,0),DURATION);
+    _moveleft = cugl::scene2::MoveBy::alloc(Vec2(-_squareSizeAdjustedForScale,0),SWAP_DURATION);
+    _moveright = cugl::scene2::MoveBy::alloc(Vec2(_squareSizeAdjustedForScale,0),SWAP_DURATION);
+    _moveup = cugl::scene2::MoveBy::alloc(Vec2(0,_squareSizeAdjustedForScale),SWAP_DURATION);
+    _movedn = cugl::scene2::MoveBy::alloc(Vec2(0,_squareSizeAdjustedForScale),SWAP_DURATION);
     
     return true;
 }
@@ -539,7 +541,7 @@ void GameScene::update(float timestep)
     {
         _debug = !_debug;
     }
-    if (_input.isDown())
+    if (_input.isDown() && _currentState != ANIMATION)
     {
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable())
         {
@@ -620,7 +622,7 @@ void GameScene::update(float timestep)
         }
         
     }
-    else if (_input.didRelease())
+    else if (_input.didRelease() && _currentState != ANIMATION)
     {
         _upcomingUnitNode->setVisible(false);
         _upcomingUnitNode->removeAllChildren();
@@ -631,13 +633,14 @@ void GameScene::update(float timestep)
         }
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable() && _currentState == CONFIRM_SWAP)
         {
+            _currentState = ANIMATION;
             std::map<Unit::Color, float> colorProbabilities = generateColorProbabilities();
             
             // Undo the swap for the animation
             _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
             
             // Animation
-            _occupied = true;
+//            _occupied = true;
             auto animationNodeSW = _swappingSquare->getUnit()->getViewNode();
             string direction = moveDirection(_selectedSquare, _swappingSquare);
             if (direction == "up"){
@@ -649,65 +652,73 @@ void GameScene::update(float timestep)
             } else {
                 doMove(animationNodeSW, _moveright);
             }
-            _occupied = false; // ???
+//            _occupied = false; // ???
             
 //            sleep(1);
 //            _selectedSquare->getUnit()->getViewNode()->setScale(1.0f);
             
-            if (_occupied == false) {
+//            if (_occupied == false) {
             // redo the swap
-            _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
-            
-            //  Because the units in the model where already swapped.
-            auto swappedUnitNode = _selectedSquare->getUnit()->getViewNode();
-            auto selectedUnitNode = _swappingSquare->getUnit()->getViewNode();
-            // Updating View
-            _selectedSquare->getViewNode()->removeChild(selectedUnitNode);
-            _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
-            _selectedSquare->getViewNode()->addChild(swappedUnitNode);
-            _swappingSquare->getViewNode()->addChild(selectedUnitNode);
-
-            _prevScore = _score;
-            // remove the attacked squares
-            for (shared_ptr<Square> attackedSquare : _attackedSquares)
-            {
-                auto attacked_unit = attackedSquare->getUnit();
-                if (_attackedSquares.size() < attackedSquare->getUnit()->getUnitsNeededToKill()) {
-                    continue;
-                }
-                
-//                if (attacked_unit->getSubType()=="king") {
-//                    std::string unitsNeededToKill = strtool::format("%d/%d",_attackedSquares.size(),attacked_unit->getUnitsNeededToKill());
-//                    _info_text->setText(unitsNeededToKill);
+//            _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+//
+//            //  Because the units in the model where already swapped.
+//            auto swappedUnitNode = _selectedSquare->getUnit()->getViewNode();
+//            auto selectedUnitNode = _swappingSquare->getUnit()->getViewNode();
+//            // Updating View
+//            _selectedSquare->getViewNode()->removeChild(selectedUnitNode);
+//            _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
+//            _selectedSquare->getViewNode()->addChild(swappedUnitNode);
+//            _swappingSquare->getViewNode()->addChild(selectedUnitNode);
+//
+//            _prevScore = _score;
+//            // remove the attacked squares
+//            for (shared_ptr<Square> attackedSquare : _attackedSquares)
+//            {
+//                auto attacked_unit = attackedSquare->getUnit();
+//                if (_attackedSquares.size() < attackedSquare->getUnit()->getUnitsNeededToKill()) {
+//                    continue;
 //                }
-                
-                // Replace Unit
-                Vec2 squarePos = attackedSquare->getPosition();
-                _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
-                int currentReplacementDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
-                std::shared_ptr<Square> replacementSquare = _level->getBoard(currentReplacementDepth)->getSquare(squarePos);
-                auto unitSubType = replacementSquare->getUnit()->getSubType();
-                auto unitColor = unitSubType == "random" ? generateRandomUnitColor(colorProbabilities) : replacementSquare->getUnit()->getColor();
-                auto unitDirection = unitSubType == "random" ? generateRandomDirection() : replacementSquare->getUnit()->getDirection();
-                if (unitSubType == "random") unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
-                std:string unitPattern = getUnitType(unitSubType, unitColor);
-                generateUnit(attackedSquare, unitSubType, unitColor, unitDirection, replacementSquare->getUnit()->getUnitsNeededToKill());
-
-                // Set empty squares to be uninteractable.
-                attackedSquare->setInteractable(unitSubType != "empty");
-                attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
-                refreshUnitAndSquareView(attackedSquare);
-                if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
-                _score++;
-            }
-        }
+//
+////                if (attacked_unit->getSubType()=="king") {
+////                    std::string unitsNeededToKill = strtool::format("%d/%d",_attackedSquares.size(),attacked_unit->getUnitsNeededToKill());
+////                    _info_text->setText(unitsNeededToKill);
+////                }
+//
+//                // Replace Unit
+//                Vec2 squarePos = attackedSquare->getPosition();
+//                _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
+//                int currentReplacementDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
+//                std::shared_ptr<Square> replacementSquare = _level->getBoard(currentReplacementDepth)->getSquare(squarePos);
+//                auto unitSubType = replacementSquare->getUnit()->getSubType();
+//                auto unitColor = unitSubType == "random" ? generateRandomUnitColor(colorProbabilities) : replacementSquare->getUnit()->getColor();
+//                auto unitDirection = unitSubType == "random" ? generateRandomDirection() : replacementSquare->getUnit()->getDirection();
+//                if (unitSubType == "random") unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
+//                std:string unitPattern = getUnitType(unitSubType, unitColor);
+//                generateUnit(attackedSquare, unitSubType, unitColor, unitDirection, replacementSquare->getUnit()->getUnitsNeededToKill());
+//
+//                // Set empty squares to be uninteractable.
+//                attackedSquare->setInteractable(unitSubType != "empty");
+//                attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
+//                refreshUnitAndSquareView(attackedSquare);
+//                if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
+//                _score++;
+//            }
+//            }
             
             _turns--;
 //             _prev_score = _score;
 //             _score += _attackedUnits;
+        } else {
+            _currentState = SELECTING_UNIT;
         }
+    }
+    
+    if (_currentState == ANIMATION) {
+        // if swapping animation is done
         _currentState = SELECTING_UNIT;
     }
+    
+    
     // Update the score meter
     if (_score >= _level->oneStarThreshold) _scoreMeterStar1->setTexture(_assets->get<Texture>("star_full"));
     if (_score >= _level->twoStarThreshold) _scoreMeterStar2->setTexture(_assets->get<Texture>("star_full"));

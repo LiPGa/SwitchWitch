@@ -52,8 +52,8 @@ protected:
     std::shared_ptr<cugl::scene2::MoveBy> _moveright;
     std::shared_ptr<cugl::scene2::MoveBy> _moveleft;
 
-    /** Whether we are mid animation */
-    bool _occupied;
+//    /** Whether we are mid animation */
+//    bool _occupied;
 
     // MODELS should be shared pointers or a data structure of shared pointers
     /** The JSON value for the levels */
