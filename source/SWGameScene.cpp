@@ -356,23 +356,26 @@ Vec2 GameScene::generateRandomDirection() {
 }
 
 /**
- * sets the correct square texture for a unit.
+ * sets the correct square texture for a square based on the unit on it.
  * @param square         the square being set
  * @param textures       the texture map being used
  */
 void GameScene::updateSquareTexture(shared_ptr<Square> square)
 {
     Vec2 squarePos = square->getPosition();
+    string sqTexture;
     shared_ptr<Unit> currentUnit = square->getUnit();
+    string currentDirection = Unit::directionToString(currentUnit->getDirection());
     if (_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns) {
-        square->getViewNode()->setTexture(_textures.at("square"));
+        if (currentUnit->isSpecial() && currentUnit->getSubType() != "king" && currentUnit->getSubType() != "empty") sqTexture = "special_" + currentDirection + "_square";
+        else sqTexture = "square";
+        square->getViewNode()->setTexture(_textures.at(sqTexture));
         return;
     }
     shared_ptr<Unit> replacementUnit = _level->getBoard(_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1)->getSquare(square->getPosition())->getUnit();
     std::string color = Unit::colorToString(replacementUnit->getColor());
-    string currentDirection = Unit::directionToString(currentUnit->getDirection());
     string replacementDirection = Unit::directionToString(replacementUnit->getDirection());
-    string sqTexture;
+    
     if (currentUnit->isSpecial() && (replacementUnit->getSubType() == "basic" || replacementUnit->getSubType() == "random"))
     {
         sqTexture = "special_" + currentDirection + "_square";
@@ -566,7 +569,7 @@ void GameScene::update(float timestep)
                 auto upcomingUnitColor = Unit::colorToString(replacementSquare->getUnit()->getColor());
                 auto upcomingUnitDirection =Unit::directionToString(replacementSquare->getUnit()->getDirection());
                 auto upcomingSquarePos = _selectedSquare->getViewNode()->getPosition();
-                if (upcomingUnitType != "basic" && upcomingUnitType != "random"){
+                if (upcomingUnitType != "basic" && upcomingUnitType != "random" && upcomingUnitType != "empty") {
                     _upcomingUnitNode->setPosition(upcomingSquarePos + Vec2(0, _squareSizeAdjustedForScale));
                     _upcomingUnitNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
                     auto upcomingDirectionNode = scene2::PolygonNode::allocWithTexture(_textures.at("special_"+upcomingUnitDirection+"_square"));
@@ -830,6 +833,7 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         std::string unitType = _selectedSquare == NULL ? "Unit Type: " : "Unit Type: " + _selectedSquare->getUnit()->getSubType();
         std::string unitColor = _selectedSquare == NULL ? "Unit Color: " : "Unit Color: " + Unit::colorToString(_selectedSquare->getUnit()->getColor());
         std::string unitIsMoveable = _selectedSquare == NULL ? "Unit Moveable: " : (_selectedSquare->getUnit()->isMoveable() ? "true" : "false");
+        std::string squareIsInteractable = _selectedSquare == NULL ? "Interactable: " : (_selectedSquare->isInteractable() ? "true" : "false");
         std::string replacementType = replacementSquare == NULL ? "" : replacementSquare->getUnit()->getSubType();
         std::string replacementColor = replacementSquare == NULL ? "" : Unit::colorToString(replacementSquare->getUnit()->getColor());
         auto direction = _selectedSquare == NULL ? Vec2::ZERO : _selectedSquare->getUnit()->getDirection();
@@ -841,15 +845,16 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         batch->drawText(unitType, _turn_text->getFont(), Vec2(50, getSize().height - 100));
         batch->drawText(unitColor, _turn_text->getFont(), Vec2(50, getSize().height - 150));
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
-        batch->drawText(unitIsMoveable, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+//        batch->drawText(unitIsMoveable, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+        batch->drawText(squareIsInteractable, _turn_text->getFont(), Vec2(50, getSize().height - 300));
         std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
                                                                                                  : "isSpecial() = false";
-        /*
+        
         batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
-        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 300));
-        batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 350));
-        batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 400));
-        */
+//        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 300));
+//        batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 350));
+//        batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 400));
+        
     }
 
     batch->end();
