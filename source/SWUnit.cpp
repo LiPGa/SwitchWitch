@@ -74,8 +74,8 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
             return _textureMap.count(idleTextureName) > 0 ? _textureMap.at(idleTextureName) : _textureMap.at(defaultTextureName);
         case HIT:
             return _textureMap.count(hitTextureName) > 0 ? _textureMap.at(hitTextureName)
-//            : _textureMap.at(defaultTextureName);
-            : _textureMap.at(hitTextureName);
+            : _textureMap.at(defaultTextureName);
+//            : _textureMap.at(hitTextureName);
         default:
             return _textureMap.at(defaultTextureName);
     }
@@ -87,6 +87,7 @@ void Unit::setState(State s) {
 //    if (s == _state) return;
     _state = s;
     std::shared_ptr<scene2::SpriteNode> newNode;
+    completedAnimation = false;
     switch (s) {
         case State::IDLE:
             newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 2);
@@ -150,7 +151,10 @@ void Unit::update(float dt) {
     if (_time_since_last_frame > _time_per_frame) {
         _time_since_last_frame = 0.0f;
         int frame = _viewNode->getFrame() + 1;
-        if (frame >= _viewNode->getSize()) frame = 0;
+        if (frame >= _viewNode->getSize()) {
+            frame = 0;
+            completedAnimation = true;
+        }
         _viewNode->setFrame(frame);
     }
 //    }

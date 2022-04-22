@@ -35,6 +35,9 @@ public:
         IDLE,
         HIT
     };
+    
+    /** True if the unit has completed the animation cycle of its current state */
+    bool completedAnimation = false;
 
 private:
     /**Both the basic attack and special attack of a unit is stored as a list of vectors.

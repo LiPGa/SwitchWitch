@@ -409,8 +409,8 @@ void GameScene::generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::
     unit->setSpecialAttack(unitSelected->getSpecialAttack());
     unit->setSpecial(unitType != "basic");
     unit->setUnitsNeededToKill(numberOfUnitsNeededToKill);
-//    unit->setState(Unit::State::IDLE);
-    unit->setState(Unit::State::HIT);
+    unit->setState(Unit::State::IDLE);
+//    unit->setState(Unit::State::HIT);
 //    refreshUnitAndSquareView(sq);
 }
 
@@ -533,7 +533,7 @@ void GameScene::update(float timestep)
         }
         if (attackSequenceDone) _currentState = State::SELECTING_UNIT;
     }
-    else if (_input.isDown())
+    else if (_input.isDown() && _currentState != ANIMATION)
     {
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable())
         {
@@ -606,7 +606,7 @@ void GameScene::update(float timestep)
         }
         
     }
-    else if (_input.didRelease())
+    else if (_input.didRelease() && _currentState != ANIMATION)
     {
         _upcomingUnitNode->setVisible(false);
         _upcomingUnitNode->removeAllChildren();
@@ -634,46 +634,57 @@ void GameScene::update(float timestep)
                 for (shared_ptr<Square> attackedSquare : _attackedSquares)
                 {
                     auto attacked_unit = attackedSquare->getUnit();
-                    if (_attackedSquares.size() < attackedSquare->getUnit()->getUnitsNeededToKill()) {
-                        continue;
-                    }
+                    attacked_unit->setState(Unit::State::HIT);
                     
-    //                if (attacked_unit->getSubType()=="king") {
-    //                    std::string unitsNeededToKill = strtool::format("%d/%d",_attackedSquares.size(),attacked_unit->getUnitsNeededToKill());
-    //                    _info_text->setText(unitsNeededToKill);
-    //                }
-                    
-                    // Replace Unit
-                    Vec2 squarePos = attackedSquare->getPosition();
-                    _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
-                    int currentReplacementDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
-                    std::shared_ptr<Square> replacementSquare = _level->getBoard(currentReplacementDepth)->getSquare(squarePos);
-                    auto unitSubType = replacementSquare->getUnit()->getSubType();
-                    auto unitColor = unitSubType == "random" ? generateRandomUnitColor(colorProbabilities) : replacementSquare->getUnit()->getColor();
-                    auto unitDirection = unitSubType == "random" ? generateRandomDirection() : replacementSquare->getUnit()->getDirection();
-                    if (unitSubType == "random") unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
-                    std:string unitPattern = getUnitType(unitSubType, unitColor);
-                    generateUnit(attackedSquare, unitSubType, unitColor, unitDirection, replacementSquare->getUnit()->getUnitsNeededToKill());
-
-                    // Set empty squares to be uninteractable.
-                    attackedSquare->setInteractable(unitSubType != "empty");
-                    attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
-                    refreshUnitAndSquareView(attackedSquare);
-                    if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
-                    _score++;
+//                    if (_attackedSquares.size() < attackedSquare->getUnit()->getUnitsNeededToKill()) {
+//                        continue;
+//                    }
+//
+//    //                if (attacked_unit->getSubType()=="king") {
+//    //                    std::string unitsNeededToKill = strtool::format("%d/%d",_attackedSquares.size(),attacked_unit->getUnitsNeededToKill());
+//    //                    _info_text->setText(unitsNeededToKill);
+//    //                }
+//
+//                    // Replace Unit
+//                    Vec2 squarePos = attackedSquare->getPosition();
+//                    _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
+//                    int currentReplacementDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
+//                    std::shared_ptr<Square> replacementSquare = _level->getBoard(currentReplacementDepth)->getSquare(squarePos);
+//                    auto unitSubType = replacementSquare->getUnit()->getSubType();
+//                    auto unitColor = unitSubType == "random" ? generateRandomUnitColor(colorProbabilities) : replacementSquare->getUnit()->getColor();
+//                    auto unitDirection = unitSubType == "random" ? generateRandomDirection() : replacementSquare->getUnit()->getDirection();
+//                    if (unitSubType == "random") unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
+//                    std:string unitPattern = getUnitType(unitSubType, unitColor);
+//
+////                    generateUnit(attackedSquare, unitSubType, unitColor, unitDirection, replacementSquare->getUnit()->getUnitsNeededToKill());
+//
+//                    // Set empty squares to be uninteractable.
+//                    attackedSquare->setInteractable(unitSubType != "empty");
+//                    attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
+//                    refreshUnitAndSquareView(attackedSquare);
+//                    if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
+//                    _score++;
                 }
                 _turns--;
     //             _prev_score = _score;
     //             _score += _attackedUnits;
             }
-            else {
-                _currentState = SELECTING_UNIT;
+        }
+        else _currentState = SELECTING_UNIT;
+    }
+    
+    else if (_currentState == ANIMATION) {
+        bool animationSequenceComplete = true;
+        for (auto square : _attackedSquares) {
+            auto unit = square->getUnit();
+            if (unit->getState() != Unit::State::IDLE) {
+                animationSequenceComplete = false;
+                break;
             }
         }
-        // The following line should only execute once all animations are done...
-//        _currentState = SELECTING_UNIT;
-//        _currentState = NOTHING;
+        if (animationSequenceComplete) _currentState = SELECTING_UNIT;
     }
+    
     // Update the score meter
     if (_score >= _level->oneStarThreshold) _scoreMeterStar1->setTexture(_assets->get<Texture>("star_full"));
     if (_score >= _level->twoStarThreshold) _scoreMeterStar2->setTexture(_assets->get<Texture>("star_full"));
@@ -701,6 +712,19 @@ void GameScene::update(float timestep)
     // Animate all units
     for (shared_ptr<Square> square : _board->getAllSquares())
     {
+        auto unit = square->getUnit();
+        auto unitState = unit->getState();
+        if (unit->completedAnimation) {
+            switch (unitState) {
+                case Unit::State::IDLE:
+                    break;
+                case Unit::State::HIT:
+                    unit->setState(Unit::State::IDLE);
+                    break;
+                default:
+                    break;
+            }
+        }
         square->getUnit()->update(timestep);
     }
 
