@@ -135,6 +135,7 @@ protected:
 #pragma mark -
 #pragma mark View Variables
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
+    std::shared_ptr<cugl::scene2::OrderedNode> _orderedBoardChild;
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _replacementBoardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;

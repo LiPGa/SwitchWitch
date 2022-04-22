@@ -189,8 +189,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Set the view of the board.
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height);
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _maxBoardWidth * _squareSizeAdjustedForScale, _maxBoardHeight * _squareSizeAdjustedForScale));
+    _orderedBoardChild = scene2::OrderedNode::allocWithOrder(cugl::scene2::OrderedNode::DESCEND);
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, -0.075));
     _boardNode->setTexture(_textures.at("transparent"));
+    _boardNode->addChild(_orderedBoardChild);
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
 
@@ -919,7 +921,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
         { Unit::Color(2), 0.33 }
     };
     // Create the squares & units and put them in the map
-    _board->getViewNode()->removeAllChildren();
+    _board->getViewNode()->getChild(0)->removeAllChildren();
     _board = Board::alloc(_level->getNumberOfColumns(),_level->getNumberOfRows());
     _board->setViewNode(_boardNode);
     // Set the view of the board.
@@ -933,10 +935,10 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             auto squarePosition = Vec2(i, j);
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
             squareNode->setScale(_squareScaleFactor);
-//            squareNode->setZOrder(SQUARE_Z);
+            squareNode->setPriority(SQUARE_Z);
             shared_ptr<Square> sq = _board->getSquare(squarePosition);
             sq->setViewNode(squareNode);
-            _board->getViewNode()->addChild(squareNode);
+            _board->getViewNode()->getChild(0)->addChild(squareNode);
             // Generate unit for this square
             auto unit = _level->getBoard(0)->getSquare(squarePosition)->getUnit();
             auto unitSubType = unit->getSubType();
@@ -957,7 +959,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             sq->setUnit(newUnit);
             auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
             unitNode->setAnchor(Vec2::ANCHOR_CENTER);
-//            unitNode->setZOrder(UNIT_Z);
+            unitNode->setPriority(UNIT_Z);
             newUnit->setViewNode(unitNode);
             newUnit->setSpecial(unitSubType != "basic");
             if (_debug) unitNode->setAngle(newUnit->getAngleBetweenDirectionAndDefault());
