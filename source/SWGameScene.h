@@ -67,6 +67,7 @@ protected:
     int _maxBoardHeight;
     int _defaultSquareSize;
     int _squareSizeAdjustedForScale;
+    float _squareScaleFactor;
     
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
@@ -323,7 +324,7 @@ public:
      *
      * @param action The move action
      */
-    void doMove(shared_ptr<cugl::scene2::PolygonNode> viewNode, const std::shared_ptr<cugl::scene2::MoveBy>& action);
+    void doMove(std::string act_key, shared_ptr<cugl::scene2::PolygonNode> viewNode, const std::shared_ptr<cugl::scene2::MoveBy>& action);
     
     /**
      * Check the direction that the selectedSq is moving to
@@ -391,6 +392,8 @@ private:
     }
     
     void loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> unitNode);
+    
+    void updateModelPostSwap();
     
     /**
      * Generate a unit on the given square.
