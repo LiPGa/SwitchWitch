@@ -16,12 +16,28 @@
 #include <sstream>
 #include <math.h>
 #include <algorithm>
+#include <cugl/scene2/actions/CUMoveAction.h>
+#include <cugl/scene2/actions/CUScaleAction.h>
+#include <cugl/scene2/actions/CUFadeAction.h>
+#include <cugl/scene2/actions/CUAnimateAction.h>
+#include <cugl/math/CUEasingBezier.h>
+#include <unistd.h>
 
 #include "SWGameScene.h"
 
 using namespace cugl;
 using namespace std;
 #define PADDING_SCALE = 1.2
+
+///** Define the time settings for animation */
+#define DURATION 10000.0f
+#define WALKPACE 100
+#define ACT_KEY  "current"
+#define ALT_KEY  "slide"
+
+/** How large the unit should be for tween*/
+#define ENLARGE 1.25f
+#define BACK2NORMAL 1.0f
 
 #pragma mark Constructors
 
@@ -66,6 +82,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Initialize Variables
     _assets = assets;
+    
+    // Allocate the manager and the actions
+    _actions = cugl::scene2::ActionManager::alloc();
     
     // Seed the random number generator to a new seed
     srand(static_cast<int>(time(NULL)));
@@ -282,6 +301,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _didGoToLevelMap = true;
         }
     });
+    
+    // Unit movement
+    _moveleft = cugl::scene2::MoveBy::alloc(Vec2(-WALKPACE,0),DURATION);
+    _moveright = cugl::scene2::MoveBy::alloc(Vec2(WALKPACE,0),DURATION);
+    _moveup = cugl::scene2::MoveBy::alloc(Vec2(0,_squareSizeAdjustedForScale),DURATION);
+    _movedn = cugl::scene2::MoveBy::alloc(Vec2(0,_squareSizeAdjustedForScale),DURATION);
+    
     return true;
 }
 
@@ -441,6 +467,12 @@ void GameScene::dispose()
         _restartbutton = nullptr;
         _backbutton = nullptr;
         _active = false;
+        _input.dispose();
+        _moveup = nullptr;
+        _movedn = nullptr;
+        _moveleft = nullptr;
+        _moveright = nullptr;
+        Scene2::dispose();
     }
 }
 
@@ -518,6 +550,15 @@ void GameScene::update(float timestep)
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
                 _currentState = SELECTING_SWAP;
                 
+                // Restore the size of the previous enlarged unitNode
+                if (_enlargedUnitNode != NULL){
+                    _enlargedUnitNode->setScale(BACK2NORMAL);
+                }
+                
+                // Enlarge the new selected unit
+                _enlargedUnitNode = _selectedSquare->getUnit()->getViewNode();
+                _enlargedUnitNode->setScale(ENLARGE);
+                
                 std::shared_ptr<Square> replacementSquare = _selectedSquare == NULL ? NULL : _level->getBoard(_currentReplacementDepth[_board->flattenPos(_selectedSquare->getPosition().x, _selectedSquare->getPosition().y)] + 1)->getSquare(_selectedSquare->getPosition());
                 auto upcomingUnitType = replacementSquare->getUnit()->getSubType();
                 auto upcomingUnitColor = Unit::colorToString(replacementSquare->getUnit()->getColor());
@@ -591,6 +632,32 @@ void GameScene::update(float timestep)
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable() && _currentState == CONFIRM_SWAP)
         {
             std::map<Unit::Color, float> colorProbabilities = generateColorProbabilities();
+            
+            // Undo the swap for the animation
+            _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+            
+            // Animation
+            _occupied = true;
+            auto animationNodeSW = _swappingSquare->getUnit()->getViewNode();
+            string direction = moveDirection(_selectedSquare, _swappingSquare);
+            if (direction == "up"){
+                doMove(animationNodeSW,_moveup);
+            } else if (direction == "down"){
+                doMove(animationNodeSW, _movedn);
+            } else if (direction == "left"){
+                doMove(animationNodeSW,_moveleft);
+            } else {
+                doMove(animationNodeSW, _moveright);
+            }
+            _occupied = false; // ???
+            
+//            sleep(1);
+//            _selectedSquare->getUnit()->getViewNode()->setScale(1.0f);
+            
+            if (_occupied == false) {
+            // redo the swap
+            _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+            
             //  Because the units in the model where already swapped.
             auto swappedUnitNode = _selectedSquare->getUnit()->getViewNode();
             auto selectedUnitNode = _swappingSquare->getUnit()->getViewNode();
@@ -633,10 +700,12 @@ void GameScene::update(float timestep)
                 if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
                 _score++;
             }
+        }
+            
             _turns--;
 //             _prev_score = _score;
 //             _score += _attackedUnits;
-        }  
+        }
         _currentState = SELECTING_UNIT;
     }
     // Update the score meter
@@ -665,6 +734,62 @@ void GameScene::update(float timestep)
 
     // Layout everything
     _layout->layout(_guiNode.get());
+    
+    // Animate
+     _actions->update(timestep);
+}
+
+/**
+ * Performs a move action
+ *
+ * @param action The move action
+ */
+void GameScene::doMove(shared_ptr<cugl::scene2::PolygonNode> viewNode,const std::shared_ptr<cugl::scene2::MoveBy>& action) {
+    if (!viewNode->isVisible()) {
+        CULog("Not Visible");
+        return;
+    }
+    if (_actions->isActive(ACT_KEY)) {
+        CULog("You must wait for the animation to complete first");
+    } else {
+        auto fcn = EasingFunction::alloc(EasingFunction::Type::LINEAR);
+        _actions->activate(ACT_KEY, action, viewNode, fcn);
+        CULog("doMove is called");
+    }
+}
+
+/**
+ * Check the direction that the selectedSq is moving to
+ *
+ * @param the selected square
+ * @param the square will be swapped with the selected square
+ *
+ * @return the direction the selected square is moving to
+ */
+string GameScene::moveDirection(shared_ptr<Square> selectedSq, shared_ptr<Square> swappingSq) {
+    Vec2 selectedPos = selectedSq -> getPosition();
+    int x1 = (int)selectedPos.x;
+    int y1 = (int)selectedPos.y;
+    
+    Vec2 swappingPos = swappingSq -> getPosition();
+    int x2 = (int)swappingPos.x;
+    int y2 = (int)swappingPos.y;
+    
+    string direction;
+    if (x1 == x2 && y1 != y2) {
+        if (y1 - y2 == 1){
+            direction = "down";
+        } else if (y1 - y2 == -1) {
+            direction = "up";
+        }
+    } else if (y1 == y2 && x1 != x2) {
+        if (x1 - x2 == 1) {
+            direction = "left";
+        } else if (x1 - x2 == -1) {
+            direction = "right";
+        }
+    }
+    return direction;
 }
 
 #pragma mark -
@@ -805,6 +930,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             shared_ptr<Unit> newUnit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType!= "king", unitSubType != "basic", unit->getUnitsNeededToKill());
             sq->setUnit(newUnit);
             auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
+            unitNode->setAnchor(Vec2::ANCHOR_CENTER);
             newUnit->setViewNode(unitNode);
             newUnit->setSpecial(unitSubType != "basic");
             if (_debug) unitNode->setAngle(newUnit->getAngleBetweenDirectionAndDefault());
