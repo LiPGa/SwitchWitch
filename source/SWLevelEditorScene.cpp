@@ -241,7 +241,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         }
 
         // store the default color:red for this type of unit
-        shared_ptr<Unit> unit = Unit::alloc(subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1), subtypeString != "king");
+        shared_ptr<Unit> unit = Unit::alloc(_textures, subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1), subtypeString != "king");
         _unitTypes.insert({ child->key(), unit });
     }
 
@@ -313,7 +313,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     }
 
     // Initialize Level
-    _level = Level::alloc(_maxBoardWidth, _maxBoardHeight);
+    _level = Level::alloc(_textures, _maxBoardWidth, _maxBoardHeight);
     _level->addBoard(allocBasicBoard(_maxBoardWidth, _maxBoardHeight));
 
     // Initialize Turn Counter
@@ -555,7 +555,7 @@ shared_ptr<Board> LevelEditorScene::allocBasicBoard(int width, int height) {
             Vec2 unitDirection = Unit::getDefaultDirection();
             auto unitTemplate = _unitTypes.at(unitSubType);
             Unit::Color c = Unit::stringToColor(unitColor);
-            shared_ptr<Unit> unit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType != "king");
+            shared_ptr<Unit> unit = Unit::alloc(_textures, unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType != "king");
             sq->setUnit(unit);
         }
     }
@@ -621,7 +621,7 @@ void LevelEditorScene::showBoard() {
     _changeBoardSizeButton->setColor(Color4::BLUE);
     if (_rows != _level->getNumberOfRows() || _columns != _level->getNumberOfColumns()) {
         // Initialize Level
-        auto newLevel = Level::alloc(_columns, _rows);
+        auto newLevel = Level::alloc(_textures, _columns, _rows);
         newLevel->addBoard(allocBasicBoard(_columns, _rows));
         setLevel(newLevel);
     }

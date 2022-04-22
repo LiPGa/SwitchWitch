@@ -117,7 +117,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
 
     // Initialize state
-    _currentState = NOTHING;
+//    _currentState = NOTHING;
+    _currentState = SELECTING_UNIT;
 
     // Initialize Board
     _board = Board::alloc(_maxBoardWidth, _maxBoardHeight);
@@ -195,7 +196,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
 
         // store the default color:red for this type of unit
-        shared_ptr<Unit> unit = Unit::alloc(subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1), subtypeString != "king");
+        shared_ptr<Unit> unit = Unit::alloc(_textures, subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1), subtypeString != "king");
         _unitTypes.insert({child->key(), unit});
     }
 
@@ -372,15 +373,17 @@ void GameScene::refreshUnitAndSquareView(shared_ptr<Square> sq) {
     std::string unitColor = Unit::colorToString(unit->getColor());
     std::string unitIdleTextureName = unitType + "-idle-" + unitColor;
     std::string unitDefaultTextureName = unitType + "-" + unitColor;
-    auto newViewNode = _textures.count(unitIdleTextureName) != 0 ?
-        scene2::SpriteNode::alloc(_textures.at(unitIdleTextureName), 1, 2) :
-        scene2::SpriteNode::alloc(_textures.at(unitDefaultTextureName), 1, 1);
-    auto newTexture = _textures.count(unitIdleTextureName) != 0 ?
-    _textures.at(unitIdleTextureName) : _textures.at(unitDefaultTextureName);
+//    auto newViewNode = _textures.count(unitIdleTextureName) != 0 ?
+//        scene2::SpriteNode::alloc(_textures.at(unitIdleTextureName), 1, 2) :
+//        scene2::SpriteNode::alloc(_textures.at(unitDefaultTextureName), 1, 1);
+//    auto newTexture = _textures.count(unitIdleTextureName) != 0 ?
+//    _textures.at(unitIdleTextureName) : _textures.at(unitDefaultTextureName);
     std::string unitSubtype = unit->getSubType();
 //    unitNode->setTexture(_textures[getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))]);
 //    unit->setViewNode(newViewNode);
-    unitNode->setTexture(newTexture);
+//    unitNode->setTexture(newTexture);
+    sq->getViewNode()->removeAllChildren();
+    sq->getViewNode()->addChild(unitNode);
     if (unitSubtype != "basic") unit->setSpecial(true);
     else unit->setSpecial(false);
     if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
@@ -406,6 +409,8 @@ void GameScene::generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::
     unit->setSpecialAttack(unitSelected->getSpecialAttack());
     unit->setSpecial(unitType != "basic");
     unit->setUnitsNeededToKill(numberOfUnitsNeededToKill);
+//    unit->setState(Unit::State::IDLE);
+    unit->setState(Unit::State::HIT);
 //    refreshUnitAndSquareView(sq);
 }
 
@@ -518,7 +523,17 @@ void GameScene::update(float timestep)
     {
         _debug = !_debug;
     }
-    if (_input.isDown())
+    if (_currentState == State::ANIMATION) {
+        bool attackSequenceDone = true;
+        for (auto sq : _attackedSquares) {
+            if (sq->getUnit()->getState() != Unit::State::IDLE) {
+                attackSequenceDone = false;
+                break;
+            }
+        }
+        if (attackSequenceDone) _currentState = State::SELECTING_UNIT;
+    }
+    else if (_input.isDown())
     {
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable())
         {
@@ -600,56 +615,64 @@ void GameScene::update(float timestep)
         {
             updateSquareTexture(square);
         }
-        if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable() && _currentState == CONFIRM_SWAP)
-        {
-            std::map<Unit::Color, float> colorProbabilities = generateColorProbabilities();
-            //  Because the units in the model where already swapped.
-            auto swappedUnitNode = _selectedSquare->getUnit()->getViewNode();
-            auto selectedUnitNode = _swappingSquare->getUnit()->getViewNode();
-            // Updating View
-            _selectedSquare->getViewNode()->removeChild(selectedUnitNode);
-            _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
-            _selectedSquare->getViewNode()->addChild(swappedUnitNode);
-            _swappingSquare->getViewNode()->addChild(selectedUnitNode);
-
-            _prevScore = _score;
-            // remove the attacked squares
-            for (shared_ptr<Square> attackedSquare : _attackedSquares)
+        if (_currentState == CONFIRM_SWAP) {
+            if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable())
             {
-                auto attacked_unit = attackedSquare->getUnit();
-                if (_attackedSquares.size() < attackedSquare->getUnit()->getUnitsNeededToKill()) {
-                    continue;
-                }
-                
-//                if (attacked_unit->getSubType()=="king") {
-//                    std::string unitsNeededToKill = strtool::format("%d/%d",_attackedSquares.size(),attacked_unit->getUnitsNeededToKill());
-//                    _info_text->setText(unitsNeededToKill);
-//                }
-                
-                // Replace Unit
-                Vec2 squarePos = attackedSquare->getPosition();
-                _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
-                int currentReplacementDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
-                std::shared_ptr<Square> replacementSquare = _level->getBoard(currentReplacementDepth)->getSquare(squarePos);
-                auto unitSubType = replacementSquare->getUnit()->getSubType();
-                auto unitColor = unitSubType == "random" ? generateRandomUnitColor(colorProbabilities) : replacementSquare->getUnit()->getColor();
-                auto unitDirection = unitSubType == "random" ? generateRandomDirection() : replacementSquare->getUnit()->getDirection();
-                if (unitSubType == "random") unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
-                std:string unitPattern = getUnitType(unitSubType, unitColor);
-                generateUnit(attackedSquare, unitSubType, unitColor, unitDirection, replacementSquare->getUnit()->getUnitsNeededToKill());
+                _currentState = State::ANIMATION;
+                std::map<Unit::Color, float> colorProbabilities = generateColorProbabilities();
+                //  Because the units in the model where already swapped.
+                auto swappedUnitNode = _selectedSquare->getUnit()->getViewNode();
+                auto selectedUnitNode = _swappingSquare->getUnit()->getViewNode();
+                // Updating View
+                _selectedSquare->getViewNode()->removeChild(selectedUnitNode);
+                _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
+                _selectedSquare->getViewNode()->addChild(swappedUnitNode);
+                _swappingSquare->getViewNode()->addChild(selectedUnitNode);
 
-                // Set empty squares to be uninteractable.
-                attackedSquare->setInteractable(unitSubType != "empty");
-                attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
-                refreshUnitAndSquareView(attackedSquare);
-                if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
-                _score++;
+                _prevScore = _score;
+                // remove the attacked squares
+                for (shared_ptr<Square> attackedSquare : _attackedSquares)
+                {
+                    auto attacked_unit = attackedSquare->getUnit();
+                    if (_attackedSquares.size() < attackedSquare->getUnit()->getUnitsNeededToKill()) {
+                        continue;
+                    }
+                    
+    //                if (attacked_unit->getSubType()=="king") {
+    //                    std::string unitsNeededToKill = strtool::format("%d/%d",_attackedSquares.size(),attacked_unit->getUnitsNeededToKill());
+    //                    _info_text->setText(unitsNeededToKill);
+    //                }
+                    
+                    // Replace Unit
+                    Vec2 squarePos = attackedSquare->getPosition();
+                    _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
+                    int currentReplacementDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
+                    std::shared_ptr<Square> replacementSquare = _level->getBoard(currentReplacementDepth)->getSquare(squarePos);
+                    auto unitSubType = replacementSquare->getUnit()->getSubType();
+                    auto unitColor = unitSubType == "random" ? generateRandomUnitColor(colorProbabilities) : replacementSquare->getUnit()->getColor();
+                    auto unitDirection = unitSubType == "random" ? generateRandomDirection() : replacementSquare->getUnit()->getDirection();
+                    if (unitSubType == "random") unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
+                    std:string unitPattern = getUnitType(unitSubType, unitColor);
+                    generateUnit(attackedSquare, unitSubType, unitColor, unitDirection, replacementSquare->getUnit()->getUnitsNeededToKill());
+
+                    // Set empty squares to be uninteractable.
+                    attackedSquare->setInteractable(unitSubType != "empty");
+                    attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
+                    refreshUnitAndSquareView(attackedSquare);
+                    if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
+                    _score++;
+                }
+                _turns--;
+    //             _prev_score = _score;
+    //             _score += _attackedUnits;
             }
-            _turns--;
-//             _prev_score = _score;
-//             _score += _attackedUnits;
-        }  
-        _currentState = SELECTING_UNIT;
+            else {
+                _currentState = SELECTING_UNIT;
+            }
+        }
+        // The following line should only execute once all animations are done...
+//        _currentState = SELECTING_UNIT;
+//        _currentState = NOTHING;
     }
     // Update the score meter
     if (_score >= _level->oneStarThreshold) _scoreMeterStar1->setTexture(_assets->get<Texture>("star_full"));
@@ -776,7 +799,7 @@ void GameScene::setActive(bool value)
 
 void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _levelJson = levelJSON;
-    _level = Level::alloc(levelJSON);
+    _level = Level::alloc(_textures, levelJSON);
     vector<int> vector(_level->getNumberOfRows() * _level->getNumberOfColumns(), 0);
     _currentReplacementDepth = vector;
     _score = 0;
@@ -821,12 +844,10 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             std::string unitIdleTextureName = unitSubType + "-idle-" + unitColor;
             auto unitTemplate = _unitTypes.at(unitSubType);
             Unit::Color c = Unit::stringToColor(unitColor);
-            shared_ptr<Unit> newUnit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType!= "king", unitSubType != "basic", unit->getUnitsNeededToKill());
+            shared_ptr<Unit> newUnit = Unit::alloc(_textures, unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType!= "king", unitSubType != "basic", unit->getUnitsNeededToKill());
             sq->setUnit(newUnit);
-            auto unitNode = _textures.count(unitIdleTextureName) != 0 ?
-                scene2::SpriteNode::alloc(_textures.at(unitIdleTextureName), 1, 2) :
-                scene2::SpriteNode::alloc(_textures.at(unitPattern), 1, 1);
-            newUnit->setViewNode(unitNode);
+            newUnit->setState(Unit::State::IDLE);
+            auto unitNode = newUnit->getViewNode();
             newUnit->setSpecial(unitSubType != "basic");
             if (_debug) unitNode->setAngle(newUnit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);

@@ -43,7 +43,7 @@ public:
 //    }
     
 private:
-    shared_ptr<cugl::scene2::PolygonNode> _viewNode;
+    shared_ptr<cugl::scene2::SpriteNode> _viewNode;
     
 //    ObjectType _objType;
     

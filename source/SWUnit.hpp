@@ -32,7 +32,8 @@ public:
     
     enum State
     {
-        IDLE
+        IDLE,
+        HIT
     };
 
 private:
@@ -62,8 +63,8 @@ private:
     /** The state of this unit. */
     State _state = IDLE;
     
-    /** This map stores the corresponding sprite */
-    unordered_map<State, shared_ptr<cugl::scene2::SpriteNode>> spriteNodeMap;
+    /** This map stores a texture for every state the unit can take */
+    unordered_map<std::string, shared_ptr<Texture>> _textureMap;
 
     /** The Sprite-Node that represents this unit */
     shared_ptr<cugl::scene2::SpriteNode> _viewNode;
@@ -109,10 +110,14 @@ public:
      * @param direction the direction the unit is facing
      * @return true if initialization was successful.
      */
-    bool init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0);
+    bool init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0);
 
 
-    bool init(const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill);
+    bool init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill);
+    
+    std::shared_ptr<cugl::Texture> getTextureForUnit(const std::string subtype, const Color color, const State state);
+    
+//    void initalizeTextureMap(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color);
 #pragma mark -
 #pragma mark Static Constructors
     /**
@@ -124,9 +129,9 @@ public:
      * @param direction the direction the unit is facing
      * @return a newly allocated Unit.
      */
-    static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0) {
+    static std::shared_ptr<Unit>alloc(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0) {
         std::shared_ptr<Unit> result = std::make_shared<Unit>();
-        return (result->init(subtype, color, basicAttack, specialAttack, direction, moveable, special, unitsNeededToKill) ? result : nullptr);
+        return (result->init(textures, subtype, color, basicAttack, specialAttack, direction, moveable, special, unitsNeededToKill) ? result : nullptr);
     }
 
     /**
@@ -136,9 +141,9 @@ public:
      * @param direction the direction the unit is facing
      * @return a newly allocated Unit.
      */
-    static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0) {
+    static std::shared_ptr<Unit>alloc(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0) {
         std::shared_ptr<Unit> result = std::make_shared<Unit>();
-        return (result->init(subtype, color, direction, moveable, special, unitsNeededToKill) ? result : nullptr);
+        return (result->init(textures, subtype, color, direction, moveable, special, unitsNeededToKill) ? result : nullptr);
     }
 
 #pragma mark -
@@ -183,6 +188,24 @@ public:
             return "blue";
         default:
             return "red";
+        }
+    }
+    
+    
+    /**
+     * Returns the string data representation of the state according to JSON conventions
+     *
+     * @param s the state
+     * @returns the string of the state
+     */
+    static std::string stateToString(State s)
+    {
+        switch (s)
+        {
+        case State::IDLE:
+            return "idle";
+        default:
+            return "idle";
         }
     }
     
@@ -314,7 +337,7 @@ public:
      *
      * @param s the state of the unit.
      */
-    void setState(State s) { _state = s; }
+    void setState(State s);
 
     /**
      * Returns the direction which the unit is currently facing.

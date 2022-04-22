@@ -9,6 +9,13 @@
 #include "SWUnit.hpp"
 using namespace cugl;
 
+//void Unit::initalizeTextureMap(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, std::string subtype, Unit::Color color) {
+//    std::string colorString = Unit::colorToString(color);
+//    std::string defaultTextureName = subtype + "-" + colorString;
+//    std::string idleTextureName = subtype + "-idle-" + colorString;
+//    _textureMap[State::IDLE] = textures.count(idleTextureName) > 0 ? textures.at(idleTextureName) : textures.at(defaultTextureName);
+//}
+
 /**
  * Initializes a unit given a color, direction, basic attack pattern, and special attack pattern.
  *
@@ -18,7 +25,7 @@ using namespace cugl;
  * @param direction the direction the unit is facing
  * @return true if initialization was successful.
  */
-bool Unit::init(const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill)
+bool Unit::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill)
 {
     this->_subtype = subtype;
     this->_color = color;
@@ -26,7 +33,9 @@ bool Unit::init(const std::string subtype, const Color color, cugl::Vec2 directi
     this->_is_special_unit = special;
     this->_moveable = moveable;
     this->_unitsNeededToKill = unitsNeededToKill;
+    this->_textureMap = textures;
 //    this->_time_since_last_frame = fmod(((float) rand() / (RAND_MAX)), this->_time_per_frame); // Initalize a random animation offset
+//    initalizeTextureMap(textures, subtype, color);
     return true;
 }
 
@@ -39,7 +48,7 @@ bool Unit::init(const std::string subtype, const Color color, cugl::Vec2 directi
  * @param direction the direction the unit is facing
  * @return true if initialization was successful.
  */
-bool Unit::init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill)
+bool Unit::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill)
 {
     this->_subtype = subtype;
     this->_color = color;
@@ -49,8 +58,47 @@ bool Unit::init(const std::string subtype, const Color color, vector<cugl::Vec2>
     this->_moveable = moveable;
     this->_is_special_unit = special;
     this->_unitsNeededToKill = unitsNeededToKill;
+    this->_textureMap = textures;
 //    this->_time_since_last_frame = fmod(((float) rand() / (RAND_MAX)), this->_time_per_frame); // Initalize a random animation offset
+//    initalizeTextureMap(textures, subtype, color);
     return true;
+}
+
+std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype, const Color color, const State state) {
+    std::string colorString = Unit::colorToString(color);
+    std::string defaultTextureName = subtype + "-" + colorString;
+    std::string idleTextureName = subtype + "-idle-" + colorString;
+    std::string hitTextureName = subtype + "-hit-" + colorString;
+    switch (state) {
+        case IDLE:
+            return _textureMap.count(idleTextureName) > 0 ? _textureMap.at(idleTextureName) : _textureMap.at(defaultTextureName);
+        case HIT:
+            return _textureMap.count(hitTextureName) > 0 ? _textureMap.at(hitTextureName)
+//            : _textureMap.at(defaultTextureName);
+            : _textureMap.at(hitTextureName);
+        default:
+            return _textureMap.at(defaultTextureName);
+    }
+}
+
+
+
+void Unit::setState(State s) {
+//    if (s == _state) return;
+    _state = s;
+    std::shared_ptr<scene2::SpriteNode> newNode;
+    switch (s) {
+        case State::IDLE:
+            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 2);
+            break;
+        case State::HIT:
+            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 1);
+            break;
+        default:
+            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 1);
+            
+    }
+    _viewNode = newNode;
 }
 
 /**

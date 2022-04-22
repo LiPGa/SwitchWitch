@@ -125,6 +125,15 @@
         "basic-idle-blue": {
             "file": "textures/basic_idle_blue.png"
         },
+        "basic-hit-red": {
+            "file": "textures/basic_hit_red.png"
+        },
+        "basic-hit-green": {
+            "file": "textures/basic_hit_green.png"
+        },
+        "basic-hit-blue": {
+            "file": "textures/basic_hit_blue.png"
+        },
         "diagonal-blue": {
             "file": "textures/diagonal_blue.png"
         },
@@ -146,6 +155,15 @@
         "diagonal-idle-green": {
             "file": "textures/diagonal_idle_green.png"
         },
+        "diagonal-hit-blue": {
+            "file": "textures/diagonal_hit_blue.png"
+        },
+        "diagonal-hit-red": {
+            "file": "textures/diagonal_hit_red.png"
+        },
+        "diagonal-hit-green": {
+            "file": "textures/diagonal_hit_green.png"
+        },
         "three-way-blue": {
             "file": "textures/three_way_blue_unit.png"
         },
@@ -164,6 +182,15 @@
         "three-way-idle-blue": {
             "file": "textures/three_way_idle_blue.png"
         },
+        "three-way-hit-red": {
+            "file": "textures/three_way_hit_red.png"
+        },
+        "three-way-hit-green": {
+            "file": "textures/three_way_hit_green.png"
+        },
+        "three-way-hit-blue": {
+            "file": "textures/three_way_hit_blue.png"
+        },
         "two-forward-blue": {
             "file": "textures/two_forward_blue_unit.png"
         },
@@ -181,6 +208,15 @@
         },
         "two-forward-idle-blue": {
             "file": "textures/two_forward_idle_blue.png"
+        },
+        "two-forward-hit-red": {
+            "file": "textures/two_forward_hit_red.png"
+        },
+        "two-forward-hit-green": {
+            "file": "textures/two_forward_hit_green.png"
+        },
+        "two-forward-hit-blue": {
+            "file": "textures/two_forward_hit_blue.png"
         },
         "next-special-square": {
             "file": "textures/next_special_square.png"
