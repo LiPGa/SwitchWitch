@@ -282,6 +282,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _didGoToLevelMap = true;
         }
     });
+    _kingsKilled = false;
     return true;
 }
 
@@ -468,10 +469,10 @@ void GameScene::update(float timestep)
     // Read the input
     _input.update();
     
-    if (_turns == 0 && _didRestart == true) reset(_levelJson);
+    if (_didRestart == true) reset(_levelJson);
     if (_didRestart == true && _didPause == true) reset(_levelJson);
 
-    if (_turns == 0)
+    if (_turns == 0 || _kingsKilled)
     {
         // Show results screen
         _resultLayout->setVisible(true);
@@ -605,8 +606,18 @@ void GameScene::update(float timestep)
 
             _prevScore = _score;
             // remove the attacked squares
+            int scoreNum = 0;
+            bool plusScore = false;
             for (shared_ptr<Square> attackedSquare : _attackedSquares)
             {
+                CULog("plusScore: %i", plusScore);
+                CULog("kingsKilled: %i", _kingsKilled);
+                if (attackedSquare->getUnit()->getSubType() == "king") {
+                    _kingsKilled = true;
+                    plusScore = true;
+                    CULog("true");
+                }
+                CULog("%s", attackedSquare->getUnit()->getSubType().c_str());
                 auto attacked_unit = attackedSquare->getUnit();
                 if (_attackedSquares.size() < attackedSquare->getUnit()->getUnitsNeededToKill()) {
                     continue;
@@ -633,9 +644,12 @@ void GameScene::update(float timestep)
                 attackedSquare->setInteractable(unitSubType != "empty");
                 attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
                 refreshUnitAndSquareView(attackedSquare);
-                if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
-                _score++;
+                if (unitSubType == "king") { loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
+                }
+                scoreNum++;
             }
+            if (plusScore)
+                _score += scoreNum;
             _turns--;
 //             _prev_score = _score;
 //             _score += _attackedUnits;
