@@ -646,7 +646,8 @@ void GameScene::update(float timestep)
             
             
             // Undo the swap for the animation
-            _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+//            _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+            _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
             
             // Animation
             auto animationNodeSWA = _swappingSquare->getUnit()->getViewNode();
