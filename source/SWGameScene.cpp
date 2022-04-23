@@ -475,6 +475,7 @@ void GameScene::update(float timestep)
     if (_turns == 0 || _kingsKilled)
     {
         // Show results screen
+        showResultText(_kingsKilled && _level->getNumberOfStars(_score) >= 3, _guiNode);
         _resultLayout->setVisible(true);
         _restartbutton->activate();
         _backbutton->activate();
@@ -858,6 +859,22 @@ void GameScene::loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_p
     _info_text->setColor(Color4::RED);
     _info_text->setPosition(Vec2(unitNode->getPosition().x+Vec2::ONE.x, unitNode->getPosition().y+Vec2::ONE.y));
     unitNode->addChildWithName(_info_text, "info");
+//    CULog("text has priority of %f", _info_text->getPriority());
+//    CULog("unit has priority of %f", unitNode->getPriority());
+}
+
+void GameScene::showResultText(bool success, std::shared_ptr<cugl::scene2::SceneNode> node) {
+    std::string resultText;
+    if (success) {
+        resultText = strtool::format("You win!");
+    } else {
+        resultText = strtool::format("You lose!");
+    }
+    auto text = scene2::Label::allocWithText(resultText, _assets->get<Font>("pixel32"));
+    text->setScale(1);
+    text->setColor(Color4::RED);
+    text->setPosition(Vec2(100, 400));
+    node->addChildWithName(text, "info");
 //    CULog("text has priority of %f", _info_text->getPriority());
 //    CULog("unit has priority of %f", unitNode->getPriority());
 }

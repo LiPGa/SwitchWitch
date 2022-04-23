@@ -384,6 +384,8 @@ private:
      * @param textures       the texture map being used
      */
     void updateSquareTexture(shared_ptr<Square> square);
+    
+    void showResultText(bool success, std::shared_ptr<cugl::scene2::SceneNode> node);
 };
 
 #endif /* __SW_GAME_SCENE_H__ */
