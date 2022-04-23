@@ -659,8 +659,6 @@ void GameScene::update(float timestep)
                 doMove("swapA", animationNodeSWA, _moveright);
                 doMove("swapB", animationNodeSWB,_moveleft);
             }
-            if (plusScore)
-                _score += scoreNum;
             _turns--;
         } else {
             _currentState = SELECTING_UNIT;
