@@ -458,6 +458,22 @@ std::map<Unit::Color, float> GameScene::generateColorProbabilities() {
     return probs;
 }
 
+void GameScene::deconfirmSwap() {
+    _upcomingUnitNode->setVisible(false);
+    _upcomingUnitNode->removeAllChildren();
+
+    _currentState = SELECTING_SWAP;
+    // If we are de-confirming a swap, we must undo the swap.
+    _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+    _selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
+    //_swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
+    for (shared_ptr<Square> square : _board->getAllSquares())
+    {
+        updateSquareTexture(square);
+    }
+    _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
+}
+
 
 /**
  * Disposes of all (non-static) resources allocated to this mode.
@@ -607,20 +623,10 @@ void GameScene::update(float timestep)
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
             {
-                _upcomingUnitNode->setVisible(false);
-                _upcomingUnitNode->removeAllChildren();
-
-                _currentState = SELECTING_SWAP;
-                // If we are de-confirming a swap, we must undo the swap.
-                _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
-                _selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
-                //_swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
-                for (shared_ptr<Square> square : _board->getAllSquares())
-                {
-                    updateSquareTexture(square);
-                }
-                _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
+                deconfirmSwap();
             }
+        } else if (_currentState == CONFIRM_SWAP) {
+            deconfirmSwap();
         }
         
     }
@@ -640,7 +646,8 @@ void GameScene::update(float timestep)
             
             
             // Undo the swap for the animation
-            _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+//            _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+            _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
             
             // Animation
             auto animationNodeSWA = _swappingSquare->getUnit()->getViewNode();
