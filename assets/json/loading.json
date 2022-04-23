@@ -7,15 +7,15 @@
             "minfilter": "linear",
             "magfilter": "linear"
         },
-        "name": {
-            "file":      "textures/cugl-name.png",
+        "play": {
+            "file":      "textures/play_button.png",
             "wrapS":     "clamp",
             "wrapT":     "clamp",
             "minfilter": "linear",
             "magfilter": "linear"
         },
-        "play": {
-            "file":      "textures/play_button.png",
+        "loading_background": {
+            "file":      "textures/loading_background.png",
             "wrapS":     "clamp",
             "wrapT":     "clamp",
             "minfilter": "linear",
@@ -28,42 +28,23 @@
             "format"    : {
                 "type" : "Anchored"
             },
-            "data" : {
-                "color": [239,61,49,255]
-            },
             "children"  : {
-                "logo"  : {
-                    "type"   : "Image",
+                "background" : {
+                    "type"      : "Image",
                     "format"    : {
                         "type" : "Anchored"
                     },
-                    "data"   : {
-                        "texture"  : "logo",
+                    "data" : {
+                        "texture"  : "loading_background",
                         "anchor"   : [0.5,0.5],
-                        "scale"    : 0.75
+                        "scale"    : 0.318
                     },
                     "layout" : {
                         "x_anchor" : "center",
                         "y_anchor" : "middle",
-                        "y_offset" : 115,
-                        "absolute" : true
-                    }
-                },
-                "name"  : {
-                    "type"   : "Image",
-                    "format"    : {
-                        "type" : "Anchored"
-                    },
-                    "data"   : {
-                        "texture"  : "name",
-                        "anchor"   : [0.5,0.5],
-                        "scale"    : 0.75
-                    },
-                    "layout" : {
-                        "x_anchor" : "center",
-                        "y_anchor" : "middle",
-                        "y_offset" : -55,
-                        "absolute" : true
+                        "x_offset" : 0.01,
+                        "y_offset" : -0.005,
+                        "absolute" : false
                     }
                 },
                 "play"  : {
@@ -72,7 +53,7 @@
                         "upnode"   : "up",
                         "visible"  : false,
                         "anchor"   : [0.5,0.5],
-                        "scale"    : 0.5
+                        "scale"    : 0.32
                     },
                     "children" : {
                         "up"       : {
@@ -85,8 +66,8 @@
                     "layout" : {
                         "x_anchor" : "center",
                         "y_anchor" : "middle",
-                        "y_offset" : -115,
-                        "absolute" : true
+                        "y_offset" : 0.09,
+                        "absolute" : false
                     }
                 },
                 "bar"  : {

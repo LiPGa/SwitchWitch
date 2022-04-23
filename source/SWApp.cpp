@@ -29,6 +29,7 @@ using namespace cugl;
  * causing the application to run.
  */
 void SwitchWitchApp::onStartup() {
+//    CULog("start up");
     _assets = AssetManager::alloc();
     _batch  = SpriteBatch::alloc();
     auto cam = OrthographicCamera::alloc(getDisplaySize());
