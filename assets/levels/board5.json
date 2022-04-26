@@ -1,7 +1,7 @@
 {
 	"id":	5,
-	"rows": 9,
-	"columns": 6,
+	"rows":	9,
+	"columns":	6,
 	"total-swap-allowed":	2,
 	"one-star-condition":	3,
 	"two-star-condition":	3,
@@ -248,8 +248,8 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
+				"sub-type":	"basic",
+				"color":	"blue",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
 			}, {

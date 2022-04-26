@@ -23,6 +23,9 @@
 #include "SWLevel.h"
 #include "SWInputController.h"
 #include <cugl/audio/CUAudioEngine.h>
+#include <cugl/scene2/actions/CUActionManager.h>
+#include <cugl/scene2/actions/CUMoveAction.h>
+#include <cugl/scene2/actions/CUAnimateAction.h>
 
 /**
  * This class is the primary gameplay constroller.
@@ -38,6 +41,19 @@ protected:
     // CONTROLLERS are attached directly to the scene (no pointers)
     /** The controller to manage the ship */
     InputController _input;
+    
+    /** Manager to process the animation actions */
+    std::shared_ptr<cugl::scene2::ActionManager> _actions;
+
+    // MODELS (Sort-of)
+    /** The movement actions */
+    std::shared_ptr<cugl::scene2::MoveBy> _moveup;
+    std::shared_ptr<cugl::scene2::MoveBy> _movedn;
+    std::shared_ptr<cugl::scene2::MoveBy> _moveright;
+    std::shared_ptr<cugl::scene2::MoveBy> _moveleft;
+
+//    /** Whether we are mid animation */
+//    bool _occupied;
 
     // MODELS should be shared pointers or a data structure of shared pointers
     /** The JSON value for the levels */
@@ -51,6 +67,7 @@ protected:
     int _maxBoardHeight;
     int _defaultSquareSize;
     int _squareSizeAdjustedForScale;
+    float _squareScaleFactor;
     
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
@@ -118,6 +135,7 @@ protected:
 #pragma mark -
 #pragma mark View Variables
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
+    std::shared_ptr<cugl::scene2::OrderedNode> _orderedBoardChild;
     std::shared_ptr<cugl::scene2::PolygonNode> _boardNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _replacementBoardNode;
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
@@ -127,6 +145,7 @@ protected:
     std::shared_ptr<scene2::SceneNode> _settingsLayout;
     std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _enlargedUnitNode;
 
     int _replacementListLength;
     // VIEW items are going to be individual variables
@@ -295,6 +314,29 @@ public:
     void setBoardJSON(std::shared_ptr<cugl::JsonValue> v) { _boardJson = v; }
 
     shared_ptr<Level> getLevel() { return _level; }
+    
+    /**
+     * Swaps the animation items on screen
+     */
+    void doSwap();
+
+    /**
+     * Performs a move action
+     *
+     * @param action The move action
+     */
+    void doMove(std::string act_key, shared_ptr<cugl::scene2::PolygonNode> viewNode, const std::shared_ptr<cugl::scene2::MoveBy>& action);
+    
+    /**
+     * Check the direction that the selectedSq is moving to
+     *
+     * @param the selected square
+     * @param the square will be swapped with the selected square
+     *
+     * @return the direction the selected square is moving to
+     */
+    string moveDirection(shared_ptr<Square> selectedSq, shared_ptr<Square> swappingSq);
+    
 private:
     /**
      * Generate a random unit type with the given probabilities
@@ -352,6 +394,8 @@ private:
     
     void loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> unitNode);
     
+    void updateModelPostSwap();
+    
     /**
      * Generate a unit on the given square.
      *
@@ -384,6 +428,10 @@ private:
      * @param textures       the texture map being used
      */
     void updateSquareTexture(shared_ptr<Square> square);
+    
+    void showResultText(bool success, std::shared_ptr<cugl::scene2::SceneNode> node);
+    
+    void deconfirmSwap();
 };
 
 #endif /* __SW_GAME_SCENE_H__ */
