@@ -33,7 +33,11 @@ public:
     enum State
     {
         IDLE,
-        HIT
+        HIT,
+        ATTACKING,
+        DYING,
+        DEAD,
+        RESPAWNING
     };
     
     /** True if the unit has completed the animation cycle of its current state */
@@ -76,7 +80,7 @@ private:
     float _time_since_last_frame = 0.0f;
     
     /** The amout of time every sprite frame should remain for */
-    float _time_per_frame = 0.5f;
+    float _time_per_frame = 0.3f;
 
     /**True if unit is a special unit, False otherwise*/
     bool _is_special_unit;
@@ -86,6 +90,9 @@ private:
 
     /** Whether the unit is moveable */
     bool _moveable;
+    
+    /** Whether this unit has previously been hit by an attack */
+    bool _hasBeenHit;
 
 #pragma mark Constructors
 public:
@@ -341,6 +348,19 @@ public:
      * @param s the state of the unit.
      */
     void setState(State s);
+    
+    /**
+     * Returns whether the unit has been previously hit
+     * @return unit's hit status
+     */
+    bool hasBeenHit() { return _hasBeenHit; }
+
+    /**
+     * Sets the unit's state
+     *
+     * @param s the state of the unit.
+     */
+    void setHasBeenHit(bool h) { _hasBeenHit = h; }
 
     /**
      * Returns the direction which the unit is currently facing.

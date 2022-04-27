@@ -34,6 +34,7 @@ bool Unit::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> 
     this->_moveable = moveable;
     this->_unitsNeededToKill = unitsNeededToKill;
     this->_textureMap = textures;
+    this->_hasBeenHit = false;
 //    this->_time_since_last_frame = fmod(((float) rand() / (RAND_MAX)), this->_time_per_frame); // Initalize a random animation offset
 //    initalizeTextureMap(textures, subtype, color);
     return true;
@@ -59,6 +60,7 @@ bool Unit::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> 
     this->_is_special_unit = special;
     this->_unitsNeededToKill = unitsNeededToKill;
     this->_textureMap = textures;
+    this->_hasBeenHit = false;
 //    this->_time_since_last_frame = fmod(((float) rand() / (RAND_MAX)), this->_time_per_frame); // Initalize a random animation offset
 //    initalizeTextureMap(textures, subtype, color);
     return true;
@@ -69,13 +71,23 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
     std::string defaultTextureName = subtype + "-" + colorString;
     std::string idleTextureName = subtype + "-idle-" + colorString;
     std::string hitTextureName = subtype + "-hit-" + colorString;
+    std::string attackTextureName = subtype + "-attack-" + colorString;
+    std::string dyingTextureName = subtype + "-dying-" + colorString;
+    std::string respawningTextureName = subtype + "-respawning-" + colorString;
     switch (state) {
         case IDLE:
             return _textureMap.count(idleTextureName) > 0 ? _textureMap.at(idleTextureName) : _textureMap.at(defaultTextureName);
         case HIT:
             return _textureMap.count(hitTextureName) > 0 ? _textureMap.at(hitTextureName)
             : _textureMap.at(defaultTextureName);
-//            : _textureMap.at(hitTextureName);
+        case ATTACKING:
+            return _textureMap.count(attackTextureName) > 0 ? _textureMap.at(attackTextureName) : _textureMap.at(defaultTextureName);
+        case DYING:
+            return _textureMap.count(dyingTextureName) > 0 ? _textureMap.at(dyingTextureName) : _textureMap.at(defaultTextureName);
+        case DEAD:
+            return _textureMap.at("transparent");
+        case RESPAWNING:
+            return _textureMap.count(respawningTextureName) > 0 ? _textureMap.at(respawningTextureName) : _textureMap.at(defaultTextureName);
         default:
             return _textureMap.at(defaultTextureName);
     }
@@ -94,6 +106,19 @@ void Unit::setState(State s) {
             break;
         case State::HIT:
             newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 1);
+            this->_hasBeenHit = true;
+            break;
+        case State::ATTACKING:
+            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 2);
+            break;
+        case State::DYING:
+            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 2);
+            break;
+        case State::DEAD:
+            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 1);
+            break;
+        case State::RESPAWNING:
+            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 2);
             break;
         default:
             newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 1);

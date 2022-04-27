@@ -171,6 +171,8 @@ public:
      * @return a list of squares being attacked.
      */
     vector<shared_ptr<Square>> getAttackedSquares(cugl::Vec2 pos);
+    
+    vector<shared_ptr<Square>> getInitallyAttackedSquares(cugl::Vec2 pos, bool basic);
 
     /**
      * Flattens two coordinate number as one number. Used for organizing the _matrix.

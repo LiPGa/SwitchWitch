@@ -125,6 +125,33 @@
         "basic-idle-blue": {
             "file": "textures/basic_idle_blue.png"
         },
+        "basic-attack-red": {
+            "file": "textures/basic_attack_red.png"
+        },
+        "basic-attack-green": {
+            "file": "textures/basic_attack_green.png"
+        },
+        "basic-attack-blue": {
+            "file": "textures/basic_attack_blue.png"
+        },
+        "basic-dying-red": {
+            "file": "textures/basic_dying_red.png"
+        },
+        "basic-dying-green": {
+            "file": "textures/basic_dying_green.png"
+        },
+        "basic-dying-blue": {
+            "file": "textures/basic_dying_blue.png"
+        },
+        "basic-respawning-red": {
+            "file": "textures/basic_respawning_red.png"
+        },
+        "basic-respawning-green": {
+            "file": "textures/basic_respawning_green.png"
+        },
+        "basic-respawning-blue": {
+            "file": "textures/basic_respawning_blue.png"
+        },
         "basic-hit-red": {
             "file": "textures/basic_hit_red.png"
         },
@@ -155,6 +182,33 @@
         "diagonal-idle-green": {
             "file": "textures/diagonal_idle_green.png"
         },
+        "diagonal-attack-blue": {
+            "file": "textures/diagonal_attack_blue.png"
+        },
+        "diagonal-attack-red": {
+            "file": "textures/diagonal_attack_red.png"
+        },
+        "diagonal-attack-green": {
+            "file": "textures/diagonal_attack_green.png"
+        },
+        "diagonal-dying-blue": {
+            "file": "textures/diagonal_dying_blue.png"
+        },
+        "diagonal-dying-red": {
+            "file": "textures/diagonal_dying_red.png"
+        },
+        "diagonal-dying-green": {
+            "file": "textures/diagonal_dying_green.png"
+        },
+        "diagonal-respawning-blue": {
+            "file": "textures/diagonal_respawning_blue.png"
+        },
+        "diagonal-respawning-red": {
+            "file": "textures/diagonal_respawning_red.png"
+        },
+        "diagonal-respawning-green": {
+            "file": "textures/diagonal_respawning_green.png"
+        },
         "diagonal-hit-blue": {
             "file": "textures/diagonal_hit_blue.png"
         },
@@ -182,6 +236,33 @@
         "three-way-idle-blue": {
             "file": "textures/three_way_idle_blue.png"
         },
+        "three-way-attack-red": {
+            "file": "textures/three_way_attack_red.png"
+        },
+        "three-way-attack-green": {
+            "file": "textures/three_way_attack_green.png"
+        },
+        "three-way-attack-blue": {
+            "file": "textures/three_way_attack_blue.png"
+        },
+        "three-way-dying-red": {
+            "file": "textures/three_way_dying_red.png"
+        },
+        "three-way-dying-green": {
+            "file": "textures/three_way_dying_green.png"
+        },
+        "three-way-dying-blue": {
+            "file": "textures/three_way_dying_blue.png"
+        },
+        "three-way-respawning-red": {
+            "file": "textures/three_way_respawning_red.png"
+        },
+        "three-way-respawning-green": {
+            "file": "textures/three_way_respawning_green.png"
+        },
+        "three-way-respawning-blue": {
+            "file": "textures/three_way_respawning_blue.png"
+        },
         "three-way-hit-red": {
             "file": "textures/three_way_hit_red.png"
         },
@@ -208,6 +289,33 @@
         },
         "two-forward-idle-blue": {
             "file": "textures/two_forward_idle_blue.png"
+        },
+        "two-forward-attack-red": {
+            "file": "textures/two_forward_attack_red.png"
+        },
+        "two-forward-attack-green": {
+            "file": "textures/two_forward_attack_green.png"
+        },
+        "two-forward-attack-blue": {
+            "file": "textures/two_forward_attack_blue.png"
+        },
+        "two-forward-dying-red": {
+            "file": "textures/two_forward_dying_red.png"
+        },
+        "two-forward-dying-green": {
+            "file": "textures/two_forward_dying_green.png"
+        },
+        "two-forward-dying-blue": {
+            "file": "textures/two_forward_dying_blue.png"
+        },
+        "two-forward-respawning-red": {
+            "file": "textures/two_forward_respawning_red.png"
+        },
+        "two-forward-respawning-green": {
+            "file": "textures/two_forward_respawning_green.png"
+        },
+        "two-forward-respawning-blue": {
+            "file": "textures/two_forward_respawning_blue.png"
         },
         "two-forward-hit-red": {
             "file": "textures/two_forward_hit_red.png"
@@ -307,6 +415,9 @@
         },
         "bubble": {
             "file": "textures/bubble.png"
+        },
+        "transparent": {
+            "file": "textures/transparent.png"
         }
     },
     "fonts": {
