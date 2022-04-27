@@ -13,6 +13,10 @@
 #ifndef __SW_GAME_SCENE_H__
 #define __SW_GAME_SCENE_H__
 #include <cugl/cugl.h>
+#include <cugl/scene2/actions/CUActionManager.h>
+#include <cugl/scene2/actions/CUMoveAction.h>
+#include <cugl/scene2/actions/CURotateAction.h>
+#include <cugl/scene2/actions/CUAnimateAction.h>
 #include <vector>
 #include <map>
 #include <unordered_set>
@@ -78,6 +82,8 @@ protected:
     // Mapping between unit subtypes and respawn probabilities
     std::map<std::string, float> _unitRespawnProbabilities;
     
+//    std::unordered_map<std::string, std::shared_ptr<Action>> _actions;
+    
 #pragma mark State Varibales
     /** Possible states of the level.
      * Name of state is describing what the current state of the game is waiting for.
@@ -104,6 +110,8 @@ protected:
     int _score;
     /** The previous score of the player */
     int _prevScore;
+//    /** Whether the kings has been attacked */
+//    bool _kingsAttacked;
     /** Whether the king has been killed */
     bool _kingsKilled;
 //     /** The number of colors killed */
@@ -190,6 +198,7 @@ protected:
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
+    std::shared_ptr<Square> _initalAttackSquare;
 
     /** Whther the player pressed restart button*/
     bool _didRestart = false;
@@ -197,6 +206,8 @@ protected:
     bool _didPause= false;
     /** Whther the player pressed exit button*/
     bool _didGoToLevelMap = false;
+    
+    bool _midSwap = false;
 
 #pragma mark -
 #pragma mark Texture Variables
@@ -411,6 +422,8 @@ private:
      * @param sq  The square model to update the view of
      */
     void refreshUnitAndSquareView(shared_ptr<Square> sq);
+    
+    void refreshUnitView(shared_ptr<Square> sq);
 
     
     /**
@@ -429,7 +442,11 @@ private:
      */
     void updateSquareTexture(shared_ptr<Square> square);
     
+    void replaceUnitOnSquare(shared_ptr<Square> sq);
+    
     void showResultText(bool success, std::shared_ptr<cugl::scene2::SceneNode> node);
+    
+    void respawnAttackedSquares();
     
     void deconfirmSwap();
 };

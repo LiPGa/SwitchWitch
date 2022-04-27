@@ -11,6 +11,7 @@
 
 #include <cugl/cugl.h>
 #include "SWSquareOccupant.hpp"
+#include <math.h>
 
 using namespace cugl;
 
@@ -28,6 +29,19 @@ public:
         BLUE,
         NONE
     };
+    
+    enum State
+    {
+        IDLE,
+        HIT,
+        ATTACKING,
+        DYING,
+        DEAD,
+        RESPAWNING
+    };
+    
+    /** True if the unit has completed the animation cycle of its current state */
+    bool completedAnimation = false;
 
 private:
     /**Both the basic attack and special attack of a unit is stored as a list of vectors.
@@ -52,9 +66,21 @@ private:
 
     /** The color of this unit.*/
     Color _color;
+    
+    /** The state of this unit. */
+    State _state = IDLE;
+    
+    /** This map stores a texture for every state the unit can take */
+    unordered_map<std::string, shared_ptr<Texture>> _textureMap;
 
-    /** The Polygon-Node that represents this unit */
-    shared_ptr<cugl::scene2::PolygonNode> _viewNode;
+    /** The Sprite-Node that represents this unit */
+    shared_ptr<cugl::scene2::SpriteNode> _viewNode;
+    
+    /** The elapsed time since the sprite frame was incremented */
+    float _time_since_last_frame = 0.0f;
+    
+    /** The amout of time every sprite frame should remain for */
+    float _time_per_frame = 0.3f;
 
     /**True if unit is a special unit, False otherwise*/
     bool _is_special_unit;
@@ -64,6 +90,9 @@ private:
 
     /** Whether the unit is moveable */
     bool _moveable;
+    
+    /** Whether this unit has previously been hit by an attack */
+    bool _hasBeenHit;
 
 #pragma mark Constructors
 public:
@@ -91,10 +120,14 @@ public:
      * @param direction the direction the unit is facing
      * @return true if initialization was successful.
      */
-    bool init(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0);
+    bool init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0);
 
 
-    bool init(const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill);
+    bool init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special, int unitsNeededToKill);
+    
+    std::shared_ptr<cugl::Texture> getTextureForUnit(const std::string subtype, const Color color, const State state);
+    
+//    void initalizeTextureMap(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color);
 #pragma mark -
 #pragma mark Static Constructors
     /**
@@ -106,9 +139,9 @@ public:
      * @param direction the direction the unit is facing
      * @return a newly allocated Unit.
      */
-    static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0) {
+    static std::shared_ptr<Unit>alloc(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color, vector<cugl::Vec2> basicAttack, vector<cugl::Vec2> specialAttack, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0) {
         std::shared_ptr<Unit> result = std::make_shared<Unit>();
-        return (result->init(subtype, color, basicAttack, specialAttack, direction, moveable, special, unitsNeededToKill) ? result : nullptr);
+        return (result->init(textures, subtype, color, basicAttack, specialAttack, direction, moveable, special, unitsNeededToKill) ? result : nullptr);
     }
 
     /**
@@ -118,9 +151,9 @@ public:
      * @param direction the direction the unit is facing
      * @return a newly allocated Unit.
      */
-    static std::shared_ptr<Unit>alloc(const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0) {
+    static std::shared_ptr<Unit>alloc(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, const std::string subtype, const Color color, cugl::Vec2 direction, bool moveable, bool special = false, int unitsNeededToKill = 0) {
         std::shared_ptr<Unit> result = std::make_shared<Unit>();
-        return (result->init(subtype, color, direction, moveable, special, unitsNeededToKill) ? result : nullptr);
+        return (result->init(textures, subtype, color, direction, moveable, special, unitsNeededToKill) ? result : nullptr);
     }
 
 #pragma mark -
@@ -165,6 +198,24 @@ public:
             return "blue";
         default:
             return "red";
+        }
+    }
+    
+    
+    /**
+     * Returns the string data representation of the state according to JSON conventions
+     *
+     * @param s the state
+     * @returns the string of the state
+     */
+    static std::string stateToString(State s)
+    {
+        switch (s)
+        {
+        case State::IDLE:
+            return "idle";
+        default:
+            return "idle";
         }
     }
     
@@ -284,6 +335,32 @@ public:
      * @param c the color of the unit.
      */
     void setColor(Color c) { _color = c; }
+    
+    /**
+     * Returns the unit's state as a State enum.
+     * @return unit's state
+     */
+    State getState() { return _state; }
+
+    /**
+     * Sets the unit's state
+     *
+     * @param s the state of the unit.
+     */
+    void setState(State s);
+    
+    /**
+     * Returns whether the unit has been previously hit
+     * @return unit's hit status
+     */
+    bool hasBeenHit() { return _hasBeenHit; }
+
+    /**
+     * Sets the unit's state
+     *
+     * @param s the state of the unit.
+     */
+    void setHasBeenHit(bool h) { _hasBeenHit = h; }
 
     /**
      * Returns the direction which the unit is currently facing.
@@ -307,18 +384,21 @@ public:
     float getAngleBetweenDirectionAndDefault();
 
     /**
-     * Returns the Polygon-Node that represents the unit's view.
+     * Returns the Sprite-Node that represents the unit's view.
      *
-     * @return unit's Polygon-Node
+     * @return unit's Sprite-Node
      */
-    shared_ptr<cugl::scene2::PolygonNode> getViewNode() { return _viewNode; }
-
+    shared_ptr<cugl::scene2::SpriteNode> getViewNode() { return _viewNode; }
+    
     /**
-     * Sets the Polygon-Node that represents the unit's view.
+     * Sets the Sprite-Node that represents the unit's view.
      *
-     * @param a polygon-node for the unit.
+     * @param a sprite-node for the unit.
      */
-    void setViewNode(shared_ptr<cugl::scene2::PolygonNode> viewNode) { _viewNode = viewNode; }
+    void setViewNode(shared_ptr<cugl::scene2::SpriteNode> viewNode) {
+        _viewNode = viewNode;
+//        _time_since_last_frame = 0.0f;
+    }
 
     /**
     Returns true if unit is a special unit
@@ -338,6 +418,11 @@ public:
     int getUnitsNeededToKill() { return _unitsNeededToKill; }
 
     void setUnitsNeededToKill(int numOfUnits) { _unitsNeededToKill = numOfUnits; }
+    
+    /**
+        Updates the animation frame of this unit.
+     */
+    void update(float dt);
 };
 
 #endif /* SWUnit_hpp */

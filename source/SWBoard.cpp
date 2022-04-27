@@ -127,3 +127,19 @@ void Board::getAttackedSquares_h(vector<shared_ptr<Square>> &listOfAttackedSquar
         }
     }
 }
+
+vector<shared_ptr<Square>> Board::getInitallyAttackedSquares(cugl::Vec2 pos, bool basic) {
+    vector<shared_ptr<Square>> result;
+    if (!doesSqaureExist(pos)) {
+        return result;
+    }
+    auto attackingSquare = getSquare(pos);
+    vector<Vec2> attackedSquares = basic ? attackingSquare->getUnit()->getBasicAttackRotated() : attackingSquare->getUnit()->getSpecialAttackRotated();
+    for (Vec2 vector : attackedSquares) {
+        Vec2 squarePos = vector + attackingSquare->getPosition();
+        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && (attackingSquare->getUnit()->getColor() != getSquare(squarePos)->getUnit()->getColor() || getSquare(squarePos)->getUnit()->getSubType() == "king")) {
+            result.push_back(getSquare(squarePos));
+        }
+    }
+    return result;
+}

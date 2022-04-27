@@ -4,7 +4,7 @@
 //  SwitchWitch
 //
 //  Created by Hedy Yang on 2/21/22.
-//  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
+//  Copyright ï¿½ 2022 Game Design Initiative at Cornell. All rights reserved.
 //
 
 #ifndef SWLevel_h
@@ -58,14 +58,14 @@ public:
      * @param rows The number of rows on the board.
      * @param columns The number of columns on the board.
      */
-    bool init(int columns, int rows);
+    bool init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, int columns, int rows);
 
     /**
      * Initializes a level given JSON values
      *
      * @param JSON values
      */
-    bool init(shared_ptr<JsonValue> levelJSON);
+    bool init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, shared_ptr<JsonValue> levelJSON);
 
 #pragma mark -
 #pragma mark Static Constructors
@@ -78,9 +78,9 @@ public:
      * @param columns the number of columns on the board.
      * @return a newly allocated Board.
      */
-    static shared_ptr<Level> alloc(int columns, int rows) {
+    static shared_ptr<Level> alloc(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, int columns, int rows) {
         std::shared_ptr<Level> result = std::make_shared<Level>();
-        return (result->init(columns, rows) ? result : nullptr);
+        return (result->init(textures, columns, rows) ? result : nullptr);
     }
 
     /**
@@ -91,9 +91,9 @@ public:
      * @param columns the number of columns on the board.
      * @return a newly allocated Board.
      */
-    static shared_ptr<Level> alloc(shared_ptr<JsonValue> levelJSON) {
+    static shared_ptr<Level> alloc(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, shared_ptr<JsonValue> levelJSON) {
         std::shared_ptr<Level> result = std::make_shared<Level>();
-        return (result->init(levelJSON) ? result : nullptr);
+        return (result->init(textures, levelJSON) ? result : nullptr);
     }
 
 #pragma mark -

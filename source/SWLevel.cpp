@@ -3,7 +3,7 @@
 //  SwitchWitch
 //
 //  Created by Hedy Yang on 2/21/22.
-//  Copyright © 2022 Game Design Initiative at Cornell. All rights reserved.
+//  Copyright ï¿½ 2022 Game Design Initiative at Cornell. All rights reserved.
 //
 
 #include "SWLevel.h"
@@ -16,7 +16,7 @@ using namespace cugl;
  * @param rows The number of rows on the board.
  * @param columns The number of columns on the board.
  */
-bool Level::init(int columns, int rows) {
+bool Level::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, int columns, int rows) {
     _rows = rows;
     _columns = columns;
     levelID = 0;
@@ -32,7 +32,7 @@ bool Level::init(int columns, int rows) {
  *
  * @param JSON values
  */
-bool Level::init(shared_ptr<JsonValue> levelJSON) {
+bool Level::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> textures, shared_ptr<JsonValue> levelJSON) {
     levelID = levelJSON->getInt("id");
     maxTurns = levelJSON->getInt("total-swap-allowed");
     // Rows and Columns
@@ -57,7 +57,7 @@ bool Level::init(shared_ptr<JsonValue> levelJSON) {
             auto unitsNeededToKill = units[i]->getInt("unitsNeededToKill");
             sq->setInteractable(unitSubType != "empty");
             auto unitColor = unitSubType == "king" ? Unit::Color::NONE : Unit::stringToColor(unitColorStr);
-            sq->setUnit(Unit::alloc(unitSubType, unitColor, unitDirection, unitSubType != "king", unitSubType != "basic" && unitSubType != "random" && unitSubType != "king", unitsNeededToKill));
+            sq->setUnit(Unit::alloc(textures, unitSubType, unitColor, unitDirection, unitSubType != "king", unitSubType != "basic" && unitSubType != "random" && unitSubType != "king", unitsNeededToKill));
         }
         auto test = addBoard(board);
     }

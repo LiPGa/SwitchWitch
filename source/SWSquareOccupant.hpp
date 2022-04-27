@@ -30,9 +30,9 @@ public:
     
     //TODO: PLACEHOLDER FOR MORE COMMON PROPERTIES OF SQUAREOCCUPANTS
     
-    virtual shared_ptr<cugl::scene2::PolygonNode> getViewNode()=0;
+    virtual shared_ptr<cugl::scene2::SpriteNode> getViewNode()=0;
     
-    virtual void setViewNode(shared_ptr<cugl::scene2::PolygonNode> viewNode)=0;
+    virtual void setViewNode(shared_ptr<cugl::scene2::SpriteNode> viewNode)=0;
     
 //    virtual void setObjectType(ObjectType objType) {
 //        _objType = objType;
@@ -43,7 +43,7 @@ public:
 //    }
     
 private:
-    shared_ptr<cugl::scene2::PolygonNode> _viewNode;
+    shared_ptr<cugl::scene2::SpriteNode> _viewNode;
     
 //    ObjectType _objType;
     

@@ -220,7 +220,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
 
         // store the default color:red for this type of unit
-        shared_ptr<Unit> unit = Unit::alloc(subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1), subtypeString != "king");
+        shared_ptr<Unit> unit = Unit::alloc(_textures, subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1), subtypeString != "king");
         _unitTypes.insert({child->key(), unit});
     }
 
@@ -395,15 +395,21 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
 }
 
 void GameScene::refreshUnitAndSquareView(shared_ptr<Square> sq) {
+    refreshUnitView(sq);
+    updateSquareTexture(sq);
+}
+
+void GameScene::refreshUnitView(shared_ptr<Square> sq) {
     auto unit = sq->getUnit();
     auto unitNode = unit->getViewNode();
     std::string unitSubtype = unit->getSubType();
-    unitNode->setTexture(_textures[getUnitType(unit->getSubType(), Unit::colorToString(unit->getColor()))]);
     if (unitSubtype != "basic") unit->setSpecial(true);
     else unit->setSpecial(false);
+    sq->getViewNode()->removeAllChildren();
+    if (unitNode->getParent() == NULL) sq->getViewNode()->addChild(unitNode);
     if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
-    updateSquareTexture(sq);
 }
+
 /**
  * Generate a unit on the given square.
  *
@@ -424,7 +430,9 @@ void GameScene::generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::
     unit->setSpecialAttack(unitSelected->getSpecialAttack());
     unit->setSpecial(unitType != "basic");
     unit->setUnitsNeededToKill(numberOfUnitsNeededToKill);
-//    refreshUnitAndSquareView(sq);
+    unit->setState(Unit::State::RESPAWNING);
+    unit->setHasBeenHit(false);
+    refreshUnitView(sq);
 }
 
 std::map<Unit::Color, float> GameScene::generateColorProbabilities() {
@@ -559,6 +567,19 @@ void GameScene::update(float timestep)
     {
         _debug = !_debug;
     }
+
+//    if (_currentState == State::ANIMATION) {
+//        bool attackSequenceDone = true;
+//        for (auto sq : _attackedSquares) {
+//            if (sq->getUnit()->getState() != Unit::State::IDLE) {
+//                attackSequenceDone = false;
+//                break;
+//            }
+//        }
+//        if (attackSequenceDone) _currentState = State::SELECTING_UNIT;
+//    }
+//    else if (_input.isDown() && _currentState != ANIMATION)
+
     if (_input.isDown() && _currentState != ANIMATION)
     {
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable())
@@ -611,7 +632,8 @@ void GameScene::update(float timestep)
                 _selectedSquareOriginalDirection = _selectedSquare->getUnit()->getDirection();
                 _swappingSquareOriginalDirection = _swappingSquare->getUnit()->getDirection();
                 // We do this so that we can show the attack preview, without changing the actual positional view of units.
-                _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+//                _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+                _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
                 squareOnMouse->getViewNode()->setTexture(_textures.at("square-swap"));
                 _swappingSquare->getUnit()->setDirection(_swappingSquare->getPosition() - _selectedSquare->getPosition());
                 _attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
@@ -640,9 +662,11 @@ void GameScene::update(float timestep)
         {
             updateSquareTexture(square);
         }
+
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable() && _currentState == CONFIRM_SWAP)
         {
             _currentState = ANIMATION;
+            _midSwap = true;
             
             
             // Undo the swap for the animation
@@ -666,6 +690,7 @@ void GameScene::update(float timestep)
                 doMove("swapA", animationNodeSWA, _moveright);
                 doMove("swapB", animationNodeSWB,_moveleft);
             }
+            _initalAttackSquare = _swappingSquare;
             _turns--;
         } else {
             _currentState = SELECTING_UNIT;
@@ -674,20 +699,41 @@ void GameScene::update(float timestep)
     
     if (_currentState == ANIMATION) {
         bool completedAllAnimations = true;
-        if (_actions->isActive("swapA")) completedAllAnimations = false;
-        if (_actions->isActive("swapB")) completedAllAnimations = false;
+        bool completedAttackSequence = true;
+        bool respawning = false;
+        bool completedSwap = true;
+//        vector<std::shared_ptr<Square>> deadSquares;
+        if (_actions->isActive("swapA")) completedSwap = false;
+        if (_actions->isActive("swapB")) completedSwap = false;
         
-        if (completedAllAnimations) {
-            updateModelPostSwap();
-            for (shared_ptr<Square> square : _board->getAllSquares())
-            {
-                updateSquareTexture(square);
-            }
-            _currentState = SELECTING_UNIT;
+        if (completedSwap) {
+            if (_midSwap) updateModelPostSwap();
         }
+        
+        for (auto square : _board->getAllSquares()) {
+            auto unit = square->getUnit();
+            auto unitState = unit->getState();
+            bool isKing = unit->getSubType() == "king";
+            if (!isKing && unitState != Unit::State::IDLE) {
+                completedAllAnimations = false;
+                if (unitState != Unit::State::DEAD && unitState != Unit::State::RESPAWNING) completedAttackSequence = false;
+                if (unitState == Unit::State::RESPAWNING) respawning = true;
+//                else deadSquares.push_back(square);
+            } else if (isKing && unitState != Unit::IDLE && unitState != Unit::DEAD) {
+                completedAttackSequence = false;
+            }
+            updateSquareTexture(square);
+        }
+        
+        if (completedSwap && completedAttackSequence) {
+            if (completedAllAnimations && !_kingsKilled) _currentState = SELECTING_UNIT;
+            else if (!respawning) respawnAttackedSquares();
+        }
+        
     }
     
     
+
     // Update the score meter
     if (_score >= _level->oneStarThreshold) _scoreMeterStar1->setTexture(_assets->get<Texture>("star_full"));
     if (_score >= _level->twoStarThreshold) _scoreMeterStar2->setTexture(_assets->get<Texture>("star_full"));
@@ -711,6 +757,60 @@ void GameScene::update(float timestep)
 //    }
     // Update the remaining turns
     _turn_text->setText(strtool::format("%d/%d", _turns, _level->maxTurns));
+    
+    // Animate all units
+    for (shared_ptr<Square> square : _board->getAllSquares())
+    {
+        auto unit = square->getUnit();
+        auto unitState = unit->getState();
+        std::string unitType = unit->getSubType();
+        if (unit->completedAnimation) {
+            switch (unitState) {
+                case Unit::State::IDLE:
+                    break;
+                case Unit::State::DEAD:
+//                    square->getViewNode()->setVisible(false);
+                    break;
+                case Unit::State::HIT:
+                    if (unitType != "basic" && unitType != "empty" && unitType != "king") {
+                        unit->setState(Unit::State::ATTACKING);
+                        refreshUnitView(square);
+                    } else {
+                        unit->setState(Unit::State::DYING);
+                        refreshUnitView(square);
+                    }
+                    break;
+                case Unit::State::ATTACKING:
+                    for (auto atkSquare : _board->getInitallyAttackedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit())) {
+                        if (atkSquare->getUnit()->getState() == Unit::State::IDLE) {
+                            if (_attackedSquares.size() >= atkSquare->getUnit()->getUnitsNeededToKill()) {
+                                atkSquare->getUnit()->setState(Unit::State::HIT);
+                            }
+                        }
+                        refreshUnitView(atkSquare);
+                    }
+                    if (unit->hasBeenHit()) unit->setState(Unit::State::DYING);
+                    else unit->setState(Unit::State::IDLE);
+                    refreshUnitView(square);
+                    break;
+                case Unit::State::DYING:
+                    unit->setState(Unit::State::DEAD);
+                    if (unit->getSubType() == "king") _kingsKilled = true;
+//                    unit->getViewNode()->setVisible(false);
+                    refreshUnitView(square);
+                    break;
+                case Unit::State::RESPAWNING:
+                    unit->setState(Unit::State::IDLE);
+                    refreshUnitView(square);
+                    break;
+                default:
+                    break;
+            }
+        }
+//        refreshUnitAndSquareView(square);
+//        refreshUnitView(square);
+        square->getUnit()->update(timestep);
+    }
 
     // Layout everything
     _layout->layout(_guiNode.get());
@@ -720,7 +820,8 @@ void GameScene::update(float timestep)
 }
 
 void GameScene::updateModelPostSwap() {
-    std::map<Unit::Color, float> colorProbabilities = generateColorProbabilities();
+    _midSwap = false;
+    
     _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
     //  Because the units in the model where already swapped.
     float inverseSquareFactor = 1 / _squareScaleFactor;
@@ -736,14 +837,21 @@ void GameScene::updateModelPostSwap() {
     _selectedSquare->getViewNode()->addChild(swappedUnitNode);
     _swappingSquare->getViewNode()->addChild(selectedUnitNode);
 
-    _prevScore = _score;
+    if (_attackedSquares.size() > 0) {
+        _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING); // begin the attack sequence
+        refreshUnitView(_initalAttackSquare);
+    }
+}
+
+void GameScene::respawnAttackedSquares() {
+//    _prevScore = _score;
     // remove the attacked squares
     int scoreNum = 0;
     bool plusScore = false;
     for (shared_ptr<Square> attackedSquare : _attackedSquares)
     {
-        if (attackedSquare->getUnit()->getSubType() == "king") {
-            _kingsKilled = true;
+        if (attackedSquare->getUnit()->getSubType() == "king" && _kingsKilled) {
+////            _kingsKilled = true;
             plusScore = true;
         }
         auto attacked_unit = attackedSquare->getUnit();
@@ -757,27 +865,33 @@ void GameScene::updateModelPostSwap() {
 //                }
 
         // Replace Unit
-        Vec2 squarePos = attackedSquare->getPosition();
-        _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
-        int currentReplacementDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
-        std::shared_ptr<Square> replacementSquare = _level->getBoard(currentReplacementDepth)->getSquare(squarePos);
-        auto unitSubType = replacementSquare->getUnit()->getSubType();
-        auto unitColor = unitSubType == "random" ? generateRandomUnitColor(colorProbabilities) : replacementSquare->getUnit()->getColor();
-        auto unitDirection = unitSubType == "random" ? generateRandomDirection() : replacementSquare->getUnit()->getDirection();
-        if (unitSubType == "random") unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
-        std:string unitPattern = getUnitType(unitSubType, unitColor);
-        generateUnit(attackedSquare, unitSubType, unitColor, unitDirection, replacementSquare->getUnit()->getUnitsNeededToKill());
-
-        // Set empty squares to be uninteractable.
-        attackedSquare->setInteractable(unitSubType != "empty");
-        attackedSquare->getViewNode()->setVisible(unitSubType != "empty");
-        refreshUnitAndSquareView(attackedSquare);
-        if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
-        
+        if (attackedSquare->getUnit()->getSubType() != "king") replaceUnitOnSquare(attackedSquare);
         scoreNum++;
     }
-    if (plusScore)
+    if (plusScore) {
         _score += scoreNum;
+    }
+    if (_kingsKilled) _currentState = SELECTING_UNIT;
+}
+
+void GameScene::replaceUnitOnSquare(shared_ptr<Square> sq) {
+    std::map<Unit::Color, float> colorProbabilities = generateColorProbabilities();
+    Vec2 squarePos = sq->getPosition();
+    _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)]++;
+    int currentReplacementDepth = _currentReplacementDepth[_board->flattenPos(squarePos.x, squarePos.y)];
+    std::shared_ptr<Square> replacementSquare = _level->getBoard(currentReplacementDepth)->getSquare(squarePos);
+    auto unitSubType = replacementSquare->getUnit()->getSubType();
+    auto unitColor = unitSubType == "random" ? generateRandomUnitColor(colorProbabilities) : replacementSquare->getUnit()->getColor();
+    auto unitDirection = unitSubType == "random" ? generateRandomDirection() : replacementSquare->getUnit()->getDirection();
+    if (unitSubType == "random") unitSubType = generateRandomUnitType(_unitRespawnProbabilities);
+    std:string unitPattern = getUnitType(unitSubType, unitColor);
+    generateUnit(sq, unitSubType, unitColor, unitDirection, replacementSquare->getUnit()->getUnitsNeededToKill());
+
+    // Set empty squares to be uninteractable.
+    sq->setInteractable(unitSubType != "empty");
+    sq->getViewNode()->setVisible(unitSubType != "empty");
+//    refreshUnitAndSquareView(sq);
+    if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
 }
 
 /**
@@ -874,8 +988,28 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
         batch->drawText(unitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 200));
 //        batch->drawText(unitIsMoveable, _turn_text->getFont(), Vec2(50, getSize().height - 250));
         batch->drawText(squareIsInteractable, _turn_text->getFont(), Vec2(50, getSize().height - 300));
-        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
-                                                                                                 : "isSpecial() = false";
+//        std::string spe = _selectedSquare == NULL ? "" : _selectedSquare->getUnit()->isSpecial() ? "isSpecial() = true"
+//                                                                                                 : "isSpecial() = false";
+        std::string spe = "";
+        if (_selectedSquare != NULL) {
+            switch (_selectedSquare->getUnit()->getState()){
+                case Unit::IDLE:
+                    spe = "Idle";
+                    break;
+                case Unit::HIT:
+                    spe = "Hit";
+                    break;
+                case Unit::ATTACKING:
+                    spe = "Attacking";
+                    break;
+                case Unit::DYING:
+                    spe = "Dying";
+                    break;
+                default:
+                    spe = "Unknown state";
+                    break;
+            }
+        }
         
         batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
 //        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 300));
@@ -926,7 +1060,7 @@ void GameScene::setActive(bool value)
 
 void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _levelJson = levelJSON;
-    _level = Level::alloc(levelJSON);
+    _level = Level::alloc(_textures, levelJSON);
     vector<int> vector(_level->getNumberOfRows() * _level->getNumberOfColumns(), 0);
     _currentReplacementDepth = vector;
     _score = 0;
@@ -970,14 +1104,18 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             sq->setInteractable(unitSubType != "empty");
             sq->getViewNode()->setVisible(unitSubType != "empty");
             std::string unitPattern = getUnitType(unitSubType, unitColor);
+            std::string unitIdleTextureName = unitSubType + "-idle-" + unitColor;
             auto unitTemplate = _unitTypes.at(unitSubType);
             Unit::Color c = Unit::stringToColor(unitColor);
-            shared_ptr<Unit> newUnit = Unit::alloc(unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType!= "king", unitSubType != "basic", unit->getUnitsNeededToKill());
+            shared_ptr<Unit> newUnit = Unit::alloc(_textures, unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType!= "king", unitSubType != "basic", unit->getUnitsNeededToKill());
+            newUnit->setState(Unit::State::IDLE);
             sq->setUnit(newUnit);
-            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
+            auto unitNode = newUnit->getViewNode();
+//            auto unitNode = scene2::PolygonNode::allocWithTextzure(_textures.at(unitPattern));
             unitNode->setAnchor(Vec2::ANCHOR_CENTER);
             unitNode->setPriority(UNIT_Z);
-            newUnit->setViewNode(unitNode);
+//            newUnit->setViewNode(unitNode);
+
             newUnit->setSpecial(unitSubType != "basic");
             if (_debug) unitNode->setAngle(newUnit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
