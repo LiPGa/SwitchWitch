@@ -170,6 +170,7 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text with the final score */
     std::shared_ptr<cugl::scene2::Label> _score_number;
+    std::shared_ptr<cugl::scene2::Label> _level_info;
     std::shared_ptr<cugl::scene2::Label> _info_text;
     /** The score meter with the current score */
     std::shared_ptr<cugl::scene2::ProgressBar> _scoreMeter;

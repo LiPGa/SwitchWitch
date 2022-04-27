@@ -242,6 +242,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsMenuLayout->setVisible(false);
     
     _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
+    _level_info = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_level"));
     _star1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star1"));
     _star2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star2"));
     _star3 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star3"));
@@ -535,6 +536,7 @@ void GameScene::update(float timestep)
         _restartbutton->activate();
         _backbutton->activate();
         _score_number->setText(to_string(_score));
+        _level_info->setText("Level " + to_string(_levelJson->getInt("id")));
         _star1->setTexture(_textures.at("star_empty"));
         _star2->setTexture(_textures.at("star_empty"));
         _star3->setTexture(_textures.at("star_empty"));
