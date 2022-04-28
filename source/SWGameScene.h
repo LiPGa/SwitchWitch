@@ -178,6 +178,13 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar1;
     std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar2;
     std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar3;
+    /** The image of the star in the top left score bar*/
+    std::shared_ptr<cugl::scene2::PolygonNode> _oneStar;
+    std::shared_ptr<cugl::scene2::PolygonNode> _twoStar1;
+    std::shared_ptr<cugl::scene2::PolygonNode> _twoStar2;
+    std::shared_ptr<cugl::scene2::PolygonNode> _threeStar1;
+    std::shared_ptr<cugl::scene2::PolygonNode> _threeStar2;
+    std::shared_ptr<cugl::scene2::PolygonNode> _threeStar3;
 
     /** The images of the final stars*/
     std::shared_ptr<cugl::scene2::PolygonNode> _star1;
