@@ -263,7 +263,14 @@ public:
      * @return true if the controller is initialized properly, false otherwise.
      */
     bool init(const std::shared_ptr<cugl::AssetManager> &assets);
-
+    
+    /**
+     * Set up the top UI
+     *
+     * UI includes: star and score system, number of swaps, setting menu, and unit icons
+     */
+    void setTopUI(const std::shared_ptr<cugl::AssetManager> &assets);
+    
 #pragma mark -
 #pragma mark Gameplay Handling
     /**

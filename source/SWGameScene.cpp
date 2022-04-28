@@ -116,29 +116,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _probability.insert({probabilityName, probabilitySum});
         _unitRespawnProbabilities.insert({probabilityName, static_cast<float>(respawnProb)});
     }
-
-    // ---------------------- SET UP TOP UI --------------------------------
-    // Get the background image and constant values
-    _background = assets->get<Texture>("background");
-    _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
-    _scale = getSize() / _background->getSize();
-    _backgroundNode->setScale(_scale);
-
-    _topuibackground = assets->get<Texture>("top-ui-background");
-    _topuibackgroundNode = scene2::PolygonNode::allocWithTexture(_topuibackground);
-    _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
-    _topuibackgroundNode->setScale(_scale);
-
-    // Allocate Layout
-    _layout = scene2::AnchoredLayout::alloc();
-
+    
     // Set up GUI
     _guiNode = scene2::SceneNode::allocWithBounds(getSize());
     addChild(_guiNode);
-    _guiNode->addChild(_backgroundNode);
-    _backgroundNode->setAnchor(Vec2::ZERO);
-    _layout->addAbsolute("top_ui_background", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(0, -(_topuibackgroundNode->getSize().height)));
-    _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
+    
+    // Allocate Layout
+    _layout = scene2::AnchoredLayout::alloc();
+
+    // Set up top UI
+    setTopUI(assets);
 
     // Initialize state
     _currentState = SELECTING_UNIT;
@@ -156,41 +143,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 //    // Create and layout unitsNeededToKill info
 //    auto units_needed_to_kill = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
     
-    // ----------- Create and layout the star and score system ---------
-    _oneStar = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_oneStar"));
-    _oneStar = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
-    _twoStar1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_twoStar1"));
-    _twoStar1 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
-    _twoStar2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_twoStar2"));
-    _twoStar2 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
-    _threeStar1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_threeStar1"));
-    _threeStar1 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
-    _threeStar2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_threeStar2"));
-    _threeStar2 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
-    _threeStar3 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_threeStar3"));
-    _threeStar3 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
-    // Resize the stars
-    std::shared_ptr<cugl::scene2::PolygonNode> starSystem[6] = {_oneStar, _twoStar1, _twoStar2, _threeStar1, _threeStar2, _threeStar3};
-    for (auto star : starSystem) {
-        star->setScale(0.15f);
-    };
-    // Add stars to guiNode
-    _guiNode->addChildWithName(_oneStar, "oneStar");
-    _guiNode->addChildWithName(_twoStar1, "twoStar1");
-    _guiNode->addChildWithName(_twoStar2, "twoStar2");
-    _guiNode->addChildWithName(_threeStar1, "threeStar1");
-    _guiNode->addChildWithName(_threeStar2, "threeStar2");
-    _guiNode->addChildWithName(_threeStar3, "threeStar3");
-    // Layout
-    // One star
-    _layout->addAbsolute("oneStar", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 8, -0.76 * (_topuibackgroundNode->getSize().height)));
-    // Two stars
-    _layout->addAbsolute("twoStar1", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 8, -0.96 * (_topuibackgroundNode->getSize().height)));
-    _layout->addAbsolute("twoStar2", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 12, -0.96 * (_topuibackgroundNode->getSize().height)));
-    // Three stars
-    _layout->addAbsolute("threeStar1", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 8, -1.16 * (_topuibackgroundNode->getSize().height)));
-    _layout->addAbsolute("threeStar2", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 12, -1.16 * (_topuibackgroundNode->getSize().height)));
-    _layout->addAbsolute("threeStar3", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 24, -1.16 * (_topuibackgroundNode->getSize().height)));
     
 //
 //    // Create and layout the score meter
@@ -348,6 +300,66 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _kingsKilled = false;
     return true;
 }
+
+/**
+ * Set up the top UI
+ *
+ * UI includes: star and score system, number of swaps, setting menu, and unit icons
+ */
+void GameScene::setTopUI(const std::shared_ptr<cugl::AssetManager> &assets) {
+    // -------- Get the background image and constant values ----------
+    _background = assets->get<Texture>("background");
+    _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
+    _scale = getSize() / _background->getSize();
+    _backgroundNode->setScale(_scale);
+    
+    _topuibackground = assets->get<Texture>("top-ui-background");
+    _topuibackgroundNode = scene2::PolygonNode::allocWithTexture(_topuibackground);
+    _scale.set(getSize().width / _topuibackground->getSize().width, getSize().width / _topuibackground->getSize().width);
+    _topuibackgroundNode->setScale(_scale);
+
+    _guiNode->addChild(_backgroundNode);
+    _backgroundNode->setAnchor(Vec2::ZERO);
+    _layout->addAbsolute("top_ui_background", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(0, -(_topuibackgroundNode->getSize().height)));
+    _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
+    
+    // --------------- Create the star and score system -------------
+    _oneStar = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_oneStar"));
+    _oneStar = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
+    _twoStar1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_twoStar1"));
+    _twoStar1 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
+    _twoStar2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_twoStar2"));
+    _twoStar2 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
+    _threeStar1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_threeStar1"));
+    _threeStar1 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
+    _threeStar2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_threeStar2"));
+    _threeStar2 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
+    _threeStar3 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_threeStar3"));
+    _threeStar3 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
+    // Resize the stars
+    std::shared_ptr<cugl::scene2::PolygonNode> starSystem[6] = {_oneStar, _twoStar1, _twoStar2, _threeStar1, _threeStar2, _threeStar3};
+    for (auto star : starSystem) {
+        star->setScale(0.15f);
+    };
+    // Add stars to guiNode
+    _guiNode->addChildWithName(_oneStar, "oneStar");
+    _guiNode->addChildWithName(_twoStar1, "twoStar1");
+    _guiNode->addChildWithName(_twoStar2, "twoStar2");
+    _guiNode->addChildWithName(_threeStar1, "threeStar1");
+    _guiNode->addChildWithName(_threeStar2, "threeStar2");
+    _guiNode->addChildWithName(_threeStar3, "threeStar3");
+    
+    // --------------- Layout of the star and score system -------------
+    // One star layout
+    _layout->addAbsolute("oneStar", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 8, -0.76 * (_topuibackgroundNode->getSize().height)));
+    // Two stars
+    _layout->addAbsolute("twoStar1", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 8, -0.96 * (_topuibackgroundNode->getSize().height)));
+    _layout->addAbsolute("twoStar2", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 12, -0.96 * (_topuibackgroundNode->getSize().height)));
+    // Three stars
+    _layout->addAbsolute("threeStar1", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 8, -1.16 * (_topuibackgroundNode->getSize().height)));
+    _layout->addAbsolute("threeStar2", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 12, -1.16 * (_topuibackgroundNode->getSize().height)));
+    _layout->addAbsolute("threeStar3", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 24, -1.16 * (_topuibackgroundNode->getSize().height)));
+};
 
 /**
  * Get the pattern for a unit provided its type and color
