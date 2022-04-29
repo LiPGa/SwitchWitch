@@ -1,12 +1,34 @@
 {
     "textures": {
-        "background": {
-            "file": "textures/background.png",
-            "wrapS": "repeat",
-            "wrapT": "repeat"
+        "background-forest": {
+            "file": "textures/background_forest_big.png"
+        },
+        "background-glacier": {
+            "file": "textures/background_glacier_big.png"
+        },
+        "background-volcano": {
+            "file": "textures/background_volcano_big.png"
         },
         "top-ui-background": {
             "file": "textures/top-ui-background.png"
+        },
+        "square-forest": {
+            "file": "textures/square_forest.png"
+        },
+        "square-forest-next-special": {
+            "file": "textures/square_forest_next_special.png"
+        },
+        "square-glacier": {
+            "file": "textures/square_glacier.png"
+        },
+        "square-glacier-next-special": {
+            "file": "textures/square_glacier_next_special.png"
+        },
+        "square-volcano": {
+            "file": "textures/square_volcano.png"
+        },
+        "square-volcano-next-special": {
+            "file": "textures/square_volcano_next_special.png"
         },
         "square": {
             "file": "textures/square.png"
@@ -1476,6 +1498,23 @@
                         "y_anchor" : "middle",
                         "x_offset" : 0,
                         "y_offset" : 0
+                    }
+                },
+                "background": {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key"     : "textbutton",
+                        "variables" : {
+                            "size": [100,50],
+                            "text": "Background",
+                            "color": "#000088"
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle",
+                        "x_offset" : 0,
+                        "y_offset" : -0.25
                     }
                 }
             }

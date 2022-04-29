@@ -21,7 +21,7 @@
 #include <cugl/scene2/actions/CUFadeAction.h>
 #include <cugl/scene2/actions/CUAnimateAction.h>
 #include <cugl/math/CUEasingBezier.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "SWGameScene.h"
 
@@ -118,7 +118,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     }
 
     // Get the background image and constant values
-    _background = assets->get<Texture>("background");
+    _background = assets->get<Texture>("background-" + constants->get("themes")->asStringArray().at(0));
     _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
     _scale = getSize() / _background->getSize();
     _backgroundNode->setScale(_scale);
@@ -367,7 +367,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     string currentDirection = Unit::directionToString(currentUnit->getDirection());
     if (_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns) {
         if (currentUnit->isSpecial() && currentUnit->getSubType() != "king" && currentUnit->getSubType() != "empty") sqTexture = "special_" + currentDirection + "_square";
-        else sqTexture = "square";
+        else sqTexture = "square-" + _level->backgroundName;
         square->getViewNode()->setTexture(_textures.at(sqTexture));
         return;
     }
@@ -390,7 +390,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     }
     else
     {
-        sqTexture = "square";
+        sqTexture = "square-" + _level->backgroundName;
     }
     square->getViewNode()->setTexture(_textures.at(sqTexture));
 }
@@ -1068,6 +1068,9 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _score = 0;
     _turns = _level->maxTurns;
 
+    // Change Background
+    _backgroundNode->setTexture(_textures.at("background-" + _levelJson->getString("background")));
+
     map<Unit::Color, float> startingColorProbabilities = {
         { Unit::Color(0), 0.33 },
         { Unit::Color(1), 0.33 },
@@ -1084,7 +1087,8 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _boardNode->setTexture(_textures.at("transparent"));
     for (int i = 0; i < _level->getNumberOfColumns(); i++) {
         for (int j = 0; j < _level->getNumberOfRows(); ++j) {
-            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
+            auto test = "square-" + _level->backgroundName;
+            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square-" + _level->backgroundName));
             auto squarePosition = Vec2(i, j);
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
             squareNode->setScale(_squareScaleFactor);

@@ -6,6 +6,7 @@
 	"one-star-condition":	9,
 	"two-star-condition":	9,
 	"three-star-condition":	9,
+	"background": "forest",
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"random",

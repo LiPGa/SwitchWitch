@@ -3,7 +3,15 @@
     "board-size": [6,9],
     "square-size": 162,
     "textures": [
-        "background",
+        "background-forest",
+        "background-glacier",
+        "background-volcano",
+        "square-forest",
+        "square-forest-next-special",
+        "square-glacier",
+        "square-glacier-next-special",
+        "square-volcano",
+        "square-volcano-next-special",
         "square",
         "square-selected",
         "square-swap",
@@ -125,5 +133,10 @@
         "two-forward",
         "three-way",
         "diagonal"
+    ],
+    "themes": [
+        "forest",
+        "glacier",
+        "volcano"
     ]
 }
