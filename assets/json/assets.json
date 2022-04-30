@@ -1,12 +1,34 @@
 {
     "textures": {
-        "background": {
-            "file": "textures/background.png",
-            "wrapS": "repeat",
-            "wrapT": "repeat"
+        "background-forest": {
+            "file": "textures/background_forest_big.png"
+        },
+        "background-glacier": {
+            "file": "textures/background_glacier_big.png"
+        },
+        "background-volcano": {
+            "file": "textures/background_volcano_big.png"
         },
         "top-ui-background": {
             "file": "textures/top-ui-light-bulb.png"
+        },
+        "square-forest": {
+            "file": "textures/square_forest.png"
+        },
+        "square-forest-next-special": {
+            "file": "textures/square_forest_next_special.png"
+        },
+        "square-glacier": {
+            "file": "textures/square_glacier.png"
+        },
+        "square-glacier-next-special": {
+            "file": "textures/square_glacier_next_special.png"
+        },
+        "square-volcano": {
+            "file": "textures/square_volcano.png"
+        },
+        "square-volcano-next-special": {
+            "file": "textures/square_volcano_next_special.png"
         },
         "square": {
             "file": "textures/square.png"
@@ -107,6 +129,15 @@
         "king-blue": {
             "file": "textures/king_red.png"
         },
+        "king-idle-red": {
+            "file": "textures/king_idle_red.png"
+        },
+        "king-idle-green": {
+            "file": "textures/king_idle_red.png"
+        },
+        "king-idle-blue": {
+            "file": "textures/king_idle_red.png"
+        },
         "basic-red": {
             "file": "textures/red_unit.png"
         },
@@ -169,9 +200,6 @@
         },
         "diagonal-red": {
             "file": "textures/diagonal_red.png"
-        },
-        "diagonal-blue": {
-            "file": "textures/diagonal_blue.png"
         },
         "diagonal-idle-blue": {
             "file": "textures/diagonal_idle_blue.png"
@@ -422,8 +450,13 @@
         "bubble": {
             "file": "textures/bubble.png"
         },
-        "transparent": {
-            "file": "textures/transparent.png"
+        "black": {
+            "file": "textures/black_texture.png",
+            "wrapS": "repeat",
+            "wrapT": "repeat"
+        },
+        "score-explanation-popup": {
+            "file": "textures/score_explanation_popup.png"
         }
     },
     "fonts": {
@@ -488,7 +521,16 @@
         "level7": "levels/board7.json",
         "level8": "levels/board8.json",
         "level9": "levels/board9.json",
-        "level10": "levels/board10.json"
+        "level10": "levels/board10.json",
+        "level11": "levels/board11.json",
+        "level12": "levels/board12.json",
+        "level13": "levels/board13.json",
+        "level14": "levels/board14.json",
+        "level15": "levels/board15.json",
+        "level16": "levels/board16.json",
+        "level17": "levels/board17.json",
+        "level18": "levels/board18.json",
+        "level19": "levels/board19.json"
     },
     "scene2s": {
         "map": {
@@ -774,6 +816,240 @@
                                 "y_offset": 0.02,
                                 "absolute": false
                             }
+                        },
+                        "level11"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.05,
+                                "y_offset": 0.07,
+                                "absolute": false
+                            }
+                        },
+                        "level12"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.05,
+                                "y_offset": 0.12,
+                                "absolute": false
+                            }
+                        },
+                        "level13"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.05,
+                                "y_offset": 0.17,
+                                "absolute": false
+                            }
+                        },
+                        "level14"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.05,
+                                "y_offset": 0.22,
+                                "absolute": false
+                            }
+                        },
+                        "level15"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.05,
+                                "y_offset": 0.27,
+                                "absolute": false
+                            }
+                        },
+                        "level16"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.05,
+                                "y_offset": 0.32,
+                                "absolute": false
+                            }
+                        },
+                        "level17"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.05,
+                                "y_offset": 0.37,
+                                "absolute": false
+                            }
+                        },
+                        "level18"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.05,
+                                "y_offset": 0.42,
+                                "absolute": false
+                            }
+                        },
+                        "level19"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "size"    : [156, 126],
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.25
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "locked_level"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.05,
+                                "y_offset": 0.47,
+                                "absolute": false
+                            }
                         }
                     }
                 }
@@ -809,7 +1085,45 @@
                         "x_offset" : -0.03,
                         "y_offset" : -0.195
                     }
-                 }
+                },
+                "score-explanation-btn": {
+                    "type"   : "Button",
+                    "data"   : {
+                        "upnode"   : "up",
+                        "size"    : [200, 90],
+                        "visible"  : true,
+                        "pushsize" : true,
+                        "anchor"   : [0.5,0.5],
+                        "scale"    : 1
+                    },
+                    "children" : {
+                        "up"       : {
+                            "type"   : "Image",
+                            "data"   : {"texture"  : "transparent"}
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "right",
+                        "y_anchor" : "top",
+                        "x_offset": -0.72,
+                        "y_offset": -0.225
+                    }
+                },
+                "score-explanation": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "score-explanation-popup"
+                    },
+                    "layout": {
+                        "y_anchor": "right",
+                        "x_anchor": "top",
+                        "x_offset": -0.07,
+                        "y_offset": 0.52
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    }
+                }
             }
         },
         "settings-menu": {
@@ -1496,6 +1810,23 @@
                         "y_anchor" : "middle",
                         "x_offset" : 0,
                         "y_offset" : 0
+                    }
+                },
+                "background": {
+                    "type"   : "Widget",
+                    "data"   : {
+                        "key"     : "textbutton",
+                        "variables" : {
+                            "size": [100,50],
+                            "text": "Background",
+                            "color": "#000088"
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle",
+                        "x_offset" : 0,
+                        "y_offset" : -0.15
                     }
                 }
             }

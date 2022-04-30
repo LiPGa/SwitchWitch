@@ -74,24 +74,10 @@ protected:
     /** The asset manager for this scene. */
     std::shared_ptr<cugl::AssetManager> _assets;
     /** The vector of levels to choose */
+    int _num_levels;
     vector<std::shared_ptr<cugl::scene2::Button>> levels;
-//    /** The menu button for level editor */
-//    std::shared_ptr<cugl::scene2::Button> _editorbutton;
-    /** The player menu choice */
-    //std::shared_ptr<cugl::scene2::SceneNode> _levelsNode;
-    std::shared_ptr<cugl::scene2::Button> _level1;
-    std::shared_ptr<cugl::scene2::Button> _level2;
-    std::shared_ptr<cugl::scene2::Button> _level3;
-    std::shared_ptr<cugl::scene2::Button> _level4;
-    std::shared_ptr<cugl::scene2::Button> _level5;
-    std::shared_ptr<cugl::scene2::Button> _level6;
-    std::shared_ptr<cugl::scene2::Button> _level7;
-    std::shared_ptr<cugl::scene2::Button> _level8;
-    std::shared_ptr<cugl::scene2::Button> _level9;
-    std::shared_ptr<cugl::scene2::Button> _level10;
-    //std::shared_ptr<scene2::SceneNode> _level1Node;
     
-    Level _chosenLevel;
+    int _chosenLevel;
 
     bool start_ok = false;
     
@@ -168,7 +154,9 @@ public:
      *
      * @return the user's chosen level.
      */
-    Level getLevel() const { return _chosenLevel; }
+    int getLevel() const { return _chosenLevel; }
+    
+    void loadLevelButtons();
     
 #pragma mark -
 #pragma mark Gameplay Handling

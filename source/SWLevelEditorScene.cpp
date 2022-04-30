@@ -75,10 +75,14 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _playPressed = false;
 
     // Get the background image and constant values
-    auto background = assets->get<Texture>("background");
+    auto background = assets->get<Texture>("background-" + constants->get("themes")->asStringArray().at(0));
     _backgroundNode = scene2::PolygonNode::allocWithTexture(background);
     _scale = getSize() / background->getSize();
     _backgroundNode->setScale(_scale);
+
+    // Get different background names
+    _backgroundNumber = 0;
+    _backgroundNames = constants->get("themes")->asStringArray();
 
     // Get Textures
     vector<string> textureVec = constants->get("textures")->asStringArray();
@@ -168,6 +172,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _twoStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_two-star-score-field"));
     _threeStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_three-star-score-field"));
     _changeBoardSizeButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level-editor-info_board-size"));
+    _changeBackgroundButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level-editor-info_background"));
 
     _levelIDText->addTypeListener([this](const std::string& name, const std::string& value) {
         if (value.empty()) return;
@@ -216,6 +221,13 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
             else {
                 _changeBoardSizeButton->setColor(Color4::BLUE);
             }
+        }
+        });
+    _changeBackgroundButton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _backgroundNumber = (_backgroundNumber + 1) % _backgroundNames.size();
+            _backgroundNode->setTexture(_textures.at("background-" + _backgroundNames[_backgroundNumber]));
+            _level->backgroundName = _backgroundNames[_backgroundNumber];
         }
         });
 
@@ -603,7 +615,6 @@ void LevelEditorScene::showBoard() {
     _backButton->activate();
     _deleteButton->activate();
     _infoButton->activate();
-    _changeBoardSizeButton->deactivate();
     
     _changeBoardSizeButton->setDown(false);
 
@@ -611,6 +622,8 @@ void LevelEditorScene::showBoard() {
     _oneStarScoreText->deactivate();
     _twoStarScoreText->deactivate();
     _threeStarScoreText->deactivate();
+    _changeBackgroundButton->deactivate();
+    _changeBoardSizeButton->deactivate();
 
     _buttonsNode->setVisible(true);
     _boardNode->setVisible(true);
@@ -634,6 +647,7 @@ void LevelEditorScene::showInfo() {
     _twoStarScoreText->activate();
     _threeStarScoreText->activate();
     _changeBoardSizeButton->activate();
+    _changeBackgroundButton->activate();
 
     _playButton->deactivate();
     _saveButton->deactivate();
@@ -661,6 +675,7 @@ void LevelEditorScene::showInfo() {
 
 void LevelEditorScene::setLevel(shared_ptr<Level> level) {
     _level = level;
+    _backgroundNode->setTexture(_textures.at("background-" + _level->backgroundName));
     _currentBoardTurn = 0;
     _rows = level->getNumberOfRows();
     _columns = level->getNumberOfColumns();

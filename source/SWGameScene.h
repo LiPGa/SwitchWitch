@@ -104,6 +104,9 @@ protected:
     /** The scale which all textures must conform to */
     Size _scale;
 
+    /** The current amount of time since a reset */
+    float _time;
+
     /** The current number of turns left for the player */
     int _turns;
     /** The current score of the player */
@@ -154,6 +157,7 @@ protected:
     std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _enlargedUnitNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _scoreExplanation;
 
     int _replacementListLength;
     // VIEW items are going to be individual variables
@@ -191,6 +195,8 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _settingsRestartBtn;
     /** The button to display settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsbutton;
+    /** The button to display the explanation for score */
+    std::shared_ptr<cugl::scene2::Button> _scoreExplanationButton;
     /** The button to close settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsCloseBtn;
     /** The button to go back to level map */
