@@ -107,6 +107,15 @@
         "king-blue": {
             "file": "textures/king_red.png"
         },
+        "king-idle-red": {
+            "file": "textures/king_idle_red.png"
+        },
+        "king-idle-green": {
+            "file": "textures/king_idle_red.png"
+        },
+        "king-idle-blue": {
+            "file": "textures/king_idle_red.png"
+        },
         "basic-red": {
             "file": "textures/red_unit.png"
         },
