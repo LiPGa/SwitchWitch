@@ -6,7 +6,7 @@
 	"one-star-condition":	10,
 	"two-star-condition":	10,
 	"three-star-condition":	10,
-    "background":    "glacier",
+    "background":    "forest",
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"empty",
