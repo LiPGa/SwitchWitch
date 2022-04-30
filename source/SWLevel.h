@@ -35,6 +35,7 @@ public:
     int threeStarThreshold;
     /** number of kings*/
     int numOfKings;
+    string backgroundName;
 
 #pragma mark Constructors
     /**

@@ -1,11 +1,12 @@
 {
 	"id":	8,
-    "rows": 9,
-    "columns": 6,
+	"rows":	9,
+	"columns":	6,
 	"total-swap-allowed":	8,
 	"one-star-condition":	12,
 	"two-star-condition":	12,
 	"three-star-condition":	12,
+	"background":	"glacier",
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"random",

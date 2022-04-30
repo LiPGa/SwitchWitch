@@ -21,7 +21,7 @@
 #include <cugl/scene2/actions/CUFadeAction.h>
 #include <cugl/scene2/actions/CUAnimateAction.h>
 #include <cugl/math/CUEasingBezier.h>
-#include <unistd.h>
+//#include <unistd.h>
 
 #include "SWGameScene.h"
 
@@ -43,6 +43,9 @@ using namespace std;
 #define UNIT_Z 1
 #define SQUARE_Z 2
 
+/** Initial amount of time where no interactions do anything **/
+#define TIME_BEFORE_INTERACTION 0.2
+
 #pragma mark Constructors
 
 
@@ -59,6 +62,7 @@ using namespace std;
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
+    _time = 0;
     _debug = false;
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
@@ -118,7 +122,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     }
 
     // Get the background image and constant values
-    _background = assets->get<Texture>("background");
+    _background = assets->get<Texture>("background-" + constants->get("themes")->asStringArray().at(0));
     _backgroundNode = scene2::PolygonNode::allocWithTexture(_background);
     _scale = getSize() / _background->getSize();
     _backgroundNode->setScale(_scale);
@@ -262,9 +266,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsbutton->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didPause = true;
-            CULog("Pressed Pause/Settings button");
         }
     });
+
+    _scoreExplanationButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings_score-explanation-btn"));
+    _scoreExplanationButton->setVisible(true);
+    _scoreExplanationButton->activate();
+    _scoreExplanationButton->setDown(false);
+    _scoreExplanationButton->clearListeners();
+    _scoreExplanationButton->addListener([this](const std::string& name, bool down) {
+        if (down && _time >= TIME_BEFORE_INTERACTION) {
+             _scoreExplanation->setVisible(!_scoreExplanation->isVisible());
+        }
+        });
+    
+    _scoreExplanation = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("settings_score-explanation"));
+    _scoreExplanation->setScale(_scale);
+    _scoreExplanation->setVisible(false);
+
     
     _settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
     _settingsRestartBtn->setVisible(true);
@@ -367,7 +386,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     string currentDirection = Unit::directionToString(currentUnit->getDirection());
     if (_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns) {
         if (currentUnit->isSpecial() && currentUnit->getSubType() != "king" && currentUnit->getSubType() != "empty") sqTexture = "special_" + currentDirection + "_square";
-        else sqTexture = "square";
+        else sqTexture = "square-" + _level->backgroundName;
         square->getViewNode()->setTexture(_textures.at(sqTexture));
         return;
     }
@@ -390,7 +409,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     }
     else
     {
-        sqTexture = "square";
+        sqTexture = "square-" + _level->backgroundName;
     }
     square->getViewNode()->setTexture(_textures.at(sqTexture));
 }
@@ -520,11 +539,15 @@ void GameScene::update(float timestep)
       //  _audioQueue->play(_assets->get<Sound>("track_1"), false, .3, false);
     //}
 //    _audioQueue->setLoop(true);
-
+    if (_time <= TIME_BEFORE_INTERACTION) {
+        _time += timestep;
+    }
+    
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
     
+
     if (_didRestart == true) reset(_levelJson);
     if (_didRestart == true && _didPause == true) reset(_levelJson);
 
@@ -535,6 +558,7 @@ void GameScene::update(float timestep)
         _resultLayout->setVisible(true);
         _restartbutton->activate();
         _backbutton->activate();
+        _scoreExplanationButton->deactivate();
         _score_number->setText(to_string(_score));
         _level_info->setText("Level " + to_string(_levelJson->getInt("id")));
         _star1->setTexture(_textures.at("star_empty"));
@@ -587,7 +611,7 @@ void GameScene::update(float timestep)
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable())
         {
             auto squareOnMouse = _board->getSquare(squarePos);
-            if (_currentState == SELECTING_UNIT)
+            if (_currentState == SELECTING_UNIT && squareOnMouse->getUnit()->getSubType() != "king")
             {
                 _selectedSquare = squareOnMouse;
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
@@ -785,9 +809,9 @@ void GameScene::update(float timestep)
                 case Unit::State::ATTACKING:
                     for (auto atkSquare : _board->getInitallyAttackedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit())) {
                         if (atkSquare->getUnit()->getState() == Unit::State::IDLE) {
-                            if (_attackedSquares.size() >= atkSquare->getUnit()->getUnitsNeededToKill()) {
+//                            if (_attackedSquares.size() >= atkSquare->getUnit()->getUnitsNeededToKill()) {
                                 atkSquare->getUnit()->setState(Unit::State::HIT);
-                            }
+//                            }
                         }
                         refreshUnitView(atkSquare);
                     }
@@ -1068,6 +1092,9 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _score = 0;
     _turns = _level->maxTurns;
 
+    // Change Background
+    _backgroundNode->setTexture(_textures.at("background-" + _levelJson->getString("background")));
+
     map<Unit::Color, float> startingColorProbabilities = {
         { Unit::Color(0), 0.33 },
         { Unit::Color(1), 0.33 },
@@ -1084,7 +1111,8 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _boardNode->setTexture(_textures.at("transparent"));
     for (int i = 0; i < _level->getNumberOfColumns(); i++) {
         for (int j = 0; j < _level->getNumberOfRows(); ++j) {
-            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square"));
+            auto test = "square-" + _level->backgroundName;
+            shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square-" + _level->backgroundName));
             auto squarePosition = Vec2(i, j);
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
             squareNode->setScale(_squareScaleFactor);
