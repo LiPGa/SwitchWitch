@@ -611,7 +611,7 @@ void GameScene::update(float timestep)
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable())
         {
             auto squareOnMouse = _board->getSquare(squarePos);
-            if (_currentState == SELECTING_UNIT)
+            if (_currentState == SELECTING_UNIT && squareOnMouse->getUnit()->getSubType() != "king")
             {
                 _selectedSquare = squareOnMouse;
                 _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
@@ -809,9 +809,9 @@ void GameScene::update(float timestep)
                 case Unit::State::ATTACKING:
                     for (auto atkSquare : _board->getInitallyAttackedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit())) {
                         if (atkSquare->getUnit()->getState() == Unit::State::IDLE) {
-                            if (_attackedSquares.size() >= atkSquare->getUnit()->getUnitsNeededToKill()) {
+//                            if (_attackedSquares.size() >= atkSquare->getUnit()->getUnitsNeededToKill()) {
                                 atkSquare->getUnit()->setState(Unit::State::HIT);
-                            }
+//                            }
                         }
                         refreshUnitView(atkSquare);
                     }
