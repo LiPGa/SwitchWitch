@@ -352,6 +352,7 @@ void GameScene::setTopUI(const std::shared_ptr<cugl::AssetManager> &assets) {
     // --------------- Layout of the star and score system -------------
     // One star layout
     _layout->addAbsolute("oneStar", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 8, -0.76 * (_topuibackgroundNode->getSize().height)));
+    _layout->addAbsolute("oneStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -1.275 * (_topuibackgroundNode->getSize().height)));
     // Two stars
     _layout->addAbsolute("twoStar1", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 8, -0.96 * (_topuibackgroundNode->getSize().height)));
     _layout->addAbsolute("twoStar2", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 12, -0.96 * (_topuibackgroundNode->getSize().height)));
