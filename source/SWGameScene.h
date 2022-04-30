@@ -154,6 +154,7 @@ protected:
     std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _enlargedUnitNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _scoreExplanation;
 
     int _replacementListLength;
     // VIEW items are going to be individual variables
@@ -191,6 +192,8 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _settingsRestartBtn;
     /** The button to display settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsbutton;
+    /** The button to display the explanation for score */
+    std::shared_ptr<cugl::scene2::Button> _scoreExplanationButton;
     /** The button to close settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsCloseBtn;
     /** The button to go back to level map */

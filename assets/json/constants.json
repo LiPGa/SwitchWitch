@@ -17,6 +17,7 @@
         "square-swap",
         "square-attacked",
         "transparent",
+        "black",
         "random-red",
         "random-green",
         "random-blue",
@@ -126,7 +127,8 @@
         "star_full",
         "bubble",
         "next-special-square",
-        "transparent"
+        "transparent",
+        "score-explanation-popup"
     ],
     "probability-respawn": [
         "basic",

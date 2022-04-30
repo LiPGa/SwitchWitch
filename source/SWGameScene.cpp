@@ -262,9 +262,27 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsbutton->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didPause = true;
-            CULog("Pressed Pause/Settings button");
         }
     });
+
+    _scoreExplanationButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings_score-explanation-btn"));
+    _scoreExplanationButton->setVisible(true);
+    _scoreExplanationButton->activate();
+    _scoreExplanationButton->setDown(false);
+    _scoreExplanationButton->clearListeners();
+    _scoreExplanationButton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("-------------Pressed Score Explanation------------------");
+            auto test = _scoreExplanation->isVisible();
+            _scoreExplanation->setVisible(!_scoreExplanation->isVisible());
+        }
+        });
+
+    
+    _scoreExplanation = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("settings_score-explanation"));
+    _scoreExplanation->setScale(_scale);
+    _scoreExplanation->setVisible(false);
+
     
     _settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
     _settingsRestartBtn->setVisible(true);
@@ -535,6 +553,7 @@ void GameScene::update(float timestep)
         _resultLayout->setVisible(true);
         _restartbutton->activate();
         _backbutton->activate();
+        _scoreExplanationButton->deactivate();
         _score_number->setText(to_string(_score));
         _level_info->setText("Level " + to_string(_levelJson->getInt("id")));
         _star1->setTexture(_textures.at("star_empty"));
