@@ -9,6 +9,11 @@
         "square-swap",
         "square-attacked",
         "transparent",
+<<<<<<< Updated upstream
+=======
+        "shield",
+        "black",
+>>>>>>> Stashed changes
         "random-red",
         "random-green",
         "random-blue",

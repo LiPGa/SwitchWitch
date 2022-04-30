@@ -639,10 +639,15 @@ void GameScene::update(float timestep)
                 squareOnMouse->getViewNode()->setTexture(_textures.at("square-swap"));
                 _swappingSquare->getUnit()->setDirection(_swappingSquare->getPosition() - _selectedSquare->getPosition());
                 _attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
-                
+                _protectedSquares = _board->getProtectedSquares(_swappingSquare->getPosition());
+
                 for (shared_ptr<Square> attackedSquare : _attackedSquares)
                 {
                     attackedSquare->getViewNode()->setTexture(_textures.at("square-attacked"));
+                }
+                for (shared_ptr<Square> protectedSquare : _protectedSquares)
+                {
+                    protectedSquare->getViewNode()->setTexture(_textures.at("shield"));
                 }
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
@@ -656,6 +661,7 @@ void GameScene::update(float timestep)
     }
     else if (_input.didRelease() && _currentState != ANIMATION)
     {
+        CULog("did release");
         _upcomingUnitNode->setVisible(false);
         _upcomingUnitNode->removeAllChildren();
         if (_enlargedUnitNode) _enlargedUnitNode->setScale(BACK2NORMAL);
@@ -667,6 +673,7 @@ void GameScene::update(float timestep)
 
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable() && _currentState == CONFIRM_SWAP)
         {
+            CULog("mid swap");
             _currentState = ANIMATION;
             _midSwap = true;
             
@@ -773,6 +780,11 @@ void GameScene::update(float timestep)
                 case Unit::State::DEAD:
 //                    square->getViewNode()->setVisible(false);
                     break;
+                case Unit::State::PROTECTED:
+                    CULog("protected");
+                    unit->setState(Unit::State::IDLE);
+                    refreshUnitView(square);
+                    break;
                 case Unit::State::HIT:
                     if (unitType != "basic" && unitType != "empty" && unitType != "king") {
                         unit->setState(Unit::State::ATTACKING);
@@ -783,6 +795,7 @@ void GameScene::update(float timestep)
                     }
                     break;
                 case Unit::State::ATTACKING:
+                    CULog("attacking");
                     for (auto atkSquare : _board->getInitallyAttackedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit())) {
                         if (atkSquare->getUnit()->getState() == Unit::State::IDLE) {
                             if (_attackedSquares.size() >= atkSquare->getUnit()->getUnitsNeededToKill()) {
@@ -790,6 +803,11 @@ void GameScene::update(float timestep)
                             }
                         }
                         refreshUnitView(atkSquare);
+                    }
+                    for (auto ptdSquare : _board->getInitiallyProtectedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit())) {
+                        if (ptdSquare->getUnit()->getState() == Unit::State::IDLE){ ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
+                        }
+                        refreshUnitView(ptdSquare);
                     }
                     if (unit->hasBeenHit()) unit->setState(Unit::State::DYING);
                     else unit->setState(Unit::State::IDLE);
