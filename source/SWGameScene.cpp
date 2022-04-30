@@ -862,10 +862,13 @@ void GameScene::updateModelPostSwap() {
         _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING); // begin the attack sequence
         refreshUnitView(_initalAttackSquare);
     }
-    for (auto ptdSquare: _protectedSquares){
-        ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
-        refreshUnitView(ptdSquare);
+    else{ // need to show shield animation even if no unit is killed in this swap
+        for (auto ptdSquare: _protectedSquares){
+            ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
+            refreshUnitView(ptdSquare);
+        }
     }
+
 }
 
 void GameScene::respawnAttackedSquares() {
