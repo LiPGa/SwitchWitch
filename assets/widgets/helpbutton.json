@@ -1,0 +1,51 @@
+{
+    "variables" : {
+        "size"   : ["data", "size"],
+        "anchor" : ["data", "anchor"],
+        "text"   : ["children","up","children","label","data","text"],
+        "font"   : ["children","up","children","label","data","font"],
+        "color"  : ["children","up","children","patch","data","color"]
+    },
+    "contents": {
+        "type"   : "Button",
+        "format" : {
+            "type" : "Anchored"
+        },
+        "data"   : {
+            "upnode"  : "up",
+            "anchor"  : [0.5,0.5],
+            "size"    : [240, 60],
+            "scale": 0.35
+        },
+        "children": {
+            "up" : {
+                "type" : "Node",
+                "format" : {
+                    "type" : "Anchored"
+                },
+                "children": {
+                    "patch" : {
+                        "type" : "NinePatch",
+                        "data": {
+                            "texture":  "helpbutton",
+                            "anchor"   : [0.5, 0.5]
+                        },
+                        "layout" : {
+                            "x_anchor" : "fill",
+                            "y_anchor" : "fill"
+                        }
+                    }
+                },
+                "layout" : {
+                    "x_anchor" : "fill",
+                    "y_anchor" : "fill"
+                }
+            }
+        },
+        "layout" : {
+            "x_anchor" : "center",
+            "y_anchor" : "middle"
+        }
+    }
+}
+

@@ -341,6 +341,12 @@
         "special_right_square": {
             "file": "textures/right.png"
         },
+        "shield": {
+            "file": "textures/shield.png"
+        },
+        "helpbutton": {
+            "file": "textures/settings-help.png"
+        },
         "button": {
             "file": "textures/button.png"
         },
@@ -464,6 +470,7 @@
     "widgets": {
         "textbutton": "widgets/textbutton.json",
         "retrybutton": "widgets/retrybutton.json",
+        "helpbutton": "widgets/helpbutton.json",
         "exitbutton": "widgets/exitbutton.json",
         "settingsbutton": "widgets/settingsbutton.json",
         "levelbutton": "widgets/levelbutton.json"
@@ -860,10 +867,23 @@
                             "layout": {
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
-                                "x_offset": -0.3
+                                "x_offset": -0.35,
+                                "y_offset": 0.05
                             },
                             "format": {
                                 "type": "Anchored"
+                            }
+                        },
+                        "help": {
+                            "type": "Widget",
+                            "data": {
+                                "key": "helpbutton"
+                            },
+                            "layout": {
+                                "y_anchor": "middle",
+                                "x_anchor": "center",
+                                "x_offset": 0.0,
+                                "y_offset": -0.05
                             }
                         },
                         "restart": {
@@ -875,7 +895,7 @@
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
                                 "x_offset": 0.0,
-                                "y_offset": -0.15
+                                "y_offset": -0.2
                             }
                         },
                         "exit": {
