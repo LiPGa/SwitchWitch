@@ -175,6 +175,7 @@ vector<shared_ptr<Square>> Board::getProtectedSquares(cugl::Vec2 pos){
 }
 
 vector<shared_ptr<Square>> Board::getInitiallyProtectedSquares(cugl::Vec2 pos, bool basic) {
+    CULog("call get protected");
     vector<shared_ptr<Square>> result;
     if (!doesSqaureExist(pos)) {
         return result;

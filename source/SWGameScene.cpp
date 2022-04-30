@@ -781,7 +781,6 @@ void GameScene::update(float timestep)
 //                    square->getViewNode()->setVisible(false);
                     break;
                 case Unit::State::PROTECTED:
-                    CULog("protected");
                     unit->setState(Unit::State::IDLE);
                     refreshUnitView(square);
                     break;
@@ -799,13 +798,15 @@ void GameScene::update(float timestep)
                     for (auto atkSquare : _board->getInitallyAttackedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit())) {
                         if (atkSquare->getUnit()->getState() == Unit::State::IDLE) {
                             if (_attackedSquares.size() >= atkSquare->getUnit()->getUnitsNeededToKill()) {
+                                CULog("set hit");
                                 atkSquare->getUnit()->setState(Unit::State::HIT);
                             }
                         }
                         refreshUnitView(atkSquare);
                     }
                     for (auto ptdSquare : _board->getInitiallyProtectedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit())) {
-                        if (ptdSquare->getUnit()->getState() == Unit::State::IDLE){ ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
+                        if (ptdSquare->getUnit()->getState() == Unit::State::IDLE){
+                            ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
                         }
                         refreshUnitView(ptdSquare);
                     }
@@ -860,6 +861,10 @@ void GameScene::updateModelPostSwap() {
     if (_attackedSquares.size() > 0) {
         _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING); // begin the attack sequence
         refreshUnitView(_initalAttackSquare);
+    }
+    for (auto ptdSquare: _protectedSquares){
+        ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
+        refreshUnitView(ptdSquare);
     }
 }
 
