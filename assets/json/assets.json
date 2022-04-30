@@ -10,7 +10,7 @@
             "file": "textures/background_volcano_big.png"
         },
         "top-ui-background": {
-            "file": "textures/top-ui-background.png"
+            "file": "textures/top-ui-light-bulb.png"
         },
         "square-forest": {
             "file": "textures/square_forest.png"
@@ -363,6 +363,12 @@
         "special_right_square": {
             "file": "textures/right.png"
         },
+        "shield": {
+            "file": "textures/shield.png"
+        },
+        "helpbutton": {
+            "file": "textures/settings-help.png"
+        },
         "button": {
             "file": "textures/button.png"
         },
@@ -444,7 +450,7 @@
     },
     "fonts": {
         "pixel32": {
-            "file": "fonts/Arial.ttf",
+            "file": "fonts/NewRocker-Regular.ttf",
             "size": 32
         },
         "title32": {
@@ -486,6 +492,7 @@
     "widgets": {
         "textbutton": "widgets/textbutton.json",
         "retrybutton": "widgets/retrybutton.json",
+        "helpbutton": "widgets/helpbutton.json",
         "exitbutton": "widgets/exitbutton.json",
         "settingsbutton": "widgets/settingsbutton.json",
         "levelbutton": "widgets/levelbutton.json"
@@ -821,8 +828,8 @@
                     "layout" : {
                         "x_anchor" : "right",
                         "y_anchor" : "top",
-                        "x_offset" : -0.05,
-                        "y_offset" : -0.149
+                        "x_offset" : -0.03,
+                        "y_offset" : -0.195
                     }
                  }
             }
@@ -882,10 +889,23 @@
                             "layout": {
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
-                                "x_offset": -0.3
+                                "x_offset": -0.35,
+                                "y_offset": 0.05
                             },
                             "format": {
                                 "type": "Anchored"
+                            }
+                        },
+                        "help": {
+                            "type": "Widget",
+                            "data": {
+                                "key": "helpbutton"
+                            },
+                            "layout": {
+                                "y_anchor": "middle",
+                                "x_anchor": "center",
+                                "x_offset": 0.0,
+                                "y_offset": -0.05
                             }
                         },
                         "restart": {
@@ -897,7 +917,7 @@
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
                                 "x_offset": 0.0,
-                                "y_offset": -0.15
+                                "y_offset": -0.2
                             }
                         },
                         "exit": {
