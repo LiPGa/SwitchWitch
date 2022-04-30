@@ -1,25 +1,14 @@
 {
 	"id":	9,
-    "rows": 9,
-    "columns": 6,
+	"rows":	5,
+	"columns":	6,
 	"total-swap-allowed":	2,
 	"one-star-condition":	5,
 	"two-star-condition":	5,
 	"three-star-condition":	5,
+	"background":	"glacier",
 	"board-members":	[[{
 				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
 				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
@@ -45,30 +34,6 @@
 			}, {
 				"type":	"unit",
 				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -87,12 +52,6 @@
 			}, {
 				"type":	"unit",
 				"sub-type":	"random",
-				"color":	"blue",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -104,25 +63,7 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
+				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -158,30 +99,6 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
 				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
@@ -195,7 +112,7 @@
 			}, {
 				"type":	"unit",
 				"sub-type":	"random",
-				"color":	"green",
+				"color":	"red",
 				"direction":	[0, -1],
 				"unitsNeededToKill":	0
 			}, {
@@ -212,30 +129,6 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
 				"sub-type":	"basic",
 				"color":	"green",
 				"direction":	[1, 0],
@@ -261,30 +154,6 @@
 			}, {
 				"type":	"unit",
 				"sub-type":	"basic",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -318,27 +187,33 @@
 				"color":	"blue",
 				"direction":	[0, -1],
 				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
 			}], [{
 				"type":	"unit",
-				"sub-type":	"empty",
+				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
+				"sub-type":	"random",
+				"color":	"red",
+				"direction":	[1, 0],
+				"unitsNeededToKill":	0
+			}, {
+				"type":	"unit",
+				"sub-type":	"random",
+				"color":	"red",
+				"direction":	[1, 0],
+				"unitsNeededToKill":	0
+			}, {
+				"type":	"unit",
+				"sub-type":	"random",
+				"color":	"red",
+				"direction":	[1, 0],
+				"unitsNeededToKill":	0
+			}, {
+				"type":	"unit",
+				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -374,30 +249,6 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
 				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
@@ -423,84 +274,6 @@
 			}, {
 				"type":	"unit",
 				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -536,30 +309,6 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
 				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
@@ -579,36 +328,6 @@
 			}, {
 				"type":	"unit",
 				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -644,25 +363,37 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
+				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
 			}], [{
 				"type":	"unit",
-				"sub-type":	"empty",
+				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
+				"sub-type":	"random",
+				"color":	"red",
+				"direction":	[1, 0],
+				"unitsNeededToKill":	0
+			}, {
+				"type":	"unit",
+				"sub-type":	"random",
+				"color":	"red",
+				"direction":	[1, 0],
+				"unitsNeededToKill":	0
+			}, {
+				"type":	"unit",
+				"sub-type":	"random",
+				"color":	"red",
+				"direction":	[1, 0],
+				"unitsNeededToKill":	0
+			}, {
+				"type":	"unit",
+				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -698,25 +429,31 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
+				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
+				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
+				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
+				"sub-type":	"random",
+				"color":	"red",
+				"direction":	[1, 0],
+				"unitsNeededToKill":	0
+			}, {
+				"type":	"unit",
+				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -752,30 +489,6 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
 				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
@@ -795,36 +508,6 @@
 			}, {
 				"type":	"unit",
 				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -860,121 +543,7 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
 				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0

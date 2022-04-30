@@ -3,12 +3,21 @@
     "board-size": [6,9],
     "square-size": 162,
     "textures": [
-        "background",
+        "background-forest",
+        "background-glacier",
+        "background-volcano",
+        "square-forest",
+        "square-forest-next-special",
+        "square-glacier",
+        "square-glacier-next-special",
+        "square-volcano",
+        "square-volcano-next-special",
         "square",
         "square-selected",
         "square-swap",
         "square-attacked",
         "transparent",
+        "black",
         "random-red",
         "random-green",
         "random-blue",
@@ -121,12 +130,18 @@
         "star_full",
         "bubble",
         "next-special-square",
-        "transparent"
+        "transparent",
+        "score-explanation-popup"
     ],
     "probability-respawn": [
         "basic",
         "two-forward",
         "three-way",
         "diagonal"
+    ],
+    "themes": [
+        "forest",
+        "glacier",
+        "volcano"
     ]
 }

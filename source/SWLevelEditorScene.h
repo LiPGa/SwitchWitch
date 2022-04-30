@@ -44,11 +44,14 @@ protected:
     int _maxBoardWidth;
     int _maxBoardHeight;
     int _squareSizeAdjustedForScale;
+    int _backgroundNumber;
 
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
     // hash map for units with different types
     std::unordered_map<std::string, std::shared_ptr<Unit>> _unitTypes;
+
+    std::vector<std::string> _backgroundNames;
 
 #pragma mark Model Variables
     /** Boards */
@@ -89,6 +92,7 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _infoButton;
     std::shared_ptr<cugl::scene2::Button> _boardButton;
     std::shared_ptr<cugl::scene2::Button> _changeBoardSizeButton;
+    std::shared_ptr<cugl::scene2::Button> _changeBackgroundButton;
     std::shared_ptr<cugl::scene2::Label> _turnTextLabel;
     std::shared_ptr<cugl::scene2::Label> _unitsNeededToKillLabel;
     std::shared_ptr<cugl::scene2::Label> _boardSizeLabel;
