@@ -277,7 +277,7 @@ public:
      *
      * UI includes: star and score system, number of swaps, setting menu, and unit icons
      */
-    void setTopUI(const std::shared_ptr<cugl::AssetManager> &assets);
+    void setTopUI(const std::shared_ptr<cugl::AssetManager> &assets, std::shared_ptr<cugl::JsonValue> &constants);
     
 #pragma mark -
 #pragma mark Gameplay Handling
