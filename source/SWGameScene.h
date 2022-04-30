@@ -104,6 +104,9 @@ protected:
     /** The scale which all textures must conform to */
     Size _scale;
 
+    /** The current amount of time since a reset */
+    float _time;
+
     /** The current number of turns left for the player */
     int _turns;
     /** The current score of the player */

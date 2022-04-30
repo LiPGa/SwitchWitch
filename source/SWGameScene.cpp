@@ -43,6 +43,9 @@ using namespace std;
 #define UNIT_Z 1
 #define SQUARE_Z 2
 
+/** Initial amount of time where no interactions do anything **/
+#define TIME_BEFORE_INTERACTION 0.2
+
 #pragma mark Constructors
 
 
@@ -59,6 +62,7 @@ using namespace std;
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
+    _time = 0;
     _debug = false;
     // Initialize the scene to a locked width
     Size dimen = Application::get()->getDisplaySize();
@@ -271,13 +275,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _scoreExplanationButton->setDown(false);
     _scoreExplanationButton->clearListeners();
     _scoreExplanationButton->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            CULog("-------------Pressed Score Explanation------------------");
-            auto test = _scoreExplanation->isVisible();
-            _scoreExplanation->setVisible(!_scoreExplanation->isVisible());
+        if (down && _time >= TIME_BEFORE_INTERACTION) {
+             _scoreExplanation->setVisible(!_scoreExplanation->isVisible());
         }
         });
-
     
     _scoreExplanation = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("settings_score-explanation"));
     _scoreExplanation->setScale(_scale);
@@ -538,11 +539,15 @@ void GameScene::update(float timestep)
       //  _audioQueue->play(_assets->get<Sound>("track_1"), false, .3, false);
     //}
 //    _audioQueue->setLoop(true);
-
+    if (_time <= TIME_BEFORE_INTERACTION) {
+        _time += timestep;
+    }
+    
     // Read the keyboard for each controller.
     // Read the input
     _input.update();
     
+
     if (_didRestart == true) reset(_levelJson);
     if (_didRestart == true && _didPause == true) reset(_levelJson);
 
