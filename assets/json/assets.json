@@ -6,7 +6,7 @@
             "wrapT": "repeat"
         },
         "top-ui-background": {
-            "file": "textures/top-ui-background.png"
+            "file": "textures/top-ui-light-bulb.png"
         },
         "square": {
             "file": "textures/square.png"
@@ -422,7 +422,7 @@
     },
     "fonts": {
         "pixel32": {
-            "file": "fonts/Arial.ttf",
+            "file": "fonts/NewRocker-Regular.ttf",
             "size": 32
         },
         "title32": {
@@ -799,8 +799,8 @@
                     "layout" : {
                         "x_anchor" : "right",
                         "y_anchor" : "top",
-                        "x_offset" : -0.05,
-                        "y_offset" : -0.149
+                        "x_offset" : -0.03,
+                        "y_offset" : -0.195
                     }
                  }
             }
