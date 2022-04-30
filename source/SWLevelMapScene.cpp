@@ -53,110 +53,16 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     
     // Set up GUI
 //    start_ok = false;
-    _chosenLevel = NO_LEVEL;
+    
+    _chosenLevel = 0;
+    _num_levels = 19;
+    loadLevelButtons();
 
     _scrollPane = std::dynamic_pointer_cast<scene2::ScrollPane>(_assets->get<scene2::SceneNode>("map"));
     _scrollPane->setContentSize(dimen);
     _scrollPane->doLayout();
-    CULog("getSize: %f, %f", getSize().width, getSize().height);
     
     _currentState = NOACTION;
-    
-//    _levelsNode = _assets->get<scene2::SceneNode>("map_background_levels");
-//    _levelsNode->setContentSize(Application::get()->getDisplaySize());
-//    //_levelsNode->doLayout();
-//    _levelsNode->setVisible(true);
-    
-//    _levelOneNode = _assets->get<scene2::SceneNode>("map_background_levels_level1");
-    //_levelOneNode->setContentSize(dimen);
-//    _levelOne->setContentSize(Application::get()->getDisplaySize());
-//    _levelOneNode->doLayout();
-//    _levelOneNode->setVisible(true);
-    
-//    int i = 1;
-//
-//    for (auto level : levels) {
-//        string name = "map_background_level" + std::to_string(i);
-//        level = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>(name));
-//        level->addListener([this, i](const std::string& name, bool down) {
-//            if (down) {
-//                _chosenLevel = Level(i);
-//                //start_ok = true;
-//            }
-//        });
-//    }
-    
-    _level1 = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level1"));
-    _level1->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _chosenLevel = Level(1);
-        }
-    });
-    
-    _level2 = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level2"));
-    _level2->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _chosenLevel = Level(2);
-        }
-    });
-    
-    _level3 = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level3"));
-    _level3->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _chosenLevel = Level(3);
-        }
-    });
-    
-    _level4 = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level4"));
-    _level4->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _chosenLevel = Level(4);
-        }
-    });
-    
-    _level5 = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level5"));
-    _level5->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _chosenLevel = Level(5);
-        }
-    });
-    
-    _level6 = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level6"));
-    _level6->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _chosenLevel = Level(6);
-        }
-    });
-    
-    _level7 = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level7"));
-    _level7->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _chosenLevel = Level(7);
-        }
-    });
-    
-    _level8 = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level8"));
-    _level8->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _chosenLevel = Level(8);
-        }
-    });
-    
-    _level9 = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level9"));
-    _level9->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _chosenLevel = Level(9);
-        }
-    });
-    
-    _level10 = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("map_background_level10"));
-    _level10->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _chosenLevel = Level(10);
-        }
-    });
-    
-    levels = vector<shared_ptr<scene2::Button>> {_level1, _level2, _level3, _level4, _level5, _level6, _level7, _level8, _level9, _level10};
     
     addChild(_scrollPane);
     
@@ -176,6 +82,20 @@ void LevelMapScene::dispose() {
     if (_active) {
         removeAllChildren();
         _active = false;
+    }
+}
+
+void LevelMapScene::loadLevelButtons() {
+    for (std::size_t i=1; i <= _num_levels; ++i) {
+        string name = "map_background_level" + std::to_string(i);
+                auto level = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>(name));
+                level->addListener([this, i](const std::string& name, bool down) {
+                    if (down) {
+                        _chosenLevel = static_cast<int> (i);
+                        //start_ok = true;
+                    }
+                });
+        levels.push_back(level);
     }
 }
 
