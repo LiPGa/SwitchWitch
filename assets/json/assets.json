@@ -422,7 +422,7 @@
     },
     "fonts": {
         "pixel32": {
-            "file": "fonts/Arial.ttf",
+            "file": "fonts/NewRocker-Regular.ttf",
             "size": 32
         },
         "title32": {
