@@ -123,7 +123,7 @@ void Board::getAttackedSquares_h(vector<shared_ptr<Square>> &listOfAttackedSquar
         listOfAttackedSquares.push_back(attackingSquare);
         for (Vec2 vector : attackingSquare->getUnit()->getSpecialAttackRotated()) {
             Vec2 squarePos = vector + attackingSquare->getPosition();
-            if (doesSqaureExist(squarePos) && getSquare(squarePos)->isInteractable() && attackingSquare->getUnit()->getColor() == getSquare(squarePos)->getUnit()->getColor()){
+            if (doesSqaureExist(squarePos) && getSquare(squarePos)->isInteractable() && attackingSquare->getUnit()->getColor() == getSquare(squarePos)->getUnit()->getColor() && getSquare(squarePos)->getUnit()->getSubType() != "king"){
                 listOfProtectedSquares.push_back(getSquare(squarePos));
             }
             if (doesSqaureExist(squarePos) && getSquare(squarePos)->isInteractable() && (attackingSquare->getUnit()->getColor() != getSquare(squarePos)->getUnit()->getColor() || getSquare(squarePos)->getUnit()->getSubType() == "king")) {
@@ -164,7 +164,7 @@ vector<shared_ptr<Square>> Board::getProtectedSquares(cugl::Vec2 pos){
     auto attackingSquare = getSquare(pos);
     for (Vec2 vector : attackingSquare->getUnit()->getBasicAttackRotated()) {
         Vec2 squarePos = vector + attackingSquare->getPosition();
-        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && attackingSquare->getUnit()->getColor() == getSquare(squarePos)->getUnit()->getColor()){
+        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && attackingSquare->getUnit()->getColor() == getSquare(squarePos)->getUnit()->getColor() && getSquare(squarePos)->getUnit()->getSubType() != "king"){
             ptdResult.push_back(getSquare(squarePos));
         }
         if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && (attackingSquare->getUnit()->getColor() != getSquare(squarePos)->getUnit()->getColor() || getSquare(squarePos)->getUnit()->getSubType() == "king")) {
@@ -175,7 +175,6 @@ vector<shared_ptr<Square>> Board::getProtectedSquares(cugl::Vec2 pos){
 }
 
 vector<shared_ptr<Square>> Board::getInitiallyProtectedSquares(cugl::Vec2 pos, bool basic) {
-    CULog("get protected");
     vector<shared_ptr<Square>> result;
     if (!doesSqaureExist(pos)) {
         return result;
@@ -184,7 +183,7 @@ vector<shared_ptr<Square>> Board::getInitiallyProtectedSquares(cugl::Vec2 pos, b
     vector<Vec2> attackedSquares = basic ? attackingSquare->getUnit()->getBasicAttackRotated() : attackingSquare->getUnit()->getSpecialAttackRotated();
     for (Vec2 vector : attackedSquares) {
         Vec2 squarePos = vector + attackingSquare->getPosition();
-        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && attackingSquare->getUnit()->getColor() == getSquare(squarePos)->getUnit()->getColor()) {
+        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && attackingSquare->getUnit()->getColor() == getSquare(squarePos)->getUnit()->getColor() && getSquare(squarePos)->getUnit()->getSubType() != "king") {
             result.push_back(getSquare(squarePos));
             CULog("pushed");
         }
