@@ -24,6 +24,7 @@ bool Level::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>>
     oneStarThreshold = 0;
     twoStarThreshold = 0;
     threeStarThreshold = 0;
+    backgroundName = "forest";
     return true;
 }
 
@@ -43,6 +44,7 @@ bool Level::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>>
     twoStarThreshold = levelJSON->getInt("two-star-condition");
     threeStarThreshold = levelJSON->getInt("three-star-condition");
     numOfKings = levelJSON->getInt("num-of-kings");
+    backgroundName = levelJSON->getString("background");
     auto layersInBoardJson = levelJSON->get("board-members")->children();
     
     for (auto layer : layersInBoardJson)
@@ -76,6 +78,7 @@ shared_ptr<JsonValue> Level::convertToJSON() {
     boardJSON->appendChild("one-star-condition", cugl::JsonValue::alloc((long int)oneStarThreshold));
     boardJSON->appendChild("two-star-condition", cugl::JsonValue::alloc((long int)twoStarThreshold));
     boardJSON->appendChild("three-star-condition", cugl::JsonValue::alloc((long int)threeStarThreshold));
+    boardJSON->appendChild("background", cugl::JsonValue::alloc(backgroundName));
     numOfKings = 0;
     shared_ptr<cugl::JsonValue> boardArray = cugl::JsonValue::allocArray();
     for (shared_ptr<Board> board : _boards) {
