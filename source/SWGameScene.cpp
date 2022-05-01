@@ -1266,6 +1266,7 @@ void GameScene::showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node ) {
             _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
             break;
         }
         case 2: {
@@ -1280,6 +1281,7 @@ void GameScene::showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node ) {
             _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
             break;
         }
         case 4: {
@@ -1294,6 +1296,7 @@ void GameScene::showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node ) {
             _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(true);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
             break;
         }
         default: {
@@ -1331,8 +1334,20 @@ void GameScene::flipTutorialPage( std::string dir ) {
         case 4: {
             auto level4_rule1 = _tutorialLayout->getChild(0)->getChildByName("level4_rule1");
             auto level4_rule2 = _tutorialLayout->getChild(0)->getChildByName("level4_rule2");
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(!level4_rule1->isVisible());
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(!level4_rule2->isVisible());
+            auto level4_rule3 = _tutorialLayout->getChild(0)->getChildByName("level4_rule3");
+            if ( (dir == "left" && level4_rule1->isVisible()) || (dir == "right" && level4_rule2->isVisible()) ) {
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(true);
+            } else if ( (dir == "left" && level4_rule2->isVisible()) || (dir == "right" && level4_rule3->isVisible()) ) {
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(true);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+            } else {
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(true);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+            }
             break;
         }
     }
