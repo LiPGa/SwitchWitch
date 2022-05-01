@@ -606,7 +606,8 @@
                             },
                             "layout" : {
                                 "y_anchor": "top",
-                                "x_anchor": "center"
+                                "x_anchor": "left",
+                                "y_offset": -0.1
                             },
                             "format"    : {
                                 "type" : "Anchored"
