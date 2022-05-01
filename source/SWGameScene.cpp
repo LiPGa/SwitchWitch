@@ -218,12 +218,20 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         shared_ptr<Unit> unit = Unit::alloc(_textures, subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1), subtypeString != "king");
         _unitTypes.insert({child->key(), unit});
     }
-
+    
+    // sucess score summary screen
     _resultLayout = assets->get<scene2::SceneNode>("result");
     _resultLayout->setContentSize(dimen);
     _resultLayout->doLayout(); // Repositions the HUD
     _guiNode->addChild(_resultLayout);
     _resultLayout->setVisible(false);
+    
+    // failure score summary screen
+    _failResultLayout = assets->get<scene2::SceneNode>("failresult");
+    _failResultLayout->setContentSize(dimen);
+    _failResultLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(_failResultLayout);
+    _failResultLayout->setVisible(false);
     
     _settingsLayout = assets->get<scene2::SceneNode>("settings");
     _settingsLayout->setContentSize(dimen);
@@ -236,11 +244,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChild(_settingsMenuLayout);
     _settingsMenuLayout->setVisible(false);
     
-    _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
     _level_info = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_level"));
+    _fail_level_info = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("failresult_board_level"));
+
+    _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
+    _fail_score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("failresult_board_number"));
+
     _star1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star1"));
     _star2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star2"));
     _star3 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star3"));
+    
     _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_restart"));
     _restartbutton->deactivate();
     _restartbutton->setDown(false);
@@ -249,6 +262,44 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _didRestart = true;
         }
     });
+    
+    _failRestartButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("failresult_board_restart"));
+    _failRestartButton->deactivate();
+    _failRestartButton->setDown(false);
+    _failRestartButton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didRestart = true;
+        }
+    });
+    
+    _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
+    _backbutton->deactivate();
+    _backbutton->setDown(false);
+    _backbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didGoToLevelMap = true;
+        }
+    });
+    
+    _failBackButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("failresult_board_exit"));
+    _failBackButton->deactivate();
+    _failBackButton->setDown(false);
+    _failBackButton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didGoToLevelMap = true;
+        }
+    });
+    
+    _nextbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_next"));
+    _nextbutton->deactivate();
+    _nextbutton->setDown(false);
+    _nextbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didGoToNextLevel = true;
+        }
+    });
+    
+
     
     _settingsbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings_btn"));
     _settingsbutton->setVisible(true);
@@ -323,24 +374,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     });
     
-    _nextbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_next"));
-    _nextbutton->deactivate();
-    _nextbutton->setDown(false);
-    _nextbutton->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            CULog("go to next level");
-            _didGoToNextLevel = true;
-        }
-    });
-    
-    _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
-    _backbutton->deactivate();
-    _backbutton->setDown(false);
-    _backbutton->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _didGoToLevelMap = true;
-        }
-    });
     _kingsKilled = false;
     return true;
 }
@@ -648,26 +681,38 @@ void GameScene::update(float timestep)
     if ((_turns == 0 || _kingsKilled) && _currentState != ANIMATION )
     {
         // Show results screen
-        showResultText(_kingsKilled && _level->getNumberOfStars(_score) >= 3, _guiNode);
-        _resultLayout->setVisible(true);
-        _restartbutton->activate();
-        _backbutton->activate();
-        _nextbutton->activate();
+        // showResultText(_kingsKilled && _level->getNumberOfStars(_score) >= 3, _guiNode);
         _scoreExplanationButton->deactivate();
-        _score_number->setText(to_string(_score));
-        _level_info->setText("Level " + to_string(_levelJson->getInt("id")));
-        _star1->setTexture(_textures.at("star_empty"));
-        _star2->setTexture(_textures.at("star_empty"));
-        _star3->setTexture(_textures.at("star_empty"));
-        if (_level->getNumberOfStars(_score) >= 1) {
-            _star1->setTexture(_textures.at("star_full"));
+        
+        if (_kingsKilled && _level->getNumberOfStars(_score) >= 1) {
+            _resultLayout->setVisible(true);
+            _restartbutton->activate();
+            _backbutton->activate();
+            _nextbutton->activate();
+            _score_number->setText(to_string(_score));
+            _level_info->setText("Level " + to_string(_levelJson->getInt("id")));
+            _star1->setTexture(_textures.at("star_empty"));
+            _star2->setTexture(_textures.at("star_empty"));
+            _star3->setTexture(_textures.at("star_empty"));
+            if (_level->getNumberOfStars(_score) >= 1) {
+                _star1->setTexture(_textures.at("star_full"));
+            }
+            if (_level->getNumberOfStars(_score) >= 2) {
+                _star2->setTexture(_textures.at("star_full"));
+            }
+            if (_level->getNumberOfStars(_score) >= 3) {
+                _star3->setTexture(_textures.at("star_full"));
+            }
         }
-        if (_level->getNumberOfStars(_score) >= 2) {
-            _star2->setTexture(_textures.at("star_full"));
+        
+        else  {
+            _failResultLayout->setVisible(true);
+            _failRestartButton->activate();
+            _failBackButton->activate();
+            _fail_level_info->setText("Level " + to_string(_levelJson->getInt("id")));
+            _fail_score_number->setText(to_string(_score));
         }
-        if (_level->getNumberOfStars(_score) >= 3) {
-            _star3->setTexture(_textures.at("star_full"));
-        }
+
         return;
     }
     

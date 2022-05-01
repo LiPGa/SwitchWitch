@@ -1300,7 +1300,7 @@
                 "absolute" : false
             }
         },
-        "result-lose": {
+        "failresult": {
             "type": "Node",
             "format": {"type": "Float", "orientation": "vertical","x_alignment": "center", "y_alignment": "middle"},
             "children": {
@@ -1325,39 +1325,19 @@
                             "layout": {"x_anchor": "center","y_anchor": "top","x_offset": 0.0,"y_offset": -0.15}
                         },
                         "star1": {
-                            "type": "Image","data": {"texture": "star_full"},
+                            "type": "Image","data": {"texture": "star_empty"},
                             "layout": {"y_anchor": "middle","x_anchor": "center","x_offset": -0.3,"y_offset": 0.1},
                             "format": { "type": "Anchored"}
                         },
-                        "star2": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "star_full"
-                            },
-                            "layout": {
-                                "y_anchor": "middle",
-                                "x_anchor": "center",
-                                "x_offset": -0.1,
-                                "y_offset": 0.1
-                            },
-                            "format": {
-                                "type": "Anchored"
-                            }
+                        "star2": { "type": "Image",
+                            "data": {"texture": "star_empty"},
+                            "layout": {"y_anchor": "middle","x_anchor": "center","x_offset": -0.1,"y_offset": 0.1},
+                            "format": {"type": "Anchored"}
                         },
-                        "star3": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "star_empty"
-                            },
-                            "layout": {
-                                "y_anchor": "middle",
-                                "x_anchor": "center",
-                                "x_offset": 0.1,
-                                "y_offset": 0.1
-                            },
-                            "format": {
-                                "type": "Anchored"
-                            }
+                        "star3": { "type": "Image",
+                            "data": {"texture": "star_empty"},
+                            "layout": {"y_anchor": "middle","x_anchor": "center","x_offset": 0.1,"y_offset": 0.1},
+                            "format": {"type": "Anchored"}
                         },
                         "score": {
                             "type": "Label",
@@ -1367,19 +1347,11 @@
                                 "foreground": "#63351D",
                                 "halign": "center",
                                 "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
+                                "anchor": [0.5,0.5],
                                 "scale": 1.0,
                                 "visible": true
                             },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "x_offset": -0.01,
-                                "y_offset": 0
-                            }
+                            "layout": {"x_anchor": "center","y_anchor": "middle","x_offset": -0.01,"y_offset": 0}
                         },
                         "number": {
                             "type": "Label",
@@ -1389,25 +1361,15 @@
                                 "foreground": "#EBEBEB",
                                 "halign": "center",
                                 "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
+                                "anchor": [0.5,0.5],
                                 "scale": 2,
                                 "visible": true
                             },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "x_offset": -0.01,
-                                "y_offset": -0.1
-                            }
+                            "layout": {"x_anchor": "center","y_anchor": "middle","x_offset": -0.01,"y_offset": -0.1}
                         },
                         "restart": {
                             "type": "Widget",
-                            "data": {
-                                "key": "retrybutton"
-                            },
+                            "data": {"key": "retrybutton"},
                             "layout": {
                                 "y_anchor": "bottom",
                                 "x_anchor": "left",
@@ -1417,9 +1379,7 @@
                         },
                         "exit": {
                             "type": "Widget",
-                            "data": {
-                                "key": "exitbutton"
-                            },
+                            "data": {"key": "exitbutton"},
                             "layout": {
                                 "y_anchor": "bottom",
                                 "x_anchor": "right",
@@ -1574,7 +1534,7 @@
                                 "y_anchor": "bottom",
                                 "x_anchor": "left",
                                 "x_offset": 0.3,
-                                "y_offset": 0.25
+                                "y_offset": 0.225
                             }
                         },
                         "next": {
@@ -1586,7 +1546,7 @@
                                 "y_anchor": "bottom",
                                 "x_anchor": "right",
                                 "x_offset": -0.3,
-                                "y_offset": 0.25
+                                "y_offset": 0.225
                             }
                         },
                         "exit": {
