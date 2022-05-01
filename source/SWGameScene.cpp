@@ -101,6 +101,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     _didRestart = false;
     _didGoToLevelMap = false;
+    _didGoToNextLevel = false;
     _didPause = false;
     // Get Textures
     // Preload all the textures into a hashmap
@@ -321,7 +322,17 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             CULog("Pressed Settings exit button");
         }
     });
-
+    
+    _nextbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_next"));
+    _nextbutton->deactivate();
+    _nextbutton->setDown(false);
+    _nextbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("go to next level");
+            _didGoToNextLevel = true;
+        }
+    });
+    
     _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
     _backbutton->deactivate();
     _backbutton->setDown(false);
@@ -589,6 +600,7 @@ void GameScene::dispose()
         removeAllChildren();
         _restartbutton = nullptr;
         _backbutton = nullptr;
+        _nextbutton = nullptr;
         _active = false;
         _input.dispose();
         _moveup = nullptr;
@@ -626,6 +638,12 @@ void GameScene::update(float timestep)
 
     if (_didRestart == true) reset(_levelJson);
     if (_didRestart == true && _didPause == true) reset(_levelJson);
+    
+    if (_didGoToNextLevel == true){
+        int newLevelNum = _levelJson->getInt("id")+1;
+        auto newBoardJson = _assets->get<JsonValue>("level" + std::to_string(newLevelNum));
+        reset(newBoardJson);
+    }
 
     if ((_turns == 0 || _kingsKilled) && _currentState != ANIMATION )
     {
@@ -634,6 +652,7 @@ void GameScene::update(float timestep)
         _resultLayout->setVisible(true);
         _restartbutton->activate();
         _backbutton->activate();
+        _nextbutton->activate();
         _scoreExplanationButton->deactivate();
         _score_number->setText(to_string(_score));
         _level_info->setText("Level " + to_string(_levelJson->getInt("id")));
@@ -1157,9 +1176,6 @@ void GameScene::reset()
  */
 void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
 {
-    //    _endgame_text->setForeground(Color4::CLEAR);
-    //    _turns = _boardJson->getInt("total-swap-allowed");
-    //    _score = 0;
     removeChild(_guiNode);
     _didGoToLevelMap = false;
     _didPause = false;

@@ -210,6 +210,8 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _settingsCloseBtn;
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
+    /** The button to go to the next level  */
+    std::shared_ptr<cugl::scene2::Button> _nextbutton;
     std::shared_ptr<cugl::scene2::Button> _settingsBackBtn;
     std::shared_ptr<cugl::scene2::Button> _almanacbutton;
     
@@ -224,7 +226,8 @@ protected:
     bool _didPause= false;
     /** Whther the player pressed exit button*/
     bool _didGoToLevelMap = false;
-    
+    /** Whther the player pressed next button*/
+    bool _didGoToNextLevel = false;
     bool _midSwap = false;
 
 #pragma mark -
@@ -337,14 +340,9 @@ public:
      *
      * @returns the current state
      */
-    bool goToLevelEditor() { return _input.isEscapeDown(); }
-    
-    /**
-     * Returns the current state the game is in.
-     *
-     * @returns the current state
-     */
-    bool goToLevelMap() { return _didGoToLevelMap; }
+    const bool goToLevelEditor() { return _input.isEscapeDown(); }
+    const bool goToLevelMap() { return _didGoToLevelMap; }
+    const bool goToNextLevel() { return _didGoToNextLevel; }
     
     /** Sets the cugl::JsonValue that the gamescene reads the board population data from */
     void setBoardJSON(std::shared_ptr<cugl::JsonValue> v) { _boardJson = v; }
