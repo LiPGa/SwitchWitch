@@ -10,7 +10,7 @@
             "file": "textures/background_volcano_big.png"
         },
         "top-ui-background": {
-            "file": "textures/top-ui-light-bulb.png"
+            "file": "textures/background_without_units.png"
         },
         "square-forest": {
             "file": "textures/square_forest.png"
@@ -457,6 +457,21 @@
         },
         "score-explanation-popup": {
             "file": "textures/score_explanation_popup.png"
+        },
+        "swap-title": {
+            "file": "textures/swap_title.png"
+        },
+        "icon-basic": {
+            "file": "textures/icon_basic.png"
+        },
+        "icon-special2": {
+            "file": "textures/icon_special2.png"
+        },
+        "icon-special3": {
+            "file": "textures/icon_special3.png"
+        },
+        "icon-special4": {
+            "file": "textures/icon_special4.png"
         }
     },
     "fonts": {
@@ -1082,8 +1097,8 @@
                     "layout" : {
                         "x_anchor" : "right",
                         "y_anchor" : "top",
-                        "x_offset" : -0.03,
-                        "y_offset" : -0.195
+                        "x_offset" : -0.035,
+                        "y_offset" : -0.087
                     }
                 },
                 "score-explanation-btn": {
@@ -1119,6 +1134,91 @@
                         "x_anchor": "top",
                         "x_offset": -0.07,
                         "y_offset": 0.52
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    }
+                },
+                "swap": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "swap-title",
+                        "scale": 0.225
+            
+                    },
+                    "layout": {
+                        "y_anchor": "middle",
+                        "x_anchor": "middle",
+                        "y_offset": 0.869,
+                        "x_offset": 0.555
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    }
+                },
+                "icon-basic": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "icon-basic",
+                        "scale": 0.125
+            
+                    },
+                    "layout": {
+                        "y_anchor": "middle",
+                        "x_anchor": "middle",
+                        "y_offset": 0.815,
+                        "x_offset": 0.75
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    }
+                },
+                "icon-special2": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "icon-special2",
+                        "scale": 0.125
+            
+                    },
+                    "layout": {
+                        "y_anchor": "middle",
+                        "x_anchor": "middle",
+                        "y_offset": 0.815,
+                        "x_offset": 0.8
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    }
+                },
+                "icon-special3": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "icon-special3",
+                        "scale": 0.125
+            
+                    },
+                    "layout": {
+                        "y_anchor": "middle",
+                        "x_anchor": "middle",
+                        "y_offset": 0.812,
+                        "x_offset": 0.875
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    }
+                },
+                "icon-special4": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "icon-special4",
+                        "scale": 0.125
+            
+                    },
+                    "layout": {
+                        "y_anchor": "middle",
+                        "x_anchor": "middle",
+                        "y_offset": 0.815,
+                        "x_offset": 0.925
                     },
                     "format": {
                         "type": "Anchored"

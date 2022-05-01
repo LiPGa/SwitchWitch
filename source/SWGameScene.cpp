@@ -140,8 +140,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Create and layout the turn meter
     std::string turnMsg = strtool::format("%d/%d", _turns, 100);
     _turn_text = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
-    _turn_text->setScale(0.75);
-    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -1.275 * (_topuibackgroundNode->getSize().height)));
+    _turn_text->setScale(0.5);
+    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 5, -0.43 * (_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_turn_text, "turn_text");
 //
 //    // Create and layout unitsNeededToKill info
