@@ -1126,7 +1126,7 @@
                         "x_anchor" : "right",
                         "y_anchor" : "top",
                         "x_offset": -0.72,
-                        "y_offset": -0.225
+                        "y_offset": -0.105
                     }
                 },
                 "score-explanation": {
@@ -1138,7 +1138,7 @@
                         "y_anchor": "right",
                         "x_anchor": "top",
                         "x_offset": -0.07,
-                        "y_offset": 0.52
+                        "y_offset": 0.63
                     },
                     "format": {
                         "type": "Anchored"
@@ -1154,7 +1154,7 @@
                     "layout": {
                         "y_anchor": "middle",
                         "x_anchor": "middle",
-                        "y_offset": 0.869,
+                        "y_offset": 1.069,
                         "x_offset": 0.555
                     },
                     "format": {
@@ -1272,7 +1272,7 @@
                 "size"    : [200, 100],
                 "visible"  : true,
                 "pushsize" : true,
-                "anchor"   : [3.9,1.065],
+                "anchor"   : [3.9,1.235],
                 "scale"    : 0.2
             },
             "children" : {
