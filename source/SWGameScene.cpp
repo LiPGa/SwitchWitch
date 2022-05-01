@@ -735,17 +735,38 @@ void GameScene::update(float timestep)
         showTutorial(_guiNode);
         _enterLevel = false;
     } else {
-        _tutorialLeftBtn->deactivate();
-        _tutorialRightBtn->deactivate();
-        _tutorialCloseBtn->deactivate();
+//        _tutorialLeftBtn->deactivate();
+//        _tutorialRightBtn->deactivate();
+//        _tutorialCloseBtn->deactivate();
     }
     
     // help menu
     if (_isHelpMenuOpen) {
         _settingsHelpBtn->deactivate();
         _helpBackBtn->activate();
+        // Process the toggled key commands
+        Vec2 pos = _input.getPosition();
+        if (_isScrolling) {
+            Vec2 prevPos = _input.getPrevious();
+            Vec2 moveDist = Vec2(pos.x-prevPos.x, prevPos.y-pos.y);
+            Vec2 nodePos = _helpMenu->getPosition();
+            moveDist.x = 0;
+            if (moveDist.y + nodePos.y < 0) {
+                moveDist.y = 0 - nodePos.y;
+            } else if (moveDist.y + nodePos.y > 1182-720) {
+                moveDist.y = 1182-720 - nodePos.y;
+            }
+            _helpMenu->setPosition(nodePos+moveDist);
+        }
+        if (_input.isDown()) {
+            _isScrolling = true;
+        } else if (_input.didRelease()) {
+            _isScrolling = false;
+        }
+        return;
     } else {
         _helpBackBtn->deactivate();
+        _isScrolling = false;
     }
     
     if (_didRestart == true) reset(_levelJson);

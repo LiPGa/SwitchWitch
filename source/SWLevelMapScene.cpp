@@ -151,13 +151,9 @@ void LevelMapScene::update(float dt) {
         _scrollPane->setPosition(nodePos+moveDist*0.4);
     }
     if (_input.isDown()) {
-        if (_currentState == NOACTION) {
-            _currentState = SCROLLING;
-        }
-    } else {
-        if (_currentState == SCROLLING) {
-            _currentState = NOACTION;
-        }
+        _currentState = SCROLLING;
+    } else if (_input.didRelease()) {
+        _currentState = NOACTION;
     }
 }
 
