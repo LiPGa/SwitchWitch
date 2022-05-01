@@ -186,6 +186,15 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar1;
     std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar2;
     std::shared_ptr<cugl::scene2::PolygonNode> _scoreMeterStar3;
+    /** The image of the star in the top left score bar*/
+    std::shared_ptr<cugl::scene2::PolygonNode> _oneStar;
+    std::shared_ptr<cugl::scene2::PolygonNode> _twoStar1;
+    std::shared_ptr<cugl::scene2::PolygonNode> _twoStar2;
+    std::shared_ptr<cugl::scene2::PolygonNode> _threeStar1;
+    std::shared_ptr<cugl::scene2::PolygonNode> _threeStar2;
+    std::shared_ptr<cugl::scene2::PolygonNode> _threeStar3;
+    /** The text of score for each star level */
+    std::shared_ptr<cugl::scene2::Label> _oneStar_text;
 
     /** The images of the final stars*/
     std::shared_ptr<cugl::scene2::PolygonNode> _star1;
@@ -212,9 +221,11 @@ protected:
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
     std::shared_ptr<cugl::scene2::Button> _settingsBackBtn;
+    std::shared_ptr<cugl::scene2::Button> _almanacbutton;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
+    vector<shared_ptr<Square>> _protectedSquares;
     std::shared_ptr<Square> _initalAttackSquare;
 
     /** Whther the player pressed restart button*/
@@ -272,7 +283,14 @@ public:
      * @return true if the controller is initialized properly, false otherwise.
      */
     bool init(const std::shared_ptr<cugl::AssetManager> &assets);
-
+    
+    /**
+     * Set up the top UI
+     *
+     * UI includes: star and score system, number of swaps, setting menu, and unit icons
+     */
+    void setTopUI(const std::shared_ptr<cugl::AssetManager> &assets, std::shared_ptr<cugl::JsonValue> &constants);
+    
 #pragma mark -
 #pragma mark Gameplay Handling
     /**
