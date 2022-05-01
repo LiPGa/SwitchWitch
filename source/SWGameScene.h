@@ -212,6 +212,8 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _scoreExplanationButton;
     /** The button to close settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsCloseBtn;
+    /** The page of the tutorial*/
+    std::shared_ptr<cugl::scene2::Label> _tutorial_page;
     /** The button to close tutorial*/
     std::shared_ptr<cugl::scene2::Button> _tutorialCloseBtn;
     /** The button to go to left page for tutorial*/

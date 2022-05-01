@@ -323,6 +323,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     });
     
+    _tutorial_page = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("tutorial_board_page"));
+    
     _tutorialCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("tutorial_board_close"));
     _tutorialCloseBtn->setVisible(true);
     _tutorialCloseBtn->deactivate();
@@ -1374,6 +1376,7 @@ void GameScene::showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node ) {
             _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+            _tutorial_page->setText("1/2");
             break;
         }
         case 2: {
@@ -1389,6 +1392,7 @@ void GameScene::showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node ) {
             _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+            _tutorial_page->setText("1/2");
             break;
         }
         case 4: {
@@ -1404,6 +1408,7 @@ void GameScene::showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node ) {
             _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(true);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
             _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+            _tutorial_page->setText("1/3");
             break;
         }
         default: {
@@ -1422,13 +1427,12 @@ void GameScene::flipTutorialPage( std::string dir ) {
         case 1: {
             auto level1_rule1 = _tutorialLayout->getChild(0)->getChildByName("level1_rule1");
             auto level1_rule2 = _tutorialLayout->getChild(0)->getChildByName("level1_rule2");
-            CULog("rule1 is visible: %i", level1_rule1->isVisible());
             _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(!level1_rule1->isVisible());
-            CULog("rule11 is visible now: %i", level1_rule1->isVisible());
-            
-            CULog("rule2 is visible: %i", level1_rule2->isVisible());
             _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(!level1_rule2->isVisible());
-            CULog("rule2 is visible now: %i", level1_rule2->isVisible());
+            if (level1_rule1->isVisible())
+                _tutorial_page->setText("1/2");
+            else
+                _tutorial_page->setText("2/2");
             break;
         }
         case 2: {
@@ -1436,6 +1440,10 @@ void GameScene::flipTutorialPage( std::string dir ) {
             auto level2_rule2 = _tutorialLayout->getChild(0)->getChildByName("level2_rule2");
             _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(!level2_rule1->isVisible());
             _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(!level2_rule2->isVisible());
+            if (level2_rule1->isVisible())
+                _tutorial_page->setText("1/2");
+            else
+                _tutorial_page->setText("2/2");
             break;
         }
         case 4: {
@@ -1455,6 +1463,12 @@ void GameScene::flipTutorialPage( std::string dir ) {
                 _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(true);
                 _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
             }
+            if (level4_rule1->isVisible())
+                _tutorial_page->setText("1/3");
+            else if (level4_rule2->isVisible())
+                _tutorial_page->setText("2/3");
+            else
+                _tutorial_page->setText("3/3");
             break;
         }
     }
