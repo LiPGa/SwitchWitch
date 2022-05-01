@@ -992,6 +992,29 @@
                         "type": "Anchored"
                     },
                     "children": {
+                        "close":{
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "visible"  : true,
+                                "anchor"   : [0,0],
+                                "scale"    : 0.4
+                            },
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {
+                                        "texture": "settings_close_btn"
+                                    }
+                                }
+                            },
+                            "layout" : {
+                                "x_anchor" : "right",
+                                "y_anchor" : "top",
+                                "x_offset" : -0.18,
+                                "y_offset" : -0.12
+                            }
+                        },
                         "title":{
                             "type": "Label",
                             "data": {

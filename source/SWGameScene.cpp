@@ -291,7 +291,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _scoreExplanation = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("settings_score-explanation"));
     _scoreExplanation->setScale(_scale);
     _scoreExplanation->setVisible(false);
-
     
     _settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
     _settingsRestartBtn->setVisible(true);
@@ -314,6 +313,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _settingsMenuLayout->setVisible(false);
             CULog("Pressed Settings restart button");
         }
+    });
+    
+    _tutorialCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("tutorial_board_close"));
+    _tutorialCloseBtn->setVisible(true);
+    _tutorialCloseBtn->deactivate();
+    _tutorialCloseBtn->setDown(false);
+    _tutorialCloseBtn->addListener([=](const std::string& name, bool down) {
+        this->_active = down;
+        _tutorialLayout->setVisible(false);
+        CULog("Pressed tutorial close button");
     });
     
     _settingsBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_exit"));
@@ -1223,14 +1232,18 @@ void GameScene::showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node ) {
     switch (_currLevel) {
         case 1:
             _tutorialLayout->setVisible(true);
+            _tutorialCloseBtn->activate();
             break;
         case 3:
             _tutorialLayout->setVisible(true);
+            _tutorialCloseBtn->activate();
             break;
         case 4:
             _tutorialLayout->setVisible(true);
+            _tutorialCloseBtn->activate();
             break;
         default:
             _tutorialLayout->setVisible(false);
+            _tutorialCloseBtn->deactivate();
     }
 }
