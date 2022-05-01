@@ -104,6 +104,9 @@ void Unit::setState(State s) {
         case State::IDLE:
             newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 2);
             break;
+        case State::PROTECTED:
+            newNode = scene2::SpriteNode::alloc(_textureMap.at("shield"), 1, 1);
+            break;
         case State::HIT:
             newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 1);
             this->_hasBeenHit = true;

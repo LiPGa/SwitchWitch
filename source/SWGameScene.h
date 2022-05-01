@@ -214,6 +214,7 @@ protected:
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
+    vector<shared_ptr<Square>> _protectedSquares;
     std::shared_ptr<Square> _initalAttackSquare;
 
     /** Whther the player pressed restart button*/

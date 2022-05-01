@@ -725,10 +725,15 @@ void GameScene::update(float timestep)
                 squareOnMouse->getViewNode()->setTexture(_textures.at("square-swap"));
                 _swappingSquare->getUnit()->setDirection(_swappingSquare->getPosition() - _selectedSquare->getPosition());
                 _attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
-                
+                _protectedSquares = _board->getProtectedSquares(_swappingSquare->getPosition());
+
                 for (shared_ptr<Square> attackedSquare : _attackedSquares)
                 {
                     attackedSquare->getViewNode()->setTexture(_textures.at("square-attacked"));
+                }
+                for (shared_ptr<Square> protectedSquare : _protectedSquares)
+                {
+                    protectedSquare->getViewNode()->setTexture(_textures.at("shield"));
                 }
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
@@ -859,6 +864,10 @@ void GameScene::update(float timestep)
                 case Unit::State::DEAD:
 //                    square->getViewNode()->setVisible(false);
                     break;
+                case Unit::State::PROTECTED:
+                    unit->setState(Unit::State::IDLE);
+                    refreshUnitView(square);
+                    break;
                 case Unit::State::HIT:
                     if (unitType != "basic" && unitType != "empty" && unitType != "king") {
                         unit->setState(Unit::State::ATTACKING);
@@ -876,6 +885,12 @@ void GameScene::update(float timestep)
 //                            }
                         }
                         refreshUnitView(atkSquare);
+                    }
+                    for (auto ptdSquare : _board->getInitiallyProtectedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit())) {
+                        if (ptdSquare->getUnit()->getState() == Unit::State::IDLE){
+                            ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
+                        }
+                        refreshUnitView(ptdSquare);
                     }
                     if (unit->hasBeenHit()) unit->setState(Unit::State::DYING);
                     else unit->setState(Unit::State::IDLE);
@@ -929,6 +944,13 @@ void GameScene::updateModelPostSwap() {
         _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING); // begin the attack sequence
         refreshUnitView(_initalAttackSquare);
     }
+    else{ // need to show shield animation even if no unit is killed in this swap
+        for (auto ptdSquare: _protectedSquares){
+            ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
+            refreshUnitView(ptdSquare);
+        }
+    }
+
 }
 
 void GameScene::respawnAttackedSquares() {
