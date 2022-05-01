@@ -262,6 +262,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_restart"));
     _restartbutton->deactivate();
     _restartbutton->setDown(false);
+    _restartbutton->clearListeners();
     _restartbutton->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didRestart = true;
@@ -272,6 +273,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsbutton->setVisible(true);
     _settingsbutton->activate();
     _settingsbutton->setDown(false);
+    _settingsbutton->clearListeners();
     _settingsbutton->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didPause = true;
@@ -297,6 +299,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsRestartBtn->setVisible(true);
     _settingsRestartBtn->deactivate();
     _settingsRestartBtn->setDown(false);
+    _settingsRestartBtn->clearListeners();
     _settingsRestartBtn->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didRestart = true;
@@ -308,6 +311,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsCloseBtn->setVisible(true);
     _settingsCloseBtn->deactivate();
     _settingsCloseBtn->setDown(false);
+    _settingsCloseBtn->clearListeners();
     _settingsCloseBtn->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didPause = false;
@@ -320,6 +324,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _tutorialCloseBtn->setVisible(true);
     _tutorialCloseBtn->deactivate();
     _tutorialCloseBtn->setDown(false);
+    _tutorialCloseBtn->clearListeners();
     _tutorialCloseBtn->addListener([=](const std::string& name, bool down) {
         if (down) {
             _tutorialLayout->setVisible(false);
@@ -331,6 +336,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _tutorialLeftBtn->setVisible(true);
     _tutorialLeftBtn->deactivate();
     _tutorialLeftBtn->setDown(false);
+    _tutorialLeftBtn->clearListeners();
     _tutorialLeftBtn->addListener([=](const std::string& name, bool down) {
         if (down) {
             flipTutorialPage("left");
@@ -342,6 +348,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _tutorialRightBtn->setVisible(true);
     _tutorialRightBtn->deactivate();
     _tutorialRightBtn->setDown(false);
+    _tutorialRightBtn->clearListeners();
     _tutorialRightBtn->addListener([=](const std::string& name, bool down) {
         if (down) {
             flipTutorialPage("right");
@@ -353,6 +360,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsBackBtn->setVisible(true);
     _settingsBackBtn->deactivate();
     _settingsBackBtn->setDown(false);
+    _settingsBackBtn->clearListeners();
     _settingsBackBtn->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didGoToLevelMap = true;
@@ -363,6 +371,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
     _backbutton->deactivate();
     _backbutton->setDown(false);
+    _backbutton->clearListeners();
     _backbutton->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didGoToLevelMap = true;
