@@ -37,6 +37,7 @@ public:
         ATTACKING,
         DYING,
         DEAD,
+        PROTECTED,
         RESPAWNING
     };
     
