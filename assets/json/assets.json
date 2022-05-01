@@ -598,45 +598,220 @@
                         "type" : "Anchored"
                     },
                     "children": {
-                        "title" : {
-                            "type":    "Solid",
-                            "data": {
-                                "texture" : "help_title",
-                                "scale"   : 1
+                        "back"  : {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "visible"  : true,
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 1.2
                             },
-                            "layout" : {
-                                "y_anchor": "top",
-                                "x_anchor": "center"
-                            },
-                            "format"    : {
-                                "type" : "Anchored"
-                            },
-                            "children": {
-                                "back"  : {
-                                    "type"   : "Button",
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
                                     "data"   : {
-                                        "upnode"   : "up",
-                                        "size"    : [156, 126],
-                                        "visible"  : true,
-                                        "pushsize" : true,
-                                        "anchor"   : [0.5,0.5],
-                                        "scale"    : 2
-                                    },
-                                    "children" : {
-                                        "up"       : {
-                                            "type"   : "Image",
-                                            "data"   : {
-                                                "texture"  : "help_back"
-                                            }
-                                        }
-                                    },
-                                    "layout" : {
-                                        "x_anchor" : "center",
-                                        "y_anchor" : "middle",
-                                        "x_offset" : 0,
-                                        "y_offset" : 0
+                                        "texture"  : "help_back"
                                     }
                                 }
+                            },
+                            "layout" : {
+                                "x_anchor" : "left",
+                                "y_anchor" : "top",
+                                "x_offset" : 0.1,
+                                "y_offset" : -0.035
+                            }
+                        },
+                        "rule1": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "A selected and swapped \n unit will attack in the \n direction of its swap.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5,
+                                "visible": true
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "y_offset": 0.395,
+                                "x_offset": 0.38
+                            }
+                        },
+                        "rule2": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "A unit will not attack \n another unit of the same \n color.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "y_offset": 0.3,
+                                "x_offset": 0.38
+                            }
+                        },
+                        "rule3": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "A special unit will \n perform a special attack \n only when it is attacked.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "y_offset": 0.205,
+                                "x_offset": 0.38
+                            }
+                        },
+                        "rule4": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "Swap units to set up a \n chain.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "y_offset": 0.115,
+                                "x_offset": 0.38
+                            }
+                        },
+                        "rule5": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "Kill the king within the \n number of moves to win \n the level.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "y_offset": 0.014,
+                                "x_offset": 0.38
+                            }
+                        },
+                        "rule8": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "The king can only be \n killed by a chain of a \n minimum length.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "y_offset": -0.1,
+                                "x_offset": 0.38
+                            }
+                        },
+                        "rule6": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "Select and swap a \n special unit to change \n its direction. ",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "y_offset": -0.21,
+                                "x_offset": 0.38
+                            }
+                        },
+                        "rule7": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "Selecting another unit \n to swap with a special \n unit will not change the \n special unit’s direction.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "y_offset": -0.322,
+                                "x_offset": 0.38
                             }
                         }
                     }

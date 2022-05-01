@@ -339,6 +339,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         if (down) {
             _isHelpMenuOpen = true;
             _helpMenu->setVisible(true);
+            _helpBackBtn->activate();
             _settingsMenuLayout->setVisible(false);
             _settingsLayout->setVisible(false);
             _didPause = false;
@@ -359,7 +360,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     });
     
-    _helpBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_menu_background_title_back"));
+    _helpBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_menu_background_back"));
     _helpBackBtn->setVisible(true);
     _helpBackBtn->deactivate();
     _helpBackBtn->setDown(false);
@@ -760,9 +761,12 @@ void GameScene::update(float timestep)
         }
         if (_input.isDown()) {
             _isScrolling = true;
+//            CULog("help back btn position: %f, %f", _helpBackBtn->getPositionX(), _helpBackBtn->getPositionY());
+//            CULog("input position: %f, %f", pos.x, pos.y);
         } else if (_input.didRelease()) {
             _isScrolling = false;
         }
+//        CULog("help back btn is active: %i", _helpBackBtn->isActive());
         return;
     } else {
         _helpBackBtn->deactivate();
