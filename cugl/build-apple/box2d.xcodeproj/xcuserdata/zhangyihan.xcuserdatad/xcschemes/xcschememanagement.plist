@@ -7,12 +7,20 @@
 		<key>box2d-ios.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
+<<<<<<< HEAD
 			<integer>6</integer>
+=======
+			<integer>3</integer>
+>>>>>>> b1446f0851bda084dd548ed07526d6c4fe662381
 		</dict>
 		<key>box2d-mac.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
+<<<<<<< HEAD
 			<integer>3</integer>
+=======
+			<integer>7</integer>
+>>>>>>> b1446f0851bda084dd548ed07526d6c4fe662381
 		</dict>
 	</dict>
 </dict>
