@@ -202,6 +202,7 @@ protected:
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
     std::shared_ptr<cugl::scene2::Button> _settingsBackBtn;
+    std::shared_ptr<cugl::scene2::Button> _almanacbutton;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
