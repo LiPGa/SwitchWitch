@@ -217,6 +217,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _unitTypes.insert({child->key(), unit});
     }
     
+    _helpMenu = std::dynamic_pointer_cast<scene2::SceneNode>(_assets->get<scene2::SceneNode>("help_menu"));
+    _helpMenu->setContentSize(dimen);
+    _helpMenu->doLayout();
+    _guiNode->addChild(_helpMenu);
+    _helpMenu->setVisible(false);
+    _isScrolling = false;
+    
     _tutorialLayout = assets->get<scene2::SceneNode>("tutorial");
     _tutorialLayout->setContentSize(dimen);
     _tutorialLayout->doLayout();
@@ -320,6 +327,54 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _didPause = false;
             _settingsMenuLayout->setVisible(false);
             CULog("Pressed Settings restart button");
+        }
+    });
+    
+    _settingsHelpBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_help"));
+    _settingsHelpBtn->setVisible(true);
+    _settingsHelpBtn->deactivate();
+    _settingsHelpBtn->setDown(false);
+    _settingsHelpBtn->clearListeners();
+    _settingsHelpBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _isHelpMenuOpen = true;
+            _helpMenu->setVisible(true);
+            _settingsMenuLayout->setVisible(false);
+            _settingsLayout->setVisible(false);
+            _didPause = false;
+            _almanacbutton->setVisible(false);
+            _almanacbutton->deactivate();
+            // tutorial
+            _tutorialLayout->setVisible(false);
+            _tutorialActive = false;
+            _tutorialLeftBtn->deactivate();
+            _tutorialRightBtn->deactivate();
+            _tutorialCloseBtn->deactivate();
+            // set setting buttons inactive
+            _settingsbutton->deactivate();
+            _settingsBackBtn->deactivate();
+            _settingsRestartBtn->deactivate();
+            _settingsCloseBtn->deactivate();
+            CULog("Pressed Settings help button");
+        }
+    });
+    
+    _helpBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_menu_background_title_back"));
+    _helpBackBtn->setVisible(true);
+    _helpBackBtn->deactivate();
+    _helpBackBtn->setDown(false);
+    _helpBackBtn->clearListeners();
+    _helpBackBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _isHelpMenuOpen = false;
+            _helpMenu->setVisible(false);
+            _settingsLayout->setVisible(true);
+            _almanacbutton->setVisible(true);
+            _almanacbutton->setVisible(false);
+            _almanacbutton->activate();
+            // set other buttons inactive
+            _settingsbutton->activate();
+            CULog("Pressed help menu close button");
         }
     });
     
@@ -679,6 +734,18 @@ void GameScene::update(float timestep)
     if (_enterLevel && !_tutorialActive) {
         showTutorial(_guiNode);
         _enterLevel = false;
+    } else {
+        _tutorialLeftBtn->deactivate();
+        _tutorialRightBtn->deactivate();
+        _tutorialCloseBtn->deactivate();
+    }
+    
+    // help menu
+    if (_isHelpMenuOpen) {
+        _settingsHelpBtn->deactivate();
+        _helpBackBtn->activate();
+    } else {
+        _helpBackBtn->deactivate();
     }
     
     if (_didRestart == true) reset(_levelJson);
@@ -715,6 +782,7 @@ void GameScene::update(float timestep)
         _settingsBackBtn->activate();
         _settingsRestartBtn->activate();
         _settingsCloseBtn->activate();
+        _settingsHelpBtn->activate();
         return;
     }
 
@@ -1220,6 +1288,9 @@ void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
     removeChild(_guiNode);
     _didGoToLevelMap = false;
     _didPause = false;
+    _isScrolling = false;
+    _isHelpMenuOpen = false;
+    _tutorialActive = false;
     init(_assets);
     setLevel(boardJSON);
 }

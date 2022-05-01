@@ -405,6 +405,15 @@
         "tutorial_right": {
             "file": "textures/tutorial_right.png"
         },
+        "help_background": {
+            "file": "textures/help_background.png"
+        },
+        "help_back": {
+            "file": "textures/help_back.png"
+        },
+        "help_title": {
+            "file": "textures/help_title.png"
+        },
         "result_background": {
             "file": "textures/result-background.png"
         },
@@ -566,6 +575,74 @@
         "level19": "levels/board19.json"
     },
     "scene2s": {
+        "help_menu": {
+            "type"      : "Scroll",
+            "data" : {
+                "interior"  : [0,0,332,1182],
+                "constrain" : true,
+                "mask"      : false,
+                "pan"       : [0,-462]
+            },
+            "children":  {
+                "background" : {
+                    "type":    "Solid",
+                    "data": {
+                        "texture" : "help_background",
+                        "scale"   : 0.2216
+                    },
+                    "layout" : {
+                        "y_anchor": "middle",
+                        "x_anchor": "center"
+                    },
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "children": {
+                        "title" : {
+                            "type":    "Solid",
+                            "data": {
+                                "texture" : "help_title",
+                                "scale"   : 1
+                            },
+                            "layout" : {
+                                "y_anchor": "top",
+                                "x_anchor": "center"
+                            },
+                            "format"    : {
+                                "type" : "Anchored"
+                            },
+                            "children": {
+                                "back"  : {
+                                    "type"   : "Button",
+                                    "data"   : {
+                                        "upnode"   : "up",
+                                        "size"    : [156, 126],
+                                        "visible"  : true,
+                                        "pushsize" : true,
+                                        "anchor"   : [0.5,0.5],
+                                        "scale"    : 2
+                                    },
+                                    "children" : {
+                                        "up"       : {
+                                            "type"   : "Image",
+                                            "data"   : {
+                                                "texture"  : "help_back"
+                                            }
+                                        }
+                                    },
+                                    "layout" : {
+                                        "x_anchor" : "center",
+                                        "y_anchor" : "middle",
+                                        "x_offset" : 0,
+                                        "y_offset" : 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "map": {
             "type"      : "Scroll",
             "data" : {

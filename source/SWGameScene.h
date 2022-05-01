@@ -69,6 +69,10 @@ protected:
     // if the player has just enter the level
     bool _enterLevel;
     bool _tutorialActive;
+    // if the user is scrolling
+    bool _isScrolling;
+    // if the user opens the help menu
+    bool _isHelpMenuOpen;
     // CONSTANTS
     int _maxBoardWidth;
     int _maxBoardHeight;
@@ -155,6 +159,7 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _helpMenu;
     std::shared_ptr<scene2::SceneNode> _resultLayout;
     std::shared_ptr<scene2::SceneNode> _tutorialLayout;
     std::shared_ptr<scene2::SceneNode> _settingsLayout;
@@ -206,6 +211,10 @@ protected:
     /** The button to restart a game */
     std::shared_ptr<cugl::scene2::Button> _restartbutton;
     std::shared_ptr<cugl::scene2::Button> _settingsRestartBtn;
+    /** The button to open the help menu  */
+    std::shared_ptr<cugl::scene2::Button> _settingsHelpBtn;
+    /** The button to close the help menu */
+    std::shared_ptr<cugl::scene2::Button> _helpBackBtn;
     /** The button to display settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsbutton;
     /** The button to display the explanation for score */
