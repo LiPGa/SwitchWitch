@@ -66,6 +66,8 @@ protected:
     
     // current level, corresponds to board's ID.
     int _currLevel;
+    // if the player has just enter the level
+    bool _enterLevel;
     // CONSTANTS
     int _maxBoardWidth;
     int _maxBoardHeight;
@@ -153,6 +155,7 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
     std::shared_ptr<scene2::SceneNode> _resultLayout;
+    std::shared_ptr<scene2::SceneNode> _tutorialLayout;
     std::shared_ptr<scene2::SceneNode> _settingsLayout;
     std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
@@ -313,6 +316,22 @@ public:
      */
     void setLevel(shared_ptr<cugl::JsonValue> levelJSON);
 
+    /**
+     * Get the current level of the board
+     */
+    int getCurrLevel() { return _currLevel; };
+    
+    /**
+     * Sets the current level of the board
+     *
+     * @param the JSON representation of the board.
+     */
+    void setCurrLevel( int level_num ) { _currLevel = level_num; }
+    
+    /**
+     * Sets the enter level of the board to true
+     */
+    void enterLevel( ) { _enterLevel = true; }
     
     /**
      * Returns the current state the game is in.
@@ -456,6 +475,12 @@ private:
     void respawnAttackedSquares();
     
     void deconfirmSwap();
+    
+    /**
+     * shows the tutorial when the player first enter the level
+     * @param node               GUI node
+     */
+    void showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node );
 };
 
 #endif /* __SW_GAME_SCENE_H__ */

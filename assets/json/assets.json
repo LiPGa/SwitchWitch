@@ -929,22 +929,6 @@
                                 "y_offset" : -0.12
                             }
                         },
-                        "sound": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "settings_sound",
-                                "scale": 0.5
-                            },
-                            "layout": {
-                                "y_anchor": "middle",
-                                "x_anchor": "center",
-                                "x_offset": -0.35,
-                                "y_offset": 0.05
-                            },
-                            "format": {
-                                "type": "Anchored"
-                            }
-                        },
                         "help": {
                             "type": "Widget",
                             "data": {
@@ -954,7 +938,7 @@
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
                                 "x_offset": 0.0,
-                                "y_offset": -0.05
+                                "y_offset": 0.2
                             }
                         },
                         "restart": {
@@ -966,7 +950,7 @@
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
                                 "x_offset": 0.0,
-                                "y_offset": -0.2
+                                "y_offset": 0
                             }
                         },
                         "exit": {
@@ -978,7 +962,56 @@
                                 "y_anchor": "bottom",
                                 "x_anchor": "center",
                                 "x_offset": 0.0,
-                                "y_offset": 0.15
+                                "y_offset": 0.3
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "tutorial": {
+            "type": "Node",
+            "format": {
+                "type": "Float",
+                "orientation": "vertical",
+                "x_alignment": "center",
+                "y_alignment": "middle"
+            },
+            "children": {
+                "board": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "result_background",
+                        "scale": 0.6
+                    },
+                    "layout": {
+                        "y_anchor": "middle",
+                        "x_anchor": "center"
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    },
+                    "children": {
+                        "title":{
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel32",
+                                "text": "Tutorial",
+                                "foreground": "#63351D",
+                                "halign": "top",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "scale": 1.0,
+                                "visible": true
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "top",
+                                "x_offset": 0.0,
+                                "y_offset": -0.15
                             }
                         }
                     }

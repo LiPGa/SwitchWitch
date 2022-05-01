@@ -227,6 +227,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         shared_ptr<Unit> unit = Unit::alloc(_textures, subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1), subtypeString != "king");
         _unitTypes.insert({child->key(), unit});
     }
+    
+    _tutorialLayout = assets->get<scene2::SceneNode>("tutorial");
+    _tutorialLayout->setContentSize(dimen);
+    _tutorialLayout->doLayout();
+    _guiNode->addChild(_tutorialLayout);
+    _tutorialLayout->setVisible(false);
 
     _resultLayout = assets->get<scene2::SceneNode>("result");
     _resultLayout->setContentSize(dimen);
@@ -242,6 +248,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsMenuLayout = assets->get<scene2::SceneNode>("settings-menu");
     _settingsMenuLayout->setContentSize(dimen);
     _settingsMenuLayout->doLayout(); // Repositions the HUD
+    _settingsMenuLayout->getChild(0)->getChild(2)->setScale(0.725);
+    _settingsMenuLayout->getChild(0)->getChild(3)->setScale(0.725);
     _guiNode->addChild(_settingsMenuLayout);
     _settingsMenuLayout->setVisible(false);
     
@@ -547,7 +555,12 @@ void GameScene::update(float timestep)
     // Read the input
     _input.update();
     
-
+    // show tutorial when first enter the level
+    if (_enterLevel) {
+        showTutorial(_guiNode);
+        _enterLevel = false;
+    }
+    
     if (_didRestart == true) reset(_levelJson);
     if (_didRestart == true && _didPause == true) reset(_levelJson);
 
@@ -1204,4 +1217,20 @@ void GameScene::showResultText(bool success, std::shared_ptr<cugl::scene2::Scene
     node->addChildWithName(text, "info");
 //    CULog("text has priority of %f", _info_text->getPriority());
 //    CULog("unit has priority of %f", unitNode->getPriority());
+}
+
+void GameScene::showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node ) {
+    switch (_currLevel) {
+        case 1:
+            _tutorialLayout->setVisible(true);
+            break;
+        case 3:
+            _tutorialLayout->setVisible(true);
+            break;
+        case 4:
+            _tutorialLayout->setVisible(true);
+            break;
+        default:
+            _tutorialLayout->setVisible(false);
+    }
 }
