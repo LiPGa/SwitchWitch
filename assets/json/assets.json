@@ -472,6 +472,10 @@
         },
         "icon-special4": {
             "file": "textures/icon_special4.png"
+        },
+        "almanac-btn": {
+            "file":
+                "textures/almanac-button.png"
         }
     },
     "fonts": {
@@ -521,7 +525,8 @@
         "helpbutton": "widgets/helpbutton.json",
         "exitbutton": "widgets/exitbutton.json",
         "settingsbutton": "widgets/settingsbutton.json",
-        "levelbutton": "widgets/levelbutton.json"
+        "levelbutton": "widgets/levelbutton.json",
+        "almanacbutton": "widgets/almanacbutton.json"
     },
     "jsons": {
         "constants": "json/constants.json",
@@ -1258,6 +1263,32 @@
                         }
                     }
                 }
+            }
+        },
+        "almanac"  : {
+            "type"   : "Button",
+            "data"   : {
+                "upnode"   : "up",
+                "size"    : [200, 100],
+                "visible"  : true,
+                "pushsize" : true,
+                "anchor"   : [3.9,1.065],
+                "scale"    : 0.2
+            },
+            "children" : {
+                "up"       : {
+                    "type"   : "Image",
+                    "data"   : {
+                        "texture"  : "almanac-btn"
+                    }
+                }
+            },
+            "layout" : {
+                "x_anchor" : "center",
+                "y_anchor" : "middle",
+                "x_offset" : 0,
+                "y_offset" : 0.7,
+                "absolute" : false
             }
         },
         "result": {

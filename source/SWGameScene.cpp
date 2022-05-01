@@ -80,6 +80,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _maxBoardHeight = boardSize.at(1);
     _defaultSquareSize = constants->getInt("square-size");
 
+
     // Initialize Scene
     dimen *= sceneHeight / dimen.height;
     if (!Scene2::init(dimen))
@@ -272,7 +273,20 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _scoreExplanation = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("settings_score-explanation"));
     _scoreExplanation->setScale(_scale);
     _scoreExplanation->setVisible(false);
-
+    
+    _almanacbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac"));
+    //_almanacbutton->setScale(_scale);
+    _almanacbutton->setVisible(true);
+    _almanacbutton->setContentSize(dimen);
+    _almanacbutton->doLayout();
+    _almanacbutton->activate();
+    _almanacbutton->setDown(false);
+    _almanacbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+             CULog("%u pressed", 1);
+        }
+    });
+    _guiNode->addChild(_almanacbutton);
     
     _settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
     _settingsRestartBtn->setVisible(true);
