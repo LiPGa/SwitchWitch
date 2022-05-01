@@ -173,6 +173,16 @@ public:
     vector<shared_ptr<Square>> getAttackedSquares(cugl::Vec2 pos);
     
     vector<shared_ptr<Square>> getInitallyAttackedSquares(cugl::Vec2 pos, bool basic);
+    
+    /**
+     * Returns the squares being protected in an attack by a given unit on a square.
+     *
+     * @param pos the attacker square's position
+     * @return a list of squares being attacked.
+     */
+    vector<shared_ptr<Square>> getProtectedSquares(cugl::Vec2 pos);
+
+    vector<shared_ptr<Square>> getInitiallyProtectedSquares(cugl::Vec2 pos, bool basic);
 
     /**
      * Flattens two coordinate number as one number. Used for organizing the _matrix.
@@ -183,7 +193,7 @@ private:
     /**
      * Helper function for finding attacked squares.
      */
-    void getAttackedSquares_h(vector<shared_ptr<Square>> &listOfAttackedSquares, shared_ptr<Square> attackingSquare);
+    void getAttackedSquares_h(vector<shared_ptr<Square>> &listOfAttackedSquares, vector<shared_ptr<Square>> &listOfProtectedSquares, shared_ptr<Square> attackingSquare);
 #pragma mark -
 };
 #endif /* SWBoard_hpp */
