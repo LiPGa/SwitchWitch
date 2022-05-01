@@ -1314,7 +1314,7 @@
                             "type": "Label",
                             "data": {
                                 "font": "pixel32",
-                                "text": "Level 1",
+                                "text": "Level 20",
                                 "foreground": "#63351D",
                                 "halign": "top",
                                 "valign": "true middle",
@@ -1458,7 +1458,7 @@
                             "type": "Label",
                             "data": {
                                 "font": "pixel32",
-                                "text": "Level 1",
+                                "text": "Level 20",
                                 "foreground": "#63351D",
                                 "halign": "top",
                                 "valign": "true middle",
