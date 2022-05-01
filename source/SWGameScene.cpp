@@ -685,7 +685,6 @@ void GameScene::update(float timestep)
     }
     else if (_input.didRelease() && _currentState != ANIMATION)
     {
-        CULog("did release");
         _upcomingUnitNode->setVisible(false);
         _upcomingUnitNode->removeAllChildren();
         if (_enlargedUnitNode) _enlargedUnitNode->setScale(BACK2NORMAL);
@@ -697,7 +696,6 @@ void GameScene::update(float timestep)
 
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable() && _currentState == CONFIRM_SWAP)
         {
-            CULog("mid swap");
             _currentState = ANIMATION;
             _midSwap = true;
             
@@ -818,7 +816,6 @@ void GameScene::update(float timestep)
                     }
                     break;
                 case Unit::State::ATTACKING:
-                    CULog("attacking");
                     for (auto atkSquare : _board->getInitallyAttackedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit())) {
                         if (atkSquare->getUnit()->getState() == Unit::State::IDLE) {
 //                            if (_attackedSquares.size() >= atkSquare->getUnit()->getUnitsNeededToKill()) {
