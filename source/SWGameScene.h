@@ -68,6 +68,7 @@ protected:
     int _currLevel;
     // if the player has just enter the level
     bool _enterLevel;
+    bool _tutorialActive;
     // CONSTANTS
     int _maxBoardWidth;
     int _maxBoardHeight;
@@ -204,6 +205,10 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _settingsCloseBtn;
     /** The button to close tutorial*/
     std::shared_ptr<cugl::scene2::Button> _tutorialCloseBtn;
+    /** The button to go to left page for tutorial*/
+    std::shared_ptr<cugl::scene2::Button> _tutorialLeftBtn;
+    /** The button to go to right page for tutorial*/
+    std::shared_ptr<cugl::scene2::Button> _tutorialRightBtn;
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
     std::shared_ptr<cugl::scene2::Button> _settingsBackBtn;
@@ -483,6 +488,12 @@ private:
      * @param node               GUI node
      */
     void showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node );
+    
+    /**
+     * flip the tutorial page
+     * @param dir                 direction to flip: left or right
+     */
+    void flipTutorialPage( std::string dir );
 };
 
 #endif /* __SW_GAME_SCENE_H__ */

@@ -396,6 +396,15 @@
         "settings_close_btn":{
             "file": "textures/settings-close.png"
         },
+        "tutorial_background": {
+            "file": "textures/tutorial_background.png"
+        },
+        "tutorial_left": {
+            "file": "textures/tutorial_left.png"
+        },
+        "tutorial_right": {
+            "file": "textures/tutorial_right.png"
+        },
         "result_background": {
             "file": "textures/result-background.png"
         },
@@ -463,6 +472,10 @@
         "pixel32": {
             "file": "fonts/NewRocker-Regular.ttf",
             "size": 32
+        },
+        "pixel25": {
+            "file": "fonts/NewRocker-Regular.ttf",
+            "size": 25
         },
         "title32": {
             "file": "fonts/UnifrakturMaguntia.ttf",
@@ -1224,8 +1237,8 @@
                 "board": {
                     "type": "Image",
                     "data": {
-                        "texture": "result_background",
-                        "scale": 0.6
+                        "texture": "tutorial_background",
+                        "scale": 0.22
                     },
                     "layout": {
                         "y_anchor": "middle",
@@ -1241,7 +1254,7 @@
                                 "upnode"   : "up",
                                 "visible"  : true,
                                 "anchor"   : [0,0],
-                                "scale"    : 0.4
+                                "scale"    : 1.1
                             },
                             "children" : {
                                 "up"       : {
@@ -1254,30 +1267,204 @@
                             "layout" : {
                                 "x_anchor" : "right",
                                 "y_anchor" : "top",
-                                "x_offset" : -0.18,
-                                "y_offset" : -0.12
+                                "x_offset" : -0.22,
+                                "y_offset" : -0.22
                             }
                         },
-                        "title":{
+                        "level1_rule1": {
                             "type": "Label",
                             "data": {
-                                "font": "pixel32",
-                                "text": "Tutorial",
+                                "font": "pixel25",
+                                "text": "A selected and swapped \n unit will attack in the \n direction of its swap.",
                                 "foreground": "#63351D",
-                                "halign": "top",
                                 "valign": "true middle",
                                 "anchor": [
                                     0.5,
                                     0.5
                                 ],
-                                "scale": 1.0,
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5,
                                 "visible": true
                             },
                             "layout": {
                                 "x_anchor": "center",
-                                "y_anchor": "top",
-                                "x_offset": 0.0,
-                                "y_offset": -0.15
+                                "y_anchor": "middle",
+                                "y_offset": 0.1,
+                                "x_offset": 0.15
+                            }
+                        },
+                        "level1_rule2": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "Kill the king within the \n number of moves to win \n the level. The king \n cannot be swapped. ",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5,
+                                "visible": false
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "y_offset": 0.1,
+                                "x_offset": 0.15
+                            }
+                        },
+                        "level2_rule1": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "A special unit will perform \n a special attack only \n when it is attacked.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5,
+                                "visible": false
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "y_offset": 0.1,
+                                "x_offset": 0.15
+                            }
+                        },
+                        "level2_rule2": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "The king can only be \n killed by a chain of a \n minimum length.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5,
+                                "visible": false
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "y_offset": 0.1,
+                                "x_offset": 0.15
+                            }
+                        },
+                        "level4_rule1": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "Swap units to set up a chain.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5,
+                                "visible": false
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "y_offset": 0.12,
+                                "x_offset": 0.1
+                            }
+                        },
+                        "level4_rule2": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel25",
+                                "text": "Select and swap a special \n unit to change its direction.",
+                                "foreground": "#63351D",
+                                "valign": "true middle",
+                                "anchor": [
+                                    0.5,
+                                    0.5
+                                ],
+                                "size": [
+                                    400,
+                                    400
+                                ],
+                                "scale": 2.5,
+                                "visible": false
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "y_offset": 0.12,
+                                "x_offset": 0.1
+                            }
+                        },
+                        "left": {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "visible"  : true,
+                                "anchor"   : [0,0],
+                                "scale"    : 1.2
+                            },
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {
+                                        "texture": "tutorial_left"
+                                    }
+                                }
+                            },
+                            "layout" : {
+                                "x_anchor" : "left",
+                                "y_anchor" : "middle",
+                                "x_offset" : 0.02,
+                                "y_offset" : -0.1
+                            }
+                        },
+                        "right": {
+                            "type"   : "Button",
+                            "data"   : {
+                                "upnode"   : "up",
+                                "visible"  : true,
+                                "anchor"   : [0,0],
+                                "scale"    : 1.2
+                            },
+                            "children" : {
+                                "up"       : {
+                                    "type"   : "Image",
+                                    "data"   : {
+                                        "texture": "tutorial_right"
+                                    }
+                                }
+                            },
+                            "layout" : {
+                                "x_anchor" : "right",
+                                "y_anchor" : "middle",
+                                "x_offset" : -0.32,
+                                "y_offset" : -0.1
                             }
                         }
                     }

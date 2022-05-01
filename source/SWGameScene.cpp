@@ -233,6 +233,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _tutorialLayout->doLayout();
     _guiNode->addChild(_tutorialLayout);
     _tutorialLayout->setVisible(false);
+    _tutorialActive = false;
 
     _resultLayout = assets->get<scene2::SceneNode>("result");
     _resultLayout->setContentSize(dimen);
@@ -320,9 +321,32 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _tutorialCloseBtn->deactivate();
     _tutorialCloseBtn->setDown(false);
     _tutorialCloseBtn->addListener([=](const std::string& name, bool down) {
-        this->_active = down;
-        _tutorialLayout->setVisible(false);
-        CULog("Pressed tutorial close button");
+        if (down) {
+            _tutorialLayout->setVisible(false);
+            CULog("Pressed tutorial close button");
+        }
+    });
+    
+    _tutorialLeftBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("tutorial_board_left"));
+    _tutorialLeftBtn->setVisible(true);
+    _tutorialLeftBtn->deactivate();
+    _tutorialLeftBtn->setDown(false);
+    _tutorialLeftBtn->addListener([=](const std::string& name, bool down) {
+        if (down) {
+            flipTutorialPage("left");
+            CULog("Pressed tutorial left button");
+        }
+    });
+    
+    _tutorialRightBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("tutorial_board_right"));
+    _tutorialRightBtn->setVisible(true);
+    _tutorialRightBtn->deactivate();
+    _tutorialRightBtn->setDown(false);
+    _tutorialRightBtn->addListener([=](const std::string& name, bool down) {
+        if (down) {
+            flipTutorialPage("right");
+            CULog("Pressed tutorial right button");
+        }
     });
     
     _settingsBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_exit"));
@@ -565,7 +589,7 @@ void GameScene::update(float timestep)
     _input.update();
     
     // show tutorial when first enter the level
-    if (_enterLevel) {
+    if (_enterLevel && !_tutorialActive) {
         showTutorial(_guiNode);
         _enterLevel = false;
     }
@@ -1230,20 +1254,86 @@ void GameScene::showResultText(bool success, std::shared_ptr<cugl::scene2::Scene
 
 void GameScene::showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node ) {
     switch (_currLevel) {
-        case 1:
+        case 1: {
             _tutorialLayout->setVisible(true);
             _tutorialCloseBtn->activate();
+            _tutorialLeftBtn->activate();
+            _tutorialRightBtn->activate();
+            _tutorialActive = true;
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(true);
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
             break;
-        case 3:
+        }
+        case 2: {
             _tutorialLayout->setVisible(true);
             _tutorialCloseBtn->activate();
+            _tutorialLeftBtn->activate();
+            _tutorialRightBtn->activate();
+            _tutorialActive = true;
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(true);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
             break;
-        case 4:
+        }
+        case 4: {
             _tutorialLayout->setVisible(true);
             _tutorialCloseBtn->activate();
+            _tutorialLeftBtn->activate();
+            _tutorialRightBtn->activate();
+            _tutorialActive = true;
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(true);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
             break;
-        default:
+        }
+        default: {
             _tutorialLayout->setVisible(false);
             _tutorialCloseBtn->deactivate();
+            _tutorialLeftBtn->deactivate();
+            _tutorialRightBtn->deactivate();
+            _tutorialActive = false;
+        }
+    }
+    
+}
+
+void GameScene::flipTutorialPage( std::string dir ) {
+    switch (_currLevel) {
+        case 1: {
+            auto level1_rule1 = _tutorialLayout->getChild(0)->getChildByName("level1_rule1");
+            auto level1_rule2 = _tutorialLayout->getChild(0)->getChildByName("level1_rule2");
+            CULog("rule1 is visible: %i", level1_rule1->isVisible());
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(!level1_rule1->isVisible());
+            CULog("rule11 is visible now: %i", level1_rule1->isVisible());
+            
+            CULog("rule2 is visible: %i", level1_rule2->isVisible());
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(!level1_rule2->isVisible());
+            CULog("rule2 is visible now: %i", level1_rule2->isVisible());
+            break;
+        }
+        case 2: {
+            auto level2_rule1 = _tutorialLayout->getChild(0)->getChildByName("level2_rule1");
+            auto level2_rule2 = _tutorialLayout->getChild(0)->getChildByName("level2_rule2");
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(!level2_rule1->isVisible());
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(!level2_rule2->isVisible());
+            break;
+        }
+        case 4: {
+            auto level4_rule1 = _tutorialLayout->getChild(0)->getChildByName("level4_rule1");
+            auto level4_rule2 = _tutorialLayout->getChild(0)->getChildByName("level4_rule2");
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(!level4_rule1->isVisible());
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(!level4_rule2->isVisible());
+            break;
+        }
     }
 }
