@@ -337,13 +337,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsHelpBtn->clearListeners();
     _settingsHelpBtn->addListener([this](const std::string& name, bool down) {
         if (down) {
+            // help menu
             _isHelpMenuOpen = true;
             _helpMenu->setVisible(true);
             _helpBackBtn->activate();
             _helpMenu->setPositionY(-1182+720);
-            _settingsMenuLayout->setVisible(false);
-            _settingsLayout->setVisible(false);
-            _didPause = false;
+            // almanac
             _almanacbutton->setVisible(false);
             _almanacbutton->deactivate();
             // tutorial
@@ -353,6 +352,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _tutorialRightBtn->deactivate();
             _tutorialCloseBtn->deactivate();
             // set setting buttons inactive
+            _didPause = false;
+            _settingsMenuLayout->setVisible(false);
+            _settingsLayout->setVisible(false);
             _settingsbutton->deactivate();
             _settingsBackBtn->deactivate();
             _settingsRestartBtn->deactivate();
@@ -368,15 +370,15 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _helpBackBtn->clearListeners();
     _helpBackBtn->addListener([this](const std::string& name, bool down) {
         if (down) {
+            // help
             _isHelpMenuOpen = false;
             _helpMenu->setVisible(false);
-//            _helpBackBtn->deactivate();
+            // settings
             _settingsLayout->setVisible(true);
-            _almanacbutton->setVisible(true);
-            _almanacbutton->setVisible(false);
-            _almanacbutton->activate();
-            // set other buttons inactive
             _settingsbutton->activate();
+            // almanac
+            _almanacbutton->setVisible(true);
+            _almanacbutton->activate();
             CULog("Pressed help menu close button");
         }
     });
@@ -391,6 +393,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _tutorialCloseBtn->addListener([=](const std::string& name, bool down) {
         if (down) {
             _tutorialLayout->setVisible(false);
+            _tutorialActive = false;
             CULog("Pressed tutorial close button");
         }
     });
@@ -737,30 +740,22 @@ void GameScene::update(float timestep)
     if (_enterLevel && !_tutorialActive) {
         showTutorial(_guiNode);
         _enterLevel = false;
-    } else {
-//        _tutorialLeftBtn->deactivate();
-//        _tutorialRightBtn->deactivate();
-//        _tutorialCloseBtn->deactivate();
+    } else if (!_tutorialActive) {
+        _tutorialLeftBtn->deactivate();
+        _tutorialRightBtn->deactivate();
+        _tutorialCloseBtn->deactivate();
     }
     
     // help menu
     if (_isHelpMenuOpen) {
         _settingsHelpBtn->deactivate();
-//        _helpBackBtn->activate();
         // Process the toggled key commands
         Vec2 pos = _input.getPosition();
-//        std::cout << "(" << pos.x << ", " << pos.y << ")" << endl;
-//        std::cout << _helpBackBtn->containsScreen(pos) << std::endl;
         if (_isScrolling) {
             Vec2 prevPos = _input.getPrevious();
             Vec2 moveDist = Vec2(pos.x-prevPos.x, prevPos.y-pos.y);
             Vec2 nodePos = _helpMenu->getPosition();
             moveDist.x = 0;
-//            if (moveDist.y + nodePos.y < 0) {
-//                moveDist.y = 0 - nodePos.y;
-//            } else if (moveDist.y + nodePos.y > 1182-720) {
-//                moveDist.y = 1182-720 - nodePos.y;
-//            }
             if (moveDist.y + nodePos.y < -1182+720) {
                 moveDist.y = -1182+720 - nodePos.y;
             } else if (moveDist.y + nodePos.y > 0) {
@@ -770,20 +765,14 @@ void GameScene::update(float timestep)
         }
         if (_input.isDown()) {
             _isScrolling = true;
-//            if (_helpBackBtn->containsScreen(pos + Vec2(0, -464))) _helpBackBtn->setDown(true);
-            Vec2 nodePos = _helpBackBtn->screenToNodeCoords(Vec2(pos.x, pos.y));
-            CULog("help back btn position: %f, %f", _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).x, _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).y);
-            CULog("input position: %f, %f", pos.x, pos.y);
-//            CULog("input position on button: %f, %f", nodePos.x, nodePos.y);
-//            CULog("button has listeners: %d", _helpBackBtn->hasListener());
+//            CULog("help back btn position: %f, %f", _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).x, _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).y);
+//            CULog("input position: %f, %f", pos.x, pos.y);
         } else if (_input.didRelease()) {
             _isScrolling = false;
-//            _helpBackBtn->setDown(false);
         }
-//        CULog("help back btn is active: %i", _helpBackBtn->isActive());
         return;
     } else {
-//        _helpBackBtn->deactivate();
+        _helpBackBtn->deactivate();
         _isScrolling = false;
     }
     
