@@ -604,7 +604,10 @@
                                 "upnode"   : "up",
                                 "visible"  : true,
                                 "anchor"   : [0.5,0.5],
-                                "scale"    : 1.2
+                                "scale"    : 1.2,
+                                "visible"  : true,
+                                "pushsize" : true,
+                                "size"    : [156, 126]
                             },
                             "children" : {
                                 "up"       : {
@@ -618,7 +621,8 @@
                                 "x_anchor" : "left",
                                 "y_anchor" : "top",
                                 "x_offset" : 0.1,
-                                "y_offset" : -0.035
+                                "y_offset" : -0.035,
+                                "absolute" : false
                             }
                         },
                         "rule1": {
