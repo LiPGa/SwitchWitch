@@ -153,6 +153,8 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
     std::shared_ptr<scene2::SceneNode> _resultLayout;
+    /** result screen when player fails the game*/
+    std::shared_ptr<scene2::SceneNode> _failResultLayout;
     std::shared_ptr<scene2::SceneNode> _settingsLayout;
     std::shared_ptr<scene2::SceneNode> _almanacLayout;
     std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
@@ -175,7 +177,10 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text with the final score */
     std::shared_ptr<cugl::scene2::Label> _score_number;
+    std::shared_ptr<cugl::scene2::Label> _fail_score_number;
+    /** The text with the level number */
     std::shared_ptr<cugl::scene2::Label> _level_info;
+    std::shared_ptr<cugl::scene2::Label> _fail_level_info;
     std::shared_ptr<cugl::scene2::Label> _info_text;
     /** The score meter with the current score */
     std::shared_ptr<cugl::scene2::ProgressBar> _scoreMeter;
@@ -208,6 +213,7 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _replace_text;
     /** The button to restart a game */
     std::shared_ptr<cugl::scene2::Button> _restartbutton;
+    std::shared_ptr<cugl::scene2::Button> _failRestartButton;
     std::shared_ptr<cugl::scene2::Button> _settingsRestartBtn;
     /** The button to display settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsbutton;
@@ -218,6 +224,9 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _almanacCloseBtn;
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
+    std::shared_ptr<cugl::scene2::Button> _failBackButton;
+    /** The button to go to the next level  */
+    std::shared_ptr<cugl::scene2::Button> _nextbutton;
     std::shared_ptr<cugl::scene2::Button> _settingsBackBtn;
     std::shared_ptr<cugl::scene2::Button> _almanacbutton;
     std::shared_ptr<cugl::scene2::Button> _unit1button;
@@ -242,6 +251,8 @@ protected:
     bool _didPause= false;
     /** Whther the player pressed exit button*/
     bool _didGoToLevelMap = false;
+    /** Whther the player pressed next button*/
+    bool _didGoToNextLevel = false;
     /** Whther the player pressed almanac button*/
     bool _didPreview = false;
     
@@ -367,14 +378,9 @@ public:
      *
      * @returns the current state
      */
-    bool goToLevelEditor() { return _input.isEscapeDown(); }
-    
-    /**
-     * Returns the current state the game is in.
-     *
-     * @returns the current state
-     */
-    bool goToLevelMap() { return _didGoToLevelMap; }
+    const bool goToLevelEditor() { return _input.isEscapeDown(); }
+    const bool goToLevelMap() { return _didGoToLevelMap; }
+    const bool goToNextLevel() { return _didGoToNextLevel; }
     
     /** Sets the cugl::JsonValue that the gamescene reads the board population data from */
     void setBoardJSON(std::shared_ptr<cugl::JsonValue> v) { _boardJson = v; }

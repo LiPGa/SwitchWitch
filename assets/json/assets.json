@@ -402,6 +402,12 @@
         "result_btn_retry": {
             "file": "textures/result-btn-retry.png"
         },
+        "result_btn_next": {
+            "file": "textures/result-btn-next.png"
+        },
+        "result_btn_back": {
+            "file": "textures/result-btn-back.png"
+        },
         "result_btn_exit": {
             "file": "textures/result-btn-exit.png"
         },
@@ -629,8 +635,11 @@
     "widgets": {
         "textbutton": "widgets/textbutton.json",
         "retrybutton": "widgets/retrybutton.json",
+        "restartbutton": "widgets/restartbutton.json",
         "helpbutton": "widgets/helpbutton.json",
         "exitbutton": "widgets/exitbutton.json",
+        "nextbutton": "widgets/nextbutton.json",
+        "backbutton": "widgets/backbutton.json",
         "settingsbutton": "widgets/settingsbutton.json",
         "levelbutton": "widgets/levelbutton.json",
         "almanacbutton": "widgets/almanacbutton.json"
@@ -1354,7 +1363,7 @@
                         "restart": {
                             "type": "Widget",
                             "data": {
-                                "key": "retrybutton"
+                                "key": "restartbutton"
                             },
                             "layout": {
                                 "y_anchor": "middle",
@@ -1435,6 +1444,97 @@
                 "x_offset" : 0,
                 "y_offset" : 0.7,
                 "absolute" : false
+            }
+        },
+        "failresult": {
+            "type": "Node",
+            "format": {"type": "Float", "orientation": "vertical","x_alignment": "center", "y_alignment": "middle"},
+            "children": {
+                "board": {
+                    "type": "Image",
+                    "data": {"texture": "result_background","scale": 0.6},
+                    "layout": {"y_anchor": "middle","x_anchor": "center"},
+                    "format": {"type": "Anchored"},
+                    "children": {
+                        "level":{
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel32",
+                                "text": "Level 20",
+                                "foreground": "#63351D",
+                                "halign": "top",
+                                "valign": "true middle",
+                                "anchor": [0.5,0.5],
+                                "scale": 1.0,
+                                "visible": true
+                            },
+                            "layout": {"x_anchor": "center","y_anchor": "top","x_offset": 0.0,"y_offset": -0.15}
+                        },
+                        "star1": {
+                            "type": "Image","data": {"texture": "star_empty"},
+                            "layout": {"y_anchor": "middle","x_anchor": "center","x_offset": -0.3,"y_offset": 0.1},
+                            "format": { "type": "Anchored"}
+                        },
+                        "star2": { "type": "Image",
+                            "data": {"texture": "star_empty"},
+                            "layout": {"y_anchor": "middle","x_anchor": "center","x_offset": -0.1,"y_offset": 0.1},
+                            "format": {"type": "Anchored"}
+                        },
+                        "star3": { "type": "Image",
+                            "data": {"texture": "star_empty"},
+                            "layout": {"y_anchor": "middle","x_anchor": "center","x_offset": 0.1,"y_offset": 0.1},
+                            "format": {"type": "Anchored"}
+                        },
+                        "score": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel32",
+                                "text": "Score",
+                                "foreground": "#63351D",
+                                "halign": "center",
+                                "valign": "true middle",
+                                "anchor": [0.5,0.5],
+                                "scale": 1.0,
+                                "visible": true
+                            },
+                            "layout": {"x_anchor": "center","y_anchor": "middle","x_offset": -0.01,"y_offset": 0}
+                        },
+                        "number": {
+                            "type": "Label",
+                            "data": {
+                                "font": "pixel32",
+                                "text": "placement",
+                                "foreground": "#EBEBEB",
+                                "halign": "center",
+                                "valign": "true middle",
+                                "anchor": [0.5,0.5],
+                                "scale": 2,
+                                "visible": true
+                            },
+                            "layout": {"x_anchor": "center","y_anchor": "middle","x_offset": -0.01,"y_offset": -0.1}
+                        },
+                        "restart": {
+                            "type": "Widget",
+                            "data": {"key": "retrybutton"},
+                            "layout": {
+                                "y_anchor": "bottom",
+                                "x_anchor": "left",
+                                "x_offset": 0.3,
+                                "y_offset": 0.15
+                            }
+                        },
+                        "exit": {
+                            "type": "Widget",
+                            "data": {"key": "exitbutton"},
+                            "layout": {
+                                "y_anchor": "bottom",
+                                "x_anchor": "right",
+                                "x_offset": -0.3,
+                                "y_offset": 0.15
+                            }
+                        }
+                    }
+                }
             }
         },
         "almanac-menu": {
@@ -1789,7 +1889,7 @@
                             "type": "Label",
                             "data": {
                                 "font": "pixel32",
-                                "text": "Level 1",
+                                "text": "Level 20",
                                 "foreground": "#63351D",
                                 "halign": "top",
                                 "valign": "true middle",
@@ -1905,19 +2005,31 @@
                                 "y_anchor": "bottom",
                                 "x_anchor": "left",
                                 "x_offset": 0.3,
-                                "y_offset": 0.15
+                                "y_offset": 0.225
                             }
                         },
-                        "exit": {
+                        "next": {
                             "type": "Widget",
                             "data": {
-                                "key": "exitbutton"
+                                "key": "nextbutton"
                             },
                             "layout": {
                                 "y_anchor": "bottom",
                                 "x_anchor": "right",
                                 "x_offset": -0.3,
-                                "y_offset": 0.15
+                                "y_offset": 0.225
+                            }
+                        },
+                        "exit": {
+                            "type": "Widget",
+                            "data": {
+                                "key": "backbutton"
+                            },
+                            "layout": {
+                                "y_anchor": "bottom",
+                                "x_anchor": "center",
+                                "x_offset": 0.0,
+                                "y_offset": 0.1
                             }
                         }
                     }
