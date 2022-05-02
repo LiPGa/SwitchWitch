@@ -191,6 +191,8 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _threeStar3;
     /** The text of score for each star level */
     std::shared_ptr<cugl::scene2::Label> _oneStar_text;
+    std::shared_ptr<cugl::scene2::Label> _twoStar_text;
+    std::shared_ptr<cugl::scene2::Label> _threeStar_text;
 
     /** The images of the final stars*/
     std::shared_ptr<cugl::scene2::PolygonNode> _star1;

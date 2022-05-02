@@ -141,45 +141,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     std::string turnMsg = strtool::format("%d/%d", _turns, 100);
     _turn_text = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
     _turn_text->setScale(0.5);
-    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 5, -0.43 * (_topuibackgroundNode->getSize().height)));
     _guiNode->addChildWithName(_turn_text, "turn_text");
-//
-//    // Create and layout unitsNeededToKill info
-//    auto units_needed_to_kill = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
-    
-    
-//
-//    // Create and layout the score meter
-//
-//    _scoreMeter = scene2::ProgressBar::allocWithCaps(_assets->get<Texture>("scoremeter_background"), _assets->get<Texture>("scoremeter_foreground"), _assets->get<Texture>("scoremeter_endcap_left"), _assets->get<Texture>("scoremeter_endcap_right"), Size(97, 15));
-//    _scoreMeter->setProgress(0.0);
-////    _scoreMeter->setPosition(Vec2(0, 0));
-//    _layout->addAbsolute("scoreMeter", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(10 -_topuibackgroundNode->getSize().width / 6, -0.87 * (_topuibackgroundNode->getSize().height)));
-////    _layout->addRelative("scoreMeter", cugl::scene2::Layout::Anchor::CENTER_FILL, Vec2(0, 0));
-//    _guiNode->addChildWithName(_scoreMeter, "scoreMeter");
-//    _scoreMeterStar1 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_empty"));
-//    _scoreMeterStar1->setScale(0.15f);
-//    _scoreMeterStar2 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_empty"));
-//    _scoreMeterStar2->setScale(0.15f);
-//    _scoreMeterStar3 = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_empty"));
-//    _scoreMeterStar3->setScale(0.15f);
-//
-//    _guiNode->addChildWithName(_scoreMeterStar1, "scoreMeterStar1");
-//    _guiNode->addChildWithName(_scoreMeterStar2, "scoreMeterStar2");
-//    _guiNode->addChildWithName(_scoreMeterStar3, "scoreMeterStar3");
-//    std::string scoreMsg = strtool::format("%d", _score);
-//    _score_text = scene2::Label::allocWithText(scoreMsg, assets->get<Font>("pixel32"));
-//    _score_text->setScale(0.35);
-//    _score_text->setHorizontalAlignment(HorizontalAlign::RIGHT);
-//    _score_text->setAnchor(Vec2(1.0, 0.5));
-//    _score_text->setForeground(Color4::WHITE);
-//    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7 + 12,
-//                                                                                      _scoreMeter->getSize().height / 2 + -0.87 * (_topuibackgroundNode->getSize().height)));
-////    _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_LEFT, Vec2(20, 20));
-//    _guiNode->addChildWithName(_score_text, "score_text");
-    
+    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 5, -0.43 * (_topuibackgroundNode->getSize().height)));
 
-    // --------------- Set the view of the board ------------------------
+    // -------- Set the view of the board --------------
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height);
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _maxBoardWidth * _squareSizeAdjustedForScale, _maxBoardHeight * _squareSizeAdjustedForScale));
     _orderedBoardChild = scene2::OrderedNode::allocWithOrder(cugl::scene2::OrderedNode::DESCEND);
@@ -189,7 +154,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _board->setViewNode(_boardNode);
     _guiNode->addChildWithName(_boardNode, "boardNode");
 
-    // --------------- Initialize units with different types --------------
+    // ------ Initialize units with different types ----------
     // Children will be types "basic", "three-way", etc.
     auto children = boardMembers->get("unit")->children();
     for (auto child : children)
@@ -342,7 +307,7 @@ void GameScene::setTopUI(const std::shared_ptr<cugl::AssetManager> &assets,std::
     _layout->addAbsolute("top_ui_background", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(0, -(_topuibackgroundNode->getSize().height/1.8)));
     _guiNode->addChildWithName(_topuibackgroundNode, "top_ui_background");
     
-    // --------------- Create the star and score system -------------
+    // ------------- Create the star system -------------
     _oneStar = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_oneStar"));
     _oneStar = scene2::PolygonNode::allocWithTexture(assets->get<Texture>("star_full"));
     _twoStar1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("score_bar_twoStar1"));
@@ -368,22 +333,13 @@ void GameScene::setTopUI(const std::shared_ptr<cugl::AssetManager> &assets,std::
     _guiNode->addChildWithName(_threeStar2, "threeStar2");
     _guiNode->addChildWithName(_threeStar3, "threeStar3");
     
-    // Load scores
-//    std::string oneStarMsg = strtool::format("%d", _level->oneStarThreshold);
-    //    _score_text = scene2::Label::allocWithText(scoreMsg, assets->get<Font>("pixel32"));
-    //    _score_text->setScale(0.35);
-    //    _score_text->setHorizontalAlignment(HorizontalAlign::RIGHT);
-    //    _score_text->setAnchor(Vec2(1.0, 0.5));
-    //    _score_text->setForeground(Color4::WHITE);
-    
-    // --------------- Layout of the star and score system -------------
-    // One star layout
+    // ------ Layout of the star system ----------
+    // One star
     float xStartPoint = 10 -_topuibackgroundNode->getSize().width / 4.3;
     float xInterval = _topuibackgroundNode->getSize().width * 0.039;
     float yStartPoint = -0.4 * (_topuibackgroundNode->getSize().height);
     float yInterval = -0.11 * (_topuibackgroundNode->getSize().height);
     _layout->addAbsolute("oneStar", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint, yStartPoint));
-//    _layout->addAbsolute("oneStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -1.275 * (_topuibackgroundNode->getSize().height)));
     // Two stars
     _layout->addAbsolute("twoStar1", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint, yStartPoint + yInterval));
     _layout->addAbsolute("twoStar2", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + xInterval, yStartPoint + yInterval));
@@ -1184,6 +1140,41 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
         { Unit::Color(1), 0.33 },
         { Unit::Color(2), 0.33 }
     };
+    
+    // Load scores for the star system
+    std::string oneStarMsg = strtool::format("%d", _level->oneStarThreshold);
+    _oneStar_text = scene2::Label::allocWithText(oneStarMsg, _assets->get<Font>("pixel32"));
+    _oneStar_text->setScale(0.35);
+    _oneStar_text->setHorizontalAlignment(HorizontalAlign::RIGHT);
+    _oneStar_text->setAnchor(Vec2(1.0, 0.5));
+    _oneStar_text->setForeground(Color4::RED);
+    _guiNode->addChildWithName(_oneStar_text, "oneStar_text");
+    
+    std::string twoStarMsg = strtool::format("%d", _level->twoStarThreshold);
+    _twoStar_text = scene2::Label::allocWithText(twoStarMsg, _assets->get<Font>("pixel32"));
+    _twoStar_text->setScale(0.35);
+    _twoStar_text->setHorizontalAlignment(HorizontalAlign::RIGHT);
+    _twoStar_text->setAnchor(Vec2(1.0, 0.5));
+    _twoStar_text->setForeground(Color4::RED);
+    _guiNode->addChildWithName(_twoStar_text, "twoStar_text");
+    
+    std::string threeStarMsg = strtool::format("%d", _level->threeStarThreshold);
+    _threeStar_text = scene2::Label::allocWithText(threeStarMsg, _assets->get<Font>("pixel32"));
+    _threeStar_text->setScale(0.35);
+    _threeStar_text->setHorizontalAlignment(HorizontalAlign::RIGHT);
+    _threeStar_text->setAnchor(Vec2(1.0, 0.5));
+    _threeStar_text->setForeground(Color4::RED);
+    _guiNode->addChildWithName(_threeStar_text, "threeStar_text");
+    
+    // Layout of the scores for the star system
+    float xStartPoint = 10 -_topuibackgroundNode->getSize().width / 4.3;
+    float xInterval = _topuibackgroundNode->getSize().width * 0.039;
+    float yStartPoint = -0.4 * (_topuibackgroundNode->getSize().height);
+    float yInterval = -0.11 * (_topuibackgroundNode->getSize().height);
+    _layout->addAbsolute("oneStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint));
+    _layout->addAbsolute("twoStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint + yInterval));
+    _layout->addAbsolute("threeStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint + 2 * yInterval));
+    
     // Create the squares & units and put them in the map
     _board->getViewNode()->getChild(0)->removeAllChildren();
     _board = Board::alloc(_level->getNumberOfColumns(),_level->getNumberOfRows());
