@@ -340,6 +340,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _isHelpMenuOpen = true;
             _helpMenu->setVisible(true);
             _helpBackBtn->activate();
+            _helpMenu->setPositionY(-1182+720);
             _settingsMenuLayout->setVisible(false);
             _settingsLayout->setVisible(false);
             _didPause = false;
@@ -755,10 +756,15 @@ void GameScene::update(float timestep)
             Vec2 moveDist = Vec2(pos.x-prevPos.x, prevPos.y-pos.y);
             Vec2 nodePos = _helpMenu->getPosition();
             moveDist.x = 0;
-            if (moveDist.y + nodePos.y < 0) {
+//            if (moveDist.y + nodePos.y < 0) {
+//                moveDist.y = 0 - nodePos.y;
+//            } else if (moveDist.y + nodePos.y > 1182-720) {
+//                moveDist.y = 1182-720 - nodePos.y;
+//            }
+            if (moveDist.y + nodePos.y < -1182+720) {
+                moveDist.y = -1182+720 - nodePos.y;
+            } else if (moveDist.y + nodePos.y > 0) {
                 moveDist.y = 0 - nodePos.y;
-            } else if (moveDist.y + nodePos.y > 1182-720) {
-                moveDist.y = 1182-720 - nodePos.y;
             }
             _helpMenu->setPosition(nodePos+moveDist);
         }
