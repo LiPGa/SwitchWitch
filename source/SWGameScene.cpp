@@ -339,7 +339,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         if (down) {
             _isHelpMenuOpen = true;
             _helpMenu->setVisible(true);
-//            _helpBackBtn->activate();
+            _helpBackBtn->activate();
             _settingsMenuLayout->setVisible(false);
             _settingsLayout->setVisible(false);
             _didPause = false;
@@ -764,15 +764,15 @@ void GameScene::update(float timestep)
         }
         if (_input.isDown()) {
             _isScrolling = true;
-            if (_helpBackBtn->containsScreen(pos + Vec2(0, -464))) _helpBackBtn->setDown(true);
-//            Vec2 nodePos = _helpBackBtn->screenToNodeCoords(Vec2(pos.x, pos.y));
-//            CULog("help back btn position: %f, %f", _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).x, _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).y);
-//            CULog("input position: %f, %f", pos.x, pos.y);
+//            if (_helpBackBtn->containsScreen(pos + Vec2(0, -464))) _helpBackBtn->setDown(true);
+            Vec2 nodePos = _helpBackBtn->screenToNodeCoords(Vec2(pos.x, pos.y));
+            CULog("help back btn position: %f, %f", _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).x, _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).y);
+            CULog("input position: %f, %f", pos.x, pos.y);
 //            CULog("input position on button: %f, %f", nodePos.x, nodePos.y);
 //            CULog("button has listeners: %d", _helpBackBtn->hasListener());
         } else if (_input.didRelease()) {
             _isScrolling = false;
-            _helpBackBtn->setDown(false);
+//            _helpBackBtn->setDown(false);
         }
 //        CULog("help back btn is active: %i", _helpBackBtn->isActive());
         return;

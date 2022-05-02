@@ -581,7 +581,7 @@
                 "interior"  : [0,0,332,1182],
                 "constrain" : true,
                 "mask"      : false,
-                "pan"       : [0,-462]
+                "pan"       : [0,0]
             },
             "children":  {
                 "background" : {
@@ -619,9 +619,9 @@
                             },
                             "layout" : {
                                 "x_anchor" : "left",
-                                "y_anchor" : "top",
+                                "y_anchor" : "bottom",
                                 "x_offset" : 0.1,
-                                "y_offset" : -0.035,
+                                "y_offset" : 0.035,
                                 "absolute" : false
                             }
                         },
