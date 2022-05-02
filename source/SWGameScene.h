@@ -156,6 +156,7 @@ protected:
     /** result screen when player fails the game*/
     std::shared_ptr<scene2::SceneNode> _failResultLayout;
     std::shared_ptr<scene2::SceneNode> _settingsLayout;
+    std::shared_ptr<scene2::SceneNode> _almanacLayout;
     std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _enlargedUnitNode;
@@ -196,6 +197,12 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _threeStar3;
     /** The text of score for each star level */
     std::shared_ptr<cugl::scene2::Label> _oneStar_text;
+    
+    /** The nodes representing unit attacking pattern illustrations */
+    std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern1;
+    std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern2;
+    std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern3;
+    std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern4;
 
     /** The images of the final stars*/
     std::shared_ptr<cugl::scene2::PolygonNode> _star1;
@@ -214,6 +221,7 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _scoreExplanationButton;
     /** The button to close settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsCloseBtn;
+    std::shared_ptr<cugl::scene2::Button> _almanacCloseBtn;
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
     std::shared_ptr<cugl::scene2::Button> _failBackButton;
@@ -221,6 +229,16 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _nextbutton;
     std::shared_ptr<cugl::scene2::Button> _settingsBackBtn;
     std::shared_ptr<cugl::scene2::Button> _almanacbutton;
+    std::shared_ptr<cugl::scene2::Button> _unit1button;
+    std::shared_ptr<cugl::scene2::Button> _unit2button;
+    std::shared_ptr<cugl::scene2::Button> _unit3button;
+    std::shared_ptr<cugl::scene2::Button> _unit4button;
+    std::shared_ptr<cugl::scene2::Button> _unit1button_selected;
+    std::shared_ptr<cugl::scene2::Button> _unit2button_selected;
+    std::shared_ptr<cugl::scene2::Button> _unit3button_selected;
+    std::shared_ptr<cugl::scene2::Button> _unit4button_selected;
+    vector<shared_ptr<cugl::scene2::Button>> _unitButtons;
+    vector<shared_ptr<cugl::scene2::Button>> _unitButtons_selected;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
@@ -235,6 +253,14 @@ protected:
     bool _didGoToLevelMap = false;
     /** Whther the player pressed next button*/
     bool _didGoToNextLevel = false;
+    /** Whther the player pressed almanac button*/
+    bool _didPreview = false;
+    
+    bool unit1Selected = false;
+    bool unit2Selected = false;
+    bool unit3Selected = false;
+    bool unit4Selected = false;
+    
     bool _midSwap = false;
 
 #pragma mark -
@@ -287,9 +313,14 @@ public:
     /**
      * Set up the top UI
      *
-     * UI includes: star and score system, number of swaps, setting menu, and unit icons
+     * UI includes: star and score system, number of swaps, setting menu
      */
     void setTopUI(const std::shared_ptr<cugl::AssetManager> &assets, std::shared_ptr<cugl::JsonValue> &constants);
+    
+    /**
+     * Set up the attacking pattern pop-up
+     */
+    void viewAttackingPatterns();
     
 #pragma mark -
 #pragma mark Gameplay Handling
