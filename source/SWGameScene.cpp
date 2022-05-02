@@ -406,7 +406,7 @@ void GameScene::viewAttackingPatterns() {
     _unitPattern2 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit2-pattern"));
     _unitPattern3 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit3-pattern"));
     _unitPattern4 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4-pattern"));
-    _unitPattern1->setVisible(false);
+    _unitPattern1->setVisible(true);
     _unitPattern2->setVisible(false);
     _unitPattern3->setVisible(false);
     _unitPattern4->setVisible(false);
@@ -887,6 +887,7 @@ void GameScene::update(float timestep)
         _unit1button_selected->deactivate();
         _unit1button->setVisible(true);
         _unit1button->activate();
+//        _unitPattern1->setVisible(false);
     }
     
     if (unit2Selected == true) {
@@ -898,9 +899,6 @@ void GameScene::update(float timestep)
         _unitPattern1->setVisible(false);
         _unitPattern3->setVisible(false);
         _unitPattern4->setVisible(false);
-//        unit1Selected = false;
-//        unit3Selected = false;
-//        unit4Selected = false;
     }
     
     if (unit2Selected == false) {
@@ -908,6 +906,7 @@ void GameScene::update(float timestep)
         _unit2button_selected->deactivate();
         _unit2button->setVisible(true);
         _unit2button->activate();
+//        _unitPattern2->setVisible(false);
     }
     
     if (unit3Selected == true) {
@@ -919,9 +918,6 @@ void GameScene::update(float timestep)
             _unitPattern1->setVisible(false);
             _unitPattern2->setVisible(false);
             _unitPattern4->setVisible(false);
-//            unit1Selected = false;
-//            unit2Selected = false;
-//            unit4Selected = false;
         }
     
     if (unit3Selected == false) {
@@ -929,6 +925,7 @@ void GameScene::update(float timestep)
             _unit3button_selected->deactivate();
             _unit3button->setVisible(true);
             _unit3button->activate();
+//        _unitPattern3->setVisible(false);
     }
     
     if (unit4Selected == true) {
@@ -940,9 +937,6 @@ void GameScene::update(float timestep)
             _unitPattern1->setVisible(false);
             _unitPattern2->setVisible(false);
             _unitPattern3->setVisible(false);
-//            unit1Selected = false;
-//            unit2Selected = false;
-//            unit3Selected = false;
         }
     
     if (unit4Selected == false) {
@@ -950,6 +944,7 @@ void GameScene::update(float timestep)
             _unit4button_selected->deactivate();
             _unit4button->setVisible(true);
             _unit4button->activate();
+//        _unitPattern4->setVisible(false);
         }
     
 

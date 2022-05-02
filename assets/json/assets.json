@@ -1641,7 +1641,7 @@
                                 "unit1-pattern"       : {
                                     "type"   : "Image",
                                     "data"   : {
-                                        "visible"  : false,
+                                        "visible"  : true,
                                         "texture"  : "illustration1",
                                         "anchor" : [0.5, 0.5],
                                         "scale": 1

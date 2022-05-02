@@ -256,7 +256,7 @@ protected:
     /** Whther the player pressed almanac button*/
     bool _didPreview = false;
     
-    bool unit1Selected = false;
+    bool unit1Selected = true;
     bool unit2Selected = false;
     bool unit3Selected = false;
     bool unit4Selected = false;
