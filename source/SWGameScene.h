@@ -198,6 +198,8 @@ protected:
     /** The text of score for each star level */
     std::shared_ptr<cugl::scene2::Label> _oneStar_text;
     
+    vector<string> _unit_types;
+    
     /** The nodes representing unit attacking pattern illustrations */
     std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern1;
     std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern2;

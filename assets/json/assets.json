@@ -1421,6 +1421,15 @@
                         "scale": 0.75
                     }
                 },
+                "unit2-missing"       : {
+                    "type"   : "Image",
+                    "data"   : {
+                        "visible" : false,
+                        "texture"  : "archer-missing",
+                        "anchor" : [-0.5, 0.075],
+                        "scale": 0.75
+                    }
+                },
                 "unit3"       : {
                     "type"   : "Image",
                     "data"   : {
@@ -1429,10 +1438,28 @@
                         "scale": 0.75
                     }
                 },
+                "unit3-missing"       : {
+                    "type"   : "Image",
+                    "data"   : {
+                        "visible" : false,
+                        "texture"  : "knight-missing",
+                        "anchor" : [-1.1, 0.075],
+                        "scale": 0.75
+                    }
+                },
                 "unit4"       : {
                     "type"   : "Image",
                     "data"   : {
                         "texture"  : "icon-special4",
+                        "anchor" : [-1.7, 0.075],
+                        "scale": 0.75
+                    }
+                },
+                "unit4-missing"       : {
+                    "type"   : "Image",
+                    "data"   : {
+                        "visible" : false,
+                        "texture"  : "babarian-missing",
                         "anchor" : [-1.7, 0.075],
                         "scale": 0.75
                     }

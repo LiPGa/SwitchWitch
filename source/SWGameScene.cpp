@@ -330,6 +330,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
         });
     
+//    _unit_types = _level->unitTypes;
+    
     _scoreExplanation = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("settings_score-explanation"));
     _scoreExplanation->setScale(_scale);
     _scoreExplanation->setVisible(false);
@@ -1473,6 +1475,10 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _currentReplacementDepth = vector;
     _score = 0;
     _turns = _level->maxTurns;
+    _unit_types = _level->unitTypes;
+    for (auto unit : _unit_types) {
+        CULog("unit type is %s", unit.c_str());
+    }
 
     // Change Background
     _backgroundNode->setTexture(_textures.at("background-" + _levelJson->getString("background")));
