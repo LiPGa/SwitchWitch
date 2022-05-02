@@ -7,7 +7,7 @@
 	"two-star-condition":	5,
 	"three-star-condition":	5,
 	"background":	"volcano",
-    "unit-types": ["basic", "empty", "empty", "empty"],
+    "unit-types": ["unit1", "unit2", "unit3"],
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"random",

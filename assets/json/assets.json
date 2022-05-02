@@ -1395,7 +1395,7 @@
                 "size"    : [200, 100],
                 "visible"  : true,
                 "pushsize" : true,
-                "anchor"   : [3.9,1.235],
+                "anchor"   : [3.9,1.2],
                 "scale"    : 0.2
             },
             "children" : {
@@ -1426,7 +1426,7 @@
                     "data"   : {
                         "visible" : false,
                         "texture"  : "archer-missing",
-                        "anchor" : [-0.5, 0.075],
+                        "anchor" : [0.05, 0.27],
                         "scale": 0.75
                     }
                 },
@@ -1443,7 +1443,7 @@
                     "data"   : {
                         "visible" : false,
                         "texture"  : "knight-missing",
-                        "anchor" : [-1.1, 0.075],
+                        "anchor" : [-0.18, 0.27],
                         "scale": 0.75
                     }
                 },
@@ -1460,7 +1460,7 @@
                     "data"   : {
                         "visible" : false,
                         "texture"  : "babarian-missing",
-                        "anchor" : [-1.7, 0.075],
+                        "anchor" : [-0.45, 0.27],
                         "scale": 0.75
                     }
                 }
@@ -1733,6 +1733,22 @@
                                         "absolute": false
                                     }
                                 },
+                                "unit2-missing": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "archer-missing",
+                                        "visible": false,
+                                        "scale": 1.2,
+                                        "anchor": [0.5, 0.5]
+                                    },
+                                    "layout": {
+                                        "x_anchor": "middle",
+                                        "y_anchor": "center",
+                                        "x_offset": 0.17,
+                                        "y_offset": 0.67,
+                                        "absolute": false
+                                    }
+                                },
                                 "unit2-pattern"       : {
                                     "type"   : "Image",
                                     "data"   : {
@@ -1801,6 +1817,22 @@
                                         "absolute": false
                                     }
                                 },
+                                "unit3-missing": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "knight-missing",
+                                        "visible": false,
+                                        "scale": 1.2,
+                                        "anchor": [0.5, 0.5]
+                                    },
+                                    "layout": {
+                                        "x_anchor": "middle",
+                                        "y_anchor": "center",
+                                        "x_offset": 0.17,
+                                        "y_offset": 0.52,
+                                        "absolute": false
+                                    }
+                                },
                                 "unit3-pattern"       : {
                                     "type"   : "Image",
                                     "data"   : {
@@ -1866,6 +1898,22 @@
                                         "y_anchor" : "center",
                                         "x_offset" : 0.17,
                                         "y_offset" : 0.37,
+                                        "absolute": false
+                                    }
+                                },
+                                "unit4-missing": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "babarian-missing",
+                                        "visible": false,
+                                        "scale": 1.2,
+                                        "anchor": [0.5, 0.5]
+                                    },
+                                    "layout": {
+                                        "x_anchor": "middle",
+                                        "y_anchor": "center",
+                                        "x_offset": 0.17,
+                                        "y_offset": 0.37,
                                         "absolute": false
                                     }
                                 },

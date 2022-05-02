@@ -7,7 +7,7 @@
 	"two-star-condition":	8,
 	"three-star-condition":	8,
 	"background":	"glacier",
-    "unit-types": ["basic", "empty", "empty", "empty"],
+    "unit-types": ["unit1", "unit2", "empty"],
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"basic",

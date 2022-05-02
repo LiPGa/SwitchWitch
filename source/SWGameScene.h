@@ -241,6 +241,7 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _unit4button_selected;
     vector<shared_ptr<cugl::scene2::Button>> _unitButtons;
     vector<shared_ptr<cugl::scene2::Button>> _unitButtons_selected;
+    vector<shared_ptr<cugl::scene2::PolygonNode>> _unitPatterns;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
@@ -262,6 +263,8 @@ protected:
     bool unit2Selected = false;
     bool unit3Selected = false;
     bool unit4Selected = false;
+    
+    vector<bool> unitMissing = {false, false, false};
     
     bool _midSwap = false;
 
@@ -323,6 +326,11 @@ public:
      * Set up the attacking pattern pop-up
      */
     void viewAttackingPatterns();
+    
+    /**
+     * Adjust the unit icons on attacking pattern almanac according to level parameters.
+     */
+    void updateAttackingPatterns();
     
 #pragma mark -
 #pragma mark Gameplay Handling
