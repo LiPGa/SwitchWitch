@@ -79,6 +79,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _maxBoardWidth = boardSize.at(0);
     _maxBoardHeight = boardSize.at(1);
     _defaultSquareSize = constants->getInt("square-size");
+    _topUI_scores_color = constants->getString("topUI-scores-color");
+    _topUI_maxTurn_color = constants->getString("topUI-maxTurn-color");
 
     // Initialize Scene
     dimen *= sceneHeight / dimen.height;
@@ -1144,27 +1146,23 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     // Load scores for the star system
     std::string oneStarMsg = strtool::format("%d", _level->oneStarThreshold);
     _oneStar_text = scene2::Label::allocWithText(oneStarMsg, _assets->get<Font>("pixel32"));
-    _oneStar_text->setScale(0.35);
-    _oneStar_text->setHorizontalAlignment(HorizontalAlign::RIGHT);
-    _oneStar_text->setAnchor(Vec2(1.0, 0.5));
-    _oneStar_text->setForeground(Color4::RED);
     _guiNode->addChildWithName(_oneStar_text, "oneStar_text");
     
     std::string twoStarMsg = strtool::format("%d", _level->twoStarThreshold);
     _twoStar_text = scene2::Label::allocWithText(twoStarMsg, _assets->get<Font>("pixel32"));
-    _twoStar_text->setScale(0.35);
-    _twoStar_text->setHorizontalAlignment(HorizontalAlign::RIGHT);
-    _twoStar_text->setAnchor(Vec2(1.0, 0.5));
-    _twoStar_text->setForeground(Color4::RED);
     _guiNode->addChildWithName(_twoStar_text, "twoStar_text");
     
     std::string threeStarMsg = strtool::format("%d", _level->threeStarThreshold);
     _threeStar_text = scene2::Label::allocWithText(threeStarMsg, _assets->get<Font>("pixel32"));
-    _threeStar_text->setScale(0.35);
-    _threeStar_text->setHorizontalAlignment(HorizontalAlign::RIGHT);
-    _threeStar_text->setAnchor(Vec2(1.0, 0.5));
-    _threeStar_text->setForeground(Color4::RED);
     _guiNode->addChildWithName(_threeStar_text, "threeStar_text");
+    
+    std::shared_ptr<cugl::scene2::Label> starText[3] = {_oneStar_text, _twoStar_text, _threeStar_text};
+    for (auto text : starText) {
+        text->setScale(0.35);
+        text->setHorizontalAlignment(HorizontalAlign::RIGHT);
+        text->setAnchor(Vec2(1.0, 0.5));
+        text->setForeground(Color4(_topUI_scores_color));
+    };
     
     // Layout of the scores for the star system
     float xStartPoint = 10 -_topuibackgroundNode->getSize().width / 4.3;

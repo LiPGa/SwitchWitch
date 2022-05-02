@@ -2,6 +2,8 @@
     "scene-height": 720,
     "board-size": [6,9],
     "square-size": 162,
+    "topUI-scores-color": "#D81C1D",
+    "topUI-maxTurn-color": "#774E37",
     "textures": [
         "background-forest",
         "background-glacier",

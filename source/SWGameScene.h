@@ -72,6 +72,8 @@ protected:
     int _defaultSquareSize;
     int _squareSizeAdjustedForScale;
     float _squareScaleFactor;
+    std::string _topUI_scores_color;
+    std::string _topUI_maxTurn_color;
     
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
@@ -170,6 +172,8 @@ protected:
     std::shared_ptr<cugl::Texture> _resultmenubackground;
     /** The text with the current remaining turns */
     std::shared_ptr<cugl::scene2::Label> _turn_text;
+    /** The text with the maximum turns in the level*/
+    std::shared_ptr<cugl::scene2::Label> _maxTurn_text;
     /** The text with the current score */
     std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text with the final score */
@@ -276,9 +280,10 @@ public:
     bool init(const std::shared_ptr<cugl::AssetManager> &assets);
     
     /**
-     * Set up the top UI
+     * Set up the top UI, including the top background image and star systems
      *
-     * UI includes: star and score system, number of swaps, setting menu, and unit icons
+     * @param assets The (loaded) assets for this game mode
+     * @param constants The (loaded) constants for this game mode
      */
     void setTopUI(const std::shared_ptr<cugl::AssetManager> &assets, std::shared_ptr<cugl::JsonValue> &constants);
     
