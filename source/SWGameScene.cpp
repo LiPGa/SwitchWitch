@@ -235,6 +235,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChild(_settingsMenuLayout);
     _settingsMenuLayout->setVisible(false);
     
+    _almanacLayout = assets->get<scene2::SceneNode>("almanac-menu");
+//    _layout->addAbsolute("almanac-menu", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(1, 1));
+    _almanacLayout->setContentSize(dimen);
+    _almanacLayout->doLayout();
+    _guiNode->addChild(_almanacLayout);
+    _almanacLayout->setVisible(false);
+    
     _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
     _level_info = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_level"));
     _star1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star1"));
@@ -283,11 +290,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _almanacbutton->setDown(false);
     _almanacbutton->addListener([this](const std::string& name, bool down) {
         if (down) {
-             CULog("%u pressed", 1);
+            CULog("%u is pressed", 2);
+            _didPreview = true;
         }
     });
     _guiNode->addChild(_almanacbutton);
-    
+
     _settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
     _settingsRestartBtn->setVisible(true);
     _settingsRestartBtn->deactivate();
@@ -311,6 +319,20 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     });
     
+    _almanacCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_close"));
+    _almanacCloseBtn->setVisible(true);
+    _almanacCloseBtn->activate();
+    _almanacCloseBtn->setDown(false);
+    _almanacCloseBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didPreview = false;
+            _almanacLayout->setVisible(false);
+            CULog("Pressed Settings restart button");
+        }
+    });
+    
+    viewAttackingPatterns();
+    
     _settingsBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_exit"));
     _settingsBackBtn->setVisible(true);
     _settingsBackBtn->deactivate();
@@ -332,6 +354,124 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     });
     _kingsKilled = false;
     return true;
+}
+
+void GameScene::viewAttackingPatterns() {
+    _unitPattern1 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit1-pattern"));
+    _unitPattern2 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit2-pattern"));
+    _unitPattern3 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit3-pattern"));
+    _unitPattern4 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4-pattern"));
+    _unitPattern1->setVisible(false);
+    _unitPattern2->setVisible(false);
+    _unitPattern3->setVisible(false);
+    _unitPattern4->setVisible(false);
+    
+    _unit1button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit1"));
+    _unit1button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit1-selected"));
+    _unit2button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit2"));
+    _unit2button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit2-selected"));
+    _unit3button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit3"));
+    _unit3button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit3-selected"));
+    _unit4button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4"));
+    _unit4button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4-selected"));
+    
+    _unitButtons = {_unit1button, _unit2button, _unit3button, _unit4button};
+    
+    _unit1button->setVisible(true);
+    _unit1button->activate();
+    _unit1button->setDown(false);
+    _unit1button->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("Pressed unit1 button");
+            unit1Selected = true;
+            unit2Selected = false;
+            unit3Selected = false;
+            unit4Selected = false;
+        }
+    });
+    
+    _unit1button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit1-selected"));
+    _unit1button_selected->deactivate();
+    _unit1button_selected->setVisible(false);
+    _unit1button_selected->setDown(false);
+    _unit1button_selected->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("Pressed unit1 button");
+            unit1Selected = false;
+        }
+    });
+ 
+ 
+    _unit2button->setVisible(true);
+    _unit2button->activate();
+    _unit2button->setDown(false);
+    _unit2button->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            unit2Selected = true;
+            unit1Selected = false;
+            unit3Selected = false;
+            unit4Selected = false;
+        }
+    });
+    
+    _unit2button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit2-selected"));
+    _unit2button_selected->setVisible(false);
+    _unit2button_selected->deactivate();
+    _unit2button_selected->setDown(false);
+    _unit2button_selected->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("Pressed unit2 button");
+            unit2Selected = false;
+        }
+    });
+    
+    _unit3button->setVisible(true);
+    _unit3button->activate();
+    _unit3button->setDown(false);
+    _unit3button->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("Pressed unit3 button");
+            unit3Selected = true;
+            unit1Selected = false;
+            unit2Selected = false;
+            unit4Selected = false;
+        }
+    });
+    
+    _unit3button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit3-selected"));
+    _unit3button_selected->setVisible(false);
+    _unit3button_selected->deactivate();
+    _unit3button_selected->setDown(false);
+    _unit3button_selected->addListener([this](const std::string& name, bool down) {
+            if (down) {
+                CULog("Pressed unit3 button");
+                unit3Selected = false;
+            }
+        });
+    
+
+    _unit4button->setVisible(true);
+    _unit4button->activate();
+    _unit4button->setDown(false);
+    _unit4button->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("Pressed unit4 button");
+            unit4Selected = true;
+            unit1Selected = false;
+            unit2Selected = false;
+            unit3Selected = false;
+        }
+    });
+    
+    _unit4button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4-selected"));
+        _unit4button_selected->setVisible(false);
+        _unit4button_selected->deactivate();
+        _unit4button_selected->setDown(false);
+        _unit4button_selected->addListener([this](const std::string& name, bool down) {
+            if (down) {
+                unit4Selected = false;
+            }
+        });
 }
 
 /**
@@ -660,6 +800,93 @@ void GameScene::update(float timestep)
         _settingsCloseBtn->activate();
         return;
     }
+    
+    if (_didPreview == true) {
+        // show attacking patterns preview
+        _almanacLayout->setVisible(true);
+    }
+    
+    if (unit1Selected == true) {
+        _unit1button->setVisible(false);
+        _unit1button->deactivate();
+        _unit1button_selected->setVisible(true);
+        _unit1button_selected->activate();
+        _unitPattern1->setVisible(true);
+        _unitPattern2->setVisible(false);
+        _unitPattern3->setVisible(false);
+        _unitPattern4->setVisible(false);
+    }
+    
+    if (unit1Selected == false) {
+        _unit1button_selected->setVisible(false);
+        _unit1button_selected->deactivate();
+        _unit1button->setVisible(true);
+        _unit1button->activate();
+    }
+    
+    if (unit2Selected == true) {
+        _unit2button->setVisible(false);
+        _unit2button->deactivate();
+        _unit2button_selected->setVisible(true);
+        _unit2button_selected->activate();
+        _unitPattern2->setVisible(true);
+        _unitPattern1->setVisible(false);
+        _unitPattern3->setVisible(false);
+        _unitPattern4->setVisible(false);
+//        unit1Selected = false;
+//        unit3Selected = false;
+//        unit4Selected = false;
+    }
+    
+    if (unit2Selected == false) {
+        _unit2button_selected->setVisible(false);
+        _unit2button_selected->deactivate();
+        _unit2button->setVisible(true);
+        _unit2button->activate();
+    }
+    
+    if (unit3Selected == true) {
+            _unit3button->setVisible(false);
+            _unit3button->deactivate();
+            _unit3button_selected->setVisible(true);
+            _unit3button_selected->activate();
+            _unitPattern3->setVisible(true);
+            _unitPattern1->setVisible(false);
+            _unitPattern2->setVisible(false);
+            _unitPattern4->setVisible(false);
+//            unit1Selected = false;
+//            unit2Selected = false;
+//            unit4Selected = false;
+        }
+    
+    if (unit3Selected == false) {
+            _unit3button_selected->setVisible(false);
+            _unit3button_selected->deactivate();
+            _unit3button->setVisible(true);
+            _unit3button->activate();
+    }
+    
+    if (unit4Selected == true) {
+            _unit4button->setVisible(false);
+            _unit4button->deactivate();
+            _unit4button_selected->setVisible(true);
+            _unit4button_selected->activate();
+            _unitPattern4->setVisible(true);
+            _unitPattern1->setVisible(false);
+            _unitPattern2->setVisible(false);
+            _unitPattern3->setVisible(false);
+//            unit1Selected = false;
+//            unit2Selected = false;
+//            unit3Selected = false;
+        }
+    
+    if (unit4Selected == false) {
+            _unit4button_selected->setVisible(false);
+            _unit4button_selected->deactivate();
+            _unit4button->setVisible(true);
+            _unit4button->activate();
+        }
+    
 
     Vec2 pos = _input.getPosition();
     Vec3 worldCoordinate = screenToWorldCoords(pos);
