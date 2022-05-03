@@ -55,7 +55,7 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 //    start_ok = false;
     
     _chosenLevel = 0;
-    _num_levels = 19;
+    _num_levels = 30;
     loadLevelButtons();
 
     _scrollPane = std::dynamic_pointer_cast<scene2::ScrollPane>(_assets->get<scene2::SceneNode>("map"));
@@ -143,10 +143,10 @@ void LevelMapScene::update(float dt) {
 //        CULog("scroll pane size: %f", _scrollPane->getSize().height);
 //        CULog("scroll pane bounding box: %f", _scrollPane->getBoundingBox().size.height);
 //        if (moveDist.y + nodePos.y < -_scrollPane->getContentSize().height) {
-        if (moveDist.y + nodePos.y < -2316+720) {
-            moveDist.y = -2316+720 - nodePos.y;
-        } else if (moveDist.y + nodePos.y > -10) {
-            moveDist.y = -10 - nodePos.y;
+        if (moveDist.y + nodePos.y < -2792+720) {
+            moveDist.y = -2792+720 - nodePos.y;
+        } else if (moveDist.y + nodePos.y > 0) {
+            moveDist.y = 0 - nodePos.y;
         }
         _scrollPane->setPosition(nodePos+moveDist*0.4);
     }

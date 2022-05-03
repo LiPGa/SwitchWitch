@@ -36,6 +36,7 @@ public:
     /** number of kings*/
     int numOfKings;
     string backgroundName;
+    vector<string> unitTypes;
 
 #pragma mark Constructors
     /**
@@ -108,6 +109,7 @@ public:
      * Get number of columns.
      */
     int getNumberOfColumns() { return _columns; }
+    
 
     /**
      * Adds a blank board to the level, increaseing the depth of the level.

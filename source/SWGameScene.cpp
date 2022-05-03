@@ -82,6 +82,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _topUI_scores_color = constants->getString("topUI-scores-color");
     _topUI_maxTurn_color = constants->getString("topUI-maxTurn-color");
 
+
     // Initialize Scene
     dimen *= sceneHeight / dimen.height;
     if (!Scene2::init(dimen))
@@ -102,7 +103,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     _didRestart = false;
     _didGoToLevelMap = false;
+    _didGoToNextLevel = false;
     _didPause = false;
+    unit1Selected = true;
+    unit2Selected = false;
+    unit3Selected = false;
+    unit4Selected = false;
+    unitMissing = {false, false, false};
     // Get Textures
     // Preload all the textures into a hashmap
     vector<string> textureVec = constants->get("textures")->asStringArray();
@@ -193,12 +200,20 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         shared_ptr<Unit> unit = Unit::alloc(_textures, subtypeString, Unit::Color::RED, basicAttackVec, specialAttackVec, Vec2(0, -1), subtypeString != "king");
         _unitTypes.insert({child->key(), unit});
     }
-
+    
+    // sucess score summary screen
     _resultLayout = assets->get<scene2::SceneNode>("result");
     _resultLayout->setContentSize(dimen);
     _resultLayout->doLayout(); // Repositions the HUD
     _guiNode->addChild(_resultLayout);
     _resultLayout->setVisible(false);
+    
+    // failure score summary screen
+    _failResultLayout = assets->get<scene2::SceneNode>("failresult");
+    _failResultLayout->setContentSize(dimen);
+    _failResultLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(_failResultLayout);
+    _failResultLayout->setVisible(false);
     
     _settingsLayout = assets->get<scene2::SceneNode>("settings");
     _settingsLayout->setContentSize(dimen);
@@ -211,11 +226,24 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChild(_settingsMenuLayout);
     _settingsMenuLayout->setVisible(false);
     
+    _almanacLayout = assets->get<scene2::SceneNode>("almanac-menu");
+//    _layout->addAbsolute("almanac-menu", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(1, 1));
+    _almanacLayout->setContentSize(dimen);
+    _almanacLayout->doLayout();
+    _guiNode->addChild(_almanacLayout);
+    _almanacLayout->setVisible(false);
+    
     _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
     _level_info = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_level"));
+    _fail_level_info = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("failresult_board_level"));
+
+    _score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_number"));
+    _fail_score_number = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("failresult_board_number"));
+
     _star1 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star1"));
     _star2 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star2"));
     _star3 = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("result_board_star3"));
+    
     _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_restart"));
     _restartbutton->deactivate();
     _restartbutton->setDown(false);
@@ -224,6 +252,44 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _didRestart = true;
         }
     });
+    
+    _failRestartButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("failresult_board_restart"));
+    _failRestartButton->deactivate();
+    _failRestartButton->setDown(false);
+    _failRestartButton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didRestart = true;
+        }
+    });
+    
+    _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
+    _backbutton->deactivate();
+    _backbutton->setDown(false);
+    _backbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didGoToLevelMap = true;
+        }
+    });
+    
+    _failBackButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("failresult_board_exit"));
+    _failBackButton->deactivate();
+    _failBackButton->setDown(false);
+    _failBackButton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didGoToLevelMap = true;
+        }
+    });
+    
+    _nextbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_next"));
+    _nextbutton->deactivate();
+    _nextbutton->setDown(false);
+    _nextbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didGoToNextLevel = true;
+        }
+    });
+    
+
     
     _settingsbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings_btn"));
     _settingsbutton->setVisible(true);
@@ -246,11 +312,27 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
         });
     
+//    _unit_types = _level->unitTypes;
+    
     _scoreExplanation = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("settings_score-explanation"));
     _scoreExplanation->setScale(_scale);
     _scoreExplanation->setVisible(false);
-
     
+    _almanacbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac"));
+    //_almanacbutton->setScale(_scale);
+    _almanacbutton->setVisible(true);
+    _almanacbutton->setContentSize(dimen);
+    _almanacbutton->doLayout();
+    _almanacbutton->activate();
+    _almanacbutton->setDown(false);
+    _almanacbutton->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("%u is pressed", 2);
+            _didPreview = true;
+        }
+    });
+    _guiNode->addChild(_almanacbutton);
+
     _settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
     _settingsRestartBtn->setVisible(true);
     _settingsRestartBtn->deactivate();
@@ -274,6 +356,20 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     });
     
+    _almanacCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_close"));
+    _almanacCloseBtn->setVisible(true);
+    _almanacCloseBtn->activate();
+    _almanacCloseBtn->setDown(false);
+    _almanacCloseBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            _didPreview = false;
+            _almanacLayout->setVisible(false);
+            CULog("Pressed Settings restart button");
+        }
+    });
+    
+    viewAttackingPatterns();
+    
     _settingsBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_exit"));
     _settingsBackBtn->setVisible(true);
     _settingsBackBtn->deactivate();
@@ -284,17 +380,129 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             CULog("Pressed Settings exit button");
         }
     });
-
-    _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
-    _backbutton->deactivate();
-    _backbutton->setDown(false);
-    _backbutton->addListener([this](const std::string& name, bool down) {
-        if (down) {
-            _didGoToLevelMap = true;
-        }
-    });
+    
     _kingsKilled = false;
     return true;
+}
+
+void GameScene::viewAttackingPatterns() {
+    _unitPattern1 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit1-pattern"));
+    _unitPattern2 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit2-pattern"));
+    _unitPattern3 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit3-pattern"));
+    _unitPattern4 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4-pattern"));
+    _unitPattern1->setVisible(true);
+    _unitPattern2->setVisible(false);
+    _unitPattern3->setVisible(false);
+    _unitPattern4->setVisible(false);
+    
+    _unit1button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit1"));
+    _unit1button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit1-selected"));
+    _unit2button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit2"));
+    _unit2button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit2-selected"));
+    _unit3button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit3"));
+    _unit3button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit3-selected"));
+    _unit4button = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4"));
+    _unit4button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4-selected"));
+    
+    _unitButtons = {_unit1button, _unit2button, _unit3button, _unit4button};
+    _unitButtons_selected = {_unit1button_selected, _unit2button_selected, _unit3button_selected, _unit4button_selected};
+    _unitPatterns = {_unitPattern1, _unitPattern2, _unitPattern3, _unitPattern4};
+    
+    _unit1button->setVisible(true);
+    _unit1button->activate();
+    _unit1button->setDown(false);
+    _unit1button->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("Pressed unit1 button");
+            unit1Selected = true;
+            unit2Selected = false;
+            unit3Selected = false;
+            unit4Selected = false;
+        }
+    });
+    
+    _unit1button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit1-selected"));
+    _unit1button_selected->deactivate();
+    _unit1button_selected->setVisible(false);
+    _unit1button_selected->setDown(false);
+    _unit1button_selected->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("Pressed unit1 button");
+            unit1Selected = false;
+        }
+    });
+ 
+ 
+    _unit2button->setVisible(true);
+    _unit2button->activate();
+    _unit2button->setDown(false);
+    _unit2button->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            unit2Selected = true;
+            unit1Selected = false;
+            unit3Selected = false;
+            unit4Selected = false;
+        }
+    });
+    
+    _unit2button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit2-selected"));
+    _unit2button_selected->setVisible(false);
+    _unit2button_selected->deactivate();
+    _unit2button_selected->setDown(false);
+    _unit2button_selected->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("Pressed unit2 button");
+            unit2Selected = false;
+        }
+    });
+    
+    _unit3button->setVisible(true);
+    _unit3button->activate();
+    _unit3button->setDown(false);
+    _unit3button->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("Pressed unit3 button");
+            unit3Selected = true;
+            unit1Selected = false;
+            unit2Selected = false;
+            unit4Selected = false;
+        }
+    });
+    
+    _unit3button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit3-selected"));
+    _unit3button_selected->setVisible(false);
+    _unit3button_selected->deactivate();
+    _unit3button_selected->setDown(false);
+    _unit3button_selected->addListener([this](const std::string& name, bool down) {
+            if (down) {
+                CULog("Pressed unit3 button");
+                unit3Selected = false;
+            }
+        });
+    
+
+    _unit4button->setVisible(true);
+    _unit4button->activate();
+    _unit4button->setDown(false);
+    _unit4button->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            CULog("Pressed unit4 button");
+            unit4Selected = true;
+            unit1Selected = false;
+            unit2Selected = false;
+            unit3Selected = false;
+        }
+    });
+    
+    _unit4button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4-selected"));
+        _unit4button_selected->setVisible(false);
+        _unit4button_selected->deactivate();
+        _unit4button_selected->setDown(false);
+        _unit4button_selected->addListener([this](const std::string& name, bool down) {
+            if (down) {
+                unit4Selected = false;
+            }
+        });
 }
 
 /**
@@ -543,6 +751,7 @@ void GameScene::dispose()
         removeAllChildren();
         _restartbutton = nullptr;
         _backbutton = nullptr;
+        _nextbutton = nullptr;
         _active = false;
         _input.dispose();
         _moveup = nullptr;
@@ -580,29 +789,48 @@ void GameScene::update(float timestep)
 
     if (_didRestart == true) reset(_levelJson);
     if (_didRestart == true && _didPause == true) reset(_levelJson);
+    
+    if (_didGoToNextLevel == true){
+        int newLevelNum = _levelJson->getInt("id")+1;
+        auto newBoardJson = _assets->get<JsonValue>("level" + std::to_string(newLevelNum));
+        reset(newBoardJson);
+    }
 
     if ((_turns == 0 || _kingsKilled) && _currentState != ANIMATION )
     {
         // Show results screen
-        showResultText(_kingsKilled && _level->getNumberOfStars(_score) >= 3, _guiNode);
-        _resultLayout->setVisible(true);
-        _restartbutton->activate();
-        _backbutton->activate();
+        // showResultText(_kingsKilled && _level->getNumberOfStars(_score) >= 3, _guiNode);
         _scoreExplanationButton->deactivate();
-        _score_number->setText(to_string(_score));
-        _level_info->setText("Level " + to_string(_levelJson->getInt("id")));
-        _star1->setTexture(_textures.at("star_empty"));
-        _star2->setTexture(_textures.at("star_empty"));
-        _star3->setTexture(_textures.at("star_empty"));
-        if (_level->getNumberOfStars(_score) >= 1) {
-            _star1->setTexture(_textures.at("star_full"));
+        
+        if (_kingsKilled && _level->getNumberOfStars(_score) >= 1) {
+            _resultLayout->setVisible(true);
+            _restartbutton->activate();
+            _backbutton->activate();
+            _nextbutton->activate();
+            _score_number->setText(to_string(_score));
+            _level_info->setText("Level " + to_string(_levelJson->getInt("id")));
+            _star1->setTexture(_textures.at("star_empty"));
+            _star2->setTexture(_textures.at("star_empty"));
+            _star3->setTexture(_textures.at("star_empty"));
+            if (_level->getNumberOfStars(_score) >= 1) {
+                _star1->setTexture(_textures.at("star_full"));
+            }
+            if (_level->getNumberOfStars(_score) >= 2) {
+                _star2->setTexture(_textures.at("star_full"));
+            }
+            if (_level->getNumberOfStars(_score) >= 3) {
+                _star3->setTexture(_textures.at("star_full"));
+            }
         }
-        if (_level->getNumberOfStars(_score) >= 2) {
-            _star2->setTexture(_textures.at("star_full"));
+        
+        else  {
+            _failResultLayout->setVisible(true);
+            _failRestartButton->activate();
+            _failBackButton->activate();
+            _fail_level_info->setText("Level " + to_string(_levelJson->getInt("id")));
+            _fail_score_number->setText(to_string(_score));
         }
-        if (_level->getNumberOfStars(_score) >= 3) {
-            _star3->setTexture(_textures.at("star_full"));
-        }
+
         return;
     }
     
@@ -614,6 +842,88 @@ void GameScene::update(float timestep)
         _settingsCloseBtn->activate();
         return;
     }
+    
+    if (_didPreview == true) {
+        // show attacking patterns preview
+        _almanacLayout->setVisible(true);
+    }
+    
+    if (unit1Selected == true) {
+        _unit1button->setVisible(false);
+        _unit1button->deactivate();
+        _unit1button_selected->setVisible(true);
+        _unit1button_selected->activate();
+        _unitPattern1->setVisible(true);
+        _unitPattern2->setVisible(false);
+        _unitPattern3->setVisible(false);
+        _unitPattern4->setVisible(false);
+    }
+    
+    if (unit1Selected == false) {
+        _unit1button_selected->setVisible(false);
+        _unit1button_selected->deactivate();
+        _unit1button->setVisible(true);
+        _unit1button->activate();
+//        _unitPattern1->setVisible(false);
+    }
+    
+    if (unit2Selected == true && unitMissing.at(0) != true) {
+        _unit2button->setVisible(false);
+        _unit2button->deactivate();
+        _unit2button_selected->setVisible(true);
+        _unit2button_selected->activate();
+        _unitPattern2->setVisible(true);
+        _unitPattern1->setVisible(false);
+        _unitPattern3->setVisible(false);
+        _unitPattern4->setVisible(false);
+    }
+    
+    if (unit2Selected == false && unitMissing.at(0) != true) {
+        _unit2button_selected->setVisible(false);
+        _unit2button_selected->deactivate();
+        _unit2button->setVisible(true);
+        _unit2button->activate();
+//        _unitPattern2->setVisible(false);
+    }
+    
+    if (unit3Selected == true && unitMissing.at(1) != true) {
+            _unit3button->setVisible(false);
+            _unit3button->deactivate();
+            _unit3button_selected->setVisible(true);
+            _unit3button_selected->activate();
+            _unitPattern3->setVisible(true);
+            _unitPattern1->setVisible(false);
+            _unitPattern2->setVisible(false);
+            _unitPattern4->setVisible(false);
+        }
+    
+    if (unit3Selected == false && unitMissing.at(1) != true) {
+            _unit3button_selected->setVisible(false);
+            _unit3button_selected->deactivate();
+            _unit3button->setVisible(true);
+            _unit3button->activate();
+//        _unitPattern3->setVisible(false);
+    }
+    
+    if (unit4Selected == true && unitMissing.at(2) != true) {
+            _unit4button->setVisible(false);
+            _unit4button->deactivate();
+            _unit4button_selected->setVisible(true);
+            _unit4button_selected->activate();
+            _unitPattern4->setVisible(true);
+            _unitPattern1->setVisible(false);
+            _unitPattern2->setVisible(false);
+            _unitPattern3->setVisible(false);
+        }
+    
+    if (unit4Selected == false && unitMissing.at(2) != true) {
+            _unit4button_selected->setVisible(false);
+            _unit4button_selected->deactivate();
+            _unit4button->setVisible(true);
+            _unit4button->activate();
+//        _unitPattern4->setVisible(false);
+        }
+    
 
     Vec2 pos = _input.getPosition();
     Vec3 worldCoordinate = screenToWorldCoords(pos);
@@ -1089,9 +1399,6 @@ void GameScene::reset()
  */
 void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
 {
-    //    _endgame_text->setForeground(Color4::CLEAR);
-    //    _turns = _boardJson->getInt("total-swap-allowed");
-    //    _score = 0;
     removeChild(_guiNode);
     _didGoToLevelMap = false;
     _didPause = false;
@@ -1114,6 +1421,43 @@ void GameScene::setActive(bool value)
 //        }
 }
 
+void GameScene::updateAttackingPatterns() {
+    for (size_t i = 0; i < 3; i++) {
+        string unit_type = _unit_types.at(i);
+        if (unit_type == "empty") {
+            unitMissing.at(i) = true;
+        }
+        else {
+            unitMissing.at(i) = false;
+        }
+    }
+    for (size_t j = 0; j < 3; j++) {
+        int num = static_cast<int>(j) + 2;
+        string nodeName = "almanac-menu_board_unit" + to_string(num) + "-missing";
+        string iconName = "almanac_unit" + to_string(num);
+        string missingIconName = "almanac_unit" + to_string(num) + "-missing";
+        auto img = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>(nodeName));
+        auto icon = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>(iconName));
+        auto missingIcon = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>(missingIconName));
+        if (unitMissing.at(j) == true) {
+            img->setVisible(true);
+            icon->setVisible(false);
+            missingIcon->setVisible(true);
+            _unitButtons.at(j+1)->setVisible(false);
+            _unitButtons.at(j+1)->deactivate();
+            _unitButtons_selected.at(j+1)->setVisible(false);
+            _unitButtons_selected.at(j+1)->deactivate();
+            _unitPatterns.at(j+1)->setVisible(false);
+        }
+        else {
+            img->setVisible(false);
+            icon->setVisible(true);
+            missingIcon->setVisible(false);
+        }
+    }
+}
+
+
 void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _levelJson = levelJSON;
     _level = Level::alloc(_textures, levelJSON);
@@ -1122,6 +1466,11 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _score = 0;
     _turns = _level->maxTurns;
     _maxturns = _level->maxTurns;
+    _unit_types = _level->unitTypes;
+    updateAttackingPatterns();
+    for (auto unit : _unit_types) {
+        CULog("unit type is %s", unit.c_str());
+    }
 
     // Change Background
     _backgroundNode->setTexture(_textures.at("background-" + _levelJson->getString("background")));

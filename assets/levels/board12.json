@@ -7,6 +7,7 @@
 	"two-star-condition":	12,
 	"three-star-condition":	12,
     "background":    "forest",
+    "unit-types": ["unit1", "empty", "empty"],
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"empty",

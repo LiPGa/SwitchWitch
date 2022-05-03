@@ -1,0 +1,96 @@
+{
+    "variables" : {
+        "size"   : ["data", "size"],
+        "anchor" : ["data", "anchor"],
+        "text"   : ["children","up","children","label","data","text"],
+        "font"   : ["children","up","children","label","data","font"],
+        "color"  : ["children","up","children","patch","data","color"]
+    },
+    "contents": {
+        "type"   : "Button",
+        "format" : {
+            "type" : "Anchored"
+        },
+        "data"   : {
+            "upnode"  : "up",
+            "anchor"  : [1,1],
+            "size"    : [156, 126],
+            "scale": 1.25
+        },
+        "children": {
+            "up" : {
+                "type" : "Node",
+                "format" : {
+                    "type" : "Anchored"
+                },
+                "children": {
+                    "patch" : {
+                        "type" : "NinePatch",
+                        "data": {
+                            "anchor"   : [0.5, 0.5],
+                            "texture": "almanac"
+                        },
+                        "layout" : {
+                            "x_anchor" : "fill",
+                            "y_anchor" : "fill"
+                        }
+                    },
+                    "image" : {
+                        "type": "image",
+                        "data": {
+                            "anchor": [0.5, 0.5],
+                            "texture": "level-one"
+                        },
+                        "layout" : {
+                            "x_anchor" : "fill",
+                            "y_anchor" : "fill"
+                        }
+                    },
+                    "image" : {
+                        "type": "image",
+                        "data": {
+                            "anchor": [0.5, 0.5],
+                            "texture": "level-one"
+                        },
+                        "layout" : {
+                            "x_anchor" : "fill",
+                            "y_anchor" : "fill"
+                        }
+                    },
+                    "image" : {
+                        "type": "image",
+                        "data": {
+                            "anchor": [0.5, 0.5],
+                            "texture": "level-one"
+                        },
+                        "layout" : {
+                            "x_anchor" : "fill",
+                            "y_anchor" : "fill"
+                        }
+                    },
+                    "image" : {
+                        "type": "image",
+                        "data": {
+                            "anchor": [0.5, 0.5],
+                            "texture": "level-one"
+                        },
+                        "layout" : {
+                            "x_anchor" : "fill",
+                            "y_anchor" : "fill"
+                        }
+                    }
+                },
+                "layout" : {
+                    "x_anchor" : "fill",
+                    "y_anchor" : "fill"
+                }
+            }
+        },
+        "layout" : {
+            "x_anchor" : "center",
+            "y_anchor" : "middle"
+        }
+    }
+}
+
+
