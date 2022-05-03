@@ -174,6 +174,8 @@ void SwitchWitchApp::update(float timestep) {
                     _levelMap.setActive(false);
                     _gameplay.setLevel(_assets->get<JsonValue>("level" + std::to_string(level_num)));
                     _gameplay.setActive(true);
+                    _gameplay.enterLevel();
+                    _gameplay.setCurrLevel(level_num);
                     _scene = State::GAME;
                 }
                 break;
