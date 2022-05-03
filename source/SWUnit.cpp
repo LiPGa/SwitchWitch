@@ -78,7 +78,7 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
         case IDLE:
             return _textureMap.count(idleTextureName) > 0 ? _textureMap.at(idleTextureName) : _textureMap.at(defaultTextureName);
         case State::PROTECTED:
-            return _textureMap.at("shield");
+            return _textureMap.at(idleTextureName);
         case HIT:
             return _textureMap.count(hitTextureName) > 0 ? _textureMap.at(hitTextureName)
             : _textureMap.at(defaultTextureName);
@@ -109,6 +109,10 @@ void Unit::setState(State s) {
     }
     newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, framesInAnimation);
     if (s == State::HIT) _hasBeenHit = true;
+        if (s == State::PROTECTED) {
+            auto shieldNode = scene2::SpriteNode::alloc(_textureMap.at("shield"),1,1);
+            newNode->addChild(shieldNode);
+        }
     _time_per_frame = _time_per_animation / framesInAnimation;
     _time_since_last_flash = 0.0f;
     _time_since_last_frame = 0.0f;

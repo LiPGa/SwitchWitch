@@ -4,6 +4,8 @@
     "square-size": 162,
     "unit-size": 460,
     "unit-sprite-padding-factor": 0.75,
+    "topUI-scores-color": "#D81C1D",
+    "topUI-maxTurn-color": "#774E37",
     "textures": [
         "background-forest",
         "background-glacier",

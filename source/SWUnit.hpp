@@ -120,7 +120,7 @@ private:
         { ATTACKING, 18 },
         { DYING, 5 },
         { DEAD, 1 },
-        { PROTECTED, 1 },
+        { PROTECTED, 2 },
         { RESPAWNING, 1 }
     };
 

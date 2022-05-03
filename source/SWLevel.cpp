@@ -45,6 +45,7 @@ bool Level::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>>
     threeStarThreshold = levelJSON->getInt("three-star-condition");
     numOfKings = levelJSON->getInt("num-of-kings");
     backgroundName = levelJSON->getString("background");
+    unitTypes = levelJSON->get("unit-types")->asStringArray();
     auto layersInBoardJson = levelJSON->get("board-members")->children();
     
     for (auto layer : layersInBoardJson)

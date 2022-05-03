@@ -66,6 +66,13 @@ protected:
     
     // current level, corresponds to board's ID.
     int _currLevel;
+    // if the player has just enter the level
+    bool _enterLevel;
+    bool _tutorialActive;
+    // if the user is scrolling
+    bool _isScrolling;
+    // if the user opens the help menu
+    bool _isHelpMenuOpen;
     // CONSTANTS
     int _maxBoardWidth;
     int _maxBoardHeight;
@@ -75,6 +82,8 @@ protected:
     float _unitSpritePaddingFactor;
     float _squareScaleFactor;
     float _unitScaleFactor;
+    std::string _topUI_scores_color;
+    std::string _topUI_maxTurn_color;
     
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
@@ -112,6 +121,8 @@ protected:
 
     /** The current number of turns left for the player */
     int _turns;
+    /** The maximum number of turns for the current level */
+    int _maxturns;
     /** The current score of the player */
     int _score;
     /** The previous score of the player */
@@ -155,7 +166,9 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _guiNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _backgroundNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _topuibackgroundNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _helpMenu;
     std::shared_ptr<scene2::SceneNode> _resultLayout;
+    std::shared_ptr<scene2::SceneNode> _tutorialLayout;
     /** result screen when player fails the game*/
     std::shared_ptr<scene2::SceneNode> _failResultLayout;
     std::shared_ptr<scene2::SceneNode> _settingsLayout;
@@ -163,8 +176,8 @@ protected:
     std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _enlargedUnitNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _shieldNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _scoreExplanation;
-
     int _replacementListLength;
     // VIEW items are going to be individual variables
     // In the future, we will replace this with the scene graph
@@ -176,6 +189,8 @@ protected:
     std::shared_ptr<cugl::Texture> _resultmenubackground;
     /** The text with the current remaining turns */
     std::shared_ptr<cugl::scene2::Label> _turn_text;
+    /** The text with the maximum turns in the level*/
+    std::shared_ptr<cugl::scene2::Label> _maxTurn_text;
     /** The text with the current score */
     std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text with the final score */
@@ -200,6 +215,10 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _threeStar3;
     /** The text of score for each star level */
     std::shared_ptr<cugl::scene2::Label> _oneStar_text;
+    std::shared_ptr<cugl::scene2::Label> _twoStar_text;
+    std::shared_ptr<cugl::scene2::Label> _threeStar_text;
+    
+    vector<string> _unit_types;
     
     /** The nodes representing unit attacking pattern illustrations */
     std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern1;
@@ -218,12 +237,24 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _restartbutton;
     std::shared_ptr<cugl::scene2::Button> _failRestartButton;
     std::shared_ptr<cugl::scene2::Button> _settingsRestartBtn;
+    /** The button to open the help menu  */
+    std::shared_ptr<cugl::scene2::Button> _settingsHelpBtn;
+    /** The button to close the help menu */
+    std::shared_ptr<cugl::scene2::Button> _helpBackBtn;
     /** The button to display settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsbutton;
     /** The button to display the explanation for score */
     std::shared_ptr<cugl::scene2::Button> _scoreExplanationButton;
     /** The button to close settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsCloseBtn;
+    /** The page of the tutorial*/
+    std::shared_ptr<cugl::scene2::Label> _tutorial_page;
+    /** The button to close tutorial*/
+    std::shared_ptr<cugl::scene2::Button> _tutorialCloseBtn;
+    /** The button to go to left page for tutorial*/
+    std::shared_ptr<cugl::scene2::Button> _tutorialLeftBtn;
+    /** The button to go to right page for tutorial*/
+    std::shared_ptr<cugl::scene2::Button> _tutorialRightBtn;
     std::shared_ptr<cugl::scene2::Button> _almanacCloseBtn;
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
@@ -242,6 +273,7 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _unit4button_selected;
     vector<shared_ptr<cugl::scene2::Button>> _unitButtons;
     vector<shared_ptr<cugl::scene2::Button>> _unitButtons_selected;
+    vector<shared_ptr<cugl::scene2::PolygonNode>> _unitPatterns;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
@@ -259,10 +291,12 @@ protected:
     /** Whther the player pressed almanac button*/
     bool _didPreview = false;
     
-    bool unit1Selected = false;
+    bool unit1Selected = true;
     bool unit2Selected = false;
     bool unit3Selected = false;
     bool unit4Selected = false;
+    
+    vector<bool> unitMissing = {false, false, false};
     
     bool _midSwap = false;
 
@@ -314,9 +348,10 @@ public:
     bool init(const std::shared_ptr<cugl::AssetManager> &assets);
     
     /**
-     * Set up the top UI
+     * Set up the top UI, including the top background image and star systems
      *
-     * UI includes: star and score system, number of swaps, setting menu
+     * @param assets The (loaded) assets for this game mode
+     * @param constants The (loaded) constants for this game mode
      */
     void setTopUI(const std::shared_ptr<cugl::AssetManager> &assets, std::shared_ptr<cugl::JsonValue> &constants);
     
@@ -324,6 +359,11 @@ public:
      * Set up the attacking pattern pop-up
      */
     void viewAttackingPatterns();
+    
+    /**
+     * Adjust the unit icons on attacking pattern almanac according to level parameters.
+     */
+    void updateAttackingPatterns();
     
 #pragma mark -
 #pragma mark Gameplay Handling
@@ -375,6 +415,22 @@ public:
      */
     void setLevel(shared_ptr<cugl::JsonValue> levelJSON);
 
+    /**
+     * Get the current level of the board
+     */
+    int getCurrLevel() { return _currLevel; };
+    
+    /**
+     * Sets the current level of the board
+     *
+     * @param the JSON representation of the board.
+     */
+    void setCurrLevel( int level_num ) { _currLevel = level_num; }
+    
+    /**
+     * Sets the enter level of the board to true
+     */
+    void enterLevel( ) { _enterLevel = true; }
     
     /**
      * Returns the current state the game is in.
@@ -513,6 +569,18 @@ private:
     void respawnAttackedSquares();
     
     void deconfirmSwap();
+    
+    /**
+     * shows the tutorial when the player first enter the level
+     * @param node               GUI node
+     */
+    void showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node );
+    
+    /**
+     * flip the tutorial page
+     * @param dir                 direction to flip: left or right
+     */
+    void flipTutorialPage( std::string dir );
 };
 
 #endif /* __SW_GAME_SCENE_H__ */
