@@ -82,7 +82,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _topUI_scores_color = constants->getString("topUI-scores-color");
     _topUI_maxTurn_color = constants->getString("topUI-maxTurn-color");
 
-
     // Initialize Scene
     dimen *= sceneHeight / dimen.height;
     if (!Scene2::init(dimen))
@@ -201,6 +200,20 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _unitTypes.insert({child->key(), unit});
     }
     
+    _helpMenu = std::dynamic_pointer_cast<scene2::SceneNode>(_assets->get<scene2::SceneNode>("help_menu"));
+    _helpMenu->setContentSize(dimen);
+    _helpMenu->doLayout();
+    _guiNode->addChild(_helpMenu);
+    _helpMenu->setVisible(false);
+    _isScrolling = false;
+    
+    _tutorialLayout = assets->get<scene2::SceneNode>("tutorial");
+    _tutorialLayout->setContentSize(dimen);
+    _tutorialLayout->doLayout();
+    _guiNode->addChild(_tutorialLayout);
+    _tutorialLayout->setVisible(false);
+    _tutorialActive = false;
+
     // sucess score summary screen
     _resultLayout = assets->get<scene2::SceneNode>("result");
     _resultLayout->setContentSize(dimen);
@@ -223,6 +236,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsMenuLayout = assets->get<scene2::SceneNode>("settings-menu");
     _settingsMenuLayout->setContentSize(dimen);
     _settingsMenuLayout->doLayout(); // Repositions the HUD
+    _settingsMenuLayout->getChild(0)->getChild(2)->setScale(0.725);
+    _settingsMenuLayout->getChild(0)->getChild(3)->setScale(0.725);
     _guiNode->addChild(_settingsMenuLayout);
     _settingsMenuLayout->setVisible(false);
     
@@ -247,6 +262,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _restartbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_restart"));
     _restartbutton->deactivate();
     _restartbutton->setDown(false);
+    _restartbutton->clearListeners();
     _restartbutton->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didRestart = true;
@@ -265,6 +281,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _backbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("result_board_exit"));
     _backbutton->deactivate();
     _backbutton->setDown(false);
+    _backbutton->clearListeners();
     _backbutton->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didGoToLevelMap = true;
@@ -295,6 +312,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsbutton->setVisible(true);
     _settingsbutton->activate();
     _settingsbutton->setDown(false);
+    _settingsbutton->clearListeners();
     _settingsbutton->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didPause = true;
@@ -337,6 +355,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsRestartBtn->setVisible(true);
     _settingsRestartBtn->deactivate();
     _settingsRestartBtn->setDown(false);
+    _settingsRestartBtn->clearListeners();
     _settingsRestartBtn->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didRestart = true;
@@ -348,6 +367,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsCloseBtn->setVisible(true);
     _settingsCloseBtn->deactivate();
     _settingsCloseBtn->setDown(false);
+    _settingsCloseBtn->clearListeners();
     _settingsCloseBtn->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didPause = false;
@@ -356,6 +376,98 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
     });
     
+    _settingsHelpBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_help"));
+    _settingsHelpBtn->setVisible(true);
+    _settingsHelpBtn->deactivate();
+    _settingsHelpBtn->setDown(false);
+    _settingsHelpBtn->clearListeners();
+    _settingsHelpBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            // help menu
+            _isHelpMenuOpen = true;
+            _helpMenu->setVisible(true);
+            _helpBackBtn->activate();
+            _helpMenu->setPositionY(-1182+720);
+            // almanac
+            _almanacbutton->setVisible(false);
+            _almanacbutton->deactivate();
+            // tutorial
+            _tutorialLayout->setVisible(false);
+            _tutorialActive = false;
+            _tutorialLeftBtn->deactivate();
+            _tutorialRightBtn->deactivate();
+            _tutorialCloseBtn->deactivate();
+            // set setting buttons inactive
+            _didPause = false;
+            _settingsMenuLayout->setVisible(false);
+            _settingsLayout->setVisible(false);
+            _settingsbutton->deactivate();
+            _settingsBackBtn->deactivate();
+            _settingsRestartBtn->deactivate();
+            _settingsCloseBtn->deactivate();
+            CULog("Pressed Settings help button");
+        }
+    });
+    
+    _helpBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_menu_background_back"));
+    _helpBackBtn->setVisible(true);
+    _helpBackBtn->deactivate();
+    _helpBackBtn->setDown(false);
+    _helpBackBtn->clearListeners();
+    _helpBackBtn->addListener([this](const std::string& name, bool down) {
+        if (down) {
+            // help
+            _isHelpMenuOpen = false;
+            _helpMenu->setVisible(false);
+            // settings
+            _settingsLayout->setVisible(true);
+            _settingsbutton->activate();
+            // almanac
+            _almanacbutton->setVisible(true);
+            _almanacbutton->activate();
+            CULog("Pressed help menu close button");
+        }
+    });
+    
+    _tutorial_page = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("tutorial_board_page"));
+    
+    _tutorialCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("tutorial_board_close"));
+    _tutorialCloseBtn->setVisible(true);
+    _tutorialCloseBtn->deactivate();
+    _tutorialCloseBtn->setDown(false);
+    _tutorialCloseBtn->clearListeners();
+    _tutorialCloseBtn->addListener([=](const std::string& name, bool down) {
+        if (down) {
+            _tutorialLayout->setVisible(false);
+            _tutorialActive = false;
+            CULog("Pressed tutorial close button");
+        }
+    });
+    
+    _tutorialLeftBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("tutorial_board_left"));
+    _tutorialLeftBtn->setVisible(true);
+    _tutorialLeftBtn->deactivate();
+    _tutorialLeftBtn->setDown(false);
+    _tutorialLeftBtn->clearListeners();
+    _tutorialLeftBtn->addListener([=](const std::string& name, bool down) {
+        if (down) {
+            flipTutorialPage("left");
+            CULog("Pressed tutorial left button");
+        }
+    });
+    
+    _tutorialRightBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("tutorial_board_right"));
+    _tutorialRightBtn->setVisible(true);
+    _tutorialRightBtn->deactivate();
+    _tutorialRightBtn->setDown(false);
+    _tutorialRightBtn->clearListeners();
+    _tutorialRightBtn->addListener([=](const std::string& name, bool down) {
+        if (down) {
+            flipTutorialPage("right");
+            CULog("Pressed tutorial right button");
+        }
+    });
+
     _almanacCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_close"));
     _almanacCloseBtn->setVisible(true);
     _almanacCloseBtn->activate();
@@ -374,6 +486,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _settingsBackBtn->setVisible(true);
     _settingsBackBtn->deactivate();
     _settingsBackBtn->setDown(false);
+    _settingsBackBtn->clearListeners();
     _settingsBackBtn->addListener([this](const std::string& name, bool down) {
         if (down) {
             _didGoToLevelMap = true;
@@ -786,7 +899,46 @@ void GameScene::update(float timestep)
     // Read the input
     _input.update();
     
-
+    // show tutorial when first enter the level
+    if (_enterLevel && !_tutorialActive) {
+        showTutorial(_guiNode);
+        _enterLevel = false;
+    } else if (!_tutorialActive) {
+        _tutorialLeftBtn->deactivate();
+        _tutorialRightBtn->deactivate();
+        _tutorialCloseBtn->deactivate();
+    }
+    
+    // help menu
+    if (_isHelpMenuOpen) {
+        _settingsHelpBtn->deactivate();
+        // Process the toggled key commands
+        Vec2 pos = _input.getPosition();
+        if (_isScrolling) {
+            Vec2 prevPos = _input.getPrevious();
+            Vec2 moveDist = Vec2(pos.x-prevPos.x, prevPos.y-pos.y);
+            Vec2 nodePos = _helpMenu->getPosition();
+            moveDist.x = 0;
+            if (moveDist.y + nodePos.y < -1182+720) {
+                moveDist.y = -1182+720 - nodePos.y;
+            } else if (moveDist.y + nodePos.y > 0) {
+                moveDist.y = 0 - nodePos.y;
+            }
+            _helpMenu->setPosition(nodePos+moveDist);
+        }
+        if (_input.isDown()) {
+            _isScrolling = true;
+//            CULog("help back btn position: %f, %f", _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).x, _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).y);
+//            CULog("input position: %f, %f", pos.x, pos.y);
+        } else if (_input.didRelease()) {
+            _isScrolling = false;
+        }
+        return;
+    } else {
+        _helpBackBtn->deactivate();
+        _isScrolling = false;
+    }
+    
     if (_didRestart == true) reset(_levelJson);
     if (_didRestart == true && _didPause == true) reset(_levelJson);
     
@@ -840,6 +992,7 @@ void GameScene::update(float timestep)
         _settingsBackBtn->activate();
         _settingsRestartBtn->activate();
         _settingsCloseBtn->activate();
+        _settingsHelpBtn->activate();
         return;
     }
     
@@ -1011,7 +1164,9 @@ void GameScene::update(float timestep)
                 }
                 for (shared_ptr<Square> protectedSquare : _protectedSquares)
                 {
-                    protectedSquare->getViewNode()->setTexture(_textures.at("shield"));
+                    _shieldNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("shield"));
+                    protectedSquare->getViewNode()->addChild(_shieldNode);
+//                    protectedSquare->getViewNode()->setTexture(_textures.at("shield"));
                 }
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
@@ -1402,6 +1557,9 @@ void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
     removeChild(_guiNode);
     _didGoToLevelMap = false;
     _didPause = false;
+    _isScrolling = false;
+    _isHelpMenuOpen = false;
+    _tutorialActive = false;
     init(_assets);
     setLevel(boardJSON);
 }
@@ -1615,4 +1773,117 @@ void GameScene::showResultText(bool success, std::shared_ptr<cugl::scene2::Scene
     node->addChildWithName(text, "info");
 //    CULog("text has priority of %f", _info_text->getPriority());
 //    CULog("unit has priority of %f", unitNode->getPriority());
+}
+
+void GameScene::showTutorial( std::shared_ptr<cugl::scene2::SceneNode> node ) {
+    switch (_currLevel) {
+        case 1: {
+            _tutorialLayout->setVisible(true);
+            _tutorialCloseBtn->activate();
+            _tutorialLeftBtn->activate();
+            _tutorialRightBtn->activate();
+            _tutorialActive = true;
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(true);
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+            _tutorial_page->setText("1/2");
+            break;
+        }
+        case 2: {
+            _tutorialLayout->setVisible(true);
+            _tutorialCloseBtn->activate();
+            _tutorialLeftBtn->activate();
+            _tutorialRightBtn->activate();
+            _tutorialActive = true;
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(true);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+            _tutorial_page->setText("1/2");
+            break;
+        }
+        case 4: {
+            _tutorialLayout->setVisible(true);
+            _tutorialCloseBtn->activate();
+            _tutorialLeftBtn->activate();
+            _tutorialRightBtn->activate();
+            _tutorialActive = true;
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(true);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+            _tutorial_page->setText("1/3");
+            break;
+        }
+        default: {
+            _tutorialLayout->setVisible(false);
+            _tutorialCloseBtn->deactivate();
+            _tutorialLeftBtn->deactivate();
+            _tutorialRightBtn->deactivate();
+            _tutorialActive = false;
+        }
+    }
+    
+}
+
+void GameScene::flipTutorialPage( std::string dir ) {
+    switch (_currLevel) {
+        case 1: {
+            auto level1_rule1 = _tutorialLayout->getChild(0)->getChildByName("level1_rule1");
+            auto level1_rule2 = _tutorialLayout->getChild(0)->getChildByName("level1_rule2");
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(!level1_rule1->isVisible());
+            _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(!level1_rule2->isVisible());
+            if (level1_rule1->isVisible())
+                _tutorial_page->setText("1/2");
+            else
+                _tutorial_page->setText("2/2");
+            break;
+        }
+        case 2: {
+            auto level2_rule1 = _tutorialLayout->getChild(0)->getChildByName("level2_rule1");
+            auto level2_rule2 = _tutorialLayout->getChild(0)->getChildByName("level2_rule2");
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(!level2_rule1->isVisible());
+            _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(!level2_rule2->isVisible());
+            if (level2_rule1->isVisible())
+                _tutorial_page->setText("1/2");
+            else
+                _tutorial_page->setText("2/2");
+            break;
+        }
+        case 4: {
+            auto level4_rule1 = _tutorialLayout->getChild(0)->getChildByName("level4_rule1");
+            auto level4_rule2 = _tutorialLayout->getChild(0)->getChildByName("level4_rule2");
+            auto level4_rule3 = _tutorialLayout->getChild(0)->getChildByName("level4_rule3");
+            if ( (dir == "left" && level4_rule1->isVisible()) || (dir == "right" && level4_rule2->isVisible()) ) {
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(true);
+            } else if ( (dir == "left" && level4_rule2->isVisible()) || (dir == "right" && level4_rule3->isVisible()) ) {
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(true);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+            } else {
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(true);
+                _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+            }
+            if (level4_rule1->isVisible())
+                _tutorial_page->setText("1/3");
+            else if (level4_rule2->isVisible())
+                _tutorial_page->setText("2/3");
+            else
+                _tutorial_page->setText("3/3");
+            break;
+        }
+    }
 }
