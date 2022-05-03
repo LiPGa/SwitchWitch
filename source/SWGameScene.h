@@ -198,6 +198,8 @@ protected:
     /** The text of score for each star level */
     std::shared_ptr<cugl::scene2::Label> _oneStar_text;
     
+    vector<string> _unit_types;
+    
     /** The nodes representing unit attacking pattern illustrations */
     std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern1;
     std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern2;
@@ -239,6 +241,7 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _unit4button_selected;
     vector<shared_ptr<cugl::scene2::Button>> _unitButtons;
     vector<shared_ptr<cugl::scene2::Button>> _unitButtons_selected;
+    vector<shared_ptr<cugl::scene2::PolygonNode>> _unitPatterns;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
     vector<shared_ptr<Square>> _attackedSquares;
@@ -256,10 +259,12 @@ protected:
     /** Whther the player pressed almanac button*/
     bool _didPreview = false;
     
-    bool unit1Selected = false;
+    bool unit1Selected = true;
     bool unit2Selected = false;
     bool unit3Selected = false;
     bool unit4Selected = false;
+    
+    vector<bool> unitMissing = {false, false, false};
     
     bool _midSwap = false;
 
@@ -321,6 +326,11 @@ public:
      * Set up the attacking pattern pop-up
      */
     void viewAttackingPatterns();
+    
+    /**
+     * Adjust the unit icons on attacking pattern almanac according to level parameters.
+     */
+    void updateAttackingPatterns();
     
 #pragma mark -
 #pragma mark Gameplay Handling

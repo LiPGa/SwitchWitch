@@ -103,6 +103,11 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _didGoToLevelMap = false;
     _didGoToNextLevel = false;
     _didPause = false;
+    unit1Selected = true;
+    unit2Selected = false;
+    unit3Selected = false;
+    unit4Selected = false;
+    unitMissing = {false, false, false};
     // Get Textures
     // Preload all the textures into a hashmap
     vector<string> textureVec = constants->get("textures")->asStringArray();
@@ -330,6 +335,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         }
         });
     
+//    _unit_types = _level->unitTypes;
+    
     _scoreExplanation = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("settings_score-explanation"));
     _scoreExplanation->setScale(_scale);
     _scoreExplanation->setVisible(false);
@@ -406,7 +413,7 @@ void GameScene::viewAttackingPatterns() {
     _unitPattern2 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit2-pattern"));
     _unitPattern3 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit3-pattern"));
     _unitPattern4 = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4-pattern"));
-    _unitPattern1->setVisible(false);
+    _unitPattern1->setVisible(true);
     _unitPattern2->setVisible(false);
     _unitPattern3->setVisible(false);
     _unitPattern4->setVisible(false);
@@ -421,6 +428,8 @@ void GameScene::viewAttackingPatterns() {
     _unit4button_selected = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac-menu_board_unit4-selected"));
     
     _unitButtons = {_unit1button, _unit2button, _unit3button, _unit4button};
+    _unitButtons_selected = {_unit1button_selected, _unit2button_selected, _unit3button_selected, _unit4button_selected};
+    _unitPatterns = {_unitPattern1, _unitPattern2, _unitPattern3, _unitPattern4};
     
     _unit1button->setVisible(true);
     _unit1button->activate();
@@ -887,9 +896,10 @@ void GameScene::update(float timestep)
         _unit1button_selected->deactivate();
         _unit1button->setVisible(true);
         _unit1button->activate();
+//        _unitPattern1->setVisible(false);
     }
     
-    if (unit2Selected == true) {
+    if (unit2Selected == true && unitMissing.at(0) != true) {
         _unit2button->setVisible(false);
         _unit2button->deactivate();
         _unit2button_selected->setVisible(true);
@@ -898,19 +908,17 @@ void GameScene::update(float timestep)
         _unitPattern1->setVisible(false);
         _unitPattern3->setVisible(false);
         _unitPattern4->setVisible(false);
-//        unit1Selected = false;
-//        unit3Selected = false;
-//        unit4Selected = false;
     }
     
-    if (unit2Selected == false) {
+    if (unit2Selected == false && unitMissing.at(0) != true) {
         _unit2button_selected->setVisible(false);
         _unit2button_selected->deactivate();
         _unit2button->setVisible(true);
         _unit2button->activate();
+//        _unitPattern2->setVisible(false);
     }
     
-    if (unit3Selected == true) {
+    if (unit3Selected == true && unitMissing.at(1) != true) {
             _unit3button->setVisible(false);
             _unit3button->deactivate();
             _unit3button_selected->setVisible(true);
@@ -919,19 +927,17 @@ void GameScene::update(float timestep)
             _unitPattern1->setVisible(false);
             _unitPattern2->setVisible(false);
             _unitPattern4->setVisible(false);
-//            unit1Selected = false;
-//            unit2Selected = false;
-//            unit4Selected = false;
         }
     
-    if (unit3Selected == false) {
+    if (unit3Selected == false && unitMissing.at(1) != true) {
             _unit3button_selected->setVisible(false);
             _unit3button_selected->deactivate();
             _unit3button->setVisible(true);
             _unit3button->activate();
+//        _unitPattern3->setVisible(false);
     }
     
-    if (unit4Selected == true) {
+    if (unit4Selected == true && unitMissing.at(2) != true) {
             _unit4button->setVisible(false);
             _unit4button->deactivate();
             _unit4button_selected->setVisible(true);
@@ -940,16 +946,14 @@ void GameScene::update(float timestep)
             _unitPattern1->setVisible(false);
             _unitPattern2->setVisible(false);
             _unitPattern3->setVisible(false);
-//            unit1Selected = false;
-//            unit2Selected = false;
-//            unit3Selected = false;
         }
     
-    if (unit4Selected == false) {
+    if (unit4Selected == false && unitMissing.at(2) != true) {
             _unit4button_selected->setVisible(false);
             _unit4button_selected->deactivate();
             _unit4button->setVisible(true);
             _unit4button->activate();
+//        _unitPattern4->setVisible(false);
         }
     
 
@@ -1471,6 +1475,43 @@ void GameScene::setActive(bool value)
 //        }
 }
 
+void GameScene::updateAttackingPatterns() {
+    for (size_t i = 0; i < 3; i++) {
+        string unit_type = _unit_types.at(i);
+        if (unit_type == "empty") {
+            unitMissing.at(i) = true;
+        }
+        else {
+            unitMissing.at(i) = false;
+        }
+    }
+    for (size_t j = 0; j < 3; j++) {
+        int num = static_cast<int>(j) + 2;
+        string nodeName = "almanac-menu_board_unit" + to_string(num) + "-missing";
+        string iconName = "almanac_unit" + to_string(num);
+        string missingIconName = "almanac_unit" + to_string(num) + "-missing";
+        auto img = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>(nodeName));
+        auto icon = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>(iconName));
+        auto missingIcon = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>(missingIconName));
+        if (unitMissing.at(j) == true) {
+            img->setVisible(true);
+            icon->setVisible(false);
+            missingIcon->setVisible(true);
+            _unitButtons.at(j+1)->setVisible(false);
+            _unitButtons.at(j+1)->deactivate();
+            _unitButtons_selected.at(j+1)->setVisible(false);
+            _unitButtons_selected.at(j+1)->deactivate();
+            _unitPatterns.at(j+1)->setVisible(false);
+        }
+        else {
+            img->setVisible(false);
+            icon->setVisible(true);
+            missingIcon->setVisible(false);
+        }
+    }
+}
+
+
 void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _levelJson = levelJSON;
     _level = Level::alloc(_textures, levelJSON);
@@ -1478,6 +1519,11 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _currentReplacementDepth = vector;
     _score = 0;
     _turns = _level->maxTurns;
+    _unit_types = _level->unitTypes;
+    updateAttackingPatterns();
+    for (auto unit : _unit_types) {
+        CULog("unit type is %s", unit.c_str());
+    }
 
     // Change Background
     _backgroundNode->setTexture(_textures.at("background-" + _levelJson->getString("background")));

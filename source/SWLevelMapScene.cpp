@@ -55,7 +55,7 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 //    start_ok = false;
     
     _chosenLevel = 0;
-    _num_levels = 19;
+    _num_levels = 30;
     loadLevelButtons();
 
     _scrollPane = std::dynamic_pointer_cast<scene2::ScrollPane>(_assets->get<scene2::SceneNode>("map"));
