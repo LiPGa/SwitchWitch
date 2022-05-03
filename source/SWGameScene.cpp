@@ -153,7 +153,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _maxTurn_text->setScale(0.5);
     _maxTurn_text->setForeground(Color4(_topUI_maxTurn_color));
     _guiNode->addChildWithName(_maxTurn_text, "maxTurn_text");
-    _layout->addAbsolute("maxTurn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 5.1, -0.43 * (_topuibackgroundNode->getSize().height)));
+    _layout->addAbsolute("maxTurn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 5.25, -0.43 * (_topuibackgroundNode->getSize().height)));
 
 
     // -------- Set the view of the board --------------
