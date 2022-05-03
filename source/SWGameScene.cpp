@@ -139,12 +139,22 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Initialize Board
     _board = Board::alloc(_maxBoardWidth, _maxBoardHeight);
 
-    // Create and layout the turn meter
-    std::string turnMsg = strtool::format("%d/%d", _turns, 100);
+    // Load the current number of turns left for the player
+    std::string turnMsg = strtool::format("%d", _turns);
     _turn_text = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
     _turn_text->setScale(0.5);
+    _turn_text->setForeground(Color4::WHITE);
     _guiNode->addChildWithName(_turn_text, "turn_text");
-    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 5, -0.43 * (_topuibackgroundNode->getSize().height)));
+    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 4.5, -0.43 * (_topuibackgroundNode->getSize().height)));
+    
+    // Load the maximum number of turns for this level
+    std::string maxTurnMsg = "/ " + strtool::format("%d", _maxturns);
+    _maxTurn_text = scene2::Label::allocWithText(maxTurnMsg, assets->get<Font>("pixel32"));
+    _maxTurn_text->setScale(0.5);
+    _maxTurn_text->setForeground(Color4(_topUI_maxTurn_color));
+    _guiNode->addChildWithName(_maxTurn_text, "maxTurn_text");
+    _layout->addAbsolute("maxTurn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 5.1, -0.43 * (_topuibackgroundNode->getSize().height)));
+
 
     // -------- Set the view of the board --------------
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height);
@@ -783,31 +793,9 @@ void GameScene::update(float timestep)
         
     }
     
-    
-
-    // Update the score meter
-//    if (_score >= _level->oneStarThreshold) _scoreMeterStar1->setTexture(_assets->get<Texture>("star_full"));
-//    if (_score >= _level->twoStarThreshold) _scoreMeterStar2->setTexture(_assets->get<Texture>("star_full"));
-//    if (_score >= _level->threeStarThreshold) _scoreMeterStar3->setTexture(_assets->get<Texture>("star_full"));
-//    if (_score < _level->threeStarThreshold) {
-//        _scoreMeter->setProgress(static_cast<float>(_score) / _level->threeStarThreshold);
-//        _layout->remove("score_text");
-//        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7 + 12 + (static_cast<float>(_score) / _level->threeStarThreshold) * (_scoreMeter->getWidth() - 14),
-//                                                                                          _scoreMeter->getSize().height / 2 + -0.87 * (_topuibackgroundNode->getSize().height)));
-//    } else {
-//        _scoreMeter->setProgress(1.0f);
-//        _layout->remove("score_text");
-//        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7 + (_scoreMeter->getWidth() - 2),
-//                                                                                          _scoreMeter->getSize().height / 2 + -0.87 * (_topuibackgroundNode->getSize().height)));
-//    }
-//    _score_text->setText(strtool::format("%d", _score), true);
-//    if ((_prev_score < 9 && _score > 9) || (_prev_score < 99 && _score > 99))
-//    {
-//        _layout->remove("score_text");
-//        _layout->addAbsolute("score_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(-_topuibackgroundNode->getSize().width / 7, -0.85 * (_topuibackgroundNode->getSize().height)));
-//    }
     // Update the remaining turns
-    _turn_text->setText(strtool::format("%d/%d", _turns, _level->maxTurns));
+    _turn_text->setText(strtool::format("%d", _turns));
+    _maxTurn_text->setText("/ " + strtool::format("%d", _maxturns));
     
     // Animate all units
     for (shared_ptr<Square> square : _board->getAllSquares())
@@ -1133,6 +1121,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _currentReplacementDepth = vector;
     _score = 0;
     _turns = _level->maxTurns;
+    _maxturns = _level->maxTurns;
 
     // Change Background
     _backgroundNode->setTexture(_textures.at("background-" + _levelJson->getString("background")));

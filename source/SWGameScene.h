@@ -111,6 +111,8 @@ protected:
 
     /** The current number of turns left for the player */
     int _turns;
+    /** The maximum number of turns for the current level */
+    int _maxturns;
     /** The current score of the player */
     int _score;
     /** The previous score of the player */
