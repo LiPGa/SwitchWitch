@@ -141,10 +141,10 @@ void SwitchWitchApp::update(float timestep) {
                 _levelMap.init(_assets);
                 _gameplay.init(_assets);
                 _levelEditor.init(_assets);
-                _mainMenu.setActive(true);
-                _scene = State::MENU;
-//                _scene = State::MAP;
-//                _levelMap.setActive(true);
+//                _mainMenu.setActive(true);
+//                _scene = State::MENU;
+                _scene = State::MAP;
+                _levelMap.setActive(true);
             }
             break;
         }

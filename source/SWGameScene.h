@@ -170,6 +170,7 @@ protected:
     std::shared_ptr<scene2::SceneNode> _failResultLayout;
     std::shared_ptr<scene2::SceneNode> _settingsLayout;
     std::shared_ptr<scene2::SceneNode> _almanacLayout;
+    std::shared_ptr<scene2::SceneNode> _almanac;
     std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _enlargedUnitNode;
