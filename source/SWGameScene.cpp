@@ -318,7 +318,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _scoreExplanation->setScale(_scale);
     _scoreExplanation->setVisible(false);
     
-    _almanacbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac"));
+    _almanacbutton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("almanac_btn"));
     //_almanacbutton->setScale(_scale);
     _almanacbutton->setVisible(true);
     _almanacbutton->setContentSize(dimen);
@@ -331,7 +331,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _didPreview = true;
         }
     });
-    _guiNode->addChild(_almanacbutton);
+//    _guiNode->addChild(_almanacbutton);
 
     _settingsRestartBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings-menu_board_restart"));
     _settingsRestartBtn->setVisible(true);
@@ -1434,8 +1434,8 @@ void GameScene::updateAttackingPatterns() {
     for (size_t j = 0; j < 3; j++) {
         int num = static_cast<int>(j) + 2;
         string nodeName = "almanac-menu_board_unit" + to_string(num) + "-missing";
-        string iconName = "almanac_unit" + to_string(num);
-        string missingIconName = "almanac_unit" + to_string(num) + "-missing";
+        string iconName = "almanac_btn_unit" + to_string(num);
+        string missingIconName = "almanac_btn_unit" + to_string(num) + "-missing";
         auto img = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>(nodeName));
         auto icon = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>(iconName));
         auto missingIcon = std::dynamic_pointer_cast<scene2::PolygonNode>(_assets->get<scene2::SceneNode>(missingIconName));
