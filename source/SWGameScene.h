@@ -70,8 +70,11 @@ protected:
     int _maxBoardWidth;
     int _maxBoardHeight;
     int _defaultSquareSize;
+    int _defaultUnitSize;
     int _squareSizeAdjustedForScale;
+    float _unitSpritePaddingFactor;
     float _squareScaleFactor;
+    float _unitScaleFactor;
     
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;

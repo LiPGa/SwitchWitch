@@ -138,6 +138,24 @@
         "king-idle-blue": {
             "file": "textures/king_idle_red.png"
         },
+        "king-hit-red": {
+            "file": "textures/king_hit_red.png"
+        },
+        "king-hit-green": {
+            "file": "textures/king_hit_red.png"
+        },
+        "king-hit-blue": {
+            "file": "textures/king_hit_red.png"
+        },
+        "king-dying-red": {
+            "file": "textures/king_dying_red.png"
+        },
+        "king-dying-green": {
+            "file": "textures/king_dying_red.png"
+        },
+        "king-dying-blue": {
+            "file": "textures/king_dying_red.png"
+        },
         "basic-red": {
             "file": "textures/red_unit.png"
         },
@@ -146,6 +164,15 @@
         },
         "basic-green": {
             "file": "textures/orange_unit.png"
+        },
+        "basic-red-old": {
+            "file": "textures/red_unit_old.png"
+        },
+        "basic-blue-old": {
+            "file": "textures/blue_unit_old.png"
+        },
+        "basic-green-old": {
+            "file": "textures/orange_unit_old.png"
         },
         "basic-idle-red": {
             "file": "textures/basic_idle_red.png"
@@ -201,6 +228,15 @@
         "diagonal-red": {
             "file": "textures/diagonal_red.png"
         },
+        "diagonal-blue-old": {
+            "file": "textures/diagonal_blue_old.png"
+        },
+        "diagonal-green-old": {
+            "file": "textures/diagonal_orange_old.png"
+        },
+        "diagonal-red-old": {
+            "file": "textures/diagonal_red_old.png"
+        },
         "diagonal-idle-blue": {
             "file": "textures/diagonal_idle_blue.png"
         },
@@ -255,6 +291,15 @@
         "three-way-red": {
             "file": "textures/three_way_red_unit.png"
         },
+        "three-way-blue-old": {
+            "file": "textures/three_way_blue_unit_old.png"
+        },
+        "three-way-green-old": {
+            "file": "textures/three_way_orange_unit_old.png"
+        },
+        "three-way-red-old": {
+            "file": "textures/three_way_red_unit_old.png"
+        },
         "three-way-idle-red": {
             "file": "textures/three_way_idle_red.png"
         },
@@ -308,6 +353,15 @@
         },
         "two-forward-red": {
             "file": "textures/two_forward_red_unit.png"
+        },
+        "two-forward-blue-old": {
+            "file": "textures/two_forward_blue_unit_old.png"
+        },
+        "two-forward-green-old": {
+            "file": "textures/two_forward_orange_unit_old.png"
+        },
+        "two-forward-red-old": {
+            "file": "textures/two_forward_red_unit_old.png"
         },
         "two-forward-idle-red": {
             "file": "textures/two_forward_idle_red.png"

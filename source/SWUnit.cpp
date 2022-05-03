@@ -77,6 +77,8 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
     switch (state) {
         case IDLE:
             return _textureMap.count(idleTextureName) > 0 ? _textureMap.at(idleTextureName) : _textureMap.at(defaultTextureName);
+        case State::PROTECTED:
+            return _textureMap.at("shield");
         case HIT:
             return _textureMap.count(hitTextureName) > 0 ? _textureMap.at(hitTextureName)
             : _textureMap.at(defaultTextureName);
@@ -96,37 +98,24 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
 
 
 void Unit::setState(State s) {
-//    if (s == _state) return;
     _state = s;
     std::shared_ptr<scene2::SpriteNode> newNode;
     completedAnimation = false;
-    switch (s) {
-        case State::IDLE:
-            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 2);
-            break;
-        case State::PROTECTED:
-            newNode = scene2::SpriteNode::alloc(_textureMap.at("shield"), 1, 1);
-            break;
-        case State::HIT:
-            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 1);
-            this->_hasBeenHit = true;
-            break;
-        case State::ATTACKING:
-            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 2);
-            break;
-        case State::DYING:
-            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 2);
-            break;
-        case State::DEAD:
-            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 1);
-            break;
-        case State::RESPAWNING:
-            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 2);
-            break;
-        default:
-            newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, 1);
-            
+    int framesInAnimation = animationFrameCounts[s];
+//    if (_subtype == "king" && s == DYING) framesInAnimation = 5; // King dying animation is a special case
+    if (_subtype == "basic" && s == ATTACKING) {
+        framesInAnimation = 1; // Basic attack animation is a special case
+        _initialPos = _viewNode->getPosition();
     }
+    newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, framesInAnimation);
+    if (s == State::HIT) _hasBeenHit = true;
+    _time_per_frame = _time_per_animation / framesInAnimation;
+    _time_since_last_flash = 0.0f;
+    _time_since_last_frame = 0.0f;
+    _time_since_start_animation = 0.0f;
+    newNode->setAnchor(Vec2::ANCHOR_CENTER + Vec2(0, -0.2));
+    newNode->setVisible(true);
+//    newNode->setLayout()
     _viewNode = newNode;
 }
 
@@ -176,14 +165,68 @@ void Unit::update(float dt) {
 //    auto* _spriteNode = dynamic_cast<cugl::scene2::SpriteNode*>(_viewNode.get());
 //    if (_spriteNode) {
     _time_since_last_frame += dt;
+    _time_since_last_flash += dt;
+    _time_since_start_animation += dt;
+    switch (_state) { // state-specific effects
+        case HIT: { // flashing effect
+            float timePerFlash = _time_per_animation / 2 / _num_flashes;
+            if (_time_since_last_flash > timePerFlash) {
+                _time_since_last_flash = 0.0f;
+                _viewNode->setVisible(!_viewNode->isVisible());
+            }
+            break;
+        }
+        case ATTACKING: {
+            if (_subtype == "basic") { // basic units have a special attack effect
+                float timeBeforeMovement = _time_per_animation / 4.0f; // begin the movement effect after 1/4 animation is complete
+                if (_time_since_start_animation <= _time_per_animation / 2.0f && _time_since_start_animation >= timeBeforeMovement) {
+                    Vec2 newPos = _initialPos + _direction * _basicAttackDistance * ((_time_since_start_animation - timeBeforeMovement) / timeBeforeMovement);
+                    _viewNode->setPosition(newPos);
+                } else if (_time_since_start_animation <= 3.0f * timeBeforeMovement && _time_since_start_animation >= _time_per_animation / 2.0f) {
+                    Vec2 newPos = _initialPos + _direction * _basicAttackDistance * (1 - ((_time_since_start_animation - 2.0f * timeBeforeMovement) / timeBeforeMovement));
+                    _viewNode->setPosition(newPos);
+                }
+            }
+            break;
+        }
+//        case DYING: {
+//            if (_subtype == "king") break; // King dying animation is a special case
+//            Color4 newColor = Color4::CLEAR;
+//            float cols[] = { 0.0, 0.0, 0.0, std::max(0.0f, 1 - (_time_since_start_animation / _time_per_animation)) };
+//            newColor.set(cols);
+//            _viewNode->setColor(newColor);
+//            break;
+//        }
+        case RESPAWNING: {
+//            _viewNode->setBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            float cols[] = { 1.0, 1.0, 1.0, std::min(1.0f, (_time_since_start_animation / _time_per_animation)) };
+            Color4 newColor = Color4(cols);
+            _viewNode->setColor(newColor);
+            break;
+        }
+        default: {
+            break;
+        }
+    }
     if (_time_since_last_frame > _time_per_frame) {
         _time_since_last_frame = 0.0f;
         int frame = _viewNode->getFrame() + 1;
         if (frame >= _viewNode->getSize()) {
-            frame = 0;
+            if (animationShouldLoop(_state)) frame = 0;
+            else frame = _viewNode->getSize() - 1;
             completedAnimation = true;
+//            _viewNode->setPosition(_initialPos);
         }
         _viewNode->setFrame(frame);
     }
 //    }
+}
+
+bool Unit::animationShouldLoop(State s) {
+    switch (s) {
+        case IDLE:
+            return true;
+        default:
+            return false;
+    }
 }

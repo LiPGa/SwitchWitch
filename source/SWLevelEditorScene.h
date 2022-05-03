@@ -44,6 +44,7 @@ protected:
     int _maxBoardWidth;
     int _maxBoardHeight;
     int _squareSizeAdjustedForScale;
+    float _unitScaleFactor;
     int _backgroundNumber;
 
     // hash map for unit textures

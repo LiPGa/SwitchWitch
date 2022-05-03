@@ -12,6 +12,8 @@
 #include <cugl/cugl.h>
 #include "SWSquareOccupant.hpp"
 #include <math.h>
+#include <algorithm>
+#include <unordered_map>
 
 using namespace cugl;
 
@@ -80,8 +82,19 @@ private:
     /** The elapsed time since the sprite frame was incremented */
     float _time_since_last_frame = 0.0f;
     
-    /** The amout of time every sprite frame should remain for */
-    float _time_per_frame = 0.3f;
+    /** The elapsed time since the animation started */
+    float _time_since_start_animation = 0.0f;
+    
+    /** The amout of time every animation should play for */
+    float _time_per_animation = 0.9f;
+    
+    /** The amout of time every frame should play for */
+    float _time_per_frame = 0.1f;
+    
+    /** The number of times the sprite should flash when hit */
+    int _num_flashes = 4;
+    
+    float _time_since_last_flash;
 
     /**True if unit is a special unit, False otherwise*/
     bool _is_special_unit;
@@ -94,6 +107,22 @@ private:
     
     /** Whether this unit has previously been hit by an attack */
     bool _hasBeenHit;
+    
+    /** The initial position of the unit sprite node, only used for basic unit's attack effect */
+    Vec2 _initialPos;
+    
+    /** The distance the basic unit's attack should move the sprite in attacking direction */
+    float _basicAttackDistance = 50.0f;
+    
+    std::unordered_map<State, int, std::hash<int>> animationFrameCounts = {
+        { IDLE, 2 },
+        { HIT, 1 },
+        { ATTACKING, 18 },
+        { DYING, 5 },
+        { DEAD, 1 },
+        { PROTECTED, 1 },
+        { RESPAWNING, 1 }
+    };
 
 #pragma mark Constructors
 public:
@@ -419,6 +448,9 @@ public:
     int getUnitsNeededToKill() { return _unitsNeededToKill; }
 
     void setUnitsNeededToKill(int numOfUnits) { _unitsNeededToKill = numOfUnits; }
+    
+    /** Whether the animation for the state should loop or not */
+    bool animationShouldLoop(State s);
     
     /**
         Updates the animation frame of this unit.
