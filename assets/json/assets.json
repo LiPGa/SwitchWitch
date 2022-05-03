@@ -1395,7 +1395,7 @@
                 "size"    : [200, 100],
                 "visible"  : true,
                 "pushsize" : true,
-                "anchor"   : [3.9,1.2],
+                "anchor"   : [3.9,1.22],
                 "scale"    : 0.2
             },
             "children" : {
@@ -1409,7 +1409,7 @@
                     "type"   : "Image",
                     "data"   : {
                         "texture"  : "icon-basic",
-                        "anchor" : [0.1, 0.075],
+                        "anchor" : [0.1, 0],
                         "scale": 0.75
                     }
                 },
@@ -1417,7 +1417,7 @@
                     "type"   : "Image",
                     "data"   : {
                         "texture"  : "icon-special2",
-                        "anchor" : [-0.5, 0.075],
+                        "anchor" : [-0.5, 0],
                         "scale": 0.75
                     }
                 },
@@ -1434,7 +1434,7 @@
                     "type"   : "Image",
                     "data"   : {
                         "texture"  : "icon-special3",
-                        "anchor" : [-1.1, 0.075],
+                        "anchor" : [-1.1, 0],
                         "scale": 0.75
                     }
                 },
@@ -1451,7 +1451,7 @@
                     "type"   : "Image",
                     "data"   : {
                         "texture"  : "icon-special4",
-                        "anchor" : [-1.7, 0.075],
+                        "anchor" : [-1.7, 0],
                         "scale": 0.75
                     }
                 },

@@ -103,6 +103,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _didGoToLevelMap = false;
     _didGoToNextLevel = false;
     _didPause = false;
+    unit1Selected = true;
+    unit2Selected = false;
+    unit3Selected = false;
+    unit4Selected = false;
     unitMissing = {false, false, false};
     // Get Textures
     // Preload all the textures into a hashmap
