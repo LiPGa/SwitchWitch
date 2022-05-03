@@ -852,6 +852,10 @@ void GameScene::deconfirmSwap() {
     _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
     _selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
     //_swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
+    for (shared_ptr<Square> protectedSquare : _protectedSquares)
+    {
+        protectedSquare->getUnit()->getViewNode()->removeAllChildren();
+    }
     for (shared_ptr<Square> square : _board->getAllSquares())
     {
         updateSquareTexture(square);
@@ -1170,9 +1174,11 @@ void GameScene::update(float timestep)
                 }
                 for (shared_ptr<Square> protectedSquare : _protectedSquares)
                 {
+                    auto protectedUnit = protectedSquare->getUnit();
                     _shieldNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("shield"));
-                    protectedSquare->getViewNode()->addChild(_shieldNode);
-//                    protectedSquare->getViewNode()->setTexture(_textures.at("shield"));
+                    _shieldNode->setScale(1 / protectedUnit->getViewNode()->getScale());
+                    _shieldNode->setPosition(Vec2(protectedUnit->getViewNode()->getWidth(), protectedUnit->getViewNode()->getHeight()));
+                    protectedUnit->getViewNode()->addChildWithName(_shieldNode, "shield");
                 }
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)

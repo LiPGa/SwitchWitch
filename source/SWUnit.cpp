@@ -111,7 +111,14 @@ void Unit::setState(State s) {
     if (s == State::HIT) _hasBeenHit = true;
         if (s == State::PROTECTED) {
             auto shieldNode = scene2::SpriteNode::alloc(_textureMap.at("shield"),1,1);
+//            std::shared_ptr<cugl::scene2::AnchoredLayout> unitLayout = scene2::AnchoredLayout::alloc();
+            shieldNode->setScale(1 / _viewNode->getScale());
+            shieldNode->setAnchor(Vec2::ANCHOR_CENTER);
+            shieldNode->setPosition(Vec2(newNode->getWidth() / 2.0f, newNode->getHeight() / 2.0f));
+//            newNode->setAnchor(Vec2::ANCHOR_CENTER);
             newNode->addChild(shieldNode);
+//            unitLayout->add
+            
         }
     _time_per_frame = _time_per_animation / framesInAnimation;
     _time_since_last_flash = 0.0f;
