@@ -766,7 +766,9 @@ void GameScene::update(float timestep)
                 }
                 for (shared_ptr<Square> protectedSquare : _protectedSquares)
                 {
-                    protectedSquare->getViewNode()->setTexture(_textures.at("shield"));
+                    _shieldNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("shield"));
+                    protectedSquare->getViewNode()->addChild(_shieldNode);
+//                    protectedSquare->getViewNode()->setTexture(_textures.at("shield"));
                 }
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)

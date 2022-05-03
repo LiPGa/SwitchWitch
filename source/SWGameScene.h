@@ -157,8 +157,8 @@ protected:
     std::shared_ptr<scene2::SceneNode> _settingsMenuLayout;
     std::shared_ptr<cugl::scene2::PolygonNode> _upcomingUnitNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _enlargedUnitNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _shieldNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _scoreExplanation;
-
     int _replacementListLength;
     // VIEW items are going to be individual variables
     // In the future, we will replace this with the scene graph
