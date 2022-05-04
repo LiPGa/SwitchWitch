@@ -853,6 +853,7 @@ void GameScene::deconfirmSwap() {
     //_swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
     for (shared_ptr<Square> square : _board->getAllSquares())
     {
+        square->getViewNode()->removeChildByName("shield");
         updateSquareTexture(square);
     }
     _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
@@ -1170,7 +1171,7 @@ void GameScene::update(float timestep)
                 for (shared_ptr<Square> protectedSquare : _protectedSquares)
                 {
                     _shieldNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("shield"));
-                    protectedSquare->getViewNode()->addChild(_shieldNode);
+                    protectedSquare->getViewNode()->addChildWithName(_shieldNode, "shield");
 //                    protectedSquare->getViewNode()->setTexture(_textures.at("shield"));
                 }
             }
