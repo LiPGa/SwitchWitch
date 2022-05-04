@@ -1988,6 +1988,13 @@ void GameScene::showResultText(bool success, std::shared_ptr<cugl::scene2::Scene
 
 void GameScene::showTutorial(std::shared_ptr<cugl::scene2::SceneNode> node)
 {
+    _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(false);
+    _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(false);
+    _tutorialLayout->getChild(0)->getChildByName("level3_rule1")->setVisible(false);
+    _tutorialLayout->getChild(0)->getChildByName("level3_rule2")->setVisible(false);
+    _tutorialLayout->getChild(0)->getChildByName("level5_rule1")->setVisible(false);
+    _tutorialLayout->getChild(0)->getChildByName("level6_rule1")->setVisible(false);
+    _tutorialLayout->getChild(0)->getChildByName("level7_rule1")->setVisible(false);
     switch (_currLevel)
     {
     case 1:
@@ -1998,47 +2005,57 @@ void GameScene::showTutorial(std::shared_ptr<cugl::scene2::SceneNode> node)
         _tutorialRightBtn->activate();
         _tutorialActive = true;
         _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(true);
-        _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
         _tutorial_page->setText("1/2");
         break;
     }
-    case 2:
+    case 3:
     {
         _tutorialLayout->setVisible(true);
         _tutorialCloseBtn->activate();
         _tutorialLeftBtn->activate();
         _tutorialRightBtn->activate();
         _tutorialActive = true;
-        _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(true);
-        _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+        _tutorialLayout->getChild(0)->getChildByName("level3_rule1")->setVisible(true);
         _tutorial_page->setText("1/2");
         break;
     }
-    case 4:
+    case 5:
     {
         _tutorialLayout->setVisible(true);
         _tutorialCloseBtn->activate();
-        _tutorialLeftBtn->activate();
-        _tutorialRightBtn->activate();
+//        _tutorialLeftBtn->activate();
+//        _tutorialRightBtn->activate();
+        _tutorialLeftBtn->setVisible(false);
+        _tutorialRightBtn->setVisible(false);
         _tutorialActive = true;
-        _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(true);
-        _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
-        _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
-        _tutorial_page->setText("1/3");
+        _tutorialLayout->getChild(0)->getChildByName("level5_rule1")->setVisible(true);
+        _tutorial_page->setText("1/1");
+        break;
+    }
+    case 6:
+    {
+        _tutorialLayout->setVisible(true);
+        _tutorialCloseBtn->activate();
+//        _tutorialLeftBtn->activate();
+//        _tutorialRightBtn->activate();
+        _tutorialLeftBtn->setVisible(false);
+        _tutorialRightBtn->setVisible(false);
+        _tutorialActive = true;
+        _tutorialLayout->getChild(0)->getChildByName("level6_rule1")->setVisible(true);
+        _tutorial_page->setText("1/1");
+        break;
+    }
+    case 7:
+    {
+        _tutorialLayout->setVisible(true);
+        _tutorialCloseBtn->activate();
+//        _tutorialLeftBtn->activate();
+//        _tutorialRightBtn->activate();
+        _tutorialLeftBtn->setVisible(false);
+        _tutorialRightBtn->setVisible(false);
+        _tutorialActive = true;
+        _tutorialLayout->getChild(0)->getChildByName("level7_rule1")->setVisible(true);
+        _tutorial_page->setText("1/1");
         break;
     }
     default:
@@ -2068,48 +2085,49 @@ void GameScene::flipTutorialPage(std::string dir)
             _tutorial_page->setText("2/2");
         break;
     }
-    case 2:
+    case 3:
     {
-        auto level2_rule1 = _tutorialLayout->getChild(0)->getChildByName("level2_rule1");
-        auto level2_rule2 = _tutorialLayout->getChild(0)->getChildByName("level2_rule2");
-        _tutorialLayout->getChild(0)->getChildByName("level2_rule1")->setVisible(!level2_rule1->isVisible());
-        _tutorialLayout->getChild(0)->getChildByName("level2_rule2")->setVisible(!level2_rule2->isVisible());
-        if (level2_rule1->isVisible())
+        auto level3_rule1 = _tutorialLayout->getChild(0)->getChildByName("level3_rule1");
+        auto level3_rule2 = _tutorialLayout->getChild(0)->getChildByName("level3_rule2");
+        _tutorialLayout->getChild(0)->getChildByName("level3_rule1")->setVisible(!level3_rule1->isVisible());
+        _tutorialLayout->getChild(0)->getChildByName("level3_rule2")->setVisible(!level3_rule2->isVisible());
+        if (level3_rule1->isVisible())
             _tutorial_page->setText("1/2");
         else
             _tutorial_page->setText("2/2");
         break;
     }
-    case 4:
-    {
-        auto level4_rule1 = _tutorialLayout->getChild(0)->getChildByName("level4_rule1");
-        auto level4_rule2 = _tutorialLayout->getChild(0)->getChildByName("level4_rule2");
-        auto level4_rule3 = _tutorialLayout->getChild(0)->getChildByName("level4_rule3");
-        if ((dir == "left" && level4_rule1->isVisible()) || (dir == "right" && level4_rule2->isVisible()))
-        {
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(true);
-        }
-        else if ((dir == "left" && level4_rule2->isVisible()) || (dir == "right" && level4_rule3->isVisible()))
-        {
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(true);
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
-        }
-        else
-        {
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(true);
-            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
-        }
-        if (level4_rule1->isVisible())
-            _tutorial_page->setText("1/3");
-        else if (level4_rule2->isVisible())
-            _tutorial_page->setText("2/3");
-        else
-            _tutorial_page->setText("3/3");
-        break;
-    }
+//    case 5:
+//    {
+//        auto level4_rule1 = _tutorialLayout->getChild(0)->getChildByName("level5_rule1");
+//    }
+//        auto level4_rule2 = _tutorialLayout->getChild(0)->getChildByName("level4_rule2");
+//        auto level4_rule3 = _tutorialLayout->getChild(0)->getChildByName("level4_rule3");
+//        if ((dir == "left" && level4_rule1->isVisible()) || (dir == "right" && level4_rule2->isVisible()))
+//        {
+//            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
+//            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+//            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(true);
+//        }
+//        else if ((dir == "left" && level4_rule2->isVisible()) || (dir == "right" && level4_rule3->isVisible()))
+//        {
+//            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(true);
+//            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
+//            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+//        }
+//        else
+//        {
+//            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
+//            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(true);
+//            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
+//        }
+//        if (level4_rule1->isVisible())
+//            _tutorial_page->setText("1/3");
+//        else if (level4_rule2->isVisible())
+//            _tutorial_page->setText("2/3");
+//        else
+//            _tutorial_page->setText("3/3");
+//        break;
+//    }
     }
 }
