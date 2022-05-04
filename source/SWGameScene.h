@@ -77,8 +77,11 @@ protected:
     int _maxBoardWidth;
     int _maxBoardHeight;
     int _defaultSquareSize;
+    int _defaultUnitSize;
     int _squareSizeAdjustedForScale;
+    float _unitSpritePaddingFactor;
     float _squareScaleFactor;
+    float _unitScaleFactor;
     std::string _topUI_scores_color;
     std::string _topUI_maxTurn_color;
     
