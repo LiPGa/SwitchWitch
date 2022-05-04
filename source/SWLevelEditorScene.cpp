@@ -61,6 +61,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _rows = _maxBoardHeight;
     _columns = _maxBoardWidth;
     auto defaultSquareSize = constants->getInt("square-size");
+//    auto defaultUnitSize = constants->getInt("unit-size");
     _currentBoardTurn = 0;
 
     // Initialize Scene
@@ -265,6 +266,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
 
     // Set the view of the board.
     _squareSizeAdjustedForScale = int(defaultSquareSize * min(_scale.width, _scale.height) * LEVEL_EDITOR_SQUARE_SCALE);
+//    _unitScaleFactor = (float)_squareSizeAdjustedForScale / defaultUnitSize / LEVEL_EDITOR_SQUARE_SCALE;
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _maxBoardWidth * _squareSizeAdjustedForScale, _maxBoardHeight * _squareSizeAdjustedForScale));
     _boardNode->setName("boardNode");
     _layout->addRelative("boardNode", cugl::scene2::Layout::Anchor::CENTER, Vec2(0, 0));
@@ -289,6 +291,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
 //            auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(unitPattern));
             unit->setViewNode(unitNode);
             unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+//            unitNode->setScale(_unitScaleFactor);
             squareNode->addChild(unitNode);
         }
     }
@@ -319,6 +322,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         auto test = getUnitType(unitType->getSubType(), Unit::colorToString(unitType->getColor()));
 //        auto unitNode = scene2::PolygonNode::allocWithTexture(_textures.at(getUnitType(unitType->getSubType(), Unit::colorToString(unitType->getColor()))));
         auto unitNode = scene2::SpriteNode::alloc(_textures.at(getUnitType(unitType->getSubType(), Unit::colorToString(unitType->getColor()))), 1, 1);
+//        unitNode->setScale(_unitScaleFactor);
         square->getUnit()->setViewNode(unitNode);
         square->getViewNode()->addChild(unitNode);
         i++;
@@ -361,7 +365,9 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
  *
  */
 std::string LevelEditorScene::getUnitType(std::string type, std::string color) {
-return type + "-" + color;
+    std::string name = type + "-" + color;
+    if (type != "king" && type != "empty" && type != "random") name = name + "-old";
+    return name;
 }
 
 bool LevelEditorScene::isInteger(const std::string& s) {

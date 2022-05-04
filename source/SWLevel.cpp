@@ -80,6 +80,11 @@ shared_ptr<JsonValue> Level::convertToJSON() {
     boardJSON->appendChild("two-star-condition", cugl::JsonValue::alloc((long int)twoStarThreshold));
     boardJSON->appendChild("three-star-condition", cugl::JsonValue::alloc((long int)threeStarThreshold));
     boardJSON->appendChild("background", cugl::JsonValue::alloc(backgroundName));
+    auto unitTypeArray = cugl::JsonValue::allocArray();
+    unitTypeArray->appendChild(cugl::JsonValue::alloc("empty"));
+    unitTypeArray->appendChild(cugl::JsonValue::alloc("empty"));
+    unitTypeArray->appendChild(cugl::JsonValue::alloc("empty"));
+    boardJSON->appendChild("unit-types", unitTypeArray);
     numOfKings = 0;
     shared_ptr<cugl::JsonValue> boardArray = cugl::JsonValue::allocArray();
     for (shared_ptr<Board> board : _boards) {

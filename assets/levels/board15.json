@@ -22,7 +22,7 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"random",
+				"sub-type":	"basic",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0

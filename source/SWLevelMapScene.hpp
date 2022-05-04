@@ -93,6 +93,17 @@ protected:
     cugl::Size _scale;
     std::shared_ptr<cugl::scene2::AnchoredLayout> _layout;
     std::shared_ptr<cugl::AudioQueue> _audioQueue;
+    std::shared_ptr<cugl::audio::AudioMixer> _audioMixer;
+    std::shared_ptr<cugl::AudioSample> _normalSample;
+    std::shared_ptr<cugl::AudioSample> _iceSample;
+
+    std::shared_ptr<cugl::AudioSample> _fireSample;
+
+    std::shared_ptr<cugl::audio::AudioPlayer> _normalNode;
+
+    std::shared_ptr<cugl::audio::AudioNode> _fireNode;
+    std::shared_ptr<cugl::audio::AudioNode> _iceNode;
+
     
     
 
@@ -157,6 +168,7 @@ public:
     int getLevel() const { return _chosenLevel; }
     
     void loadLevelButtons();
+    void adjust_scroll_bgm(float yposition);
     
 #pragma mark -
 #pragma mark Gameplay Handling
