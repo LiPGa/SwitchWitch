@@ -257,6 +257,11 @@ protected:
     /** The button to go to right page for tutorial*/
     std::shared_ptr<cugl::scene2::Button> _tutorialRightBtn;
     std::shared_ptr<cugl::scene2::Button> _almanacCloseBtn;
+    std::shared_ptr<cugl::scene2::Slider> _musicSlider;
+    std::shared_ptr<cugl::scene2::Slider> _soundSlider;
+    std::shared_ptr<cugl::AudioQueue>_audioQueue;
+    float _musicVolume = .5;
+    float _soundVolume = .5;
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
     std::shared_ptr<cugl::scene2::Button> _failBackButton;

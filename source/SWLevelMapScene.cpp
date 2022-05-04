@@ -70,9 +70,46 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 //    _layout = scene2::AnchoredLayout::alloc();
 
     setActive(false);
+    _audioMixer = audio::AudioMixer::alloc(3);
     _audioQueue = AudioEngine::get()->getMusicQueue();
-    _audioQueue->play(_assets->get<Sound>("normal"), true, .3, false);
+
+    _normalSample = AudioSample::alloc("sounds/normal.ogg", false);
+    _normalNode = audio::AudioPlayer::alloc(_normalSample);
+    _audioMixer -> AudioMixer::attach(0, _normalNode);
+
+    _iceSample = AudioSample::alloc("sounds/ice.ogg", false);
+    _iceNode = audio::AudioPlayer::alloc(_iceSample);
+    _audioMixer->AudioMixer::attach(1, _iceNode);
+
+    _fireSample = AudioSample::alloc("sounds/fire.ogg", false);
+    _fireNode = audio::AudioPlayer::alloc(_fireSample);
+    _audioMixer->AudioMixer::attach(2, _fireNode);
+
+    _audioQueue->play(_audioMixer,true);
+    _normalNode->setGain(1);
+    _iceNode->setGain(0);
+    _fireNode->setGain(0);
+
     return true;
+}
+
+void LevelMapScene::adjust_scroll_bgm(float yposition) {
+    CULog("%d ypos", yposition);
+    if (yposition >-700) {
+        _normalNode->setGain(1);
+        _iceNode->setGain(0);
+        _fireNode->setGain(0);
+    }
+    if (yposition > -1300  &&  yposition < -700) {
+        _normalNode->setGain(0);
+        _iceNode->setGain(1);
+        _fireNode->setGain(0);
+    }
+    if (yposition < -1300) {
+        _normalNode->setGain(0);
+        _iceNode->setGain(0);
+        _fireNode->setGain(1);
+    }
 }
 
 /**
@@ -155,6 +192,8 @@ void LevelMapScene::update(float dt) {
     } else if (_input.didRelease()) {
         _currentState = NOACTION;
     }
+    //adjust_scroll_bgm(_scrollPane->getHeight());
+    adjust_scroll_bgm(_scrollPane->getPositionY());
 }
 
 
