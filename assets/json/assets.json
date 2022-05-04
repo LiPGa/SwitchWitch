@@ -2283,8 +2283,8 @@
                                 "key": "helpbutton"
                             },
                             "layout": {
-                                "y_anchor": "middle",
                                 "x_anchor": "center",
+                                "y_anchor": "bottom",
                                 "x_offset": 0.0,
                                 "y_offset": 0.2
                             }
@@ -2310,7 +2310,7 @@
                                 "y_anchor": "bottom",
                                 "x_anchor": "center",
                                 "x_offset": 0.0,
-                                "y_offset": 0.3
+                                "y_offset": 0.36
                             }
                         }
                     }
