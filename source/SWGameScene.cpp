@@ -378,6 +378,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             // almanac
             _almanacbutton->setVisible(false);
             _almanacbutton->deactivate();
+            _scoreExplanationButton->deactivate();
             // tutorial
             _tutorialLayout->setVisible(false);
             _tutorialActive = false;
@@ -414,6 +415,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             // almanac
             _almanacbutton->setVisible(true);
             _almanacbutton->activate();
+            _scoreExplanationButton->activate();
             CULog("Pressed help menu close button");
         } });
 
