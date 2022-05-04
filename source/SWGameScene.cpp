@@ -1251,14 +1251,18 @@ void GameScene::update(float timestep)
                 if (upcomingUnitType != "basic" && upcomingUnitType != "random" && upcomingUnitType != "empty")
                 {
                     _upcomingUnitNode->setPosition(upcomingSquarePos + Vec2(0, _squareSizeAdjustedForScale));
-                    _upcomingUnitNode->setScale((float)_squareSizeAdjustedForScale / (float)_defaultSquareSize);
+                    _upcomingUnitNode->setAnchor(Vec2::ANCHOR_CENTER);
+                    float squareSizeFactor = (float)_squareSizeAdjustedForScale / (float)_defaultSquareSize;
+                    _upcomingUnitNode->setScale(squareSizeFactor);
                     auto upcomingDirectionNode = scene2::PolygonNode::allocWithTexture(_textures.at("special_" + upcomingUnitDirection + "_square"));
-                    upcomingDirectionNode->setPosition(Vec2(81 + _squareSizeAdjustedForScale / 2, 81 + _squareSizeAdjustedForScale));
+                    upcomingDirectionNode->setAnchor(Vec2::ANCHOR_CENTER);
+                    upcomingDirectionNode->setPosition(Vec2(_upcomingUnitNode->getWidth() / 2, _upcomingUnitNode->getHeight() / 2.1) / squareSizeFactor);
                     upcomingDirectionNode->setScale(0.8f);
                     _upcomingUnitNode->addChild(upcomingDirectionNode);
                     auto upcomingTextureNode = scene2::PolygonNode::allocWithTexture(_textures.at(upcomingUnitType + "-" + upcomingUnitColor));
-                    upcomingTextureNode->setScale(0.8f);
-                    upcomingTextureNode->setPosition(Vec2(81 + _squareSizeAdjustedForScale / 2, 81 + _squareSizeAdjustedForScale));
+                    upcomingTextureNode->setScale(0.8f * _unitScaleFactor);
+                    upcomingTextureNode->setAnchor(Vec2::ANCHOR_CENTER);
+                    upcomingTextureNode->setPosition(Vec2(_upcomingUnitNode->getWidth() / 2, _upcomingUnitNode->getHeight() / 1.7) / squareSizeFactor);
                     _upcomingUnitNode->addChild(upcomingTextureNode);
                     _upcomingUnitNode->setVisible(true);
                 }
