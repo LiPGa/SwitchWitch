@@ -2319,88 +2319,98 @@
             }
         },
         "almanac"  : {
-            "type"   : "Button",
-            "data"   : {
-                "upnode"   : "up",
-                "size"    : [200, 100],
-                "visible"  : true,
-                "pushsize" : true,
-                "anchor"   : [3.9,1.22],
-                "scale"    : 0.2
+            "type": "Node",
+            "format": {
+                "type": "Anchored",
+                "x_alignment": "right",
+                "y_alignment": "top"
             },
             "children" : {
-                "up"       : {
-                    "type"   : "Image",
+                "btn": {
+                    "type"   : "Button",
                     "data"   : {
-                        "texture"  : "almanac-btn"
-                    }
-                },
-                "unit1"       : {
-                    "type"   : "Image",
-                    "data"   : {
-                        "texture"  : "icon-basic",
-                        "anchor" : [0.36, 0.27],
-                        "scale": 0.75
-                    }
-                },
-                "unit2"       : {
-                    "type"   : "Image",
-                    "data"   : {
-                        "texture"  : "icon-special2",
-                        "anchor" : [0.09, 0.27],
-                        "scale": 0.75
-                    }
-                },
-                "unit2-missing"       : {
-                    "type"   : "Image",
-                    "data"   : {
-                        "visible" : false,
-                        "texture"  : "archer-missing",
-                        "anchor" : [0.09, 0.27],
-                        "scale": 0.75
-                    }
-                },
-                "unit3"       : {
-                    "type"   : "Image",
-                    "data"   : {
-                        "texture"  : "icon-special3",
-                        "anchor" : [-0.18, 0.27],
-                        "scale": 0.75
-                    }
-                },
-                "unit3-missing"       : {
-                    "type"   : "Image",
-                    "data"   : {
-                        "visible" : false,
-                        "texture"  : "knight-missing",
-                        "anchor" : [-0.18, 0.27],
-                        "scale": 0.75
-                    }
-                },
-                "unit4"       : {
-                    "type"   : "Image",
-                    "data"   : {
-                        "texture"  : "icon-special4",
-                        "anchor" : [-0.45, 0.27],
-                        "scale": 0.75
-                    }
-                },
-                "unit4-missing"       : {
-                    "type"   : "Image",
-                    "data"   : {
-                        "visible" : false,
-                        "texture"  : "babarian-missing",
-                        "anchor" : [-0.45, 0.27],
-                        "scale": 0.75
+                        "upnode"   : "up",
+                        "size"     : [200, 100],
+                        "visible"  : true,
+                        "pushsize" : true,
+                        "anchor"   : [0.5,0.5],
+                        "scale"    : 0.2
+                    },
+                    "layout": {
+                        "x_anchor" : "right",
+                        "y_anchor" : "top",
+                        "x_offset": -0.17,
+                        "y_offset": -0.18,
+                        "absolute": false
+                    },
+                    "children" : {
+                        "up"       : {
+                            "type"   : "Image",
+                            "data"   : {
+                                "texture"  : "almanac-btn"
+                            }
+                        },
+                        "unit1"       : {
+                            "type"   : "Image",
+                            "data"   : {
+                                "texture"  : "icon-basic",
+                                "anchor" : [0.3, 0.18],
+                                "scale": 0.75
+                            }
+                        },
+                        "unit2"       : {
+                            "type"   : "Image",
+                            "data"   : {
+                                "texture"  : "icon-special2",
+                                "anchor" : [-0.2, 0.18],
+                                "scale": 0.75
+                            }
+                        },
+                        "unit2-missing"       : {
+                            "type"   : "Image",
+                            "data"   : {
+                                "visible" : false,
+                                "texture"  : "archer-missing",
+                                "anchor" : [-0.2, 0.18],
+                                "scale": 0.75
+                            }
+                        },
+                        "unit3"       : {
+                            "type"   : "Image",
+                            "data"   : {
+                                "texture"  : "icon-special3",
+                                "anchor" : [-0.7, 0.18],
+                                "scale": 0.75
+                            }
+                        },
+                        "unit3-missing"       : {
+                            "type"   : "Image",
+                            "data"   : {
+                                "visible" : false,
+                                "texture"  : "knight-missing",
+                                "anchor" : [-0.7, 0.18],
+                                "scale": 0.75
+                            }
+                        },
+                        "unit4"       : {
+                            "type"   : "Image",
+                            "data"   : {
+                                "texture"  : "icon-special4",
+                                "anchor" : [-1.2, 0.18],
+                                "scale": 0.75
+                            }
+                        },
+                        "unit4-missing"       : {
+                            "type"   : "Image",
+                            "data"   : {
+                                "visible" : false,
+                                "texture"  : "babarian-missing",
+                                "anchor" : [-1.2, 0.18],
+                                "scale": 0.75
+                            }
+                        }
                     }
                 }
-            },
-            "layout" : {
-                "x_anchor" : "center",
-                "y_anchor" : "middle",
-                "x_offset" : 0,
-                "y_offset" : 0.7,
-                "absolute" : false
             }
         },
         "failresult": {
