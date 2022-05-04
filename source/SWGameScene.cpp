@@ -1445,7 +1445,9 @@ void GameScene::update(float timestep)
                 }
                 break;
             case Unit::State::ATTACKING:
-                AudioEngine::get()->play("attacksound", _assets->get<Sound>("attacksound"), false, _soundVolume, false);
+                if (AudioEngine::get()->getState("attacksound") != AudioEngine::State::PLAYING) {
+                    AudioEngine::get()->play("attacksound", _assets->get<Sound>("attacksound"), false, _soundVolume, false);
+                }
                 for (auto atkSquare : _board->getInitallyAttackedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit()))
                 {
                     if (atkSquare->getUnit()->getState() == Unit::State::IDLE)
