@@ -1699,7 +1699,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _board = Board::alloc(_level->getNumberOfColumns(),_level->getNumberOfRows());
     _board->setViewNode(_boardNode);
     // Set the view of the board.
-    _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height) * (min((float)_maxBoardHeight / (float)_level->getNumberOfRows(), (float)_maxBoardWidth / (float)_level->getNumberOfColumns()));
+    _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height) * (min((float)_maxBoardHeight / (float)_level->getNumberOfRows(), (float)_maxBoardWidth / (float)_level->getNumberOfColumns())) * 1.25;
     _squareScaleFactor = (float)_squareSizeAdjustedForScale / (float)_defaultSquareSize;
     _unitScaleFactor =  (float)_squareSizeAdjustedForScale / (float)_defaultUnitSize / _squareScaleFactor / _unitSpritePaddingFactor;
     _boardNode->setPolygon(Rect(0, 0, _level->getNumberOfColumns() * _squareSizeAdjustedForScale, _level->getNumberOfRows() * _squareSizeAdjustedForScale));
