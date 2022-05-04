@@ -79,6 +79,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _maxBoardWidth = boardSize.at(0);
     _maxBoardHeight = boardSize.at(1);
     _defaultSquareSize = constants->getInt("square-size");
+    _defaultUnitSize = constants->getInt("unit-size");
+    _unitSpritePaddingFactor = constants->getFloat("unit-sprite-padding-factor");
     _topUI_scores_color = constants->getString("topUI-scores-color");
     _topUI_maxTurn_color = constants->getString("topUI-maxTurn-color");
 
@@ -778,12 +780,16 @@ void GameScene::refreshUnitAndSquareView(shared_ptr<Square> sq) {
 void GameScene::refreshUnitView(shared_ptr<Square> sq) {
     auto unit = sq->getUnit();
     auto unitNode = unit->getViewNode();
+    
     std::string unitSubtype = unit->getSubType();
     if (unitSubtype != "basic") unit->setSpecial(true);
     else unit->setSpecial(false);
     sq->getViewNode()->removeAllChildren();
     if (unitNode->getParent() == NULL) sq->getViewNode()->addChild(unitNode);
     if (_debug) unitNode->setAngle(unit->getAngleBetweenDirectionAndDefault());
+    float inverseSquareFactor = 1 / _squareScaleFactor;
+    unitNode->setPosition(Vec2::ONE * inverseSquareFactor * (_squareSizeAdjustedForScale / 2));
+    unitNode->setScale(_unitScaleFactor);
 }
 
 /**
@@ -851,6 +857,10 @@ void GameScene::deconfirmSwap() {
     _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
     _selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
     //_swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
+    for (shared_ptr<Square> protectedSquare : _protectedSquares)
+    {
+        protectedSquare->getUnit()->getViewNode()->removeAllChildren();
+    }
     for (shared_ptr<Square> square : _board->getAllSquares())
     {
         updateSquareTexture(square);
@@ -1117,12 +1127,12 @@ void GameScene::update(float timestep)
                 
                 // Restore the size of the previous enlarged unitNode
                 if (_enlargedUnitNode != NULL){
-                    _enlargedUnitNode->setScale(BACK2NORMAL);
+                    _enlargedUnitNode->setScale(_unitScaleFactor * BACK2NORMAL);
                 }
                 
                 // Enlarge the new selected unit
                 _enlargedUnitNode = _selectedSquare->getUnit()->getViewNode();
-                _enlargedUnitNode->setScale(ENLARGE);
+                _enlargedUnitNode->setScale(_unitScaleFactor * ENLARGE);
                 
                 std::shared_ptr<Square> replacementSquare = _selectedSquare == NULL ? NULL : _level->getBoard(_currentReplacementDepth[_board->flattenPos(_selectedSquare->getPosition().x, _selectedSquare->getPosition().y)] + 1)->getSquare(_selectedSquare->getPosition());
                 auto upcomingUnitType = replacementSquare->getUnit()->getSubType();
@@ -1169,9 +1179,11 @@ void GameScene::update(float timestep)
                 }
                 for (shared_ptr<Square> protectedSquare : _protectedSquares)
                 {
+                    auto protectedUnit = protectedSquare->getUnit();
                     _shieldNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("shield"));
-                    protectedSquare->getViewNode()->addChild(_shieldNode);
-//                    protectedSquare->getViewNode()->setTexture(_textures.at("shield"));
+                    _shieldNode->setScale(1 / protectedUnit->getViewNode()->getScale());
+                    _shieldNode->setPosition(Vec2(protectedUnit->getViewNode()->getWidth(), protectedUnit->getViewNode()->getHeight()));
+                    protectedUnit->getViewNode()->addChildWithName(_shieldNode, "shield");
                 }
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
@@ -1187,7 +1199,7 @@ void GameScene::update(float timestep)
     {
         _upcomingUnitNode->setVisible(false);
         _upcomingUnitNode->removeAllChildren();
-        if (_enlargedUnitNode) _enlargedUnitNode->setScale(BACK2NORMAL);
+        if (_enlargedUnitNode) _enlargedUnitNode->setScale(_unitScaleFactor * BACK2NORMAL);
 
         for (shared_ptr<Square> square : _board->getAllSquares())
         {
@@ -1417,7 +1429,7 @@ void GameScene::replaceUnitOnSquare(shared_ptr<Square> sq) {
     sq->setInteractable(unitSubType != "empty");
     sq->getViewNode()->setVisible(unitSubType != "empty");
 //    refreshUnitAndSquareView(sq);
-    if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getUnit()->getViewNode());
+    if (unitSubType == "king") loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getViewNode());
 }
 
 /**
@@ -1681,6 +1693,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     // Set the view of the board.
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height) * (min((float)_maxBoardHeight / (float)_level->getNumberOfRows(), (float)_maxBoardWidth / (float)_level->getNumberOfColumns()));
     _squareScaleFactor = (float)_squareSizeAdjustedForScale / (float)_defaultSquareSize;
+    _unitScaleFactor =  (float)_squareSizeAdjustedForScale / (float)_defaultUnitSize / _squareScaleFactor / _unitSpritePaddingFactor;
     _boardNode->setPolygon(Rect(0, 0, _level->getNumberOfColumns() * _squareSizeAdjustedForScale, _level->getNumberOfRows() * _squareSizeAdjustedForScale));
     _boardNode->setTexture(_textures.at("transparent"));
     for (int i = 0; i < _level->getNumberOfColumns(); i++) {
@@ -1688,6 +1701,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             auto test = "square-" + _level->backgroundName;
             shared_ptr<scene2::PolygonNode> squareNode = scene2::PolygonNode::allocWithTexture(_textures.at("square-" + _level->backgroundName));
             auto squarePosition = Vec2(i, j);
+            squareNode->setAnchor(Vec2::ANCHOR_CENTER);
             squareNode->setPosition((Vec2(squarePosition.x, squarePosition.y) * _squareSizeAdjustedForScale) + Vec2::ONE * (_squareSizeAdjustedForScale / 2));
             squareNode->setScale(_squareScaleFactor);
             squareNode->setPriority(SQUARE_Z);
@@ -1716,7 +1730,10 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
             sq->setUnit(newUnit);
             auto unitNode = newUnit->getViewNode();
 //            auto unitNode = scene2::PolygonNode::allocWithTextzure(_textures.at(unitPattern));
-            unitNode->setAnchor(Vec2::ANCHOR_CENTER);
+            unitNode->setAnchor(Vec2::ANCHOR_CENTER + Vec2(0, -0.2));
+            float inverseSquareFactor = 1.0f / _squareScaleFactor;
+            unitNode->setPosition(Vec2::ONE * inverseSquareFactor * (_squareSizeAdjustedForScale / 2));
+            unitNode->setScale(_unitScaleFactor);
             unitNode->setPriority(UNIT_Z);
 //            newUnit->setViewNode(unitNode);
 
@@ -1753,13 +1770,19 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
     _movedn = cugl::scene2::MoveBy::alloc(Vec2(0,inverseSquareFactor * -_squareSizeAdjustedForScale),SWAP_DURATION);
 }
 
-void GameScene::loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> unitNode) {
+void GameScene::loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> squareNode) {
     std::string unitsNeededToKill = strtool::format("%d", goal);
     _info_text = scene2::Label::allocWithText(unitsNeededToKill, _assets->get<Font>("pixel32"));
-    _info_text->setScale(3);
+    _info_text->setScale(5);
     _info_text->setColor(Color4::RED);
-    _info_text->setPosition(Vec2(unitNode->getPosition().x+Vec2::ONE.x, unitNode->getPosition().y+Vec2::ONE.y));
-    unitNode->addChildWithName(_info_text, "info");
+    _info_text->setPriority(0);
+    _info_text->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
+    float inverseSquareFactor = 1 / _squareScaleFactor;
+    _info_text->setPosition(Vec2(squareNode->getSize().width, squareNode->getSize().height) / squareNode->getScale() / 1.1);
+//    _info_text->setLayout(Vec2::)
+//    _info_text->setPosition(Vec2::ONE);
+//    _info_text->setPosition(Vec2(unitNode->getPosition().x+Vec2::ONE.x, unitNode->getPosition().y+Vec2::ONE.y));
+    squareNode->addChildWithName(_info_text, "info");
 //    CULog("text has priority of %f", _info_text->getPriority());
 //    CULog("unit has priority of %f", unitNode->getPriority());
 }
