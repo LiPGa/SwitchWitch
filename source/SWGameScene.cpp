@@ -145,23 +145,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Initialize Board
     _board = Board::alloc(_maxBoardWidth, _maxBoardHeight);
 
-    // Load the current number of turns left for the player
-    std::string turnMsg = strtool::format("%d", _turns);
-    _turn_text = scene2::Label::allocWithText(turnMsg, assets->get<Font>("pixel32"));
-    _turn_text->setScale(0.5);
-    _turn_text->setForeground(Color4::WHITE);
-    _guiNode->addChildWithName(_turn_text, "turn_text");
-    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 4.5, -0.43 * (_topuibackgroundNode->getSize().height)));
-    
-    // Load the maximum number of turns for this level
-    std::string maxTurnMsg = "/ " + strtool::format("%d", _maxturns);
-    _maxTurn_text = scene2::Label::allocWithText(maxTurnMsg, assets->get<Font>("pixel32"));
-    _maxTurn_text->setScale(0.5);
-    _maxTurn_text->setForeground(Color4(_topUI_maxTurn_color));
-    _guiNode->addChildWithName(_maxTurn_text, "maxTurn_text");
-    _layout->addAbsolute("maxTurn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 5.25, -0.43 * (_topuibackgroundNode->getSize().height)));
-
-
     // -------- Set the view of the board --------------
     _squareSizeAdjustedForScale = _defaultSquareSize * min(_scale.width, _scale.height);
     _boardNode = scene2::PolygonNode::allocWithPoly(Rect(0, 0, _maxBoardWidth * _squareSizeAdjustedForScale, _maxBoardHeight * _squareSizeAdjustedForScale));
@@ -708,6 +691,22 @@ void GameScene::setTopUI(const std::shared_ptr<cugl::AssetManager> &assets,std::
     _layout->addAbsolute("oneStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint));
     _layout->addAbsolute("twoStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint + yInterval));
     _layout->addAbsolute("threeStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint + 2 * yInterval));
+    
+    // Load the current number of turns left for the player
+//    std::string turnMsg = to_string(_turns);
+    _turn_text = scene2::Label::allocWithText("xxx", assets->get<Font>("pixel32"));
+    _turn_text->setScale(0.5);
+    _turn_text->setForeground(Color4::WHITE);
+    _guiNode->addChildWithName(_turn_text, "turn_text");
+    _layout->addAbsolute("turn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 4.5, -0.43 * (_topuibackgroundNode->getSize().height)));
+    
+    // Load the maximum number of turns for this level
+//    std::string maxTurnMsg = "/ " + to_string(_maxturns);
+    _maxTurn_text = scene2::Label::allocWithText("xxx", assets->get<Font>("pixel32"));
+    _maxTurn_text->setScale(0.5);
+    _maxTurn_text->setForeground(Color4(_topUI_maxTurn_color));
+    _guiNode->addChildWithName(_maxTurn_text, "maxTurn_text");
+    _layout->addAbsolute("maxTurn_text", cugl::scene2::Layout::Anchor::TOP_RIGHT, Vec2(-_topuibackgroundNode->getSize().width / 5.25, -0.43 * (_topuibackgroundNode->getSize().height)));
 };
 
 /**
@@ -1287,8 +1286,8 @@ void GameScene::update(float timestep)
     }
     
     // Update the remaining turns
-    _turn_text->setText(strtool::format("%d", _turns));
-    _maxTurn_text->setText("/ " + strtool::format("%d", _maxturns));
+    _turn_text->setText(to_string(_turns));
+//    _maxTurn_text->setText("/ " + to_string(_maxturns));
     
     // Animate all units
     for (shared_ptr<Square> square : _board->getAllSquares())
@@ -1666,6 +1665,12 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
         { Unit::Color(1), 0.33 },
         { Unit::Color(2), 0.33 }
     };
+    
+    // Load the turn texts
+    std::string turnMsg = to_string(_turns);
+    _turn_text->setText(turnMsg);
+    std::string maxTurnMsg = "/ " + to_string(_maxturns);
+    _maxTurn_text->setText(maxTurnMsg);
     
     // Load star thresholds
     std::string oneStarMsg = strtool::format("%d", _level->oneStarThreshold);
