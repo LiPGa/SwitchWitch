@@ -685,6 +685,29 @@ void GameScene::setTopUI(const std::shared_ptr<cugl::AssetManager> &assets,std::
     _layout->addAbsolute("threeStar1", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint, yStartPoint + yInterval * 2));
     _layout->addAbsolute("threeStar2", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + xInterval, yStartPoint + yInterval * 2));
     _layout->addAbsolute("threeStar3", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + xInterval * 2, yStartPoint + yInterval * 2));
+    
+    // Load scores for the star system
+    _oneStar_text = scene2::Label::allocWithText("xxx", _assets->get<Font>("pixel32"));
+    _guiNode->addChildWithName(_oneStar_text, "oneStar_text");
+    
+    _twoStar_text = scene2::Label::allocWithText("xxx", _assets->get<Font>("pixel32"));
+    _guiNode->addChildWithName(_twoStar_text, "twoStar_text");
+
+    _threeStar_text = scene2::Label::allocWithText("xxx", _assets->get<Font>("pixel32"));
+    _guiNode->addChildWithName(_threeStar_text, "threeStar_text");
+    
+    std::shared_ptr<cugl::scene2::Label> starText[3] = {_oneStar_text, _twoStar_text, _threeStar_text};
+    for (auto text : starText) {
+        text->setScale(0.45);
+        text->setHorizontalAlignment(HorizontalAlign::RIGHT);
+        text->setAnchor(Vec2(1.0, 0.5));
+        text->setForeground(Color4(_topUI_scores_color));
+    };
+    
+    // Layout of the scores for the star system
+    _layout->addAbsolute("oneStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint));
+    _layout->addAbsolute("twoStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint + yInterval));
+    _layout->addAbsolute("threeStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint + 2 * yInterval));
 };
 
 /**
@@ -1644,35 +1667,15 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON) {
         { Unit::Color(2), 0.33 }
     };
     
-    // Load scores for the star system
+    // Load star thresholds
     std::string oneStarMsg = strtool::format("%d", _level->oneStarThreshold);
-    _oneStar_text = scene2::Label::allocWithText(oneStarMsg, _assets->get<Font>("pixel32"));
-    _guiNode->addChildWithName(_oneStar_text, "oneStar_text");
+    _oneStar_text->setText(oneStarMsg, true);
     
     std::string twoStarMsg = strtool::format("%d", _level->twoStarThreshold);
-    _twoStar_text = scene2::Label::allocWithText(twoStarMsg, _assets->get<Font>("pixel32"));
-    _guiNode->addChildWithName(_twoStar_text, "twoStar_text");
+    _twoStar_text->setText(twoStarMsg, true);
     
     std::string threeStarMsg = strtool::format("%d", _level->threeStarThreshold);
-    _threeStar_text = scene2::Label::allocWithText(threeStarMsg, _assets->get<Font>("pixel32"));
-    _guiNode->addChildWithName(_threeStar_text, "threeStar_text");
-    
-    std::shared_ptr<cugl::scene2::Label> starText[3] = {_oneStar_text, _twoStar_text, _threeStar_text};
-    for (auto text : starText) {
-        text->setScale(0.35);
-        text->setHorizontalAlignment(HorizontalAlign::RIGHT);
-        text->setAnchor(Vec2(1.0, 0.5));
-        text->setForeground(Color4(_topUI_scores_color));
-    };
-    
-    // Layout of the scores for the star system
-    float xStartPoint = 10 -_topuibackgroundNode->getSize().width / 4.3;
-    float xInterval = _topuibackgroundNode->getSize().width * 0.039;
-    float yStartPoint = -0.4 * (_topuibackgroundNode->getSize().height);
-    float yInterval = -0.11 * (_topuibackgroundNode->getSize().height);
-    _layout->addAbsolute("oneStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint));
-    _layout->addAbsolute("twoStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint + yInterval));
-    _layout->addAbsolute("threeStar_text", cugl::scene2::Layout::Anchor::TOP_CENTER, Vec2(xStartPoint + 4 * xInterval, yStartPoint + 2 * yInterval));
+    _threeStar_text->setText(threeStarMsg, true);
     
     // Create the squares & units and put them in the map
     _board->getViewNode()->getChild(0)->removeAllChildren();
