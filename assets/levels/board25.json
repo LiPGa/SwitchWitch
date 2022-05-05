@@ -7,7 +7,7 @@
 	"two-star-condition":	5,
 	"three-star-condition":	5,
 	"background":	"volcano",
-    "unit-types": ["unit1", "unit2", "unit3"],
+	"unit-types":	["empty", "empty", "empty"],
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"random",
@@ -22,12 +22,6 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
 				"sub-type":	"basic",
 				"color":	"red",
 				"direction":	[1, 0],
@@ -46,7 +40,7 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"random",
+				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -71,18 +65,18 @@
 			}, {
 				"type":	"unit",
 				"sub-type":	"diagonal",
+				"color":	"green",
+				"direction":	[1, 0],
+				"unitsNeededToKill":	0
+			}, {
+				"type":	"unit",
+				"sub-type":	"random",
 				"color":	"blue",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
-				"sub-type":	"random",
+				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -96,7 +90,7 @@
 				"type":	"unit",
 				"sub-type":	"basic",
 				"color":	"blue",
-				"direction":	[1, 0],
+				"direction":	[0, 1],
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
@@ -109,7 +103,7 @@
 				"sub-type":	"random",
 				"color":	"red",
 				"direction":	[1, 0],
-				"unitsNeededToKill":	0
+				"unitsNeededToKill":	5
 			}, {
 				"type":	"unit",
 				"sub-type":	"basic",
@@ -118,7 +112,7 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"random",
+				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -143,12 +137,18 @@
 			}, {
 				"type":	"unit",
 				"sub-type":	"basic",
-				"color":	"red",
+				"color":	"blue",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
 				"sub-type":	"random",
+				"color":	"red",
+				"direction":	[1, 0],
+				"unitsNeededToKill":	0
+			}, {
+				"type":	"unit",
+				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
@@ -184,7 +184,7 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"random",
+				"sub-type":	"empty",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
