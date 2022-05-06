@@ -73,7 +73,16 @@
         "basic-dying-blue",
         "basic-dying-red",
         "basic-dying-green",
-   
+        
+        "basic-red-selected-start",
+        "basic-red-selected-moving",
+        "basic-red-selected-end",
+        "basic-green-selected-start",
+        "basic-green-selected-moving",
+        "basic-green-selected-end",
+        "basic-blue-selected-start",
+        "basic-blue-selected-moving",
+        "basic-blue-selected-end",
   
         "diagonal-blue",
         "diagonal-green",
@@ -90,6 +99,16 @@
         "diagonal-dying-red",
         "diagonal-dying-blue",
         "diagonal-dying-green",
+        
+        "diagonal-red-selected-start",
+        "diagonal-red-selected-moving",
+        "diagonal-red-selected-end",
+        "diagonal-green-selected-start",
+        "diagonal-green-selected-moving",
+        "diagonal-green-selected-end",
+        "diagonal-blue-selected-start",
+        "diagonal-blue-selected-moving",
+        "diagonal-blue-selected-end",
     
       
       
@@ -108,6 +127,16 @@
         "three-way-dying-red",
         "three-way-dying-blue",
         "three-way-dying-green",
+        
+        "three-way-red-selected-start",
+        "three-way-red-selected-moving",
+        "three-way-red-selected-end",
+        "three-way-green-selected-start",
+        "three-way-green-selected-moving",
+        "three-way-green-selected-end",
+        "three-way-blue-selected-start",
+        "three-way-blue-selected-moving",
+        "three-way-blue-selected-end",
        
         
        
@@ -126,6 +155,16 @@
         "two-forward-dying-red",
         "two-forward-dying-blue",
         "two-forward-dying-green",
+        
+        "two-forward-red-selected-start",
+        "two-forward-red-selected-moving",
+        "two-forward-red-selected-end",
+        "two-forward-green-selected-start",
+        "two-forward-green-selected-moving",
+        "two-forward-green-selected-end",
+        "two-forward-blue-selected-start",
+        "two-forward-blue-selected-moving",
+        "two-forward-blue-selected-end",
         
  
       

@@ -677,112 +677,120 @@
         "illustration4": {
             "file": "textures/illustration-4.png"
         },
-        "soldier-red-selected-start": {
+        
+        
+        "basic-red-selected-start": {
             "file": "textures/soldier_red_selected_start.png"
         },
-        "soldier-red-selected-moving": {
+        "basic-red-selected-moving": {
             "file": "textures/soldier_red_selected_moving.png"
         },
-        "soldier-red-selected-end": {
+        "basic-red-selected-end": {
             "file": "textures/soldier_red_selected_end.png"
         },
-        "soldier-green-selected-start": {
+        "basic-green-selected-start": {
             "file": "textures/soldier_orange_selected_start.png"
         },
-        "soldier-green-selected-moving": {
+        "basic-green-selected-moving": {
             "file": "textures/soldier_orange_selected_moving.png"
         },
-        "soldier-green-selected-end": {
+        "basic-green-selected-end": {
             "file": "textures/soldier_orange_selected_end.png"
         },
-        "soldier-blue-selected-start": {
+        "basic-blue-selected-start": {
             "file": "textures/soldier_blue_selected_start.png"
         },
-        "soldier-blue-selected-moving": {
+        "basic-blue-selected-moving": {
             "file": "textures/soldier_blue_selected_moving.png"
         },
-        "soldier-blue-selected-end": {
+        "basic-blue-selected-end": {
             "file": "textures/soldier_blue_selected_end.png"
         },
-        "archer-red-selected-start": {
+        
+        
+        "two-forward-red-selected-start": {
             "file": "textures/archer_red_selected_start.png"
         },
-        "archer-red-selected-moving": {
+        "two-forward-red-selected-moving": {
             "file": "textures/archer_red_selected_moving.png"
         },
-        "archer-red-selected-end": {
+        "two-forward-red-selected-end": {
             "file": "textures/archer_red_selected_end.png"
         },
-        "archer-green-selected-start": {
+        "two-forward-green-selected-start": {
             "file": "textures/archer_orange_selected_start.png"
         },
-        "archer-green-selected-moving": {
+        "two-forward-green-selected-moving": {
             "file": "textures/archer_orange_selected_moving.png"
         },
-        "archer-green-selected-end": {
+        "two-forward-green-selected-end": {
             "file": "textures/archer_orange_selected_end.png"
         },
-        "archer-blue-selected-start": {
+        "two-forward-blue-selected-start": {
             "file": "textures/archer_blue_selected_start.png"
         },
-        "archer-blue-selected-moving": {
+        "two-forward-blue-selected-moving": {
             "file": "textures/archer_blue_selected_moving.png"
         },
-        "archer-blue-selected-end": {
+        "two-forward-blue-selected-end": {
             "file": "textures/archer_blue_selected_end.png"
         },
-        "barbarian-red-selected-start": {
+        
+        
+        "diagonal-red-selected-start": {
             "file": "textures/barbarian_red_selected_start.png"
         },
-        "barbarian-red-selected-moving": {
+        "diagonal-red-selected-moving": {
             "file": "textures/barbarian_red_selected_moving.png"
         },
-        "barbarian-red-selected-end": {
+        "diagonal-red-selected-end": {
             "file": "textures/barbarian_red_selected_end.png"
         },
-        "barbarian-green-selected-start": {
+        "diagonal-green-selected-start": {
             "file": "textures/barbarian_orange_selected_start.png"
         },
-        "barbarian-green-selected-moving": {
+        "diagonal-green-selected-moving": {
             "file": "textures/barbarian_orange_selected_moving.png"
         },
-        "barbarian-green-selected-end": {
+        "diagonal-green-selected-end": {
             "file": "textures/barbarian_orange_selected_end.png"
         },
-        "barbarian-blue-selected-start": {
+        "diagonal-blue-selected-start": {
             "file": "textures/barbarian_blue_selected_start.png"
         },
-        "barbarian-blue-selected-moving": {
+        "diagonal-blue-selected-moving": {
             "file": "textures/barbarian_blue_selected_moving.png"
         },
-        "barbarian-blue-selected-end": {
+        "diagonal-blue-selected-end": {
             "file": "textures/barbarian_blue_selected_end.png"
         },
-        "knight-red-selected-start": {
+        
+        
+        "three-way-red-selected-start": {
             "file": "textures/knight_red_selected_start.png"
         },
-        "knight-red-selected-moving": {
+        "three-way-red-selected-moving": {
             "file": "textures/knight_red_selected_moving.png"
         },
-        "knight-red-selected-end": {
+        "three-way-red-selected-end": {
             "file": "textures/knight_red_selected_end.png"
         },
-        "knight-green-selected-start": {
+        "three-way-green-selected-start": {
             "file": "textures/knight_orange_selected_start.png"
         },
-        "knight-green-selected-moving": {
+        "three-way-green-selected-moving": {
             "file": "textures/knight_orange_selected_moving.png"
         },
-        "knight-green-selected-end": {
+        "three-way-green-selected-end": {
             "file": "textures/knight_orange_selected_end.png"
         },
-        "knight-blue-selected-start": {
+        "three-way-blue-selected-start": {
             "file": "textures/knight_blue_selected_start.png"
         },
-        "knight-blue-selected-moving": {
+        "three-way-blue-selected-moving": {
             "file": "textures/knight_blue_selected_moving.png"
         },
-        "knight-blue-selected-end": {
+        "three-way-blue-selected-end": {
             "file": "textures/knight_blue_selected_end.png"
         }
     },
