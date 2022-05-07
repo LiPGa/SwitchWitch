@@ -144,11 +144,9 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _currentState = SELECTING_UNIT;
     
     // --------------------- tutorial -----------------------
-    _tutorialTextures.insert({"tutorial_1", assets->get<Texture>("tutorial_1")});
-    _tutorialTextures.insert({"tutorial_2", assets->get<Texture>("tutorial_2")});
-    _tutorialTextures.insert({"tutorial_4", assets->get<Texture>("tutorial_4")});
-    _tutorialTextures.insert({"tutorial_5", assets->get<Texture>("tutorial_5")});
-    _tutorialTextures.insert({"tutorial_6", assets->get<Texture>("tutorial_6")});
+    for (int i=1; i<=6; i++) {
+        _tutorialTextures.insert({"tutorial_"+to_string(i), assets->get<Texture>("tutorial_"+to_string(i))});
+    }
     // default tutorial is level 1
     _tutorialLayout2 = assets->get<scene2::SceneNode>("tutorialLayout");
     _tutorialLayout2->setContentSize(dimen);
@@ -2190,17 +2188,14 @@ void GameScene::flipTutorialPage(std::string dir)
 }
 
 void GameScene::setTutorial() {
-    if (_currLevel == 1 || _currLevel == 2 || _currLevel == 4 || _currLevel == 5 || _currLevel == 6) {
+    if (_currLevel >= 1 && _currLevel <= 6) {
         _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_"+std::to_string(_currLevel)), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
-        CULog("tutorial_%s",std::to_string(_currLevel).c_str());
         _tutorialNode->setPosition(0.5*_dimen.width, 0.5*_dimen.height);
         _tutorialNode->setScale(0.27f);
         _tutorialLayout2->removeAllChildren();
         _tutorialLayout2->addChildWithName(_tutorialNode, "tutorialNode");
         _tutorialLayout2->setVisible(true);
-        _tutorialNode->setVisible(true);
     } else {
         _tutorialLayout2->setVisible(false);
     }
-    CULog("current level: %i", _currLevel);
 }
