@@ -176,6 +176,7 @@ void SwitchWitchApp::update(float timestep) {
                     _gameplay.setActive(true);
                     _gameplay.enterLevel();
                     _gameplay.setCurrLevel(level_num);
+                    _gameplay.setTutorial();
                     _scene = State::GAME;
                 }
                 break;

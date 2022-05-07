@@ -85,6 +85,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Initialize Scene
     dimen *= sceneHeight / dimen.height;
+    _dimen = dimen;
     if (!Scene2::init(dimen))
         return false;
 
@@ -141,7 +142,23 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 
     // Initialize state
     _currentState = SELECTING_UNIT;
+    
+    // --------------------- tutorial -----------------------
+    for (int i=1; i<=6; i++) {
+        _tutorialTextures.insert({"tutorial_"+to_string(i), assets->get<Texture>("tutorial_"+to_string(i))});
+    }
+    // default tutorial is level 1
+    _tutorialLayout2 = assets->get<scene2::SceneNode>("tutorialLayout");
+    _tutorialLayout2->setContentSize(dimen);
+    _tutorialLayout2->doLayout();
+    _guiNode->addChild(_tutorialLayout2);
+    _tutorialLayout2->setVisible(true);
+    _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_1"), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
 
+    _tutorialNode->setPosition(0.5*dimen.width, 0.45*dimen.height);
+    _tutorialNode->setScale(0.3f);
+    _tutorialLayout2->addChildWithName(_tutorialNode, "tutorialNode");
+    
     // Initialize Board
     _board = Board::alloc(_maxBoardWidth, _maxBoardHeight);
 
@@ -418,7 +435,25 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _scoreExplanationButton->activate();
             CULog("Pressed help menu close button");
         } });
-
+    
+//    // --------------------- tutorial -----------------------
+//    _tutorialTextures.insert({"tutorial_1", assets->get<Texture>("tutorial_1")});
+//    _tutorialTextures.insert({"tutorial_2", assets->get<Texture>("tutorial_2")});
+//    _tutorialTextures.insert({"tutorial_4", assets->get<Texture>("tutorial_4")});
+//    _tutorialTextures.insert({"tutorial_5", assets->get<Texture>("tutorial_5")});
+//    _tutorialTextures.insert({"tutorial_6", assets->get<Texture>("tutorial_6")});
+//    // default tutorial is level 1
+//    _tutorialLayout2 = assets->get<scene2::SceneNode>("tutorialLayout");
+//    _tutorialLayout2->setContentSize(dimen);
+//    _tutorialLayout2->doLayout();
+//    _guiNode->addChild(_tutorialLayout2);
+//    _tutorialLayout->setVisible(false);
+//    _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_1"), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
+//
+//    _tutorialNode->setPosition(0.5*dimen.width, 0.45*dimen.height);
+//    _tutorialNode->setScale(0.3f);
+//    _tutorialLayout2->addChildWithName(_tutorialNode, "tutorialNode");
+    
     _tutorial_page = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("tutorial_board_page"));
 
     _tutorialCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("tutorial_board_close"));
@@ -992,17 +1027,17 @@ void GameScene::update(float timestep)
     _input.update();
 
     // show tutorial when first enter the level
-    if (_enterLevel && !_tutorialActive)
-    {
-        showTutorial(_guiNode);
-        _enterLevel = false;
-    }
-    else if (!_tutorialActive)
-    {
-        _tutorialLeftBtn->deactivate();
-        _tutorialRightBtn->deactivate();
-        _tutorialCloseBtn->deactivate();
-    }
+//    if (_enterLevel && !_tutorialActive)
+//    {
+//        showTutorial(_guiNode);
+//        _enterLevel = false;
+//    }
+//    else if (!_tutorialActive)
+//    {
+//        _tutorialLeftBtn->deactivate();
+//        _tutorialRightBtn->deactivate();
+//        _tutorialCloseBtn->deactivate();
+//    }
 
     // help menu
     if (_isHelpMenuOpen)
@@ -1054,6 +1089,22 @@ void GameScene::update(float timestep)
         int newLevelNum = _levelJson->getInt("id") + 1;
         auto newBoardJson = _assets->get<JsonValue>("level" + std::to_string(newLevelNum));
         reset(newBoardJson);
+        _currLevel = newLevelNum;
+    }
+
+    // ------------- tutorial animation ----------------
+    _time_since_last_frame += timestep;
+    _time_since_start_animation += timestep;
+    if (_time_since_last_frame > _time_per_frame) {
+        _time_since_last_frame = 0.0f;
+        int frame = _tutorialNode->getFrame() + 1;
+        if (frame >= _tutorialNode->getSize()) {
+//            if (animationShouldLoop(_state)) frame = 0;
+//            else frame = _tutorialNode->getSize() - 1;
+            frame = 0;
+//            completedAnimation = true;
+        }
+        _tutorialNode->setFrame(frame);
     }
 
     if ((_turns == 0 || _kingsKilled) && _currentState != ANIMATION)
@@ -1767,6 +1818,7 @@ void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
     _tutorialActive = false;
     init(_assets);
     setLevel(boardJSON);
+    setTutorial();
 }
 
 /**
@@ -2009,9 +2061,9 @@ void GameScene::showTutorial(std::shared_ptr<cugl::scene2::SceneNode> node)
     case 1:
     {
         _tutorialLayout->setVisible(true);
-        _tutorialCloseBtn->activate();
-        _tutorialLeftBtn->activate();
-        _tutorialRightBtn->activate();
+//        _tutorialCloseBtn->activate();
+//        _tutorialLeftBtn->activate();
+//        _tutorialRightBtn->activate();
         _tutorialActive = true;
         _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(true);
         _tutorial_page->setText("1/2");
@@ -2020,9 +2072,9 @@ void GameScene::showTutorial(std::shared_ptr<cugl::scene2::SceneNode> node)
     case 3:
     {
         _tutorialLayout->setVisible(true);
-        _tutorialCloseBtn->activate();
-        _tutorialLeftBtn->activate();
-        _tutorialRightBtn->activate();
+//        _tutorialCloseBtn->activate();
+//        _tutorialLeftBtn->activate();
+//        _tutorialRightBtn->activate();
         _tutorialActive = true;
         _tutorialLayout->getChild(0)->getChildByName("level3_rule1")->setVisible(true);
         _tutorial_page->setText("1/2");
@@ -2031,9 +2083,7 @@ void GameScene::showTutorial(std::shared_ptr<cugl::scene2::SceneNode> node)
     case 5:
     {
         _tutorialLayout->setVisible(true);
-        _tutorialCloseBtn->activate();
-//        _tutorialLeftBtn->activate();
-//        _tutorialRightBtn->activate();
+//        _tutorialCloseBtn->activate();
         _tutorialLeftBtn->setVisible(false);
         _tutorialRightBtn->setVisible(false);
         _tutorialActive = true;
@@ -2044,9 +2094,7 @@ void GameScene::showTutorial(std::shared_ptr<cugl::scene2::SceneNode> node)
     case 6:
     {
         _tutorialLayout->setVisible(true);
-        _tutorialCloseBtn->activate();
-//        _tutorialLeftBtn->activate();
-//        _tutorialRightBtn->activate();
+//        _tutorialCloseBtn->activate();
         _tutorialLeftBtn->setVisible(false);
         _tutorialRightBtn->setVisible(false);
         _tutorialActive = true;
@@ -2057,9 +2105,7 @@ void GameScene::showTutorial(std::shared_ptr<cugl::scene2::SceneNode> node)
     case 7:
     {
         _tutorialLayout->setVisible(true);
-        _tutorialCloseBtn->activate();
-//        _tutorialLeftBtn->activate();
-//        _tutorialRightBtn->activate();
+//        _tutorialCloseBtn->activate();
         _tutorialLeftBtn->setVisible(false);
         _tutorialRightBtn->setVisible(false);
         _tutorialActive = true;
@@ -2138,5 +2184,18 @@ void GameScene::flipTutorialPage(std::string dir)
 //            _tutorial_page->setText("3/3");
 //        break;
 //    }
+    }
+}
+
+void GameScene::setTutorial() {
+    if (_currLevel >= 1 && _currLevel <= 6) {
+        _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_"+std::to_string(_currLevel)), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
+        _tutorialNode->setPosition(0.5*_dimen.width, 0.5*_dimen.height);
+        _tutorialNode->setScale(0.27f);
+        _tutorialLayout2->removeAllChildren();
+        _tutorialLayout2->addChildWithName(_tutorialNode, "tutorialNode");
+        _tutorialLayout2->setVisible(true);
+    } else {
+        _tutorialLayout2->setVisible(false);
     }
 }

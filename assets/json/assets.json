@@ -459,6 +459,24 @@
         "tutorial_right": {
             "file": "textures/tutorial_right.png"
         },
+        "tutorial_1": {
+            "file": "textures/tutorial_level_1.png"
+        },
+        "tutorial_2": {
+            "file": "textures/tutorial_level_2.png"
+        },
+        "tutorial_3": {
+            "file": "textures/tutorial_level_3.png"
+        },
+        "tutorial_4": {
+            "file": "textures/tutorial_level_4.png"
+        },
+        "tutorial_5": {
+            "file": "textures/tutorial_level_5.png"
+        },
+        "tutorial_6": {
+            "file": "textures/tutorial_level_6.png"
+        },
         "help_background": {
             "file": "textures/help_background.png"
         },
@@ -2315,6 +2333,14 @@
                         }
                     }
                 }
+            }
+        },
+        "tutorialLayout": {
+            "type": "Node",
+            "format": {
+                "type": "Anchored",
+                "x_alignment": "center",
+                "y_alignment": "middle"
             }
         },
         "tutorial": {
