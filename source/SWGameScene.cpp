@@ -1348,6 +1348,7 @@ void GameScene::update(float timestep)
                 }
                 for (shared_ptr<Square> protectedSquare : _protectedSquares)
                 {
+                    if (find(_attackedSquares.begin(), _attackedSquares.end(), protectedSquare)!=_attackedSquares.end()) continue;
                     auto protectedUnit = protectedSquare->getUnit();
                     _shieldNode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("shield"));
                     _shieldNode->setScale(1 / protectedUnit->getViewNode()->getScale());
