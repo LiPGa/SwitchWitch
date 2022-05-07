@@ -843,6 +843,11 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     Vec2 squarePos = square->getPosition();
     string sqTexture;
     shared_ptr<Unit> currentUnit = square->getUnit();
+    // check if the targeted unit is no longer targeted, then set the state back to IDLE
+    if (currentUnit->getState() == Unit::State::TARGETED && find(_attackedSquares.begin(), _attackedSquares.end(), square)!=_attackedSquares.end()) {
+            currentUnit->setState(Unit::State::IDLE);
+            refreshUnitView(square);
+    }
     string currentDirection = Unit::directionToString(currentUnit->getDirection());
     if (_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns)
     {
@@ -850,6 +855,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
             sqTexture = "special_" + currentDirection + "_square";
         else
             sqTexture = "square-" + _level->backgroundName;
+        CULog("set square texture??");
         square->getViewNode()->setTexture(_textures.at(sqTexture));
         return;
     }
@@ -874,6 +880,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     {
         sqTexture = "square-" + _level->backgroundName;
     }
+    CULog("set texutre square !!");
     square->getViewNode()->setTexture(_textures.at(sqTexture));
 }
 
@@ -980,6 +987,7 @@ void GameScene::deconfirmSwap()
         square->getViewNode()->removeChildByName("shield");
         updateSquareTexture(square);
     }
+    CULog("set square-selected");
     _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
 }
 
@@ -1348,6 +1356,10 @@ void GameScene::update(float timestep)
                 for (shared_ptr<Square> attackedSquare : _attackedSquares)
                 {
                     attackedSquare->getViewNode()->setTexture(_textures.at("square-attacked"));
+//                    CULog("attacking square has unit type: %s", attackedSquare->getUnit()->stateToString(attackedSquare->getUnit()->getState()).c_str());
+                    // show targeted animation
+                    attackedSquare->getUnit()->setState(Unit::State::TARGETED);
+                    refreshUnitView(attackedSquare);
                 }
                 for (shared_ptr<Square> protectedSquare : _protectedSquares)
                 {
