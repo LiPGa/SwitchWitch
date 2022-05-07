@@ -36,6 +36,10 @@ public:
     {
         IDLE,
         HIT,
+        SELECTED_START,
+        SELECTED_MOVING,
+        SELECTED_NONE,
+        SELECTED_END,
         ATTACKING,
         DYING,
         DEAD,
@@ -117,6 +121,8 @@ private:
     std::unordered_map<State, int, std::hash<int>> animationFrameCounts = {
         { IDLE, 2 },
         { HIT, 1 },
+        {SELECTED_START, 5},
+        {SELECTED_END, 5},
         { ATTACKING, 18 },
         { DYING, 5 },
         { DEAD, 1 },
@@ -244,6 +250,8 @@ public:
         {
         case State::IDLE:
             return "idle";
+        case State::SELECTED_MOVING:
+            return "Selected Moving";
         default:
             return "idle";
         }
@@ -378,6 +386,14 @@ public:
      * @param s the state of the unit.
      */
     void setState(State s);
+    
+    /**
+     * Sets the selected_end animation
+     *
+     * @param texture the texture of the SELECTED unit
+     *
+     */
+    void setSelectedEnd(std::shared_ptr<cugl::Texture> texture);
     
     /**
      * Returns whether the unit has been previously hit

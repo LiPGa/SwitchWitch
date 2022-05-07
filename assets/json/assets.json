@@ -156,6 +156,15 @@
         "king-dying-blue": {
             "file": "textures/king_dying_red.png"
         },
+        "king-target-red": {
+            "file": "textures/king_target_red.png"
+        },
+        "king-target-green": {
+            "file": "textures/king_target_red.png"
+        },
+        "king-target-blue": {
+            "file": "textures/king_target_red.png"
+        },
         "basic-red": {
             "file": "textures/red_unit.png"
         },
@@ -345,6 +354,15 @@
         "three-way-hit-blue": {
             "file": "textures/three_way_hit_blue.png"
         },
+        "three-way-target-red": {
+            "file": "textures/three_way_target_red.png"
+        },
+        "three-way-target-green": {
+            "file": "textures/three_way_target_orange.png"
+        },
+        "three-way-target-blue": {
+            "file": "textures/three_way_target_blue.png"
+        },
         "two-forward-blue": {
             "file": "textures/two_forward_blue_unit.png"
         },
@@ -407,6 +425,15 @@
         },
         "two-forward-hit-blue": {
             "file": "textures/two_forward_hit_blue.png"
+        },
+        "two-forward-target-red": {
+            "file": "textures/two_forward_target_red.png"
+        },
+        "two-forward-target-green": {
+            "file": "textures/two_forward_target_orange.png"
+        },
+        "two-forward-target-blue": {
+            "file": "textures/two_forward_target_blue.png"
         },
         "next-special-square": {
             "file": "textures/next_special_square.png"
@@ -476,6 +503,18 @@
         },
         "tutorial_6": {
             "file": "textures/tutorial_level_6.png"
+        },
+        "tutorial_7": {
+            "file": "textures/tutorial_level_7.png"
+        },
+        "tutorial_16": {
+            "file": "textures/tutorial_level_16.png"
+        },
+        "tutorial_20": {
+            "file": "textures/tutorial_level_20.png"
+        },
+        "tutorial_25": {
+            "file": "textures/tutorial_level_25.png"
         },
         "help_background": {
             "file": "textures/help_background.png"
@@ -694,6 +733,122 @@
         },
         "illustration4": {
             "file": "textures/illustration-4.png"
+        },
+        
+        
+        "basic-red-selected-start": {
+            "file": "textures/soldier_red_selected_start.png"
+        },
+        "basic-red-selected-moving": {
+            "file": "textures/soldier_red_selected_moving.png"
+        },
+        "basic-red-selected-end": {
+            "file": "textures/soldier_red_selected_end.png"
+        },
+        "basic-green-selected-start": {
+            "file": "textures/soldier_orange_selected_start.png"
+        },
+        "basic-green-selected-moving": {
+            "file": "textures/soldier_orange_selected_moving.png"
+        },
+        "basic-green-selected-end": {
+            "file": "textures/soldier_orange_selected_end.png"
+        },
+        "basic-blue-selected-start": {
+            "file": "textures/soldier_blue_selected_start.png"
+        },
+        "basic-blue-selected-moving": {
+            "file": "textures/soldier_blue_selected_moving.png"
+        },
+        "basic-blue-selected-end": {
+            "file": "textures/soldier_blue_selected_end.png"
+        },
+        
+        
+        "two-forward-red-selected-start": {
+            "file": "textures/archer_red_selected_start.png"
+        },
+        "two-forward-red-selected-moving": {
+            "file": "textures/archer_red_selected_moving.png"
+        },
+        "two-forward-red-selected-end": {
+            "file": "textures/archer_red_selected_end.png"
+        },
+        "two-forward-green-selected-start": {
+            "file": "textures/archer_orange_selected_start.png"
+        },
+        "two-forward-green-selected-moving": {
+            "file": "textures/archer_orange_selected_moving.png"
+        },
+        "two-forward-green-selected-end": {
+            "file": "textures/archer_orange_selected_end.png"
+        },
+        "two-forward-blue-selected-start": {
+            "file": "textures/archer_blue_selected_start.png"
+        },
+        "two-forward-blue-selected-moving": {
+            "file": "textures/archer_blue_selected_moving.png"
+        },
+        "two-forward-blue-selected-end": {
+            "file": "textures/archer_blue_selected_end.png"
+        },
+        
+        
+        "diagonal-red-selected-start": {
+            "file": "textures/barbarian_red_selected_start.png"
+        },
+        "diagonal-red-selected-moving": {
+            "file": "textures/barbarian_red_selected_moving.png"
+        },
+        "diagonal-red-selected-end": {
+            "file": "textures/barbarian_red_selected_end.png"
+        },
+        "diagonal-green-selected-start": {
+            "file": "textures/barbarian_orange_selected_start.png"
+        },
+        "diagonal-green-selected-moving": {
+            "file": "textures/barbarian_orange_selected_moving.png"
+        },
+        "diagonal-green-selected-end": {
+            "file": "textures/barbarian_orange_selected_end.png"
+        },
+        "diagonal-blue-selected-start": {
+            "file": "textures/barbarian_blue_selected_start.png"
+        },
+        "diagonal-blue-selected-moving": {
+            "file": "textures/barbarian_blue_selected_moving.png"
+        },
+        "diagonal-blue-selected-end": {
+            "file": "textures/barbarian_blue_selected_end.png"
+        },
+        
+        
+        "three-way-red-selected-start": {
+            "file": "textures/knight_red_selected_start.png"
+        },
+        "three-way-red-selected-moving": {
+            "file": "textures/knight_red_selected_moving.png"
+        },
+        "three-way-red-selected-end": {
+            "file": "textures/knight_red_selected_end.png"
+        },
+        "three-way-green-selected-start": {
+            "file": "textures/knight_orange_selected_start.png"
+        },
+        "three-way-green-selected-moving": {
+            "file": "textures/knight_orange_selected_moving.png"
+        },
+        "three-way-green-selected-end": {
+            "file": "textures/knight_orange_selected_end.png"
+        },
+        "three-way-blue-selected-start": {
+            "file": "textures/knight_blue_selected_start.png"
+        },
+        "three-way-blue-selected-moving": {
+            "file": "textures/knight_blue_selected_moving.png"
+        },
+        "three-way-blue-selected-end": {
+            "file": "textures/knight_blue_selected_end.png"
         }
     },
     "fonts": {

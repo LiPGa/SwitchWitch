@@ -144,9 +144,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _currentState = SELECTING_UNIT;
     
     // --------------------- tutorial -----------------------
-    for (int i=1; i<=6; i++) {
+    for (int i=1; i<=7; i++) {
         _tutorialTextures.insert({"tutorial_"+to_string(i), assets->get<Texture>("tutorial_"+to_string(i))});
     }
+    _tutorialTextures.insert({"tutorial_16", assets->get<Texture>("tutorial_16")});
+    _tutorialTextures.insert({"tutorial_20", assets->get<Texture>("tutorial_20")});
+    _tutorialTextures.insert({"tutorial_25", assets->get<Texture>("tutorial_25")});
     // default tutorial is level 1
     _tutorialLayout2 = assets->get<scene2::SceneNode>("tutorialLayout");
     _tutorialLayout2->setContentSize(dimen);
@@ -1383,11 +1386,34 @@ void GameScene::update(float timestep)
             _currentState = ANIMATION;
             _midSwap = true;
 
-            // Undo the swap for the animation
-            //            _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
             _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
             AudioEngine::get()->play("swap", _assets->get<Sound>("swap"), false, _soundVolume, false);
             // Animation
+            _selectedSquare->getUnit()->setState(Unit::State::SELECTED_START);
+            refreshUnitView(_selectedSquare);
+            _initalAttackSquare = _swappingSquare;
+            _turns--;
+        }
+        else
+        {
+            _currentState = SELECTING_UNIT;
+        }
+    }
+
+    if (_currentState == ANIMATION)
+    {
+        bool completedAllAnimations = true;
+        bool completedAttackSequence = true;
+        bool respawning = false;
+        bool completedSwap = true;
+
+        //        vector<std::shared_ptr<Square>> deadSquares;
+        if (_actions->isActive("swapA") || _actions->isActive("swapB") || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_START || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_MOVING)
+        {
+            completedSwap = false;
+        }
+        
+        if (_selectedSquare->getUnit()->getState() == Unit::State::SELECTED_MOVING) {
             auto animationNodeSWA = _swappingSquare->getUnit()->getViewNode();
             auto animationNodeSWB = _selectedSquare->getUnit()->getViewNode();
             string direction = moveDirection(_swappingSquare, _selectedSquare);
@@ -1411,26 +1437,11 @@ void GameScene::update(float timestep)
                 doMove("swapA", animationNodeSWA, _moveright);
                 doMove("swapB", animationNodeSWB, _moveleft);
             }
-            _initalAttackSquare = _swappingSquare;
-            _turns--;
+            if (!_actions->isActive("swapA") && !_actions->isActive("swapB"))
+            {
+                _selectedSquare->getUnit()->completedAnimation = true;
+            }
         }
-        else
-        {
-            _currentState = SELECTING_UNIT;
-        }
-    }
-
-    if (_currentState == ANIMATION)
-    {
-        bool completedAllAnimations = true;
-        bool completedAttackSequence = true;
-        bool respawning = false;
-        bool completedSwap = true;
-        //        vector<std::shared_ptr<Square>> deadSquares;
-        if (_actions->isActive("swapA"))
-            completedSwap = false;
-        if (_actions->isActive("swapB"))
-            completedSwap = false;
 
         if (completedSwap)
         {
@@ -1486,6 +1497,16 @@ void GameScene::update(float timestep)
                 break;
             case Unit::State::DEAD:
                 //                    square->getViewNode()->setVisible(false);
+                break;
+            case Unit::State::SELECTED_START:
+                unit->setState(Unit::State::SELECTED_MOVING);
+                break;
+            case Unit::State::SELECTED_MOVING:
+                unit->setState(Unit::State::SELECTED_NONE);
+                break;
+            case Unit::State::SELECTED_END:
+                unit->setState(Unit::State::ATTACKING);
+                refreshUnitView(square);
                 break;
             case Unit::State::PROTECTED:
                 unit->setState(Unit::State::IDLE);
@@ -1564,7 +1585,8 @@ void GameScene::update(float timestep)
 void GameScene::updateModelPostSwap()
 {
     _midSwap = false;
-
+    // Save the selected unit testure before switch and rotate units
+    string texture = (_selectedSquare->getUnit()->getSubType()) + "-" + Unit::colorToString(_selectedSquare->getUnit()->getColor()) + "-selected-end";
     _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
     //  Because the units in the model where already swapped.
     float inverseSquareFactor = 1 / _squareScaleFactor;
@@ -1572,25 +1594,33 @@ void GameScene::updateModelPostSwap()
     auto selectedUnitNode = _swappingSquare->getUnit()->getViewNode();
     swappedUnitNode->setPosition(Vec2::ONE * inverseSquareFactor * (_squareSizeAdjustedForScale / 2));
     selectedUnitNode->setPosition(Vec2::ONE * inverseSquareFactor * (_squareSizeAdjustedForScale / 2));
-    //    swappedUnitNode->setPosition(Vec2::ONE * (200));
-    //    selectedUnitNode->setPosition(Vec2::ONE * (_squareSizeAdjustedForScale / 2));
+    // Prepare for Animation
+    swappedUnitNode->setVisible(false);
+    
     // Updating View
     _selectedSquare->getViewNode()->removeChild(selectedUnitNode);
     _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
     _selectedSquare->getViewNode()->addChild(swappedUnitNode);
     _swappingSquare->getViewNode()->addChild(selectedUnitNode);
-
-    if (_attackedSquares.size() > 0)
-    {
-        _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING); // begin the attack sequence
-        refreshUnitView(_initalAttackSquare);
-    }
-    else
-    { // need to show shield animation even if no unit is killed in this swap
-        for (auto ptdSquare : _protectedSquares)
+    
+    // Animation
+    _swappingSquare->getUnit()->setSelectedEnd(_textures.at(texture));
+    refreshUnitView(_swappingSquare);
+    swappedUnitNode->setVisible(true);
+    refreshUnitView(_selectedSquare);
+    if ( _swappingSquare->getUnit()->completedAnimation) {
+        if (_attackedSquares.size() > 0)
         {
-            ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
-            refreshUnitView(ptdSquare);
+            _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING); // begin the attack sequence
+            refreshUnitView(_initalAttackSquare);
+        }
+        else
+        { // need to show shield animation even if no unit is killed in this swap
+            for (auto ptdSquare : _protectedSquares)
+            {
+                ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
+                refreshUnitView(ptdSquare);
+            }
         }
     }
 }
@@ -1777,6 +1807,12 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
                 break;
             case Unit::HIT:
                 spe = "Hit";
+                break;
+            case Unit::SELECTED_START:
+                spe = "Selected Start";
+                break;
+            case Unit::SELECTED_END:
+                spe = "Selected End";
                 break;
             case Unit::ATTACKING:
                 spe = "Attacking";
@@ -2189,7 +2225,8 @@ void GameScene::flipTutorialPage(std::string dir)
 }
 
 void GameScene::setTutorial() {
-    if (_currLevel >= 1 && _currLevel <= 6) {
+//    if ((_currLevel >= 1 && _currLevel <= 7) || _currLevel == 16 || _currLevel == 20 || _currLevel == 25) {
+    if (_currLevel >= 1 && _currLevel <= 7) {
         _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_"+std::to_string(_currLevel)), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
         _tutorialNode->setPosition(0.5*_dimen.width, 0.5*_dimen.height);
         _tutorialNode->setScale(0.27f);
