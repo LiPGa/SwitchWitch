@@ -71,6 +71,12 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
     std::string defaultTextureName = subtype + "-" + colorString;
     std::string idleTextureName = subtype + "-idle-" + colorString;
     std::string hitTextureName = subtype + "-hit-" + colorString;
+    // <Hedy>
+    std::string selectedStartTextureName = subtype + "-" + colorString + "-selected-start";
+    std::string selectedEndTextureName = subtype + "-" + colorString + "-selected-end";
+    // <Hedy/>
+    std::string targetedTextureName = subtype + "-target-" + colorString;
+    CULog("targetedTexture: %s", targetedTextureName.c_str());
     std::string attackTextureName = subtype + "-attack-" + colorString;
     std::string dyingTextureName = subtype + "-dying-" + colorString;
     std::string respawningTextureName = subtype + "-respawning-" + colorString;
@@ -82,6 +88,14 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
         case HIT:
             return _textureMap.count(hitTextureName) > 0 ? _textureMap.at(hitTextureName)
             : _textureMap.at(defaultTextureName);
+        // <Hedy>
+        case SELECTED_START:
+            return _textureMap.count(selectedStartTextureName) > 0 ? _textureMap.at(selectedStartTextureName) : _textureMap.at(defaultTextureName);
+        case SELECTED_END:
+            return _textureMap.count(selectedEndTextureName) > 0 ? _textureMap.at(selectedEndTextureName) : _textureMap.at(defaultTextureName);
+        // <Hedy/>
+        case TARGETED:
+            return _textureMap.count(targetedTextureName) > 0 ? _textureMap.at(targetedTextureName) : _textureMap.at(defaultTextureName);
         case ATTACKING:
             return _textureMap.count(attackTextureName) > 0 ? _textureMap.at(attackTextureName) : _textureMap.at(defaultTextureName);
         case DYING:
@@ -99,8 +113,12 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
 
 void Unit::setState(State s) {
     _state = s;
-    std::shared_ptr<scene2::SpriteNode> newNode;
+    //<Hedy>
+    if (s != State::SELECTED_MOVING && s != State::SELECTED_NONE) {
+    // moving animation is a special case
     completedAnimation = false;
+    // <Hedy/>
+    std::shared_ptr<scene2::SpriteNode> newNode;
     int framesInAnimation = animationFrameCounts[s];
 //    if (_subtype == "king" && s == DYING) framesInAnimation = 5; // King dying animation is a special case
     if (_subtype == "basic" && s == ATTACKING) {
@@ -109,23 +127,27 @@ void Unit::setState(State s) {
     }
     newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, framesInAnimation);
     if (s == State::HIT) _hasBeenHit = true;
-        if (s == State::PROTECTED) {
-            auto shieldNode = scene2::SpriteNode::alloc(_textureMap.at("shield"),1,1);
+    if (s == State::PROTECTED) {
+        auto shieldNode = scene2::SpriteNode::alloc(_textureMap.at("shield"),1,1);
 //            std::shared_ptr<cugl::scene2::AnchoredLayout> unitLayout = scene2::AnchoredLayout::alloc();
-            shieldNode->setScale(1 / _viewNode->getScale());
-            shieldNode->setAnchor(Vec2::ANCHOR_CENTER);
-            shieldNode->setPosition(Vec2(newNode->getWidth() / 2.0f, newNode->getHeight() / 2.0f));
+        shieldNode->setScale(1 / _viewNode->getScale());
+        shieldNode->setAnchor(Vec2::ANCHOR_CENTER);
+        shieldNode->setPosition(Vec2(newNode->getWidth() / 2.0f, newNode->getHeight() / 2.0f));
 //            newNode->setAnchor(Vec2::ANCHOR_CENTER);
-            newNode->addChild(shieldNode);
+        newNode->addChild(shieldNode);
 //            unitLayout->add
             
-        }
+    }
     if (s == IDLE) { // Speed up the animation if part of a chain
         _time_per_animation = DEFAULT_TIME_PER_ANIMATION;
         _chainCount = 0;
     } else if (_subtype != "king") {
         _time_per_animation = std::max(0.2f, DEFAULT_TIME_PER_ANIMATION - _chainCount * ANIMATION_SPEEDUP_FACTOR);
     }
+//    if (s == State::TARGETED) {
+//        CULog("targeted frames in animation: %i", framesInAnimation);
+//        framesInAnimation = 4;
+//    }
     _time_per_frame = _time_per_animation / framesInAnimation;
     _time_since_last_flash = 0.0f;
     _time_since_last_frame = 0.0f;
@@ -134,7 +156,32 @@ void Unit::setState(State s) {
     newNode->setVisible(true);
 //    newNode->setLayout()
     _viewNode = newNode;
+    }
 }
+
+//<Hedy>
+/**
+ * Sets the selected_end animation
+ *
+ * @param texture the texture of the SELECTED unit
+ *
+ */
+void Unit::setSelectedEnd(std::shared_ptr<cugl::Texture> texture)
+{
+    _state = SELECTED_END;
+    completedAnimation = false;
+    std::shared_ptr<scene2::SpriteNode> newNode;
+    int framesInAnimation = animationFrameCounts[SELECTED_END];
+    newNode = scene2::SpriteNode::alloc(texture, 1, framesInAnimation);
+    _time_per_frame = _time_per_animation / framesInAnimation;
+    _time_since_last_flash = 0.0f;
+    _time_since_last_frame = 0.0f;
+    _time_since_start_animation = 0.0f;
+    newNode->setAnchor(Vec2::ANCHOR_CENTER + Vec2(0, -0.2));
+    newNode->setVisible(true);
+    _viewNode = newNode;
+};
+//<Hedy/>
 
 /**
  * Retuns the angle between the direction of the unit and the default direction in radians.
@@ -242,6 +289,8 @@ void Unit::update(float dt) {
 bool Unit::animationShouldLoop(State s) {
     switch (s) {
         case IDLE:
+            return true;
+        case TARGETED:
             return true;
         default:
             return false;
