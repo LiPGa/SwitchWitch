@@ -1,7 +1,7 @@
 {
 	"id":	1,
 	"rows":	1,
-	"columns":	4,
+	"columns":	3,
 	"total-swap-allowed":	1,
 	"one-star-condition":	1,
 	"two-star-condition":	1,
@@ -22,23 +22,11 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
-				"type":	"unit",
 				"sub-type":	"king",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	1
 			}], [{
-				"type":	"unit",
-				"sub-type":	"random",
-				"color":	"red",
-				"direction":	[1, 0],
-				"unitsNeededToKill":	0
-			}, {
 				"type":	"unit",
 				"sub-type":	"random",
 				"color":	"red",

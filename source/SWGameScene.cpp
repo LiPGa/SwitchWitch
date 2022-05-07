@@ -1401,10 +1401,8 @@ void GameScene::update(float timestep)
             _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
             AudioEngine::get()->play("swap", _assets->get<Sound>("swap"), false, _soundVolume, false);
             // Animation
-            // <Hedy>
             _selectedSquare->getUnit()->setState(Unit::State::SELECTED_START);
             refreshUnitView(_selectedSquare);
-            // <Hedy/>
             _initalAttackSquare = _swappingSquare;
             _turns--;
         }
@@ -1422,14 +1420,12 @@ void GameScene::update(float timestep)
         bool completedSwap = true;
 
         //        vector<std::shared_ptr<Square>> deadSquares;
-        // <Hedy>
         if (_actions->isActive("swapA") || _actions->isActive("swapB") || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_START || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_MOVING)
         {
             completedSwap = false;
         }
         
         if (_selectedSquare->getUnit()->getState() == Unit::State::SELECTED_MOVING) {
-        // <Hedy/>
             auto animationNodeSWA = _swappingSquare->getUnit()->getViewNode();
             auto animationNodeSWB = _selectedSquare->getUnit()->getViewNode();
             string direction = moveDirection(_swappingSquare, _selectedSquare);
@@ -1453,13 +1449,11 @@ void GameScene::update(float timestep)
                 doMove("swapA", animationNodeSWA, _moveright);
                 doMove("swapB", animationNodeSWB, _moveleft);
             }
-        // <Hedy>
             if (!_actions->isActive("swapA") && !_actions->isActive("swapB"))
             {
                 _selectedSquare->getUnit()->completedAnimation = true;
             }
         }
-        // <Hedy/>
 
         if (completedSwap)
         {
@@ -1516,7 +1510,6 @@ void GameScene::update(float timestep)
             case Unit::State::DEAD:
                 //                    square->getViewNode()->setVisible(false);
                 break;
-            //<Hedy>
             case Unit::State::SELECTED_START:
                 unit->setState(Unit::State::SELECTED_MOVING);
                 break;
@@ -1527,7 +1520,6 @@ void GameScene::update(float timestep)
                 unit->setState(Unit::State::ATTACKING);
                 refreshUnitView(square);
                 break;
-            //<Hedy/>
             case Unit::State::PROTECTED:
                 unit->setState(Unit::State::IDLE);
                 refreshUnitView(square);
@@ -1605,10 +1597,8 @@ void GameScene::update(float timestep)
 void GameScene::updateModelPostSwap()
 {
     _midSwap = false;
-    // <Hedy>
     // Save the selected unit testure before switch and rotate units
     string texture = (_selectedSquare->getUnit()->getSubType()) + "-" + Unit::colorToString(_selectedSquare->getUnit()->getColor()) + "-selected-end";
-   // <Hedy/>
     _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
     //  Because the units in the model where already swapped.
     float inverseSquareFactor = 1 / _squareScaleFactor;
@@ -1616,10 +1606,8 @@ void GameScene::updateModelPostSwap()
     auto selectedUnitNode = _swappingSquare->getUnit()->getViewNode();
     swappedUnitNode->setPosition(Vec2::ONE * inverseSquareFactor * (_squareSizeAdjustedForScale / 2));
     selectedUnitNode->setPosition(Vec2::ONE * inverseSquareFactor * (_squareSizeAdjustedForScale / 2));
-    // <Hedy>
     // Prepare for Animation
     swappedUnitNode->setVisible(false);
-    // <Hedy/>
     
     // Updating View
     _selectedSquare->getViewNode()->removeChild(selectedUnitNode);
@@ -1627,14 +1615,12 @@ void GameScene::updateModelPostSwap()
     _selectedSquare->getViewNode()->addChild(swappedUnitNode);
     _swappingSquare->getViewNode()->addChild(selectedUnitNode);
     
-    // <Hedy>
     // Animation
     _swappingSquare->getUnit()->setSelectedEnd(_textures.at(texture));
     refreshUnitView(_swappingSquare);
     swappedUnitNode->setVisible(true);
     refreshUnitView(_selectedSquare);
     if ( _swappingSquare->getUnit()->completedAnimation) {
-    // <Hedy/>
         if (_attackedSquares.size() > 0)
         {
             _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING); // begin the attack sequence
@@ -1834,14 +1820,12 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
             case Unit::HIT:
                 spe = "Hit";
                 break;
-            // <Hedy>
             case Unit::SELECTED_START:
                 spe = "Selected Start";
                 break;
             case Unit::SELECTED_END:
                 spe = "Selected End";
                 break;
-            // <Hedy/>
             case Unit::ATTACKING:
                 spe = "Attacking";
                 break;

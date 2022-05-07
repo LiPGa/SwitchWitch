@@ -256,10 +256,8 @@ public:
         {
         case State::IDLE:
             return "idle";
-        // <Hedy>
         case State::SELECTED_MOVING:
             return "Selected Moving";
-        // <Hedy/>
         default:
             return "idle";
         }
