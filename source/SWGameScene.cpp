@@ -843,6 +843,11 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     Vec2 squarePos = square->getPosition();
     string sqTexture;
     shared_ptr<Unit> currentUnit = square->getUnit();
+    // check if the targeted unit is no longer targeted, then set the state back to IDLE
+    if (currentUnit->getState() == Unit::State::TARGETED && find(_attackedSquares.begin(), _attackedSquares.end(), square)!=_attackedSquares.end()) {
+            currentUnit->setState(Unit::State::IDLE);
+            refreshUnitView(square);
+    }
     string currentDirection = Unit::directionToString(currentUnit->getDirection());
     if (_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns)
     {
@@ -852,9 +857,6 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
             sqTexture = "square-" + _level->backgroundName;
         CULog("set square texture??");
         square->getViewNode()->setTexture(_textures.at(sqTexture));
-//        if (find(_attackedSquares.begin(), _attackedSquares.end(), square)!=_attackedSquares.end() && square->getUnit()->getState() == Unit::State::TARGETED)
-//            square->getUnit()->setState(Unit::State::IDLE);
-//            refreshUnitView(square);
         return;
     }
     shared_ptr<Unit> replacementUnit = _level->getBoard(_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1)->getSquare(square->getPosition())->getUnit();
@@ -1526,10 +1528,10 @@ void GameScene::update(float timestep)
                 refreshUnitView(square);
                 break;
             //<Hedy/>
-            case Unit::State::TARGETED:
-                unit->setState(Unit::State::IDLE);
-                refreshUnitView(square);
-                break;
+//            case Unit::State::TARGETED:
+//                unit->setState(Unit::State::IDLE);
+//                refreshUnitView(square);
+//                break;
             case Unit::State::PROTECTED:
                 unit->setState(Unit::State::IDLE);
                 refreshUnitView(square);

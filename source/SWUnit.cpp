@@ -284,8 +284,8 @@ bool Unit::animationShouldLoop(State s) {
     switch (s) {
         case IDLE:
             return true;
-//        case TARGETED:
-//            return true;
+        case TARGETED:
+            return true;
         default:
             return false;
     }
