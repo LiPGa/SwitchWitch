@@ -156,6 +156,15 @@
         "king-dying-blue": {
             "file": "textures/king_dying_red.png"
         },
+        "king-target-red": {
+            "file": "textures/king_target_red.png"
+        },
+        "king-target-green": {
+            "file": "textures/king_target_red.png"
+        },
+        "king-target-blue": {
+            "file": "textures/king_target_red.png"
+        },
         "basic-red": {
             "file": "textures/red_unit.png"
         },
@@ -345,6 +354,15 @@
         "three-way-hit-blue": {
             "file": "textures/three_way_hit_blue.png"
         },
+        "three-way-target-red": {
+            "file": "textures/three_way_target_red.png"
+        },
+        "three-way-target-green": {
+            "file": "textures/three_way_target_orange.png"
+        },
+        "three-way-target-blue": {
+            "file": "textures/three_way_target_blue.png"
+        },
         "two-forward-blue": {
             "file": "textures/two_forward_blue_unit.png"
         },
@@ -408,6 +426,15 @@
         "two-forward-hit-blue": {
             "file": "textures/two_forward_hit_blue.png"
         },
+        "two-forward-target-red": {
+            "file": "textures/two_forward_target_red.png"
+        },
+        "two-forward-target-green": {
+            "file": "textures/two_forward_target_orange.png"
+        },
+        "two-forward-target-blue": {
+            "file": "textures/two_forward_target_blue.png"
+        },
         "next-special-square": {
             "file": "textures/next_special_square.png"
         },
@@ -458,6 +485,36 @@
         },
         "tutorial_right": {
             "file": "textures/tutorial_right.png"
+        },
+        "tutorial_1": {
+            "file": "textures/tutorial_level_1.png"
+        },
+        "tutorial_2": {
+            "file": "textures/tutorial_level_2.png"
+        },
+        "tutorial_3": {
+            "file": "textures/tutorial_level_3.png"
+        },
+        "tutorial_4": {
+            "file": "textures/tutorial_level_4.png"
+        },
+        "tutorial_5": {
+            "file": "textures/tutorial_level_5.png"
+        },
+        "tutorial_6": {
+            "file": "textures/tutorial_level_6.png"
+        },
+        "tutorial_7": {
+            "file": "textures/tutorial_level_7.png"
+        },
+        "tutorial_16": {
+            "file": "textures/tutorial_level_16.png"
+        },
+        "tutorial_20": {
+            "file": "textures/tutorial_level_20.png"
+        },
+        "tutorial_25": {
+            "file": "textures/tutorial_level_25.png"
         },
         "help_background": {
             "file": "textures/help_background.png"
@@ -2431,6 +2488,14 @@
                         }
                     }
                 }
+            }
+        },
+        "tutorialLayout": {
+            "type": "Node",
+            "format": {
+                "type": "Anchored",
+                "x_alignment": "center",
+                "y_alignment": "middle"
             }
         },
         "tutorial": {
