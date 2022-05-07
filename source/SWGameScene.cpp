@@ -922,6 +922,7 @@ void GameScene::generateUnit(shared_ptr<Square> sq, std::string unitType, Unit::
     unit->setUnitsNeededToKill(numberOfUnitsNeededToKill);
     unit->setState(Unit::State::RESPAWNING);
     unit->setHasBeenHit(false);
+    unit->setChainCount(0);
     refreshUnitView(sq);
 }
 
@@ -1511,6 +1512,7 @@ void GameScene::update(float timestep)
                     if (atkSquare->getUnit()->getState() == Unit::State::IDLE)
                     {
                         //                            if (_attackedSquares.size() >= atkSquare->getUnit()->getUnitsNeededToKill()) {
+                        atkSquare->getUnit()->setChainCount(unit->getChainCount() + 1);
                         atkSquare->getUnit()->setState(Unit::State::HIT);
                         //                            }
                     }
@@ -1789,7 +1791,8 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
             }
         }
 
-        batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+        // batch->drawText(spe, _turn_text->getFont(), Vec2(50, getSize().height - 250));
+        batch->drawText(_selectedSquare != NULL ? std::to_string(_selectedSquare->getUnit()->getChainCount()) : "", _turn_text->getFont(), Vec2(50, getSize().height - 250));
         //        batch->drawText(replacementType, _turn_text->getFont(), Vec2(50, getSize().height - 300));
         //        batch->drawText(replacementColor, _turn_text->getFont(), Vec2(50, getSize().height - 350));
         //        batch->drawText(replacementUnitDirection.str(), _turn_text->getFont(), Vec2(50, getSize().height - 400));

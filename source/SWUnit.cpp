@@ -78,7 +78,7 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
         case IDLE:
             return _textureMap.count(idleTextureName) > 0 ? _textureMap.at(idleTextureName) : _textureMap.at(defaultTextureName);
         case State::PROTECTED:
-            return _textureMap.at(idleTextureName);
+            return _textureMap.count(idleTextureName) > 0 ? _textureMap.at(idleTextureName) : _textureMap.at(defaultTextureName);
         case HIT:
             return _textureMap.count(hitTextureName) > 0 ? _textureMap.at(hitTextureName)
             : _textureMap.at(defaultTextureName);
@@ -120,6 +120,12 @@ void Unit::setState(State s) {
 //            unitLayout->add
             
         }
+    if (s == IDLE) { // Speed up the animation if part of a chain
+        _time_per_animation = DEFAULT_TIME_PER_ANIMATION;
+        _chainCount = 0;
+    } else if (_subtype != "king") {
+        _time_per_animation = std::max(0.2f, DEFAULT_TIME_PER_ANIMATION - _chainCount * ANIMATION_SPEEDUP_FACTOR);
+    }
     _time_per_frame = _time_per_animation / framesInAnimation;
     _time_since_last_flash = 0.0f;
     _time_since_last_frame = 0.0f;

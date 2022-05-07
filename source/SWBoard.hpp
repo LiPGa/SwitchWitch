@@ -95,7 +95,9 @@ public:
      * @return the square at that position
      */
     shared_ptr<Square> getSquare(cugl::Vec2 position) {
-        return _matrix[flattenPos(position.x, position.y)];
+        int index = flattenPos(position.x, position.y);
+        if (index >= _matrix.size()) return nullptr;
+        else return _matrix[index];
     }
 
     /**

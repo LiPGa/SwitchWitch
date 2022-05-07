@@ -85,7 +85,16 @@ private:
     /** The elapsed time since the animation started */
     float _time_since_start_animation = 0.0f;
     
-    /** The amout of time every animation should play for */
+    /** The defualt amount of time every animation should play for */
+    const float DEFAULT_TIME_PER_ANIMATION = 0.9f;
+    
+    /** The factor of time animations should speed up for every successive chain propagation */
+    const float ANIMATION_SPEEDUP_FACTOR = 0.2;
+    
+    /** The step of the chain this unit is a part of */
+    int _chainCount = 0;
+    
+    /** The amount of time every animation should play for */
     float _time_per_animation = 0.9f;
     
     /** The amout of time every frame should play for */
@@ -378,6 +387,19 @@ public:
      * @param s the state of the unit.
      */
     void setState(State s);
+    
+    /**
+     * Returns the unit's chain count
+     * @return unit's chain count
+     */
+    int getChainCount() { return _chainCount; }
+
+    /**
+     * Sets the unit's chain count
+     *
+     * @param c the chain count of the unit.
+     */
+    void setChainCount(int c) { _chainCount = c; }
     
     /**
      * Returns whether the unit has been previously hit
