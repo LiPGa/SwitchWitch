@@ -71,10 +71,8 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
     std::string defaultTextureName = subtype + "-" + colorString;
     std::string idleTextureName = subtype + "-idle-" + colorString;
     std::string hitTextureName = subtype + "-hit-" + colorString;
-    // <Hedy>
     std::string selectedStartTextureName = subtype + "-" + colorString + "-selected-start";
     std::string selectedEndTextureName = subtype + "-" + colorString + "-selected-end";
-    // <Hedy/>
     std::string attackTextureName = subtype + "-attack-" + colorString;
     std::string dyingTextureName = subtype + "-dying-" + colorString;
     std::string respawningTextureName = subtype + "-respawning-" + colorString;
@@ -86,12 +84,10 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
         case HIT:
             return _textureMap.count(hitTextureName) > 0 ? _textureMap.at(hitTextureName)
             : _textureMap.at(defaultTextureName);
-        // <Hedy>
         case SELECTED_START:
             return _textureMap.count(selectedStartTextureName) > 0 ? _textureMap.at(selectedStartTextureName) : _textureMap.at(defaultTextureName);
         case SELECTED_END:
             return _textureMap.count(selectedEndTextureName) > 0 ? _textureMap.at(selectedEndTextureName) : _textureMap.at(defaultTextureName);
-        // <Hedy/>
         case ATTACKING:
             return _textureMap.count(attackTextureName) > 0 ? _textureMap.at(attackTextureName) : _textureMap.at(defaultTextureName);
         case DYING:
@@ -109,11 +105,9 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
 
 void Unit::setState(State s) {
     _state = s;
-    //<Hedy>
     if (s != State::SELECTED_MOVING && s != State::SELECTED_NONE) {
     // moving animation is a special case
     completedAnimation = false;
-    // <Hedy/>
     std::shared_ptr<scene2::SpriteNode> newNode;
     int framesInAnimation = animationFrameCounts[s];
 //    if (_subtype == "king" && s == DYING) framesInAnimation = 5; // King dying animation is a special case
@@ -145,7 +139,6 @@ void Unit::setState(State s) {
     }
 }
 
-//<Hedy>
 /**
  * Sets the selected_end animation
  *
@@ -167,7 +160,6 @@ void Unit::setSelectedEnd(std::shared_ptr<cugl::Texture> texture)
     newNode->setVisible(true);
     _viewNode = newNode;
 };
-//<Hedy/>
 
 /**
  * Retuns the angle between the direction of the unit and the default direction in radians.

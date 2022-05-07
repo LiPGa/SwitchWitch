@@ -36,12 +36,10 @@ public:
     {
         IDLE,
         HIT,
-        // <Hedy>
         SELECTED_START,
         SELECTED_MOVING,
         SELECTED_NONE,
         SELECTED_END,
-        // <Hedy/>
         ATTACKING,
         DYING,
         DEAD,
@@ -123,10 +121,8 @@ private:
     std::unordered_map<State, int, std::hash<int>> animationFrameCounts = {
         { IDLE, 2 },
         { HIT, 1 },
-        //<Hedy>
         {SELECTED_START, 5},
         {SELECTED_END, 5},
-        //<Hedy/>
         { ATTACKING, 18 },
         { DYING, 5 },
         { DEAD, 1 },
@@ -254,10 +250,8 @@ public:
         {
         case State::IDLE:
             return "idle";
-        // <Hedy>
         case State::SELECTED_MOVING:
             return "Selected Moving";
-        // <Hedy/>
         default:
             return "idle";
         }
