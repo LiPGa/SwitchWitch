@@ -976,6 +976,7 @@ void GameScene::deconfirmSwap()
     }
     for (shared_ptr<Square> square : _board->getAllSquares())
     {
+        square->getViewNode()->removeChildByName("shield");
         updateSquareTexture(square);
     }
     _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
