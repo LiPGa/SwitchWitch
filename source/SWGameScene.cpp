@@ -1330,11 +1330,38 @@ void GameScene::update(float timestep)
             _currentState = ANIMATION;
             _midSwap = true;
 
-            // Undo the swap for the animation
-            //            _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
             _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
             AudioEngine::get()->play("swap", _assets->get<Sound>("swap"), false, _soundVolume, false);
             // Animation
+            // <Hedy>
+            _selectedSquare->getUnit()->setState(Unit::State::SELECTED_START);
+            refreshUnitView(_selectedSquare);
+            // <Hedy/>
+            _initalAttackSquare = _swappingSquare;
+            _turns--;
+        }
+        else
+        {
+            _currentState = SELECTING_UNIT;
+        }
+    }
+
+    if (_currentState == ANIMATION)
+    {
+        bool completedAllAnimations = true;
+        bool completedAttackSequence = true;
+        bool respawning = false;
+        bool completedSwap = true;
+
+        //        vector<std::shared_ptr<Square>> deadSquares;
+        // <Hedy>
+        if (_actions->isActive("swapA") || _actions->isActive("swapB") || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_START || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_MOVING || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_END)
+        {
+            completedSwap = false;
+        }
+        
+        if (_selectedSquare->getUnit()->getState() == Unit::State::SELECTED_MOVING) {
+        // <Hedy/>
             auto animationNodeSWA = _swappingSquare->getUnit()->getViewNode();
             auto animationNodeSWB = _selectedSquare->getUnit()->getViewNode();
             string direction = moveDirection(_swappingSquare, _selectedSquare);
@@ -1358,26 +1385,13 @@ void GameScene::update(float timestep)
                 doMove("swapA", animationNodeSWA, _moveright);
                 doMove("swapB", animationNodeSWB, _moveleft);
             }
-            _initalAttackSquare = _swappingSquare;
-            _turns--;
+        // <Hedy>
+            if (!_actions->isActive("swapA") && !_actions->isActive("swapB"))
+            {
+                _selectedSquare->getUnit()->completedAnimation = true;
+            }
         }
-        else
-        {
-            _currentState = SELECTING_UNIT;
-        }
-    }
-
-    if (_currentState == ANIMATION)
-    {
-        bool completedAllAnimations = true;
-        bool completedAttackSequence = true;
-        bool respawning = false;
-        bool completedSwap = true;
-        //        vector<std::shared_ptr<Square>> deadSquares;
-        if (_actions->isActive("swapA"))
-            completedSwap = false;
-        if (_actions->isActive("swapB"))
-            completedSwap = false;
+        // <Hedy/>
 
         if (completedSwap)
         {
@@ -1434,6 +1448,19 @@ void GameScene::update(float timestep)
             case Unit::State::DEAD:
                 //                    square->getViewNode()->setVisible(false);
                 break;
+            //<Hedy>
+            case Unit::State::SELECTED_START:
+                unit->setState(Unit::State::SELECTED_MOVING);
+                break;
+            case Unit::State::SELECTED_MOVING:
+                unit->setState(Unit::State::SELECTED_END);
+//                refreshUnitView(square);
+                break;
+            case Unit::State::SELECTED_END:
+                unit->setState(Unit::State::ATTACKING);
+                refreshUnitView(square);
+                break;
+            //<Hedy/>
             case Unit::State::PROTECTED:
                 unit->setState(Unit::State::IDLE);
                 refreshUnitView(square);
@@ -1725,6 +1752,14 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
             case Unit::HIT:
                 spe = "Hit";
                 break;
+            // <Hedy>
+            case Unit::SELECTED_START:
+                spe = "Selected Start";
+                break;
+            case Unit::SELECTED_END:
+                spe = "Selected End";
+                break;
+            // <Hedy/>
             case Unit::ATTACKING:
                 spe = "Attacking";
                 break;

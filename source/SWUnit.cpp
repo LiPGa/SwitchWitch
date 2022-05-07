@@ -71,6 +71,10 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
     std::string defaultTextureName = subtype + "-" + colorString;
     std::string idleTextureName = subtype + "-idle-" + colorString;
     std::string hitTextureName = subtype + "-hit-" + colorString;
+    // <Hedy>
+    std::string selectedStartTextureName = subtype + "-" + colorString + "-selected-start";
+    std::string selectedEndTextureName = subtype + "-" + colorString + "-selected-end";
+    // <Hedy/>
     std::string attackTextureName = subtype + "-attack-" + colorString;
     std::string dyingTextureName = subtype + "-dying-" + colorString;
     std::string respawningTextureName = subtype + "-respawning-" + colorString;
@@ -82,6 +86,12 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
         case HIT:
             return _textureMap.count(hitTextureName) > 0 ? _textureMap.at(hitTextureName)
             : _textureMap.at(defaultTextureName);
+        // <Hedy>
+        case SELECTED_START:
+            return _textureMap.count(selectedStartTextureName) > 0 ? _textureMap.at(selectedStartTextureName) : _textureMap.at(defaultTextureName);
+        case SELECTED_END:
+            return _textureMap.count(selectedEndTextureName) > 0 ? _textureMap.at(selectedEndTextureName) : _textureMap.at(defaultTextureName);
+        // <Hedy/>
         case ATTACKING:
             return _textureMap.count(attackTextureName) > 0 ? _textureMap.at(attackTextureName) : _textureMap.at(defaultTextureName);
         case DYING:
@@ -99,8 +109,12 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
 
 void Unit::setState(State s) {
     _state = s;
-    std::shared_ptr<scene2::SpriteNode> newNode;
+    //<Hedy>
     completedAnimation = false;
+    if (s != State::SELECTED_MOVING) {
+    // moving animation is a special case
+    // <Hedy/>
+    std::shared_ptr<scene2::SpriteNode> newNode;
     int framesInAnimation = animationFrameCounts[s];
 //    if (_subtype == "king" && s == DYING) framesInAnimation = 5; // King dying animation is a special case
     if (_subtype == "basic" && s == ATTACKING) {
@@ -109,17 +123,17 @@ void Unit::setState(State s) {
     }
     newNode = scene2::SpriteNode::alloc(getTextureForUnit(this->_subtype, this->_color, s), 1, framesInAnimation);
     if (s == State::HIT) _hasBeenHit = true;
-        if (s == State::PROTECTED) {
-            auto shieldNode = scene2::SpriteNode::alloc(_textureMap.at("shield"),1,1);
+    if (s == State::PROTECTED) {
+        auto shieldNode = scene2::SpriteNode::alloc(_textureMap.at("shield"),1,1);
 //            std::shared_ptr<cugl::scene2::AnchoredLayout> unitLayout = scene2::AnchoredLayout::alloc();
-            shieldNode->setScale(1 / _viewNode->getScale());
-            shieldNode->setAnchor(Vec2::ANCHOR_CENTER);
-            shieldNode->setPosition(Vec2(newNode->getWidth() / 2.0f, newNode->getHeight() / 2.0f));
+        shieldNode->setScale(1 / _viewNode->getScale());
+        shieldNode->setAnchor(Vec2::ANCHOR_CENTER);
+        shieldNode->setPosition(Vec2(newNode->getWidth() / 2.0f, newNode->getHeight() / 2.0f));
 //            newNode->setAnchor(Vec2::ANCHOR_CENTER);
-            newNode->addChild(shieldNode);
+        newNode->addChild(shieldNode);
 //            unitLayout->add
             
-        }
+    }
     _time_per_frame = _time_per_animation / framesInAnimation;
     _time_since_last_flash = 0.0f;
     _time_since_last_frame = 0.0f;
@@ -128,6 +142,7 @@ void Unit::setState(State s) {
     newNode->setVisible(true);
 //    newNode->setLayout()
     _viewNode = newNode;
+    }
 }
 
 /**
