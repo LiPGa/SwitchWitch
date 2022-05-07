@@ -75,6 +75,8 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
     std::string selectedStartTextureName = subtype + "-" + colorString + "-selected-start";
     std::string selectedEndTextureName = subtype + "-" + colorString + "-selected-end";
     // <Hedy/>
+    std::string targetedTextureName = subtype + "-target-" + colorString;
+    CULog("targetedTexture: %s", targetedTextureName.c_str());
     std::string attackTextureName = subtype + "-attack-" + colorString;
     std::string dyingTextureName = subtype + "-dying-" + colorString;
     std::string respawningTextureName = subtype + "-respawning-" + colorString;
@@ -92,6 +94,8 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
         case SELECTED_END:
             return _textureMap.count(selectedEndTextureName) > 0 ? _textureMap.at(selectedEndTextureName) : _textureMap.at(defaultTextureName);
         // <Hedy/>
+        case TARGETED:
+            return _textureMap.count(targetedTextureName) > 0 ? _textureMap.at(targetedTextureName) : _textureMap.at(defaultTextureName);
         case ATTACKING:
             return _textureMap.count(attackTextureName) > 0 ? _textureMap.at(attackTextureName) : _textureMap.at(defaultTextureName);
         case DYING:
@@ -134,6 +138,10 @@ void Unit::setState(State s) {
 //            unitLayout->add
             
     }
+//    if (s == State::TARGETED) {
+//        CULog("targeted frames in animation: %i", framesInAnimation);
+//        framesInAnimation = 4;
+//    }
     _time_per_frame = _time_per_animation / framesInAnimation;
     _time_since_last_flash = 0.0f;
     _time_since_last_frame = 0.0f;
@@ -276,6 +284,8 @@ bool Unit::animationShouldLoop(State s) {
     switch (s) {
         case IDLE:
             return true;
+//        case TARGETED:
+//            return true;
         default:
             return false;
     }

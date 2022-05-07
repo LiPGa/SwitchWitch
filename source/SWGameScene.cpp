@@ -850,7 +850,11 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
             sqTexture = "special_" + currentDirection + "_square";
         else
             sqTexture = "square-" + _level->backgroundName;
+        CULog("set square texture??");
         square->getViewNode()->setTexture(_textures.at(sqTexture));
+//        if (find(_attackedSquares.begin(), _attackedSquares.end(), square)!=_attackedSquares.end() && square->getUnit()->getState() == Unit::State::TARGETED)
+//            square->getUnit()->setState(Unit::State::IDLE);
+//            refreshUnitView(square);
         return;
     }
     shared_ptr<Unit> replacementUnit = _level->getBoard(_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1)->getSquare(square->getPosition())->getUnit();
@@ -874,6 +878,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     {
         sqTexture = "square-" + _level->backgroundName;
     }
+    CULog("set texutre square !!");
     square->getViewNode()->setTexture(_textures.at(sqTexture));
 }
 
@@ -980,6 +985,7 @@ void GameScene::deconfirmSwap()
         square->getViewNode()->removeChildByName("shield");
         updateSquareTexture(square);
     }
+    CULog("set square-selected");
     _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
 }
 
@@ -1348,6 +1354,10 @@ void GameScene::update(float timestep)
                 for (shared_ptr<Square> attackedSquare : _attackedSquares)
                 {
                     attackedSquare->getViewNode()->setTexture(_textures.at("square-attacked"));
+//                    CULog("attacking square has unit type: %s", attackedSquare->getUnit()->stateToString(attackedSquare->getUnit()->getState()).c_str());
+                    // show targeted animation
+                    attackedSquare->getUnit()->setState(Unit::State::TARGETED);
+                    refreshUnitView(attackedSquare);
                 }
                 for (shared_ptr<Square> protectedSquare : _protectedSquares)
                 {
@@ -1516,6 +1526,10 @@ void GameScene::update(float timestep)
                 refreshUnitView(square);
                 break;
             //<Hedy/>
+            case Unit::State::TARGETED:
+                unit->setState(Unit::State::IDLE);
+                refreshUnitView(square);
+                break;
             case Unit::State::PROTECTED:
                 unit->setState(Unit::State::IDLE);
                 refreshUnitView(square);

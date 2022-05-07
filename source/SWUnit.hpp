@@ -42,6 +42,7 @@ public:
         SELECTED_NONE,
         SELECTED_END,
         // <Hedy/>
+        TARGETED,
         ATTACKING,
         DYING,
         DEAD,
@@ -127,6 +128,7 @@ private:
         {SELECTED_START, 5},
         {SELECTED_END, 5},
         //<Hedy/>
+        { TARGETED, 4 },
         { ATTACKING, 18 },
         { DYING, 5 },
         { DEAD, 1 },
