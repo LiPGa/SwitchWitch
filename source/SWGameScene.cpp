@@ -1528,10 +1528,6 @@ void GameScene::update(float timestep)
                 refreshUnitView(square);
                 break;
             //<Hedy/>
-//            case Unit::State::TARGETED:
-//                unit->setState(Unit::State::IDLE);
-//                refreshUnitView(square);
-//                break;
             case Unit::State::PROTECTED:
                 unit->setState(Unit::State::IDLE);
                 refreshUnitView(square);
