@@ -1094,6 +1094,21 @@ void GameScene::update(float timestep)
         _currLevel = newLevelNum;
     }
 
+    // ------------- tutorial animation ----------------
+    _time_since_last_frame += timestep;
+    _time_since_start_animation += timestep;
+    if (_time_since_last_frame > _time_per_frame) {
+        _time_since_last_frame = 0.0f;
+        int frame = _tutorialNode->getFrame() + 1;
+        if (frame >= _tutorialNode->getSize()) {
+//            if (animationShouldLoop(_state)) frame = 0;
+//            else frame = _tutorialNode->getSize() - 1;
+            frame = 0;
+//            completedAnimation = true;
+        }
+        _tutorialNode->setFrame(frame);
+    }
+
     if ((_turns == 0 || _kingsKilled) && _currentState != ANIMATION)
     {
         // Show results screen
@@ -2176,12 +2191,12 @@ void GameScene::flipTutorialPage(std::string dir)
 
 void GameScene::setTutorial() {
     if (_currLevel == 1 || _currLevel == 2 || _currLevel == 4 || _currLevel == 5 || _currLevel == 6) {
-        auto tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_"+std::to_string(_currLevel)), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
+        _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_"+std::to_string(_currLevel)), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
         CULog("tutorial_%s",std::to_string(_currLevel).c_str());
-        tutorialNode->setPosition(0.5*_dimen.width, 0.5*_dimen.height);
-        tutorialNode->setScale(0.27f);
+        _tutorialNode->setPosition(0.5*_dimen.width, 0.5*_dimen.height);
+        _tutorialNode->setScale(0.27f);
         _tutorialLayout2->removeAllChildren();
-        _tutorialLayout2->addChildWithName(tutorialNode, "tutorialNode");
+        _tutorialLayout2->addChildWithName(_tutorialNode, "tutorialNode");
         _tutorialLayout2->setVisible(true);
         _tutorialNode->setVisible(true);
     } else {

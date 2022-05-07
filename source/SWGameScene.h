@@ -318,6 +318,16 @@ protected:
         { TUTORIAL, 4 }
     };
     
+    // ---------------- animation & tutorial ----------------------
+    /** The elapsed time since the sprite frame was incremented */
+    float _time_since_last_frame = 0.0f;
+    /** The elapsed time since the animation started */
+    float _time_since_start_animation = 0.0f;
+    /** The amout of time every animation should play for */
+    float _time_per_animation = 0.9f;
+    /** The amout of time every frame should play for */
+    float _time_per_frame = 0.3f;
+    
     /** This map stores a texture for every tutorial */
     unordered_map<std::string, shared_ptr<Texture>> _tutorialTextures;
     std::shared_ptr<scene2::SpriteNode> _tutorialNode;
