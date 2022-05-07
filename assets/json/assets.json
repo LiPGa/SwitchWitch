@@ -504,6 +504,18 @@
         "tutorial_6": {
             "file": "textures/tutorial_level_6.png"
         },
+        "tutorial_7": {
+            "file": "textures/tutorial_level_7.png"
+        },
+        "tutorial_16": {
+            "file": "textures/tutorial_level_16.png"
+        },
+        "tutorial_20": {
+            "file": "textures/tutorial_level_20.png"
+        },
+        "tutorial_25": {
+            "file": "textures/tutorial_level_25.png"
+        },
         "help_background": {
             "file": "textures/help_background.png"
         },
