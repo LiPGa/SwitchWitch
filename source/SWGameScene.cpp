@@ -1088,8 +1088,8 @@ void GameScene::update(float timestep)
     {
         int newLevelNum = _levelJson->getInt("id") + 1;
         auto newBoardJson = _assets->get<JsonValue>("level" + std::to_string(newLevelNum));
-        reset(newBoardJson);
         _currLevel = newLevelNum;
+        reset(newBoardJson);
     }
 
     // ------------- tutorial animation ----------------
