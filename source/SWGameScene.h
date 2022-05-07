@@ -169,6 +169,7 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _helpMenu;
     std::shared_ptr<scene2::SceneNode> _resultLayout;
     std::shared_ptr<scene2::SceneNode> _tutorialLayout;
+    std::shared_ptr<scene2::SceneNode> _tutorialLayout2;
     /** result screen when player fails the game*/
     std::shared_ptr<scene2::SceneNode> _failResultLayout;
     std::shared_ptr<scene2::SceneNode> _settingsLayout;
@@ -305,6 +306,23 @@ protected:
     vector<bool> unitMissing = {false, false, false};
     
     bool _midSwap = false;
+    
+    Size _dimen;
+    
+    enum ANIMATION_TYPE
+    {
+        TUTORIAL
+    };
+    
+    std::unordered_map<ANIMATION_TYPE, int, std::hash<int>> animationFrameCounts = {
+        { TUTORIAL, 4 }
+    };
+    
+    /** This map stores a texture for every tutorial */
+    unordered_map<std::string, shared_ptr<Texture>> _tutorialTextures;
+    std::shared_ptr<scene2::SpriteNode> _tutorialNode;
+    
+    
 
 #pragma mark -
 #pragma mark Texture Variables
@@ -437,6 +455,13 @@ public:
      * Sets the enter level of the board to true
      */
     void enterLevel( ) { _enterLevel = true; }
+    
+    /**
+     * set the tutorial node according to current level
+     */
+    void setTutorial();
+    
+//    Size getDimen( ) { return _dimen; }
     
     /**
      * Returns the current state the game is in.
