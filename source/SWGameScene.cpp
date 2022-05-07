@@ -1355,7 +1355,7 @@ void GameScene::update(float timestep)
 
         //        vector<std::shared_ptr<Square>> deadSquares;
         // <Hedy>
-        if (_actions->isActive("swapA") || _actions->isActive("swapB") || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_START || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_MOVING || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_END)
+        if (_actions->isActive("swapA") || _actions->isActive("swapB") || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_START || _selectedSquare->getUnit()->getState() == Unit::State::SELECTED_MOVING)
         {
             completedSwap = false;
         }
@@ -1453,8 +1453,7 @@ void GameScene::update(float timestep)
                 unit->setState(Unit::State::SELECTED_MOVING);
                 break;
             case Unit::State::SELECTED_MOVING:
-                unit->setState(Unit::State::SELECTED_END);
-//                refreshUnitView(square);
+                unit->setState(Unit::State::SELECTED_NONE);
                 break;
             case Unit::State::SELECTED_END:
                 unit->setState(Unit::State::ATTACKING);
@@ -1538,7 +1537,10 @@ void GameScene::update(float timestep)
 void GameScene::updateModelPostSwap()
 {
     _midSwap = false;
-
+    // <Hedy>
+    // Save the selected unit testure before switch and rotate units
+    string texture = (_selectedSquare->getUnit()->getSubType()) + "-" + Unit::colorToString(_selectedSquare->getUnit()->getColor()) + "-selected-end";
+   // <Hedy/>
     _board->switchAndRotateUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
     //  Because the units in the model where already swapped.
     float inverseSquareFactor = 1 / _squareScaleFactor;
@@ -1546,25 +1548,37 @@ void GameScene::updateModelPostSwap()
     auto selectedUnitNode = _swappingSquare->getUnit()->getViewNode();
     swappedUnitNode->setPosition(Vec2::ONE * inverseSquareFactor * (_squareSizeAdjustedForScale / 2));
     selectedUnitNode->setPosition(Vec2::ONE * inverseSquareFactor * (_squareSizeAdjustedForScale / 2));
-    //    swappedUnitNode->setPosition(Vec2::ONE * (200));
-    //    selectedUnitNode->setPosition(Vec2::ONE * (_squareSizeAdjustedForScale / 2));
+    // <Hedy>
+    // Prepare for Animation
+    swappedUnitNode->setVisible(false);
+    // <Hedy/>
+    
     // Updating View
     _selectedSquare->getViewNode()->removeChild(selectedUnitNode);
     _swappingSquare->getViewNode()->removeChild(swappedUnitNode);
     _selectedSquare->getViewNode()->addChild(swappedUnitNode);
     _swappingSquare->getViewNode()->addChild(selectedUnitNode);
-
-    if (_attackedSquares.size() > 0)
-    {
-        _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING); // begin the attack sequence
-        refreshUnitView(_initalAttackSquare);
-    }
-    else
-    { // need to show shield animation even if no unit is killed in this swap
-        for (auto ptdSquare : _protectedSquares)
+    
+    // <Hedy>
+    // Animation
+    _swappingSquare->getUnit()->setSelectedEnd(_textures.at(texture));
+    refreshUnitView(_swappingSquare);
+    swappedUnitNode->setVisible(true);
+    refreshUnitView(_selectedSquare);
+    if ( _swappingSquare->getUnit()->completedAnimation) {
+    // <Hedy/>
+        if (_attackedSquares.size() > 0)
         {
-            ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
-            refreshUnitView(ptdSquare);
+            _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING); // begin the attack sequence
+            refreshUnitView(_initalAttackSquare);
+        }
+        else
+        { // need to show shield animation even if no unit is killed in this swap
+            for (auto ptdSquare : _protectedSquares)
+            {
+                ptdSquare->getUnit()->setState(Unit::State::PROTECTED);
+                refreshUnitView(ptdSquare);
+            }
         }
     }
 }

@@ -110,9 +110,9 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
 void Unit::setState(State s) {
     _state = s;
     //<Hedy>
-    completedAnimation = false;
-    if (s != State::SELECTED_MOVING) {
+    if (s != State::SELECTED_MOVING && s != State::SELECTED_NONE) {
     // moving animation is a special case
+    completedAnimation = false;
     // <Hedy/>
     std::shared_ptr<scene2::SpriteNode> newNode;
     int framesInAnimation = animationFrameCounts[s];
@@ -144,6 +144,30 @@ void Unit::setState(State s) {
     _viewNode = newNode;
     }
 }
+
+//<Hedy>
+/**
+ * Sets the selected_end animation
+ *
+ * @param texture the texture of the SELECTED unit
+ *
+ */
+void Unit::setSelectedEnd(std::shared_ptr<cugl::Texture> texture)
+{
+    _state = SELECTED_END;
+    completedAnimation = false;
+    std::shared_ptr<scene2::SpriteNode> newNode;
+    int framesInAnimation = animationFrameCounts[SELECTED_END];
+    newNode = scene2::SpriteNode::alloc(texture, 1, framesInAnimation);
+    _time_per_frame = _time_per_animation / framesInAnimation;
+    _time_since_last_flash = 0.0f;
+    _time_since_last_frame = 0.0f;
+    _time_since_start_animation = 0.0f;
+    newNode->setAnchor(Vec2::ANCHOR_CENTER + Vec2(0, -0.2));
+    newNode->setVisible(true);
+    _viewNode = newNode;
+};
+//<Hedy/>
 
 /**
  * Retuns the angle between the direction of the unit and the default direction in radians.
