@@ -108,8 +108,9 @@ vector<shared_ptr<Square>> Board::getAttackedSquares(cugl::Vec2 pos) {
     auto attackingSquare = getSquare(pos);
     for (Vec2 vector : attackingSquare->getUnit()->getBasicAttackRotated()) {
         Vec2 squarePos = vector + attackingSquare->getPosition();
-        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && (attackingSquare->getUnit()->getColor() != getSquare(squarePos)->getUnit()->getColor() || getSquare(squarePos)->getUnit()->getSubType() == "king")) {
-            getAttackedSquares_h(result, ptdResult, getSquare(squarePos));
+        auto attackedSquare = getSquare(squarePos);
+        if (doesSqaureExist(squarePos) && attackedSquare->isInteractable() && attackingSquare->isInteractable() && (attackingSquare->getUnit()->getColor() != attackedSquare->getUnit()->getColor() || attackedSquare->getUnit()->getSubType() == "king")) {
+            getAttackedSquares_h(result, ptdResult, attackedSquare);
         }
     }
     return result;
@@ -142,8 +143,9 @@ vector<shared_ptr<Square>> Board::getInitallyAttackedSquares(cugl::Vec2 pos, boo
     vector<Vec2> attackedSquares = basic ? attackingSquare->getUnit()->getBasicAttackRotated() : attackingSquare->getUnit()->getSpecialAttackRotated();
     for (Vec2 vector : attackedSquares) {
         Vec2 squarePos = vector + attackingSquare->getPosition();
-        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && (attackingSquare->getUnit()->getColor() != getSquare(squarePos)->getUnit()->getColor() || getSquare(squarePos)->getUnit()->getSubType() == "king")) {
-            result.push_back(getSquare(squarePos));
+        auto attackedSquare = getSquare(squarePos);
+        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && attackedSquare->isInteractable() && (attackingSquare->getUnit()->getColor() != attackedSquare->getUnit()->getColor() || attackedSquare->getUnit()->getSubType() == "king")) {
+            result.push_back(attackedSquare);
         }
     }
     return result;
@@ -164,11 +166,12 @@ vector<shared_ptr<Square>> Board::getProtectedSquares(cugl::Vec2 pos){
     auto attackingSquare = getSquare(pos);
     for (Vec2 vector : attackingSquare->getUnit()->getBasicAttackRotated()) {
         Vec2 squarePos = vector + attackingSquare->getPosition();
-        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && attackingSquare->getUnit()->getColor() == getSquare(squarePos)->getUnit()->getColor() && getSquare(squarePos)->getUnit()->getSubType() != "king"){
-            ptdResult.push_back(getSquare(squarePos));
+        auto attackedSquare = getSquare(squarePos);
+        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && attackedSquare->isInteractable() && attackingSquare->getUnit()->getColor() == attackedSquare->getUnit()->getColor() && attackedSquare->getUnit()->getSubType() != "king"){
+            ptdResult.push_back(attackedSquare);
         }
-        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && (attackingSquare->getUnit()->getColor() != getSquare(squarePos)->getUnit()->getColor() || getSquare(squarePos)->getUnit()->getSubType() == "king")) {
-            getAttackedSquares_h(result,ptdResult, getSquare(squarePos));
+        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && attackedSquare->isInteractable() && (attackingSquare->getUnit()->getColor() != attackedSquare->getUnit()->getColor() || attackedSquare->getUnit()->getSubType() == "king")) {
+            getAttackedSquares_h(result,ptdResult, attackedSquare);
         }
     }
     return ptdResult;
@@ -184,8 +187,9 @@ vector<shared_ptr<Square>> Board::getInitiallyProtectedSquares(cugl::Vec2 pos, b
     vector<Vec2> attackedSquares = basic ? attackingSquare->getUnit()->getBasicAttackRotated() : attackingSquare->getUnit()->getSpecialAttackRotated();
     for (Vec2 vector : attackedSquares) {
         Vec2 squarePos = vector + attackingSquare->getPosition();
-        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && attackingSquare->getUnit()->getColor() == getSquare(squarePos)->getUnit()->getColor() && getSquare(squarePos)->getUnit()->getSubType() != "king") {
-            result.push_back(getSquare(squarePos));
+        auto attackedSquare = getSquare(squarePos);
+        if (doesSqaureExist(squarePos) && attackingSquare->isInteractable() && attackedSquare->isInteractable() && attackingSquare->getUnit()->getColor() == attackedSquare->getUnit()->getColor() && attackedSquare->getUnit()->getSubType() != "king") {
+            result.push_back(attackedSquare);
             CULog("pushed");
         }
     }

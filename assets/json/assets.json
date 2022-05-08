@@ -228,6 +228,15 @@
         "basic-hit-blue": {
             "file": "textures/basic_hit_blue.png"
         },
+        "basic-target-red": {
+            "file": "textures/basic_target_red.png"
+        },
+        "basic-target-green": {
+            "file": "textures/basic_target_orange.png"
+        },
+        "basic-target-blue": {
+            "file": "textures/basic_target_blue.png"
+        },
         "diagonal-blue": {
             "file": "textures/diagonal_blue.png"
         },
@@ -290,6 +299,15 @@
         },
         "diagonal-hit-green": {
             "file": "textures/diagonal_hit_green.png"
+        },
+        "diagonal-target-blue": {
+            "file": "textures/diagonal_target_blue.png"
+        },
+        "diagonal-target-red": {
+            "file": "textures/diagonal_target_red.png"
+        },
+        "diagonal-target-green": {
+            "file": "textures/diagonal_target_orange.png"
         },
         "three-way-blue": {
             "file": "textures/three_way_blue_unit.png"

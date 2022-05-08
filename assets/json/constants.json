@@ -41,6 +41,10 @@
         "king-dying-red",
         "king-dying-blue",
         "king-dying-green",
+        "king-target-red",
+        "king-target-blue",
+        "king-target-green",
+        
         "border-red",
         "border-green",
         "border-blue",
@@ -73,6 +77,9 @@
         "basic-dying-blue",
         "basic-dying-red",
         "basic-dying-green",
+        "basic-target-blue",
+        "basic-target-red",
+        "basic-target-green",
         
         "basic-red-selected-start",
         "basic-red-selected-moving",
@@ -99,6 +106,9 @@
         "diagonal-dying-red",
         "diagonal-dying-blue",
         "diagonal-dying-green",
+        "diagonal-target-red",
+        "diagonal-target-blue",
+        "diagonal-target-green",
         
         "diagonal-red-selected-start",
         "diagonal-red-selected-moving",
@@ -127,6 +137,9 @@
         "three-way-dying-red",
         "three-way-dying-blue",
         "three-way-dying-green",
+        "three-way-target-red",
+        "three-way-target-blue",
+        "three-way-target-green",
         
         "three-way-red-selected-start",
         "three-way-red-selected-moving",
@@ -155,6 +168,9 @@
         "two-forward-dying-red",
         "two-forward-dying-blue",
         "two-forward-dying-green",
+        "two-forward-target-red",
+        "two-forward-target-blue",
+        "two-forward-target-green",
         
         "two-forward-red-selected-start",
         "two-forward-red-selected-moving",
