@@ -7,7 +7,7 @@
 	"two-star-condition":	4,
 	"three-star-condition":	4,
 	"background":	"forest",
-	"square-size": 200,
+	"square-size": 220,
     "unit-types": ["unit1", "empty", "empty"],
 	"board-members":	[[{
 				"type":	"unit",
