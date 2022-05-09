@@ -47,6 +47,21 @@ To retrieve the json file. Open Run by going to the search bar and searching run
 ## Playing
 Play a level by pressing ENTER or pressing the play button. This will automatically take you to the game scene. Return to the level editor by pressing ESCAPE.
 
+## Changing Board Size
+The board size is linked to the size of individual squares. All squares will have the same size. In order to change the size of squares, press the info button and change the Sq Size variable.
+The default size of squares can be found in the constants.json file.
+
+# Changing JSON Values directly in JSON
+Sometimes, it is faster to change the JSON files of levels already loaded into the game directly than using the level editor. However, some variables should not be changed or else they might corrupt the level files themselves.
+**The following variables can be changed in JSON without corrupting the file**
+- id (make sure you change the name of the file to board{id}). This way you can change the order of levels without using the level editor).
+- one-star-condition
+- two-star-condition
+- three-star-condition
+- background (as long as that type of background exists, you can find the backgrounds that exist in constants.json).
+- square-size
+
+Any other variables should not be manipulated unless if you create a backup of the file.
 
 # Creating New Units
 Follow these steps to create a new unit

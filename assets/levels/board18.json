@@ -7,6 +7,7 @@
 	"two-star-condition":	6,
 	"three-star-condition":	7,
 	"background":	"glacier",
+	"square-size": 200,
     "unit-types": ["unit1", "empty", "empty"],
 	"board-members":	[[{
 				"type":	"unit",

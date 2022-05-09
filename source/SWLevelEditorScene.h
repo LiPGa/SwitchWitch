@@ -84,6 +84,7 @@ protected:
     std::shared_ptr<cugl::scene2::TextField> _oneStarScoreText;
     std::shared_ptr<cugl::scene2::TextField> _twoStarScoreText;
     std::shared_ptr<cugl::scene2::TextField> _threeStarScoreText;
+    std::shared_ptr<cugl::scene2::TextField> _squareSizeText;
     std::shared_ptr<cugl::scene2::TextField> _kingThresholdText;
     std::shared_ptr<cugl::scene2::Button> _playButton;
     std::shared_ptr<cugl::scene2::Button> _saveButton;

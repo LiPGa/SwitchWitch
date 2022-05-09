@@ -37,6 +37,7 @@ public:
     int numOfKings;
     string backgroundName;
     vector<string> unitTypes;
+    int squareSize;
 
 #pragma mark Constructors
     /**

@@ -3993,6 +3993,54 @@
                         "x_offset": 0.05
                     }
                 },
+                "square-size-label": {
+                    "type": "Label",
+                    "data": {
+                        "font": "pixel32",
+                        "text": "Sq",
+                        "foreground": "#ffffff",
+                        "background": "#000000",
+                        "size": [
+                            100,
+                            40
+                        ],
+                        "anchor": [
+                            1,
+                            0.5
+                        ]
+                    },
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "bottom",
+                        "y_offset": 0.25,
+                        "x_offset": -0.2
+                    }
+                },
+                "square-size-field": {
+                    "type": "TextField",
+                    "data": {
+                        "font": "pixel32",
+                        "text": "0",
+                        "foreground": "#ffffff",
+                        "background": "#000000",
+                        "size": [
+                            170,
+                            40
+                        ],
+                        "anchor": [
+                            0.5,
+                            0.5
+                        ],
+                        "cursor": true,
+                        "cursorcolor": "#ffffff"
+                    },
+                    "layout": {
+                        "x_anchor": "center",
+                        "y_anchor": "bottom",
+                        "y_offset": 0.25,
+                        "x_offset": 0.05
+                    }
+                },
                 "one-star-score-label": {
                     "type": "Label",
                     "data": {
@@ -4149,7 +4197,7 @@
                         "x_anchor": "center",
                         "y_anchor": "middle",
                         "x_offset": 0,
-                        "y_offset": 0
+                        "y_offset": 0.1
                     }
                 },
                 "background": {
@@ -4169,7 +4217,7 @@
                         "x_anchor": "center",
                         "y_anchor": "middle",
                         "x_offset": 0,
-                        "y_offset": -0.15
+                        "y_offset": -0.1
                     }
                 }
             }

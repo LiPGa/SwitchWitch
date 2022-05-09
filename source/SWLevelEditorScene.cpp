@@ -174,6 +174,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     _threeStarScoreText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_three-star-score-field"));
     _changeBoardSizeButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level-editor-info_board-size"));
     _changeBackgroundButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level-editor-info_background"));
+    _squareSizeText = std::dynamic_pointer_cast<scene2::TextField>(assets->get<scene2::SceneNode>("level-editor-info_square-size-field"));
 
     _levelIDText->addTypeListener([this](const std::string& name, const std::string& value) {
         if (value.empty()) return;
@@ -207,6 +208,15 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
         if (isInteger(value)) _level->threeStarThreshold = stoi(value);
         else _threeStarScoreText->setText(to_string(_level->threeStarThreshold));
         });
+    _squareSizeText->addTypeListener([this](const std::string& name, const std::string& value) {
+        if (value.empty()) return;
+        if (!isInteger(value)) _squareSizeText->setText(to_string(_level->squareSize));
+        });
+    _squareSizeText->addExitListener([this](const std::string& name, const std::string& value) {
+        if (isInteger(value)) _level->squareSize = stoi(value);
+        else _squareSizeText->setText(to_string(_level->squareSize));
+        });
+    _squareSizeText->setText(to_string(defaultSquareSize));
     _boardButton = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("level-editor-info_board"));
     _boardButton->addListener([this](const std::string& name, bool down) {
         if (down) {
@@ -331,6 +341,7 @@ bool LevelEditorScene::init(const std::shared_ptr<cugl::AssetManager>& assets)
     // Initialize Level
     _level = Level::alloc(_textures, _maxBoardWidth, _maxBoardHeight);
     _level->addBoard(allocBasicBoard(_maxBoardWidth, _maxBoardHeight));
+    _level->squareSize = defaultSquareSize;
 
     // Initialize Turn Counter
     std::string turnMsg = strtool::format("Board: %d/%d", _currentBoardTurn, _level->maxTurns);
@@ -628,6 +639,7 @@ void LevelEditorScene::showBoard() {
     _oneStarScoreText->deactivate();
     _twoStarScoreText->deactivate();
     _threeStarScoreText->deactivate();
+    _squareSizeText->deactivate();
     _changeBackgroundButton->deactivate();
     _changeBoardSizeButton->deactivate();
 
@@ -652,6 +664,7 @@ void LevelEditorScene::showInfo() {
     _oneStarScoreText->activate();
     _twoStarScoreText->activate();
     _threeStarScoreText->activate();
+    _squareSizeText->activate();
     _changeBoardSizeButton->activate();
     _changeBackgroundButton->activate();
 
@@ -691,5 +704,6 @@ void LevelEditorScene::setLevel(shared_ptr<Level> level) {
     _oneStarScoreText->setText(to_string(_level->oneStarThreshold));
     _twoStarScoreText->setText(to_string(_level->twoStarThreshold));
     _threeStarScoreText->setText(to_string(_level->threeStarThreshold));
+    _squareSizeText->setText(to_string(_level->squareSize));
     updateBoardNode();
 }

@@ -24,6 +24,7 @@ bool Level::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>>
     oneStarThreshold = 0;
     twoStarThreshold = 0;
     threeStarThreshold = 0;
+    squareSize = 162;
     backgroundName = "forest";
     return true;
 }
@@ -46,6 +47,7 @@ bool Level::init(std::unordered_map<std::string, std::shared_ptr<cugl::Texture>>
     numOfKings = levelJSON->getInt("num-of-kings");
     backgroundName = levelJSON->getString("background");
     unitTypes = levelJSON->get("unit-types")->asStringArray();
+    squareSize = levelJSON->getInt("square-size");
     auto layersInBoardJson = levelJSON->get("board-members")->children();
     
     for (auto layer : layersInBoardJson)
@@ -80,6 +82,7 @@ shared_ptr<JsonValue> Level::convertToJSON() {
     boardJSON->appendChild("two-star-condition", cugl::JsonValue::alloc((long int)twoStarThreshold));
     boardJSON->appendChild("three-star-condition", cugl::JsonValue::alloc((long int)threeStarThreshold));
     boardJSON->appendChild("background", cugl::JsonValue::alloc(backgroundName));
+    boardJSON->appendChild("square-size", cugl::JsonValue::alloc((long int)squareSize));
     auto unitTypeArray = cugl::JsonValue::allocArray();
     unitTypeArray->appendChild(cugl::JsonValue::alloc("empty"));
     unitTypeArray->appendChild(cugl::JsonValue::alloc("empty"));
