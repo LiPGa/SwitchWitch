@@ -880,7 +880,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     {
         sqTexture = "square-" + _level->backgroundName;
     }
-    CULog("set texutre square !!");
+//    CULog("set texutre square !!");
     square->getViewNode()->setTexture(_textures.at(sqTexture));
 }
 
@@ -982,6 +982,7 @@ void GameScene::deconfirmSwap()
     for (shared_ptr<Square> protectedSquare : _protectedSquares)
     {
         protectedSquare->getUnit()->getViewNode()->removeAllChildren();
+        updateSquareTexture(protectedSquare);
     }
     for (shared_ptr<Square> square : _board->getAllSquares())
     {
@@ -1460,6 +1461,13 @@ void GameScene::update(float timestep)
         {
             if (_midSwap)
                 updateModelPostSwap();
+            else{
+                for (shared_ptr<Square> protectedSquare : _protectedSquares)
+                {
+                    protectedSquare->getUnit()->getViewNode()->removeAllChildren();
+                    updateSquareTexture(protectedSquare);
+                }
+            }
         }
 
         for (auto square : _board->getAllSquares())

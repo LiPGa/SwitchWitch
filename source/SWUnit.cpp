@@ -76,14 +76,14 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
     std::string selectedEndTextureName = subtype + "-" + colorString + "-selected-end";
     // <Hedy/>
     std::string targetedTextureName = subtype + "-target-" + colorString;
-    CULog("targetedTexture: %s", targetedTextureName.c_str());
+//    CULog("targetedTexture: %s", targetedTextureName.c_str());
     std::string attackTextureName = subtype + "-attack-" + colorString;
     std::string dyingTextureName = subtype + "-dying-" + colorString;
     std::string respawningTextureName = subtype + "-respawning-" + colorString;
     switch (state) {
         case IDLE:
             return _textureMap.count(idleTextureName) > 0 ? _textureMap.at(idleTextureName) : _textureMap.at(defaultTextureName);
-        case State::PROTECTED:
+        case PROTECTED:
             return _textureMap.count(idleTextureName) > 0 ? _textureMap.at(idleTextureName) : _textureMap.at(defaultTextureName);
         case HIT:
             return _textureMap.count(hitTextureName) > 0 ? _textureMap.at(hitTextureName)

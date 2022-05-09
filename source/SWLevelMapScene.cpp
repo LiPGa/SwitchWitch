@@ -94,7 +94,7 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
 }
 
 void LevelMapScene::adjust_scroll_bgm(float yposition) {
-    CULog("%d ypos", yposition);
+//    CULog("%d ypos", yposition);
     if (yposition >-700) {
         _normalNode->setGain(1);
         _iceNode->setGain(0);
