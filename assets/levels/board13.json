@@ -7,7 +7,7 @@
 	"two-star-condition":	3,
 	"three-star-condition":	3,
 	"background":	"forest",
-    "unit-types": ["unit1", "empty", "empty"],
+	"unit-types":	["empty", "empty", "empty"],
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"two-forward",
@@ -184,7 +184,7 @@
 				"unitsNeededToKill":	0
 			}, {
 				"type":	"unit",
-				"sub-type":	"random",
+				"sub-type":	"basic",
 				"color":	"red",
 				"direction":	[1, 0],
 				"unitsNeededToKill":	0
