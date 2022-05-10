@@ -863,7 +863,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     std::string color = Unit::colorToString(replacementUnit->getColor());
     string replacementDirection = Unit::directionToString(replacementUnit->getDirection());
 
-    if (currentUnit->isSpecial() && (replacementUnit->getSubType() == "basic" || replacementUnit->getSubType() == "random"))
+    if (currentUnit->isSpecial() && currentUnit->getSubType()!="king" && (replacementUnit->getSubType() == "basic" || replacementUnit->getSubType() == "random"))
     {
         sqTexture = "special_" + currentDirection + "_square";
     }

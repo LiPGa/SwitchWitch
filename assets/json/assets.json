@@ -546,6 +546,9 @@
         "result_background": {
             "file": "textures/result-background.png"
         },
+        "result_background_dark": {
+            "file": "textures/result-background-dark.png"
+        },
         "result_btn_retry": {
             "file": "textures/result-btn-retry.png"
         },
@@ -2952,8 +2955,8 @@
                 "board": {
                     "type": "Image",
                     "data": {
-                        "texture": "result_background",
-                        "scale": 0.6
+                        "texture": "result_background_dark",
+                        "scale": 0.55
                     },
                     "layout": {
                         "y_anchor": "middle",
@@ -2982,7 +2985,7 @@
                                 "x_anchor": "center",
                                 "y_anchor": "top",
                                 "x_offset": 0.0,
-                                "y_offset": -0.15
+                                "y_offset": -0.125
                             }
                         },
                         "star1": {
@@ -3028,28 +3031,6 @@
                             },
                             "format": {
                                 "type": "Anchored"
-                            }
-                        },
-                        "score": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel32",
-                                "text": "Score",
-                                "foreground": "#63351D",
-                                "halign": "center",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "scale": 1.0,
-                                "visible": true
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "x_offset": -0.01,
-                                "y_offset": 0
                             }
                         },
                         "number": {
@@ -3565,8 +3546,8 @@
                 "board": {
                     "type": "Image",
                     "data": {
-                        "texture": "result_background",
-                        "scale": 0.6
+                        "texture": "result_background_dark",
+                        "scale": 0.55
                     },
                     "layout": {
                         "y_anchor": "middle",
@@ -3595,7 +3576,7 @@
                                 "x_anchor": "center",
                                 "y_anchor": "top",
                                 "x_offset": 0.0,
-                                "y_offset": -0.15
+                                "y_offset": -0.125
                             }
                         },
                         "star1": {
@@ -3641,28 +3622,6 @@
                             },
                             "format": {
                                 "type": "Anchored"
-                            }
-                        },
-                        "score": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel32",
-                                "text": "Score",
-                                "foreground": "#63351D",
-                                "halign": "center",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "scale": 1.0,
-                                "visible": true
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "x_offset": -0.01,
-                                "y_offset": 0
                             }
                         },
                         "number": {
