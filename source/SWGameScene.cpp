@@ -2022,7 +2022,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON)
             std::string unitIdleTextureName = unitSubType + "-idle-" + unitColor;
             auto unitTemplate = _unitTypes.at(unitSubType);
             Unit::Color c = Unit::stringToColor(unitColor);
-            shared_ptr<Unit> newUnit = Unit::alloc(_textures, unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType != "king", unitSubType != "basic", unit->getUnitsNeededToKill());
+            shared_ptr<Unit> newUnit = Unit::alloc(_textures, unitSubType, c, unitTemplate->getBasicAttack(), unitTemplate->getSpecialAttack(), unitDirection, unitSubType != "king", unitSubType != "basic" && unitSubType != "king", unit->getUnitsNeededToKill());
             newUnit->setState(Unit::State::IDLE);
             sq->setUnit(newUnit);
             auto unitNode = newUnit->getViewNode();
@@ -2034,7 +2034,6 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON)
             unitNode->setPriority(UNIT_Z);
             //            newUnit->setViewNode(unitNode);
 
-            newUnit->setSpecial(unitSubType != "basic");
             if (_debug)
                 unitNode->setAngle(newUnit->getAngleBetweenDirectionAndDefault());
             squareNode->addChild(unitNode);
