@@ -894,6 +894,7 @@ void GameScene::refreshUnitView(shared_ptr<Square> sq)
 {
     auto unit = sq->getUnit();
     auto unitNode = unit->getViewNode();
+    auto squareNode = sq->getViewNode();
 
     std::string unitSubtype = unit->getSubType();
     if (unitSubtype != "basic")
@@ -901,6 +902,17 @@ void GameScene::refreshUnitView(shared_ptr<Square> sq)
     else
         unit->setSpecial(false);
     sq->getViewNode()->removeAllChildren();
+    if (unitSubtype == "king" && unit->getState() == Unit::TARGETED) {
+        std::string updatedText = strtool::format("%d/%d", _attackedSquares.size(), unit->getUnitsNeededToKill());
+        _attack_text = scene2::Label::allocWithText(updatedText, _assets->get<Font>("pixel32"));
+        _attack_text->setScale(2.5);
+        _attack_text->setColor(Color4::RED);
+        //_attack_text->setPriority(0);
+        _attack_text->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
+        _attack_text->setPosition(Vec2(squareNode->getSize().width, squareNode->getSize().height) / squareNode->getScale() * 1.5);
+//        _info_text->setPosition(Vec2(squareNode->getSize().width, squareNode->getSize().height) / squareNode->getScale()*1.1);
+        squareNode->addChildWithName(_attack_text, "attack_info");
+    }
     if (unitNode->getParent() == NULL)
         sq->getViewNode()->addChild(unitNode);
     if (_debug)
@@ -1387,6 +1399,7 @@ void GameScene::update(float timestep)
     {
         _upcomingUnitNode->setVisible(false);
         _upcomingUnitNode->removeAllChildren();
+        
         if (_enlargedUnitNode)
             _enlargedUnitNode->setScale(_unitScaleFactor * BACK2NORMAL);
 
@@ -1487,6 +1500,14 @@ void GameScene::update(float timestep)
             else if (isKing && unitState != Unit::IDLE && unitState != Unit::DEAD)
             {
                 completedAttackSequence = false;
+                auto squareNode = square->getViewNode();
+                squareNode->removeChildByName("attack_info");
+                squareNode->removeChildByName("info");
+                _info_text->setScale(2.5);
+                _info_text->setColor(Color4::RED);
+                _info_text->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
+                _info_text->setPosition(Vec2(squareNode->getSize().width, squareNode->getSize().height) / squareNode->getScale() * 1.2);
+                squareNode->addChildWithName(_info_text, "info");
             }
             updateSquareTexture(square);
         }

@@ -202,6 +202,7 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _level_info;
     std::shared_ptr<cugl::scene2::Label> _fail_level_info;
     std::shared_ptr<cugl::scene2::Label> _info_text;
+    std::shared_ptr<cugl::scene2::Label> _attack_text;
     /** The score meter with the current score */
     std::shared_ptr<cugl::scene2::ProgressBar> _scoreMeter;
 //    /** The images of the stars above the score meter */
@@ -283,6 +284,7 @@ protected:
     vector<shared_ptr<cugl::scene2::PolygonNode>> _unitPatterns;
     
     std::shared_ptr<cugl::TextLayout> _winLoseText;
+    std::shared_ptr<Square> _kingSquare;
     vector<shared_ptr<Square>> _attackedSquares;
     vector<shared_ptr<Square>> _protectedSquares;
     std::shared_ptr<Square> _initalAttackSquare;
