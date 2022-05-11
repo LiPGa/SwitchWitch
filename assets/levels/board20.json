@@ -8,7 +8,7 @@
 	"three-star-condition":	4,
 	"background":	"glacier",
 	"square-size": 220,
-	"unit-types":	["empty", "empty", "empty"],
+	"unit-types":	["unit1", "unit2", "empty"],
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"random",

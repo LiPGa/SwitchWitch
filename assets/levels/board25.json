@@ -8,7 +8,7 @@
 	"three-star-condition":	5,
 	"background":	"volcano",
 	"square-size": 220,
-	"unit-types":	["empty", "empty", "empty"],
+	"unit-types":	["unit1", "unit2", "unit3"],
 	"board-members":	[[{
 				"type":	"unit",
 				"sub-type":	"random",
