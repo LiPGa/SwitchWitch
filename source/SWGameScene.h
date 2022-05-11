@@ -401,6 +401,8 @@ public:
      */
     void updateAttackingPatterns();
     
+    void setGoal(std::shared_ptr<cugl::scene2::PolygonNode> squareNode);
+    
 #pragma mark -
 #pragma mark Gameplay Handling
     /**
