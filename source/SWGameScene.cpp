@@ -1488,6 +1488,16 @@ void GameScene::update(float timestep)
             auto unit = square->getUnit();
             auto unitState = unit->getState();
             bool isKing = unit->getSubType() == "king";
+            if (isKing && unitState == Unit::State::IDLE) {
+                auto squareNode = square->getViewNode();
+                squareNode->removeChildByName("attack_info");
+                squareNode->removeChildByName("info");
+                _info_text->setScale(2.5);
+                _info_text->setColor(Color4::RED);
+                _info_text->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
+                _info_text->setPosition(Vec2(squareNode->getSize().width, squareNode->getSize().height) / squareNode->getScale() * 1.2);
+                squareNode->addChildWithName(_info_text, "info");
+            }
             if (!isKing && unitState != Unit::State::IDLE)
             {
                 completedAllAnimations = false;
