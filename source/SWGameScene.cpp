@@ -989,7 +989,14 @@ void GameScene::deconfirmSwap()
     _currentState = SELECTING_SWAP;
     // If we are de-confirming a swap, we must undo the swap.
     _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
-    _selectedSquare->getUnit()->setDirection(_selectedSquareOriginalDirection);
+    auto selectedUnit = _selectedSquare->getUnit();
+    auto swappingUnit = _swappingSquare->getUnit();
+    selectedUnit->setState(Unit::State::IDLE);
+    refreshUnitView(_selectedSquare);
+    _enlargedUnitNode = selectedUnit->getViewNode();
+    _enlargedUnitNode->setScale(_unitScaleFactor * ENLARGE);
+    swappingUnit->setDoAnimate(false);
+    selectedUnit->setDirection(_selectedSquareOriginalDirection);
     //_swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
     for (shared_ptr<Square> protectedSquare : _protectedSquares)
     {
@@ -1333,6 +1340,7 @@ void GameScene::update(float timestep)
                 // Enlarge the new selected unit
                 _enlargedUnitNode = _selectedSquare->getUnit()->getViewNode();
                 _enlargedUnitNode->setScale(_unitScaleFactor * ENLARGE);
+                _selectedSquare->getUnit()->setDoAnimate(true);
 
                 std::shared_ptr<Square> replacementSquare = _selectedSquare == NULL ? NULL : _level->getBoard(_currentReplacementDepth[_board->flattenPos(_selectedSquare->getPosition().x, _selectedSquare->getPosition().y)] + 1)->getSquare(_selectedSquare->getPosition());
                 auto upcomingUnitType = replacementSquare->getUnit()->getSubType();
@@ -1411,9 +1419,12 @@ void GameScene::update(float timestep)
     {
         _upcomingUnitNode->setVisible(false);
         _upcomingUnitNode->removeAllChildren();
-        
-        if (_enlargedUnitNode)
+    
+        if (_enlargedUnitNode) {
             _enlargedUnitNode->setScale(_unitScaleFactor * BACK2NORMAL);
+            auto selectedUnit = _selectedSquare->getUnit();
+            if (selectedUnit) selectedUnit->setDoAnimate(false);
+        }
 
         for (shared_ptr<Square> square : _board->getAllSquares())
         {
@@ -1426,10 +1437,13 @@ void GameScene::update(float timestep)
             _midSwap = true;
 
             _board->switchUnits(_selectedSquare->getPosition(), _swappingSquare->getPosition());
+            auto swappingUnit = _swappingSquare->getUnit();
             AudioEngine::get()->play("swap", _assets->get<Sound>("swap"), false, _soundVolume, false);
             // Animation
             _selectedSquare->getUnit()->setState(Unit::State::SELECTED_START);
             refreshUnitView(_selectedSquare);
+            _swappingSquare->getUnit()->setState(Unit::State::IDLE);
+            refreshUnitView(_swappingSquare);
             _initalAttackSquare = _swappingSquare;
             _turns--;
         }

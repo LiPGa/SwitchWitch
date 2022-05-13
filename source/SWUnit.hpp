@@ -121,6 +121,9 @@ private:
     /** Whether the unit is moveable */
     bool _moveable;
     
+    /** Whether animation is allowed for this unit */
+    bool _doAnimate = true;
+    
     /** Whether this unit has previously been hit by an attack */
     bool _hasBeenHit;
     
@@ -435,6 +438,19 @@ public:
      * @param s the state of the unit.
      */
     void setHasBeenHit(bool h) { _hasBeenHit = h; }
+    
+    /**
+     * Returns whether the unit allows animation
+     * @return unit's animation status
+     */
+    bool getDoAnimate() { return _doAnimate; }
+
+    /**
+     * Sets the unit's animation status
+     *
+     * @param a the animation state
+     */
+    void setDoAnimate(bool a);
 
     /**
      * Returns the direction which the unit is currently facing.

@@ -141,8 +141,12 @@ void Unit::setState(State s) {
     if (s == IDLE) { // Speed up the animation if part of a chain
         _time_per_animation = DEFAULT_TIME_PER_ANIMATION;
         _chainCount = 0;
-    } else if (_subtype != "king") {
-        _time_per_animation = std::max(0.2f, DEFAULT_TIME_PER_ANIMATION - _chainCount * ANIMATION_SPEEDUP_FACTOR);
+        _doAnimate = false;
+    } else {
+        if (_subtype != "king") {
+            _time_per_animation = std::max(0.2f, DEFAULT_TIME_PER_ANIMATION - _chainCount * ANIMATION_SPEEDUP_FACTOR);
+        }
+        _doAnimate = true;
     }
 //    if (s == State::TARGETED) {
 //        CULog("targeted frames in animation: %i", framesInAnimation);
@@ -281,7 +285,7 @@ void Unit::update(float dt) {
             completedAnimation = true;
 //            _viewNode->setPosition(_initialPos);
         }
-        _viewNode->setFrame(frame);
+        if (_doAnimate) _viewNode->setFrame(frame);
     }
 //    }
 }
@@ -295,4 +299,9 @@ bool Unit::animationShouldLoop(State s) {
         default:
             return false;
     }
+}
+
+void Unit::setDoAnimate(bool a) {
+    _doAnimate = a;
+    _viewNode->setFrame(0);
 }
