@@ -9,8 +9,11 @@
         "background-volcano": {
             "file": "textures/background_volcano_big.png"
         },
-        "top-ui-background": {
-            "file": "textures/background_without_units.png"
+        "top-ui-background-0": {
+            "file": "textures/top-ui-background-new-0.png"
+        },
+        "top-ui-background-00": {
+            "file": "textures/top-ui-background-new-00.png"
         },
         "square-forest": {
             "file": "textures/square_forest.png"
@@ -2275,8 +2278,8 @@
                     "layout": {
                         "x_anchor": "right",
                         "y_anchor": "top",
-                        "x_offset": -0.035,
-                        "y_offset": -0.087
+                        "x_offset": -0.055,
+                        "y_offset": -0.095
                     }
                 },
                 "score-explanation-btn": {
@@ -2320,22 +2323,6 @@
                         "x_anchor": "top",
                         "x_offset": -0.07,
                         "y_offset": 0.63
-                    },
-                    "format": {
-                        "type": "Anchored"
-                    }
-                },
-                "swap": {
-                    "type": "Image",
-                    "data": {
-                        "texture": "swap-title",
-                        "scale": 0.225
-                    },
-                    "layout": {
-                        "y_anchor": "middle",
-                        "x_anchor": "middle",
-                        "y_offset": 0.869,
-                        "x_offset": 0.555
                     },
                     "format": {
                         "type": "Anchored"

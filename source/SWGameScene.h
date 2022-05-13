@@ -84,6 +84,7 @@ protected:
     float _unitScaleFactor;
     std::string _topUI_scores_color;
     std::string _topUI_maxTurn_color;
+    std::string _levelID_color;
     
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;
@@ -123,6 +124,8 @@ protected:
     int _turns;
     /** The maximum number of turns for the current level */
     int _maxturns;
+    /** The current level ID*/
+    int _levelID;
     /** The current score of the player */
     int _score;
     /** The previous score of the player */
@@ -193,6 +196,8 @@ protected:
     std::shared_ptr<cugl::scene2::Label> _turn_text;
     /** The text with the maximum turns in the level*/
     std::shared_ptr<cugl::scene2::Label> _maxTurn_text;
+    /** The text with the current level ID*/
+    std::shared_ptr<cugl::scene2::Label> _levelID_text;
     /** The text with the current score */
     std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text with the final score */
