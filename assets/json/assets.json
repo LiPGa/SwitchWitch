@@ -468,6 +468,9 @@
         "special_right_square": {
             "file": "textures/right.png"
         },
+        "special_four_dir_square": {
+            "file": "textures/four_way_arrow.png"
+        },
         "shield": {
             "file": "textures/shield.png"
         },

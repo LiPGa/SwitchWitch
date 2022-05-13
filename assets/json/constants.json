@@ -189,6 +189,7 @@
         "special_down_square",
         "special_left_square",
         "special_right_square",
+        "special_four_dir_square",
         "star_empty",
         "star_full",
         "bubble",

@@ -851,7 +851,12 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     string currentDirection = Unit::directionToString(currentUnit->getDirection());
     if (_currentReplacementDepth[_board->flattenPos(square->getPosition().x, square->getPosition().y)] + 1 >= _level->maxTurns)
     {
-        if (currentUnit->isSpecial() && currentUnit->getSubType() != "king" && currentUnit->getSubType() != "empty")
+//        CULog("current subtype: %s", currentUnit->getSubType().c_str());
+        if (currentUnit->isSpecial() && currentUnit->getSubType() != "king" && currentUnit->getSubType() == "diagonal")
+        {
+            sqTexture = "special_four_dir_square";
+        }
+        else if (currentUnit->isSpecial() && currentUnit->getSubType() != "king" && currentUnit->getSubType() != "empty")
             sqTexture = "special_" + currentDirection + "_square";
         else
             sqTexture = "square-" + _level->backgroundName;
@@ -863,7 +868,12 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
     std::string color = Unit::colorToString(replacementUnit->getColor());
     string replacementDirection = Unit::directionToString(replacementUnit->getDirection());
 
-    if (currentUnit->isSpecial() && currentUnit->getSubType()!="king" && (replacementUnit->getSubType() == "basic" || replacementUnit->getSubType() == "random"))
+//    CULog("replacement subtype: %s", replacementUnit->getSubType().c_str());
+    if (currentUnit->isSpecial() && currentUnit->getSubType() != "king" && currentUnit->getSubType() == "diagonal")
+    {
+        sqTexture = "special_four_dir_square";
+    }
+    else if (currentUnit->isSpecial() && currentUnit->getSubType()!="king" && (replacementUnit->getSubType() == "basic" || replacementUnit->getSubType() == "random"))
     {
         sqTexture = "special_" + currentDirection + "_square";
     }
@@ -1355,6 +1365,10 @@ void GameScene::update(float timestep)
                     float squareSizeFactor = (float)_squareSizeAdjustedForScale / (float)_defaultSquareSize;
                     _upcomingUnitNode->setScale(squareSizeFactor);
                     auto upcomingDirectionNode = scene2::PolygonNode::allocWithTexture(_textures.at("special_" + upcomingUnitDirection + "_square"));
+                    if (upcomingUnitType == "diagonal")
+                    {
+                        upcomingDirectionNode = scene2::PolygonNode::allocWithTexture(_textures.at("special_four_dir_square"));
+                    }
                     upcomingDirectionNode->setAnchor(Vec2::ANCHOR_CENTER);
                     upcomingDirectionNode->setPosition(Vec2(_upcomingUnitNode->getWidth() / 2, _upcomingUnitNode->getHeight() / 2.1) / squareSizeFactor);
                     upcomingDirectionNode->setScale(0.8f);
