@@ -992,6 +992,7 @@ void GameScene::deconfirmSwap()
     auto selectedUnit = _selectedSquare->getUnit();
     auto swappingUnit = _swappingSquare->getUnit();
     selectedUnit->setState(Unit::State::IDLE);
+    selectedUnit->setDoAnimate(true);
     refreshUnitView(_selectedSquare);
     _enlargedUnitNode = selectedUnit->getViewNode();
     _enlargedUnitNode->setScale(_unitScaleFactor * ENLARGE);
