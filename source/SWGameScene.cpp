@@ -1029,6 +1029,8 @@ void GameScene::dispose()
 void GameScene::setGoal(std::shared_ptr<cugl::scene2::PolygonNode> squareNode) {
     squareNode->removeChildByName("attack_info");
     squareNode->removeChildByName("info");
+    auto _info_parent = _info_text->getParent();
+    if (_info_parent) _info_parent->removeChildByName("info");
     _info_text->setScale(2.5);
     _info_text->setColor(Color4::RED);
     _info_text->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
