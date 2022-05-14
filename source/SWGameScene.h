@@ -228,6 +228,8 @@ protected:
     
     vector<string> _unit_types;
     
+    std::string _background_string;
+    
     /** The nodes representing unit attacking pattern illustrations */
     std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern1;
     std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern2;
@@ -573,7 +575,7 @@ private:
         }
     }
     
-    void loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> unitNode);
+    void loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> unitNode, std::string background);
     
     void updateModelPostSwap();
     

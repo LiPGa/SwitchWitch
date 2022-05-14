@@ -862,7 +862,10 @@ void GameScene::refreshUnitView(shared_ptr<Square> sq)
         std::string updatedText = strtool::format("%d/%d", _attackedSquares.size(), unit->getUnitsNeededToKill());
         _attack_text = scene2::Label::allocWithText(updatedText, _assets->get<Font>("pixel32"));
         _attack_text->setScale(2.5);
-        _attack_text->setColor(Color4::RED);
+        if (_background_string == "volcano") {
+            _attack_text->setForeground(Color4::WHITE);
+        }
+//        _attack_text->setColor(Color4::RED);
         //_attack_text->setPriority(0);
         _attack_text->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
         _attack_text->setPosition(Vec2(squareNode->getSize().width, squareNode->getSize().height) / squareNode->getScale() * 1.5);
@@ -996,7 +999,10 @@ void GameScene::setGoal(std::shared_ptr<cugl::scene2::PolygonNode> squareNode) {
     auto _info_parent = _info_text->getParent();
     if (_info_parent) _info_parent->removeChildByName("info");
     _info_text->setScale(2.5);
-    _info_text->setColor(Color4::RED);
+    if (_background_string == "volcano") {
+        _info_text->setForeground(Color4::WHITE);
+    }
+//    _info_text->setColor(Color4::RED);
     _info_text->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
     _info_text->setPosition(Vec2(squareNode->getSize().width, squareNode->getSize().height) / squareNode->getScale() * 1.2);
     squareNode->addChildWithName(_info_text, "info");
@@ -1711,7 +1717,7 @@ std:
     sq->getViewNode()->setVisible(unitSubType != "empty");
     //    refreshUnitAndSquareView(sq);
     if (unitSubType == "king")
-        loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getViewNode());
+        loadKingUI(replacementSquare->getUnit()->getUnitsNeededToKill(), replacementSquare->getUnit()->getUnitsNeededToKill(), squarePos, replacementSquare->getViewNode(), _boardJson->getString("background"));
 }
 
 /**
@@ -1961,6 +1967,8 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON)
     {
         CULog("unit type is %s", unit.c_str());
     }
+    
+    _background_string = _levelJson->getString("background");
 
     // Change Background
     _backgroundNode->setTexture(_textures.at("background-" + _levelJson->getString("background")));
@@ -2055,7 +2063,7 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON)
             //            auto unit_node = unit->getViewNode();
             if (unitSubType == "king")
             {
-                loadKingUI(unit->getUnitsNeededToKill(), unit->getUnitsNeededToKill(), squarePosition, unitNode);
+                loadKingUI(unit->getUnitsNeededToKill(), unit->getUnitsNeededToKill(), squarePosition, unitNode, _background_string);
             }
         }
     }
@@ -2073,16 +2081,18 @@ void GameScene::setLevel(shared_ptr<cugl::JsonValue> levelJSON)
     _movedn = cugl::scene2::MoveBy::alloc(Vec2(0, inverseSquareFactor * -_squareSizeAdjustedForScale), SWAP_DURATION);
 }
 
-void GameScene::loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> squareNode)
+void GameScene::loadKingUI(int unitsKilled, int goal, Vec2 sq_pos, std::shared_ptr<cugl::scene2::PolygonNode> squareNode, std::string background)
 {
 
     std::string unitsNeededToKill = strtool::format("%d", goal);
     _info_text = scene2::Label::allocWithText(unitsNeededToKill, _assets->get<Font>("pixel32"));
     _info_text->setScale(5);
-    _info_text->setColor(Color4::RED);
+//    _info_text->setForeground(Color4::RED);
+    if (background == "volcano") {
+        _info_text->setForeground(Color4::WHITE);
+    }
     _info_text->setPriority(0);
     _info_text->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
-    float inverseSquareFactor = 1 / _squareScaleFactor;
     _info_text->setPosition(Vec2(squareNode->getSize().width, squareNode->getSize().height) / squareNode->getScale() / 1.1);
     //    _info_text->setLayout(Vec2::)
     //    _info_text->setPosition(Vec2::ONE);
