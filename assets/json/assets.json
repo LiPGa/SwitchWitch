@@ -2467,18 +2467,6 @@
                                 "x_offset": 0.3
                             }
                         },
-                        "help": {
-                            "type": "Widget",
-                            "data": {
-                                "key": "helpbutton"
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "bottom",
-                                "x_offset": 0.0,
-                                "y_offset": 0.2
-                            }
-                        },
                         "restart": {
                             "type": "Widget",
                             "data": {
@@ -2488,7 +2476,7 @@
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
                                 "x_offset": 0.0,
-                                "y_offset": 0
+                                "y_offset": -0.05
                             }
                         },
                         "exit": {
@@ -2497,10 +2485,22 @@
                                 "key": "exitbutton"
                             },
                             "layout": {
-                                "y_anchor": "bottom",
+                                "y_anchor": "middle",
                                 "x_anchor": "center",
                                 "x_offset": 0.0,
-                                "y_offset": 0.36
+                                "y_offset": -0.2
+                            }
+                        },
+                        "help": {
+                            "type": "Widget",
+                            "data": {
+                                "key": "helpbutton"
+                            },
+                            "layout": {
+                                "x_anchor": "center",
+                                "y_anchor": "middle",
+                                "x_offset": 0.0,
+                                "y_offset": -0.35
                             }
                         }
                     }
@@ -2993,7 +2993,7 @@
                             "layout": {
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
-                                "x_offset": -0.3,
+                                "x_offset": -0.315,
                                 "y_offset": -0.05
                             },
                             "format": {
