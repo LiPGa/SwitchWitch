@@ -3549,7 +3549,7 @@
                                 "y_anchor": "bottom",
                                 "x_anchor": "left",
                                 "x_offset": 0.3,
-                                "y_offset": 0.225
+                                "y_offset": 0.25
                             }
                         },
                         "next": {
@@ -3561,7 +3561,7 @@
                                 "y_anchor": "bottom",
                                 "x_anchor": "right",
                                 "x_offset": -0.3,
-                                "y_offset": 0.225
+                                "y_offset": 0.25
                             }
                         },
                         "exit": {
