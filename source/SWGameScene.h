@@ -271,6 +271,7 @@ protected:
     std::shared_ptr<cugl::AudioQueue>_audioQueue;
     float _musicVolume = .5;
     float _soundVolume = .5;
+    float GameScene::attacksoundmultiplier(float volume, int chaincount);
     /** The button to go back to level map */
     std::shared_ptr<cugl::scene2::Button> _backbutton;
     std::shared_ptr<cugl::scene2::Button> _failBackButton;

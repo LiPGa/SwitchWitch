@@ -169,6 +169,7 @@ public:
     
     void loadLevelButtons();
     void adjust_scroll_bgm(float yposition);
+    void snapbgm(int _chosenLevel);
     
 #pragma mark -
 #pragma mark Gameplay Handling

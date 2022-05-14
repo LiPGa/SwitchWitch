@@ -69,7 +69,7 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     
 //    _layout = scene2::AnchoredLayout::alloc();
 
-    setActive(false);
+   
     _audioMixer = audio::AudioMixer::alloc(3);
     _audioQueue = AudioEngine::get()->getMusicQueue();
 
@@ -89,7 +89,7 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _normalNode->setGain(1);
     _iceNode->setGain(0);
     _fireNode->setGain(0);
-
+    setActive(false);
     return true;
 }
 
@@ -136,6 +136,23 @@ void LevelMapScene::loadLevelButtons() {
     }
 }
 
+void LevelMapScene::snapbgm(int _chosenLevel) {
+    if (_chosenLevel < 16) {
+        _normalNode->setGain(1);
+        _iceNode->setGain(0);
+        _fireNode->setGain(0);
+    }
+    if (_chosenLevel > 15 && _chosenLevel < 25) {
+        _normalNode->setGain(0);
+        _iceNode->setGain(1);
+        _fireNode->setGain(0);
+    }
+    if (_chosenLevel > 24) {
+        _normalNode->setGain(0);
+        _iceNode->setGain(0);
+        _fireNode->setGain(1);
+    }
+}
 
 /**
  * Sets whether the scene is currently active
@@ -157,6 +174,7 @@ void LevelMapScene::setActive(bool value) {
         }
         else {
             CULog("Menu button desactivated");
+            snapbgm(_chosenLevel);
             for (auto level : levels) {
                 level->deactivate();
                 level->setDown(false);

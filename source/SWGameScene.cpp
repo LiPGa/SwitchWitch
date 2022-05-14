@@ -991,6 +991,27 @@ void GameScene::dispose()
     }
 }
 
+float GameScene::attacksoundmultiplier(float volume, int chaincount) {
+    float mult = 0;
+    float chain = (float)chaincount;
+    if (chaincount == 0) {
+        mult = .1;
+    }
+    else if (chaincount >0 && chaincount <10) {
+        mult = chain*.1;
+    }
+    else {
+        mult = 1.0;
+    }
+    float result = (mult * volume);
+    if (result > 1.0) {
+        return 1.0;
+    }
+    else {
+        return result;
+    }
+}
+
 void GameScene::setGoal(std::shared_ptr<cugl::scene2::PolygonNode> squareNode) {
     squareNode->removeChildByName("attack_info");
     squareNode->removeChildByName("info");
@@ -1560,7 +1581,7 @@ void GameScene::update(float timestep)
                 break;
             case Unit::State::ATTACKING:
                 if (AudioEngine::get()->getState("attacksound") != AudioEngine::State::PLAYING) {
-                    AudioEngine::get()->play("attacksound", _assets->get<Sound>("attacksound"), false, _soundVolume, false);
+                    AudioEngine::get()->play("attacksound", _assets->get<Sound>("attacksound"), false, attacksoundmultiplier(_soundVolume, unit->getChainCount()), false);
                 }
                 for (auto atkSquare : _board->getInitallyAttackedSquares(square->getPosition(), unit == _initalAttackSquare->getUnit()))
                 {
@@ -1592,7 +1613,7 @@ void GameScene::update(float timestep)
                 if (unit->getSubType() == "king")
                 {
                     _kingsKilled = true;
-                    AudioEngine::get()->play("deathsound", _assets->get<Sound>("deathsound"), false, _soundVolume, false);
+                    AudioEngine::get()->play("deathsound", _assets->get<Sound>("deathsound"), false, attacksoundmultiplier(_soundVolume, unit->getChainCount()), false);
                 }
                 //                    unit->getViewNode()->setVisible(false);
                 refreshUnitView(square);
