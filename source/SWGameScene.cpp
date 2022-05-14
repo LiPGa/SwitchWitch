@@ -1572,10 +1572,13 @@ void GameScene::update(float timestep)
                 {
                     unit->setState(Unit::State::ATTACKING);
                     refreshUnitView(square);
-                }
-                else
+                } else
                 {
-                    unit->setState(Unit::State::DYING);
+                    if (unitType == "king" && _attackedSquares.size()< unit->getUnitsNeededToKill()){
+                        unit->setState(Unit::State::IDLE);
+                    } else{
+                        unit->setState(Unit::State::DYING);
+                    }
                     refreshUnitView(square);
                 }
                 break;
