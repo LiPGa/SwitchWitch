@@ -61,6 +61,7 @@ using namespace std;
  */
 bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 {
+    _isHelpMenuOpen = false;
     _time = 0;
     _debug = false;
     // Initialize the scene to a locked width
@@ -318,7 +319,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         if (down) {
             _didPause = true;
         } });
-
+    /*
     _scoreExplanationButton = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("settings_score-explanation-btn"));
     _scoreExplanationButton->setVisible(true);
     _scoreExplanationButton->activate();
@@ -329,13 +330,13 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         if (down && _time >= TIME_BEFORE_INTERACTION) {
              _scoreExplanation->setVisible(!_scoreExplanation->isVisible());
         } });
-
+    */
     //    _unit_types = _level->unitTypes;
-
+    /*
     _scoreExplanation = std::dynamic_pointer_cast<scene2::PolygonNode>(assets->get<scene2::SceneNode>("settings_score-explanation"));
     _scoreExplanation->setScale(_scale);
     _scoreExplanation->setVisible(false);
-
+    */
     _almanac = assets->get<scene2::SceneNode>("almanac");
     _almanac->setContentSize(dimen);
     _almanac->doLayout(); // Repositions the HUD
@@ -397,7 +398,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             // almanac
             _almanacbutton->setVisible(false);
             _almanacbutton->deactivate();
-            _scoreExplanationButton->deactivate();
+            //_scoreExplanationButton->deactivate();
             // tutorial
             _tutorialLayout->setVisible(false);
             _tutorialActive = false;
@@ -1139,7 +1140,7 @@ void GameScene::update(float timestep)
     {
         // Show results screen
         // showResultText(_kingsKilled && _level->getNumberOfStars(_score) >= 3, _guiNode);
-        _scoreExplanationButton->deactivate();
+        //_scoreExplanationButton->deactivate();
 
         if (_kingsKilled && _level->getNumberOfStars(_score) >= 1)
         {

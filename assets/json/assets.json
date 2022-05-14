@@ -2279,52 +2279,6 @@
                         "x_offset": -0.055,
                         "y_offset": -0.095
                     }
-                },
-                "score-explanation-btn": {
-                    "type": "Button",
-                    "data": {
-                        "upnode": "up",
-                        "size": [
-                            200,
-                            90
-                        ],
-                        "visible": true,
-                        "pushsize": true,
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "scale": 1
-                    },
-                    "children": {
-                        "up": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "transparent"
-                            }
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "right",
-                        "y_anchor": "top",
-                        "x_offset": -0.72,
-                        "y_offset": -0.105
-                    }
-                },
-                "score-explanation": {
-                    "type": "Image",
-                    "data": {
-                        "texture": "score-explanation-popup"
-                    },
-                    "layout": {
-                        "y_anchor": "right",
-                        "x_anchor": "top",
-                        "x_offset": -0.07,
-                        "y_offset": 0.63
-                    },
-                    "format": {
-                        "type": "Anchored"
-                    }
                 }
             }
         },
