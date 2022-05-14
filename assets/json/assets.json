@@ -555,6 +555,12 @@
         "result_background_dark": {
             "file": "textures/result-background-dark.png"
         },
+        "victory": {
+            "file": "textures/victory.png"
+        },
+        "fail": {
+            "file": "textures/fail.png"
+        },
         "result_btn_retry": {
             "file": "textures/result-btn-retry.png"
         },
@@ -2975,74 +2981,23 @@
                                 "x_anchor": "center",
                                 "y_anchor": "top",
                                 "x_offset": 0.0,
-                                "y_offset": -0.125
+                                "y_offset": -0.175
                             }
                         },
-                        "star1": {
+                        "fail": {
                             "type": "Image",
                             "data": {
-                                "texture": "star_empty"
+                                "texture": "fail",
+                                "scale": 0.5
                             },
                             "layout": {
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
                                 "x_offset": -0.3,
-                                "y_offset": 0.1
+                                "y_offset": -0.05
                             },
                             "format": {
                                 "type": "Anchored"
-                            }
-                        },
-                        "star2": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "star_empty"
-                            },
-                            "layout": {
-                                "y_anchor": "middle",
-                                "x_anchor": "center",
-                                "x_offset": -0.1,
-                                "y_offset": 0.1
-                            },
-                            "format": {
-                                "type": "Anchored"
-                            }
-                        },
-                        "star3": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "star_empty"
-                            },
-                            "layout": {
-                                "y_anchor": "middle",
-                                "x_anchor": "center",
-                                "x_offset": 0.1,
-                                "y_offset": 0.1
-                            },
-                            "format": {
-                                "type": "Anchored"
-                            }
-                        },
-                        "number": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel32",
-                                "text": "placement",
-                                "foreground": "#EBEBEB",
-                                "halign": "center",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "scale": 2,
-                                "visible": true
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "x_offset": -0.01,
-                                "y_offset": -0.1
                             }
                         },
                         "restart": {
@@ -3051,22 +3006,22 @@
                                 "key": "retrybutton"
                             },
                             "layout": {
-                                "y_anchor": "bottom",
-                                "x_anchor": "left",
-                                "x_offset": 0.3,
-                                "y_offset": 0.15
+                                "y_anchor": "middle",
+                                "x_anchor": "center",
+                                "x_offset": 0.0,
+                                "y_offset": -0.25
                             }
                         },
                         "exit": {
                             "type": "Widget",
                             "data": {
-                                "key": "exitbutton"
+                                "key": "backbutton"
                             },
                             "layout": {
                                 "y_anchor": "bottom",
-                                "x_anchor": "right",
-                                "x_offset": -0.3,
-                                "y_offset": 0.15
+                                "x_anchor": "center",
+                                "x_offset": 0.0,
+                                "y_offset": 0.1
                             }
                         }
                     }
@@ -3566,74 +3521,23 @@
                                 "x_anchor": "center",
                                 "y_anchor": "top",
                                 "x_offset": 0.0,
-                                "y_offset": -0.125
+                                "y_offset": -0.175
                             }
                         },
-                        "star1": {
+                        "victory": {
                             "type": "Image",
                             "data": {
-                                "texture": "star_full"
+                                "texture": "victory",
+                                "scale": 0.5
                             },
                             "layout": {
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
                                 "x_offset": -0.3,
-                                "y_offset": 0.1
-                            },
-                            "format": {
-                                "type": "Anchored"
-                            }
-                        },
-                        "star2": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "star_full"
-                            },
-                            "layout": {
-                                "y_anchor": "middle",
-                                "x_anchor": "center",
-                                "x_offset": -0.1,
-                                "y_offset": 0.1
-                            },
-                            "format": {
-                                "type": "Anchored"
-                            }
-                        },
-                        "star3": {
-                            "type": "Image",
-                            "data": {
-                                "texture": "star_empty"
-                            },
-                            "layout": {
-                                "y_anchor": "middle",
-                                "x_anchor": "center",
-                                "x_offset": 0.1,
-                                "y_offset": 0.1
-                            },
-                            "format": {
-                                "type": "Anchored"
-                            }
-                        },
-                        "number": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel32",
-                                "text": "placement",
-                                "foreground": "#EBEBEB",
-                                "halign": "center",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "scale": 2,
-                                "visible": true
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "x_offset": -0.01,
                                 "y_offset": -0.1
+                            },
+                            "format": {
+                                "type": "Anchored"
                             }
                         },
                         "restart": {

@@ -201,8 +201,8 @@ protected:
     /** The text with the current score */
     std::shared_ptr<cugl::scene2::Label> _score_text;
     /** The text with the final score */
-    std::shared_ptr<cugl::scene2::Label> _score_number;
-    std::shared_ptr<cugl::scene2::Label> _fail_score_number;
+//    std::shared_ptr<cugl::scene2::Label> _score_number;
+//    std::shared_ptr<cugl::scene2::Label> _fail_score_number;
     /** The text with the level number */
     std::shared_ptr<cugl::scene2::Label> _level_info;
     std::shared_ptr<cugl::scene2::Label> _fail_level_info;
@@ -237,9 +237,9 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _unitPattern4;
 
     /** The images of the final stars*/
-    std::shared_ptr<cugl::scene2::PolygonNode> _star1;
-    std::shared_ptr<cugl::scene2::PolygonNode> _star2;
-    std::shared_ptr<cugl::scene2::PolygonNode> _star3;
+//    std::shared_ptr<cugl::scene2::PolygonNode> _star1;
+//    std::shared_ptr<cugl::scene2::PolygonNode> _star2;
+//    std::shared_ptr<cugl::scene2::PolygonNode> _star3;
     
     /** The text above the replacement board */
     std::shared_ptr<cugl::scene2::Label> _replace_text;
