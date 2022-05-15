@@ -871,6 +871,9 @@ void GameScene::refreshUnitView(shared_ptr<Square> sq)
 //        _info_text->setPosition(Vec2(squareNode->getSize().width, squareNode->getSize().height) / squareNode->getScale()*1.1);
         squareNode->addChildWithName(_attack_text, "attack_info");
     }
+    if (unitSubtype == "king" && unit->getState() != Unit::TARGETED) {
+        setGoal(squareNode);
+    }
     if (unitNode->getParent() == NULL)
         sq->getViewNode()->addChild(unitNode);
     if (_debug)
