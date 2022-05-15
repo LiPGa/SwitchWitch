@@ -2289,11 +2289,11 @@ void GameScene::flipTutorialPage(std::string dir)
 }
 
 void GameScene::setTutorial() {
-//    if ((_currLevel >= 1 && _currLevel <= 7) || _currLevel == 16 || _currLevel == 20 || _currLevel == 25) {
-    if (_currLevel >= 1 && _currLevel <= 7) {
+    if ((_currLevel >= 1 && _currLevel <= 7) || _currLevel == 16 || _currLevel == 20 || _currLevel == 25) {
+//    if (_currLevel >= 1 && _currLevel <= 7) {
         _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_"+std::to_string(_currLevel)), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
-        _tutorialNode->setPosition(0.5*_dimen.width, 0.5*_dimen.height);
-        _tutorialNode->setScale(0.27f);
+        _tutorialNode->setPosition(0.5*_dimen.width, 0.55*_dimen.height);
+        _tutorialNode->setScale(0.25f);
         _tutorialLayout2->removeAllChildren();
         _tutorialLayout2->addChildWithName(_tutorialNode, "tutorialNode");
         _tutorialLayout2->setVisible(true);
