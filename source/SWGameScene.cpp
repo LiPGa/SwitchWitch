@@ -953,11 +953,10 @@ void GameScene::deconfirmSwap()
     auto selectedUnit = _selectedSquare->getUnit();
     auto swappingUnit = _swappingSquare->getUnit();
     selectedUnit->setState(Unit::State::IDLE);
-    selectedUnit->setDoAnimate(true);
     refreshUnitView(_selectedSquare);
     _enlargedUnitNode = selectedUnit->getViewNode();
     _enlargedUnitNode->setScale(_unitScaleFactor * ENLARGE);
-    swappingUnit->setDoAnimate(false);
+//    swappingUnit->setDoAnimate(false);
     selectedUnit->setDirection(_selectedSquareOriginalDirection);
     //_swappingSquare->getUnit()->setDirection(_swappingSquareOriginalDirection);
     for (shared_ptr<Square> protectedSquare : _protectedSquares)
@@ -969,7 +968,9 @@ void GameScene::deconfirmSwap()
     {
         square->getViewNode()->removeChildByName("shield");
         updateSquareTexture(square);
+        square->getUnit()->setDoAnimate(false);
     }
+    selectedUnit->setDoAnimate(true);
     CULog("set square-selected");
     _selectedSquare->getViewNode()->setTexture(_textures.at("square-selected"));
 }
@@ -1325,6 +1326,11 @@ void GameScene::update(float timestep)
                 {
                     _enlargedUnitNode->setScale(_unitScaleFactor * BACK2NORMAL);
                 }
+                
+                for (auto sq : _board->getAllSquares()) {
+                    auto unit = sq->getUnit();
+                    unit->setDoAnimate(false);
+                }
 
                 // Enlarge the new selected unit
                 _enlargedUnitNode = _selectedSquare->getUnit()->getViewNode();
@@ -1379,6 +1385,10 @@ void GameScene::update(float timestep)
                 _swappingSquare->getUnit()->setDirection(_swappingSquare->getPosition() - _selectedSquare->getPosition());
                 _attackedSquares = _board->getAttackedSquares(_swappingSquare->getPosition());
                 _protectedSquares = _board->getProtectedSquares(_swappingSquare->getPosition());
+                for (auto sq : _board->getAllSquares()) {
+                    auto unit = sq->getUnit();
+                    unit->setDoAnimate(false);
+                }
 
                 for (shared_ptr<Square> attackedSquare : _attackedSquares)
                 {
@@ -1386,6 +1396,7 @@ void GameScene::update(float timestep)
 //                    CULog("attacking square has unit type: %s", attackedSquare->getUnit()->stateToString(attackedSquare->getUnit()->getState()).c_str());
                     // show targeted animation
                     attackedSquare->getUnit()->setState(Unit::State::TARGETED);
+                    attackedSquare->getUnit()->setDoAnimate(true);
                     refreshUnitView(attackedSquare);
                 }
                 for (shared_ptr<Square> protectedSquare : _protectedSquares)
@@ -1396,7 +1407,10 @@ void GameScene::update(float timestep)
                     _shieldNode->setScale(1 / protectedUnit->getViewNode()->getScale());
                     _shieldNode->setPosition(Vec2(protectedUnit->getViewNode()->getWidth(), protectedUnit->getViewNode()->getHeight()));
                     protectedUnit->getViewNode()->addChildWithName(_shieldNode, "shield");
+                    protectedUnit->setDoAnimate(true);
                 }
+                _swappingSquare->getUnit()->setDoAnimate(true);
+                _selectedSquare->getUnit()->setDoAnimate(true);
             }
             else if (_currentState == CONFIRM_SWAP && squareOnMouse != _swappingSquare)
             {
@@ -1415,17 +1429,29 @@ void GameScene::update(float timestep)
     
         if (_enlargedUnitNode) {
             _enlargedUnitNode->setScale(_unitScaleFactor * BACK2NORMAL);
-            auto selectedUnit = _selectedSquare->getUnit();
-            if (selectedUnit) selectedUnit->setDoAnimate(false);
+//            auto selectedUnit = _selectedSquare->getUnit();
+//            if (selectedUnit) selectedUnit->setDoAnimate(false);
         }
 
         for (shared_ptr<Square> square : _board->getAllSquares())
         {
             updateSquareTexture(square);
+            auto unit = square->getUnit();
+            unit->setDoAnimate(true);
         }
 
         if (_board->doesSqaureExist(squarePos) && boardPos.x >= 0 && boardPos.y >= 0 && _board->getSquare(squarePos)->isInteractable() && _currentState == CONFIRM_SWAP)
         {
+            for (auto square : _board->getAllSquares()) {
+                auto unit = square->getUnit();
+                unit->setDoAnimate(false);
+            }
+            for (auto square : _attackedSquares) {
+                auto unit = square->getUnit();
+                unit->setDoAnimate(true);
+            }
+            _selectedSquare->getUnit()->setDoAnimate(true);
+            _swappingSquare->getUnit()->setDoAnimate(true);
             _currentState = ANIMATION;
             _midSwap = true;
 
@@ -1531,9 +1557,13 @@ void GameScene::update(float timestep)
 
         if (completedSwap && completedAttackSequence)
         {
-            if (completedAllAnimations && !_kingsKilled)
+            if (completedAllAnimations && !_kingsKilled) {
                 _currentState = SELECTING_UNIT;
-            else if (!respawning)
+                for (auto square : _board->getAllSquares()) {
+                    auto unit = square->getUnit();
+                    unit->setDoAnimate(true);
+                }
+            } else if (!respawning)
                 respawnAttackedSquares();
         }
     }

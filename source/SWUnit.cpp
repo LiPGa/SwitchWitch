@@ -141,12 +141,12 @@ void Unit::setState(State s) {
     if (s == IDLE) { // Speed up the animation if part of a chain
         _time_per_animation = DEFAULT_TIME_PER_ANIMATION;
         _chainCount = 0;
-        _doAnimate = false;
+//        _doAnimate = false;
     } else {
         if (_subtype != "king") {
             _time_per_animation = std::max(0.2f, DEFAULT_TIME_PER_ANIMATION - _chainCount * ANIMATION_SPEEDUP_FACTOR);
         }
-        _doAnimate = true;
+//        _doAnimate = true;
     }
 //    if (s == State::TARGETED) {
 //        CULog("targeted frames in animation: %i", framesInAnimation);
@@ -302,6 +302,9 @@ bool Unit::animationShouldLoop(State s) {
 }
 
 void Unit::setDoAnimate(bool a) {
+    _time_since_last_frame = 0.0f;
+    _time_since_start_animation = 0.0f;
+    _time_since_last_flash = 0.0f;
     _doAnimate = a;
     _viewNode->setFrame(0);
 }
