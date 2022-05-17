@@ -393,6 +393,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             // help menu
             _isHelpMenuOpen = true;
             _helpMenu->setVisible(true);
+            _helpBackBtn->setDown(false);
             _helpBackBtn->activate();
             _helpMenu->setPositionY(-1182+720);
             // almanac
@@ -1192,6 +1193,7 @@ void GameScene::update(float timestep)
         _settingsBackBtn->activate();
         _settingsRestartBtn->activate();
         _settingsCloseBtn->activate();
+        _settingsHelpBtn->setDown(false);
         _settingsHelpBtn->activate();
         _musicSlider->activate();
         _soundSlider->activate();
