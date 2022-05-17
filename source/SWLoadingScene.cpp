@@ -115,6 +115,7 @@ void LoadingScene::dispose() {
     _about = nullptr;
     _credit = nullptr;
 //    _brand = nullptr;
+    _aboutBackBtn = nullptr;
     _bar = nullptr;
     _assets = nullptr;
     _progress = 0.0f;
