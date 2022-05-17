@@ -66,6 +66,37 @@ bool LoadingScene::init(const std::shared_ptr<AssetManager>& assets) {
         std::cout << "Pressed the play button!\n";
     });
     
+    // about button
+    _about = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("load_about"));
+    _about->clearListeners();
+    _about->addListener([=](const std::string& name, bool down) {
+        if (down) {
+            std::cout << "Pressed the about button!\n";
+            _credit->setVisible(true);
+            _aboutBackBtn->setDown(false);
+            _aboutBackBtn->activate();
+        }
+    });
+    
+    // credit page
+    _credit =std::dynamic_pointer_cast<scene2::SceneNode>(assets->get<scene2::SceneNode>("load_credit"));
+    _credit->setVisible(false);
+    
+    _aboutBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("load_credit_back"));
+    _aboutBackBtn->setVisible(true);
+    _aboutBackBtn->deactivate();
+    _aboutBackBtn->setDown(false);
+    _aboutBackBtn->clearListeners();
+    _aboutBackBtn->addListener([this](const std::string &name, bool down)
+        {
+        if (down) {
+            _credit->setVisible(false);
+            _about->setDown(false);
+            _button->setDown(false);
+            _about->activate();
+            _button->activate();
+        } });
+    
     Application::get()->setClearColor(Color4(192,192,192,255));
     addChild(layer);
     return true;
@@ -78,8 +109,11 @@ void LoadingScene::dispose() {
     // Deactivate the button (platform dependent)
     if (isPending()) {
         _button->deactivate();
+        _about->deactivate();
     }
     _button = nullptr;
+    _about = nullptr;
+    _credit = nullptr;
 //    _brand = nullptr;
     _bar = nullptr;
     _assets = nullptr;
@@ -97,6 +131,12 @@ void LoadingScene::dispose() {
  * @param timestep  The amount of time (in seconds) since the last frame
  */
 void LoadingScene::update(float progress) {
+    if (_credit != nullptr && _credit->isVisible()) {
+        _button->deactivate();
+        _about->deactivate();
+    } else if (_credit != nullptr && !_credit->isVisible()) {
+        _aboutBackBtn->deactivate();
+    }
     if (_progress < 1) {
         _progress = _assets->progress();
         if (_progress >= 1) {
@@ -105,6 +145,8 @@ void LoadingScene::update(float progress) {
 //            _brand->setVisible(false);
             _button->setVisible(true);
             _button->activate();
+            _about->setVisible(true);
+            _about->activate();
         }
         _bar->setProgress(_progress);
     }

@@ -45,7 +45,13 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode>  _brand;
     /** The "play" button */
     std::shared_ptr<cugl::scene2::Button>    _button;
-
+    /** The "about" button */
+    std::shared_ptr<cugl::scene2::Button>    _about;
+    /** The credit page */
+    std::shared_ptr<cugl::scene2::SceneNode>  _credit;
+    /** The back button on the credit page */
+    std::shared_ptr<cugl::scene2::Button>  _aboutBackBtn;
+    
     // MODEL
     /** The progress displayed on the screen */
     float _progress;
