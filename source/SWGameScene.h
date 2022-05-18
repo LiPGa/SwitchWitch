@@ -130,8 +130,8 @@ protected:
     int _score;
     /** The previous score of the player */
     int _prevScore;
-//    /** Whether the kings has been attacked */
-//    bool _kingsAttacked;
+    /** Whether the kings has been attacked */
+    bool _kingsAttacked;
     /** Whether the king has been killed */
     bool _kingsKilled;
 //     /** The number of colors killed */

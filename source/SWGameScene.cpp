@@ -555,6 +555,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _soundVolume = value;} });
 
     _kingsKilled = false;
+    _kingsAttacked = false;
     return true;
 }
 
@@ -1141,13 +1142,13 @@ void GameScene::update(float timestep)
         _tutorialNode->setFrame(frame);
     }
 
-    if ((_turns == 0 || _kingsKilled) && _currentState != ANIMATION)
+    if ((_turns == 0 || _kingsKilled || _kingsAttacked) && _currentState != ANIMATION)
     {
         // Show results screen
         // showResultText(_kingsKilled && _level->getNumberOfStars(_score) >= 3, _guiNode);
         //_scoreExplanationButton->deactivate();
 
-        if (_kingsKilled && _level->getNumberOfStars(_score) >= 1)
+        if (_kingsKilled)
         {
             _resultLayout->setVisible(true);
             _restartbutton->activate();
@@ -1610,7 +1611,9 @@ void GameScene::update(float timestep)
                     refreshUnitView(square);
                 } else
                 {
+                    // if unit number less than required number then set king to be idle
                     if (unitType == "king" && _attackedSquares.size()< unit->getUnitsNeededToKill()){
+                        _kingsAttacked = true;
                         unit->setState(Unit::State::IDLE);
                     } else{
                         unit->setState(Unit::State::DYING);
