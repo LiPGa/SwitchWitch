@@ -807,7 +807,7 @@ void GameScene::updateSquareTexture(shared_ptr<Square> square)
             sqTexture = "special_" + currentDirection + "_square";
         else
             sqTexture = "square-" + _level->backgroundName;
-        CULog("set square texture??");
+//        CULog("set square texture??");
         square->getViewNode()->setTexture(_textures.at(sqTexture));
         return;
     }
@@ -1141,7 +1141,6 @@ void GameScene::update(float timestep)
         }
         _tutorialNode->setFrame(frame);
     }
-
     if ((_turns == 0 || _kingsKilled || _kingsAttacked) && _currentState != ANIMATION)
     {
         // Show results screen
@@ -1173,7 +1172,6 @@ void GameScene::update(float timestep)
 //                _star3->setTexture(_textures.at("star_full"));
 //            }
         }
-
         else
         {
             _failResultLayout->setVisible(true);
@@ -1527,6 +1525,7 @@ void GameScene::update(float timestep)
                 {
                     protectedSquare->getUnit()->getViewNode()->removeAllChildren();
                     updateSquareTexture(protectedSquare);
+                    protectedSquare->getUnit()->completedAnimation = true;
                 }
             }
         }
@@ -1552,7 +1551,7 @@ void GameScene::update(float timestep)
             else if (isKing && unitState != Unit::IDLE && unitState != Unit::DEAD)
             {
                 completedAttackSequence = false;
-                auto squareNode = square->getViewNode();
+//                auto squareNode = square->getViewNode();
 //                setGoal(squareNode);
             }
             updateSquareTexture(square);
@@ -1560,7 +1559,7 @@ void GameScene::update(float timestep)
 
         if (completedSwap && completedAttackSequence)
         {
-            if (completedAllAnimations && !_kingsKilled) {
+            if (completedAllAnimations && !_kingsKilled && !_kingsAttacked) {
                 _currentState = SELECTING_UNIT;
                 for (auto square : _board->getAllSquares()) {
                     auto unit = square->getUnit();
@@ -1612,10 +1611,10 @@ void GameScene::update(float timestep)
                 } else
                 {
                     // if unit number less than required number then set king to be idle
-                    if (unitType == "king" && _attackedSquares.size()< unit->getUnitsNeededToKill()){
-                        _kingsAttacked = true;
+                    if (unitType == "king" && _attackedSquares.size() < unit->getUnitsNeededToKill()){
                         unit->setState(Unit::State::IDLE);
-                    } else{
+                        _kingsAttacked = true;
+                    } else {
                         unit->setState(Unit::State::DYING);
                     }
                     refreshUnitView(square);
@@ -1756,8 +1755,7 @@ void GameScene::respawnAttackedSquares()
     {
         _score += scoreNum;
     }
-    if (_kingsKilled)
-        _currentState = SELECTING_UNIT;
+    if (_kingsKilled || _kingsAttacked) _currentState = SELECTING_UNIT;
 }
 
 void GameScene::replaceUnitOnSquare(shared_ptr<Square> sq)
