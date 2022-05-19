@@ -145,25 +145,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     // Initialize state
     _currentState = SELECTING_UNIT;
     
-    // --------------------- tutorial -----------------------
-    for (int i=1; i<=7; i++) {
-        _tutorialTextures.insert({"tutorial_"+to_string(i), assets->get<Texture>("tutorial_"+to_string(i))});
-    }
-    _tutorialTextures.insert({"tutorial_16", assets->get<Texture>("tutorial_16")});
-    _tutorialTextures.insert({"tutorial_20", assets->get<Texture>("tutorial_20")});
-    _tutorialTextures.insert({"tutorial_25", assets->get<Texture>("tutorial_25")});
-    // default tutorial is level 1
-    _tutorialLayout2 = assets->get<scene2::SceneNode>("tutorialLayout");
-    _tutorialLayout2->setContentSize(dimen);
-    _tutorialLayout2->doLayout();
-    _guiNode->addChild(_tutorialLayout2);
-    _tutorialLayout2->setVisible(true);
-    _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_1"), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
-
-    _tutorialNode->setPosition(0.5*dimen.width, 0.45*dimen.height);
-    _tutorialNode->setScale(0.3f);
-    _tutorialLayout2->addChildWithName(_tutorialNode, "tutorialNode");
-    
     // Initialize Board
     _board = Board::alloc(_maxBoardWidth, _maxBoardHeight);
 
@@ -205,6 +186,34 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
         _unitTypes.insert({child->key(), unit});
     }
 
+    // --------------------- tutorial -----------------------
+    for (int i=1; i<=8; i++) {
+        _tutorialTextures.insert({"tutorial_"+to_string(i), assets->get<Texture>("tutorial_"+to_string(i))});
+    }
+    for (int i=1; i<=4; i++) {
+        _tutorialTextures.insert({"tutorial_"+to_string(i)+"_1", assets->get<Texture>("tutorial_"+to_string(i)+"_1")});
+    }
+    _tutorialTextures.insert({"tutorial_16", assets->get<Texture>("tutorial_16")});
+    _tutorialTextures.insert({"tutorial_20", assets->get<Texture>("tutorial_20")});
+    _tutorialTextures.insert({"tutorial_25", assets->get<Texture>("tutorial_25")});
+    // default tutorial is level 1
+    _tutorialLayout2 = assets->get<scene2::SceneNode>("tutorialLayout");
+    _tutorialLayout2->setContentSize(dimen);
+    _tutorialLayout2->doLayout();
+    _guiNode->addChild(_tutorialLayout2);
+    _tutorialLayout2->setVisible(true);
+    _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_1"), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
+
+    _tutorialNode->setPosition(0.5*dimen.width, 0.45*dimen.height);
+    _tutorialNode->setScale(0.3f);
+    _tutorialLayout2->addChildWithName(_tutorialNode, "tutorialNode");
+    
+    _tutorialNode2 = assets->get<scene2::SceneNode>("tutorial-node");
+    _tutorialNode2->setContentSize(dimen);
+    _tutorialNode2->doLayout();
+    _guiNode->addChild(_tutorialNode2);
+    _tutorialNode2->setVisible(true);
+    
     _helpMenu = std::dynamic_pointer_cast<scene2::SceneNode>(_assets->get<scene2::SceneNode>("help_menu"));
     _helpMenu->setContentSize(dimen);
     _helpMenu->doLayout();
@@ -2329,10 +2338,18 @@ void GameScene::flipTutorialPage(std::string dir)
 }
 
 void GameScene::setTutorial() {
-    if ((_currLevel >= 1 && _currLevel <= 7) || _currLevel == 16 || _currLevel == 20 || _currLevel == 25) {
-//    if (_currLevel >= 1 && _currLevel <= 7) {
+    for(int i=1; i<=4; i++) {
+        _tutorialNode2->getChildByName(std::to_string(i))->setVisible(false);
+    }
+    if ((_currLevel >= 1 && _currLevel <= 8) || _currLevel == 16 || _currLevel == 20 || _currLevel == 25) {
         _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_"+std::to_string(_currLevel)), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
         _tutorialNode->setPosition(0.5*_dimen.width, 0.55*_dimen.height);
+        if (_currLevel==1 || _currLevel == 4) {
+            _tutorialNode->setPosition(0.5*_dimen.width, 0.12*_dimen.height);
+        }
+        if (_currLevel >= 1 && _currLevel <= 4) {
+            _tutorialNode2->getChildByName(std::to_string(_currLevel))->setVisible(true);
+        }
         _tutorialNode->setScale(0.25f);
         _tutorialLayout2->removeAllChildren();
         _tutorialLayout2->addChildWithName(_tutorialNode, "tutorialNode");

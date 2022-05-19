@@ -513,14 +513,26 @@
         "tutorial_1": {
             "file": "textures/tutorial_level_1.png"
         },
+        "tutorial_1_1": {
+            "file": "textures/tutorial_level_1_1.png"
+        },
         "tutorial_2": {
             "file": "textures/tutorial_level_2.png"
+        },
+        "tutorial_2_1": {
+            "file": "textures/tutorial_level_2_1.png"
         },
         "tutorial_3": {
             "file": "textures/tutorial_level_3.png"
         },
+        "tutorial_3_1": {
+            "file": "textures/tutorial_level_3_1.png"
+        },
         "tutorial_4": {
             "file": "textures/tutorial_level_4.png"
+        },
+        "tutorial_4_1": {
+            "file": "textures/tutorial_level_4_1.png"
         },
         "tutorial_5": {
             "file": "textures/tutorial_level_5.png"
@@ -530,6 +542,9 @@
         },
         "tutorial_7": {
             "file": "textures/tutorial_level_7.png"
+        },
+        "tutorial_8": {
+            "file": "textures/tutorial_level_8.png"
         },
         "tutorial_16": {
             "file": "textures/tutorial_level_16.png"
@@ -2449,6 +2464,67 @@
                                 "y_offset": -0.35
                             }
                         }
+                    }
+                }
+            }
+        },
+        "tutorial-node": {
+            "type": "Node",
+            "children": {
+                "1": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "tutorial_1_1",
+                        "scale": 0.265
+                    },
+                    "layout": {
+                        "y_anchor": "bottom",
+                        "x_anchor": "center"
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    }
+                },
+                "2": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "tutorial_2_1",
+                        "scale": 0.265
+                    },
+                    "layout": {
+                        "y_anchor": "bottom",
+                        "x_anchor": "center"
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    }
+                },
+                "3": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "tutorial_3_1",
+                        "scale": 0.275
+                    },
+                    "layout": {
+                        "y_anchor": "bottom",
+                        "x_anchor": "center"
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    }
+                },
+                "4": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "tutorial_4_1",
+                        "scale": 0.265
+                    },
+                    "layout": {
+                        "y_anchor": "bottom",
+                        "x_anchor": "center"
+                    },
+                    "format": {
+                        "type": "Anchored"
                     }
                 }
             }

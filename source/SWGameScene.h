@@ -341,6 +341,7 @@ protected:
     /** This map stores a texture for every tutorial */
     unordered_map<std::string, shared_ptr<Texture>> _tutorialTextures;
     std::shared_ptr<scene2::SpriteNode> _tutorialNode;
+    std::shared_ptr<scene2::SceneNode> _tutorialNode2;
     
     
 
