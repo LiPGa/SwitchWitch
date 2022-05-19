@@ -1595,7 +1595,7 @@ void GameScene::update(float timestep)
                 unit->setState(Unit::State::SELECTED_NONE);
                 break;
             case Unit::State::SELECTED_END:
-                if (_attackedSquares.size() > 0) unit->setState(Unit::State::ATTACKING);
+                if (_attackedSquares.size() > 0) unit->setState(Unit::State::ATTACKING_BASIC);
                 else unit->setState(Unit::State::IDLE);
                 refreshUnitView(square);
                 break;
@@ -1606,7 +1606,7 @@ void GameScene::update(float timestep)
             case Unit::State::HIT:
                 if (unitType != "basic" && unitType != "empty" && unitType != "king")
                 {
-                    unit->setState(Unit::State::ATTACKING);
+                    unit->setState(Unit::State::ATTACKING_SPECIAL);
                     refreshUnitView(square);
                 } else
                 {
@@ -1620,7 +1620,8 @@ void GameScene::update(float timestep)
                     refreshUnitView(square);
                 }
                 break;
-            case Unit::State::ATTACKING:
+            case Unit::State::ATTACKING_BASIC:
+            case Unit::State::ATTACKING_SPECIAL:
                 if (AudioEngine::get()->getState("attacksound") != AudioEngine::State::PLAYING) {
                     AudioEngine::get()->play("attacksound", _assets->get<Sound>("attacksound"), false, attacksoundmultiplier(_soundVolume, unit->getChainCount()), false);
                 }
@@ -1708,7 +1709,7 @@ void GameScene::updateModelPostSwap()
     if ( _swappingSquare->getUnit()->completedAnimation) {
         if (_attackedSquares.size() > 0)
         {
-            _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING); // begin the attack sequence
+            _initalAttackSquare->getUnit()->setState(Unit::State::ATTACKING_BASIC); // begin the attack sequence
             refreshUnitView(_initalAttackSquare);
         }
         else
@@ -1910,8 +1911,11 @@ void GameScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch)
             case Unit::SELECTED_END:
                 spe = "Selected End";
                 break;
-            case Unit::ATTACKING:
-                spe = "Attacking";
+            case Unit::ATTACKING_BASIC:
+                spe = "Attacking Basic";
+                break;
+            case Unit::ATTACKING_SPECIAL:
+                spe = "Attacking Special";
                 break;
             case Unit::DYING:
                 spe = "Dying";

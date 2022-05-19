@@ -96,8 +96,10 @@ std::shared_ptr<cugl::Texture> Unit::getTextureForUnit(const std::string subtype
         // <Hedy/>
         case TARGETED:
             return _textureMap.count(targetedTextureName) > 0 ? _textureMap.at(targetedTextureName) : _textureMap.at(defaultTextureName);
-        case ATTACKING:
+        case ATTACKING_SPECIAL:
             return _textureMap.count(attackTextureName) > 0 ? _textureMap.at(attackTextureName) : _textureMap.at(defaultTextureName);
+        case ATTACKING_BASIC:
+            return _textureMap.at(defaultTextureName);
         case DYING:
             return _textureMap.count(dyingTextureName) > 0 ? _textureMap.at(dyingTextureName) : _textureMap.at(defaultTextureName);
         case DEAD:
@@ -121,7 +123,7 @@ void Unit::setState(State s) {
     std::shared_ptr<scene2::SpriteNode> newNode;
     int framesInAnimation = animationFrameCounts[s];
 //    if (_subtype == "king" && s == DYING) framesInAnimation = 5; // King dying animation is a special case
-    if (_subtype == "basic" && s == ATTACKING) {
+    if (s == ATTACKING_BASIC || (_subtype == "basic" && s == ATTACKING_SPECIAL)) {
         framesInAnimation = 1; // Basic attack animation is a special case
         _initialPos = _viewNode->getPosition();
     }
@@ -244,7 +246,7 @@ void Unit::update(float dt) {
             }
             break;
         }
-        case ATTACKING: {
+        case ATTACKING_SPECIAL: {
             if (_subtype == "basic") { // basic units have a special attack effect
                 float timeBeforeMovement = _time_per_animation / 4.0f; // begin the movement effect after 1/4 animation is complete
                 if (_time_since_start_animation <= _time_per_animation / 2.0f && _time_since_start_animation >= timeBeforeMovement) {
@@ -254,6 +256,17 @@ void Unit::update(float dt) {
                     Vec2 newPos = _initialPos + _direction * _basicAttackDistance * (1 - ((_time_since_start_animation - 2.0f * timeBeforeMovement) / timeBeforeMovement));
                     _viewNode->setPosition(newPos);
                 }
+            }
+            break;
+        }
+        case ATTACKING_BASIC: {
+            float timeBeforeMovement = _time_per_animation / 4.0f; // begin the movement effect after 1/4 animation is complete
+            if (_time_since_start_animation <= _time_per_animation / 2.0f && _time_since_start_animation >= timeBeforeMovement) {
+                Vec2 newPos = _initialPos + _direction * _basicAttackDistance * ((_time_since_start_animation - timeBeforeMovement) / timeBeforeMovement);
+                _viewNode->setPosition(newPos);
+            } else if (_time_since_start_animation <= 3.0f * timeBeforeMovement && _time_since_start_animation >= _time_per_animation / 2.0f) {
+                Vec2 newPos = _initialPos + _direction * _basicAttackDistance * (1 - ((_time_since_start_animation - 2.0f * timeBeforeMovement) / timeBeforeMovement));
+                _viewNode->setPosition(newPos);
             }
             break;
         }

@@ -43,7 +43,8 @@ public:
         SELECTED_END,
         // <Hedy/>
         TARGETED,
-        ATTACKING,
+        ATTACKING_BASIC,
+        ATTACKING_SPECIAL,
         DYING,
         DEAD,
         PROTECTED,
@@ -141,7 +142,8 @@ private:
         {SELECTED_END, 5},
         //<Hedy/>
         { TARGETED, 4 },
-        { ATTACKING, 18 },
+        { ATTACKING_SPECIAL, 18 },
+        { ATTACKING_BASIC, 2 },
         { DYING, 5 },
         { DEAD, 1 },
         { PROTECTED, 2 },
