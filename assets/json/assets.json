@@ -2475,7 +2475,7 @@
                     "type": "Image",
                     "data": {
                         "texture": "tutorial_1_1",
-                        "scale": 0.265
+                        "scale": 0.27
                     },
                     "layout": {
                         "y_anchor": "bottom",
