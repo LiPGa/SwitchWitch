@@ -183,6 +183,12 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _enlargedUnitNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _shieldNode;
     std::shared_ptr<cugl::scene2::PolygonNode> _scoreExplanation;
+    
+    /** The credit page */
+    std::shared_ptr<cugl::scene2::SceneNode> _creditLayout;
+    /** The back button on the credit page */
+    std::shared_ptr<cugl::scene2::Button>  _aboutBackBtn;
+    
     int _replacementListLength;
     // VIEW items are going to be individual variables
     // In the future, we will replace this with the scene graph

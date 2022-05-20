@@ -261,6 +261,25 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _almanacLayout->doLayout();
     _guiNode->addChild(_almanacLayout);
     _almanacLayout->setVisible(false);
+    
+    // credit page
+    _creditLayout = std::dynamic_pointer_cast<scene2::SceneNode>(_assets->get<scene2::SceneNode>("credit"));
+    _creditLayout->setContentSize(dimen);
+    _creditLayout->doLayout(); // Repositions the HUD
+    _guiNode->addChild(_creditLayout);
+    _creditLayout->setVisible(false);
+    
+    _aboutBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("credit_background_back"));
+    _aboutBackBtn->setVisible(true);
+    _aboutBackBtn->deactivate();
+    _aboutBackBtn->setDown(false);
+    _aboutBackBtn->clearListeners();
+    _aboutBackBtn->addListener([this](const std::string &name, bool down)
+        {
+        if (down) {
+            _creditLayout->setVisible(false);
+            _didGoToLevelMap = true;
+        } });
 
     _level_info = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("result_board_level"));
     _fail_level_info = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("failresult_board_level"));
@@ -1133,6 +1152,11 @@ void GameScene::update(float timestep)
             auto newBoardJson = _assets->get<JsonValue>("level" + std::to_string(newLevelNum));
             _currLevel = newLevelNum;
             reset(newBoardJson);
+        } else { // show credit page if last level
+            _almanac->setVisible(false);
+            _creditLayout->setVisible(true);
+            _aboutBackBtn->setDown(false);
+            _aboutBackBtn->activate();
         }
     }
 
