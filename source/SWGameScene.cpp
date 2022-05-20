@@ -214,13 +214,59 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _guiNode->addChild(_tutorialNode2);
     _tutorialNode2->setVisible(true);
     
-    _helpMenu = std::dynamic_pointer_cast<scene2::SceneNode>(_assets->get<scene2::SceneNode>("help_menu"));
+    _helpMenu = std::dynamic_pointer_cast<scene2::SceneNode>(_assets->get<scene2::SceneNode>("help"));
     _helpMenu->setContentSize(dimen);
     _helpMenu->doLayout();
     _guiNode->addChild(_helpMenu);
     _helpMenu->setVisible(false);
-    _isScrolling = false;
-
+    _helpAnimationNode = scene2::SpriteNode::alloc(_textures.at("attack_anime"), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
+    _helpAnimationNode->setPosition(0.63*dimen.width, 0.4*dimen.height);
+    _helpAnimationNode->setScale(0.2f);
+    _helpMenu->addChildWithName(_helpAnimationNode, "helpAnimationNode");
+    
+    _helpCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_close"));
+    _helpCloseBtn->setVisible(true);
+    _helpCloseBtn->deactivate();
+    _helpCloseBtn->setDown(false);
+    _helpCloseBtn->clearListeners();
+    _helpCloseBtn->addListener([this](const std::string &name, bool down)
+                              {
+        if (down) {
+            // help
+            _isHelpMenuOpen = false;
+            _helpMenu->setVisible(false);
+            // settings
+            _settingsLayout->setVisible(true);
+            _settingsbutton->activate();
+            // almanac
+            _almanacbutton->setVisible(true);
+            _almanacbutton->activate();
+            CULog("Pressed help menu close button");
+        } });
+    
+    auto helpAttackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_attack"));
+    helpAttackBtn->setVisible(true);
+    helpAttackBtn->deactivate();
+    helpAttackBtn->setDown(false);
+    helpAttackBtn->clearListeners();
+    helpAttackBtn->addListener([this](const std::string &name, bool down) {
+        if (down) {
+            _didPause = true;
+        }
+    });
+    _helpTutorialBtns.insert({"attack", helpAttackBtn});
+    auto helpwinBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_win"));
+    helpwinBtn->setVisible(true);
+    helpwinBtn->deactivate();
+    helpwinBtn->setDown(false);
+    helpwinBtn->clearListeners();
+    helpwinBtn->addListener([this](const std::string &name, bool down) {
+        if (down) {
+            _didPause = true;
+        }
+    });
+    _helpTutorialBtns.insert({"win", helpwinBtn});
+    
     _tutorialLayout = assets->get<scene2::SceneNode>("tutorial");
     _tutorialLayout->setContentSize(dimen);
     _tutorialLayout->doLayout();
@@ -402,23 +448,16 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             // help menu
             _isHelpMenuOpen = true;
             _helpMenu->setVisible(true);
-            _helpBackBtn->setDown(false);
-            _helpBackBtn->activate();
-            _helpMenu->setPositionY(-1182+720);
+            _helpCloseBtn->setDown(false);
+            _helpCloseBtn->activate();
+//            _helpMenu->setPositionY(-1182+720);
             // almanac
-            _almanacbutton->setVisible(false);
+//            _almanacbutton->setVisible(false);
             _almanacbutton->deactivate();
-            //_scoreExplanationButton->deactivate();
-            // tutorial
-            _tutorialLayout->setVisible(false);
-            _tutorialActive = false;
-            _tutorialLeftBtn->deactivate();
-            _tutorialRightBtn->deactivate();
-            _tutorialCloseBtn->deactivate();
             // set setting buttons inactive
             _didPause = false;
             _settingsMenuLayout->setVisible(false);
-            _settingsLayout->setVisible(false);
+//            _settingsLayout->setVisible(false);
             _settingsbutton->deactivate();
             _settingsBackBtn->deactivate();
             _settingsRestartBtn->deactivate();
@@ -427,46 +466,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _musicSlider->deactivate();
             CULog("Pressed Settings help button");
         } });
-
-    _helpBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_menu_background_back"));
-    _helpBackBtn->setVisible(true);
-    _helpBackBtn->deactivate();
-    _helpBackBtn->setDown(false);
-    _helpBackBtn->clearListeners();
-    _helpBackBtn->addListener([this](const std::string &name, bool down)
-                              {
-        if (down) {
-            // help
-            _isHelpMenuOpen = false;
-            _helpMenu->setVisible(false);
-            // settings
-            _settingsLayout->setVisible(true);
-            _settingsbutton->activate();
-            // almanac
-            _almanacbutton->setVisible(true);
-            _almanacbutton->activate();
-//            _scoreExplanationButton->activate();
-            CULog("Pressed help menu close button");
-        } });
     
-//    // --------------------- tutorial -----------------------
-//    _tutorialTextures.insert({"tutorial_1", assets->get<Texture>("tutorial_1")});
-//    _tutorialTextures.insert({"tutorial_2", assets->get<Texture>("tutorial_2")});
-//    _tutorialTextures.insert({"tutorial_4", assets->get<Texture>("tutorial_4")});
-//    _tutorialTextures.insert({"tutorial_5", assets->get<Texture>("tutorial_5")});
-//    _tutorialTextures.insert({"tutorial_6", assets->get<Texture>("tutorial_6")});
-//    // default tutorial is level 1
-//    _tutorialLayout2 = assets->get<scene2::SceneNode>("tutorialLayout");
-//    _tutorialLayout2->setContentSize(dimen);
-//    _tutorialLayout2->doLayout();
-//    _guiNode->addChild(_tutorialLayout2);
-//    _tutorialLayout->setVisible(false);
-//    _tutorialNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_1"), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
-//
-//    _tutorialNode->setPosition(0.5*dimen.width, 0.45*dimen.height);
-//    _tutorialNode->setScale(0.3f);
-//    _tutorialLayout2->addChildWithName(_tutorialNode, "tutorialNode");
-    
+    // --------------------- tutorial -----------------------
     _tutorial_page = std::dynamic_pointer_cast<scene2::Label>(assets->get<scene2::SceneNode>("tutorial_board_page"));
 
     _tutorialCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("tutorial_board_close"));
@@ -1084,42 +1085,50 @@ void GameScene::update(float timestep)
     // help menu
     if (_isHelpMenuOpen)
     {
+        // Show help menu
         _settingsHelpBtn->deactivate();
-        // Process the toggled key commands
-        Vec2 pos = _input.getPosition();
-        if (_isScrolling)
-        {
-            Vec2 prevPos = _input.getPrevious();
-            Vec2 moveDist = Vec2(pos.x - prevPos.x, prevPos.y - pos.y);
-            Vec2 nodePos = _helpMenu->getPosition();
-            moveDist.x = 0;
-            if (moveDist.y + nodePos.y < -1182 + 720)
-            {
-                moveDist.y = -1182 + 720 - nodePos.y;
-            }
-            else if (moveDist.y + nodePos.y > 0)
-            {
-                moveDist.y = 0 - nodePos.y;
-            }
-            _helpMenu->setPosition(nodePos + moveDist);
-        }
-        if (_input.isDown())
-        {
-            _isScrolling = true;
-            //            CULog("help back btn position: %f, %f", _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).x, _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).y);
-            //            CULog("input position: %f, %f", pos.x, pos.y);
-        }
-        else if (_input.didRelease())
-        {
-            _isScrolling = false;
-        }
         return;
+    } else {
+        _helpCloseBtn->deactivate();
     }
-    else
-    {
-        _helpBackBtn->deactivate();
-        _isScrolling = false;
-    }
+//    if (_isHelpMenuOpen)
+//    {
+//        _settingsHelpBtn->deactivate();
+//        // Process the toggled key commands
+//        Vec2 pos = _input.getPosition();
+//        if (_isScrolling)
+//        {
+//            Vec2 prevPos = _input.getPrevious();
+//            Vec2 moveDist = Vec2(pos.x - prevPos.x, prevPos.y - pos.y);
+//            Vec2 nodePos = _helpMenu->getPosition();
+//            moveDist.x = 0;
+//            if (moveDist.y + nodePos.y < -1182 + 720)
+//            {
+//                moveDist.y = -1182 + 720 - nodePos.y;
+//            }
+//            else if (moveDist.y + nodePos.y > 0)
+//            {
+//                moveDist.y = 0 - nodePos.y;
+//            }
+//            _helpMenu->setPosition(nodePos + moveDist);
+//        }
+//        if (_input.isDown())
+//        {
+//            _isScrolling = true;
+//            //            CULog("help back btn position: %f, %f", _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).x, _helpBackBtn->nodeToScreenCoords(Vec2(0, 0)).y);
+//            //            CULog("input position: %f, %f", pos.x, pos.y);
+//        }
+//        else if (_input.didRelease())
+//        {
+//            _isScrolling = false;
+//        }
+//        return;
+//    }
+//    else
+//    {
+//        _helpBackBtn->deactivate();
+//        _isScrolling = false;
+//    }
 
     if (_didRestart == true)
         reset(_levelJson);
@@ -1960,7 +1969,7 @@ void GameScene::reset(shared_ptr<cugl::JsonValue> boardJSON)
     removeChild(_guiNode);
     _didGoToLevelMap = false;
     _didPause = false;
-    _isScrolling = false;
+//    _isScrolling = false;
     _isHelpMenuOpen = false;
     _tutorialActive = false;
     init(_assets);
