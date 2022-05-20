@@ -2367,8 +2367,8 @@
                             "layout": {
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
-                                "x_offset": -0.35,
-                                "y_offset": 0.05
+                                "x_offset": -0.33,
+                                "y_offset": 0.06
                             },
                             "format": {
                                 "type": "Anchored"
@@ -2380,7 +2380,7 @@
                                 "bounds": [
                                     0,
                                     20,
-                                    200,
+                                    250,
                                     0
                                 ],
                                 "range": [
@@ -2407,7 +2407,7 @@
                                 "bounds": [
                                     0,
                                     20,
-                                    200,
+                                    250,
                                     0
                                 ],
                                 "range": [
