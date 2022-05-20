@@ -224,6 +224,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _helpAnimationNode->setScale(0.2f);
     _helpMenu->addChildWithName(_helpAnimationNode, "helpAnimationNode");
     
+    _helpButtonNames = {"attack", "win", "combo1", "combo2", "chain", "direction1", "direction2", "spawn", "unit_color"};
     _helpCloseBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_close"));
     _helpCloseBtn->setVisible(true);
     _helpCloseBtn->deactivate();
@@ -235,6 +236,10 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             // help
             _isHelpMenuOpen = false;
             _helpMenu->setVisible(false);
+            for (int i=0; i<_helpButtonNames.size(); i++) {
+                std::string name = _helpButtonNames.at(i);
+                _helpTutorialBtns.at(name)->deactivate();
+            }
             // settings
             _settingsLayout->setVisible(true);
             _settingsbutton->activate();
@@ -252,6 +257,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpAttackBtn->addListener([this](const std::string &name, bool down) {
         if (down) {
             _helpBtnPressed = "attack";
+            helpPressButton();
+            CULog("help attack btn pressed");
         }
     });
     _helpTutorialBtns.insert({"attack", helpAttackBtn});
@@ -263,6 +270,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpwinBtn->addListener([this](const std::string &name, bool down) {
         if (down) {
             _helpBtnPressed = "win";
+            helpPressButton();
         }
     });
     _helpTutorialBtns.insert({"win", helpwinBtn});
@@ -274,6 +282,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpCombo1Btn->addListener([this](const std::string &name, bool down) {
         if (down) {
             _helpBtnPressed = "combo1";
+            helpPressButton();
         }
     });
     _helpTutorialBtns.insert({"combo1", helpCombo1Btn});
@@ -285,6 +294,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpCombo2Btn->addListener([this](const std::string &name, bool down) {
         if (down) {
             _helpBtnPressed = "combo2";
+            helpPressButton();
         }
     });
     _helpTutorialBtns.insert({"combo2", helpCombo2Btn});
@@ -296,6 +306,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpDirection1Btn->addListener([this](const std::string &name, bool down) {
         if (down) {
             _helpBtnPressed = "direction1";
+            helpPressButton();
         }
     });
     _helpTutorialBtns.insert({"direction1", helpDirection1Btn});
@@ -307,6 +318,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpDirection2Btn->addListener([this](const std::string &name, bool down) {
         if (down) {
             _helpBtnPressed = "direction2";
+            helpPressButton();
         }
     });
     _helpTutorialBtns.insert({"direction2", helpDirection2Btn});
@@ -318,6 +330,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpChainBtn->addListener([this](const std::string &name, bool down) {
         if (down) {
             _helpBtnPressed = "chain";
+            helpPressButton();
         }
     });
     _helpTutorialBtns.insert({"chain", helpChainBtn});
@@ -328,6 +341,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpUnitColorBtn->addListener([this](const std::string &name, bool down) {
         if (down) {
             _helpBtnPressed = "unit_color";
+            helpPressButton();
         }
     });
     _helpTutorialBtns.insert({"unit_color", helpUnitColorBtn});
@@ -339,6 +353,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpSpawnBtn->addListener([this](const std::string &name, bool down) {
         if (down) {
             _helpBtnPressed = "spawn";
+            helpPressButton();
         }
     });
     _helpTutorialBtns.insert({"spawn", helpSpawnBtn});
@@ -526,6 +541,12 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
             _helpMenu->setVisible(true);
             _helpCloseBtn->setDown(false);
             _helpCloseBtn->activate();
+            _helpBtnPressed = "attack";
+            for (int i=0; i<_helpButtonNames.size(); i++) {
+                std::string name = _helpButtonNames.at(i);
+                _helpTutorialBtns.at(name)->setDown(false);
+                _helpTutorialBtns.at(name)->activate();
+            }
 //            _helpMenu->setPositionY(-1182+720);
             // almanac
 //            _almanacbutton->setVisible(false);
@@ -567,7 +588,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _tutorialLeftBtn->addListener([=](const std::string &name, bool down)
                                   {
         if (down) {
-            flipTutorialPage("left");
             CULog("Pressed tutorial left button");
         } });
 
@@ -579,7 +599,6 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     _tutorialRightBtn->addListener([=](const std::string &name, bool down)
                                    {
         if (down) {
-            flipTutorialPage("right");
             CULog("Pressed tutorial right button");
         } });
 
@@ -1163,7 +1182,7 @@ void GameScene::update(float timestep)
     {
         // Show help menu
         _settingsHelpBtn->deactivate();
-        // ------------- tutorial animation ----------------
+        // ------------- help tutorial animation ----------------
         _time_since_last_frame += timestep;
         _time_since_start_animation += timestep;
         if (_time_since_last_frame > _time_per_frame) {
@@ -2370,43 +2389,20 @@ void GameScene::showTutorial(std::shared_ptr<cugl::scene2::SceneNode> node)
     }
 }
 
-void GameScene::flipTutorialPage(std::string dir)
-{
-    switch (_currLevel)
-    {
-    case 1:
-    {
-        auto level1_rule1 = _tutorialLayout->getChild(0)->getChildByName("level1_rule1");
-        auto level1_rule2 = _tutorialLayout->getChild(0)->getChildByName("level1_rule2");
-        _tutorialLayout->getChild(0)->getChildByName("level1_rule1")->setVisible(!level1_rule1->isVisible());
-        _tutorialLayout->getChild(0)->getChildByName("level1_rule2")->setVisible(!level1_rule2->isVisible());
-        if (level1_rule1->isVisible())
-            _tutorial_page->setText("1/2");
-        else
-            _tutorial_page->setText("2/2");
-        break;
-    }
-    case 3:
-    {
-        auto level3_rule1 = _tutorialLayout->getChild(0)->getChildByName("level3_rule1");
-        auto level3_rule2 = _tutorialLayout->getChild(0)->getChildByName("level3_rule2");
-        _tutorialLayout->getChild(0)->getChildByName("level3_rule1")->setVisible(!level3_rule1->isVisible());
-        _tutorialLayout->getChild(0)->getChildByName("level3_rule2")->setVisible(!level3_rule2->isVisible());
-        if (level3_rule1->isVisible())
-            _tutorial_page->setText("1/2");
-        else
-            _tutorial_page->setText("2/2");
-        break;
-    }
-    }
-}
-
 void GameScene::setHelpAnimation() {
     _helpAnimationNode = scene2::SpriteNode::alloc(_textures.at(_helpBtnPressed), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
     _helpAnimationNode->setPosition(0.63*_dimen.width, 0.4*_dimen.height);
     _helpAnimationNode->setScale(0.2f);
-    _helpMenu->removeChildByName("helpAnimationNode");
-    _helpMenu->addChildWithName(_helpAnimationNode, "helpAnimationNode");
+    _helpMenu->getChild(0)->removeChildByName("helpAnimationNode");
+    _helpMenu->getChild(0)->addChildWithName(_helpAnimationNode, "helpAnimationNode");
+}
+
+void GameScene::helpPressButton() {
+    for (int i=0; i<_helpButtonNames.size(); i++) {
+        std::string name = _helpButtonNames.at(i);
+        _helpMenu->getChild(0)->getChildByName(name+"_down")->setVisible(false);
+    }
+    _helpMenu->getChild(0)->getChildByName(_helpBtnPressed+"_down")->setVisible(true);
 }
 
 void GameScene::setTutorial() {

@@ -252,6 +252,7 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _settingsHelpBtn;
     /** The button to close the help menu */
     std::shared_ptr<cugl::scene2::Button> _helpCloseBtn;
+    vector<std::string> _helpButtonNames;
     unordered_map<std::string, shared_ptr<cugl::scene2::Button>> _helpTutorialBtns;
 //    std::shared_ptr<cugl::scene2::Button> _helpAttackBtn;
     /** The animation node in help menu */
@@ -493,6 +494,8 @@ public:
      * set the help animation
      */
     void setHelpAnimation();
+    
+    void helpPressButton();
     
 //    Size getDimen( ) { return _dimen; }
     

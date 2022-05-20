@@ -2200,6 +2200,21 @@
                                 "y_offset": 0.18
                             }
                         },
+                        "attack_down": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "attack_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0.18
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
                         "win": {
                             "type": "Button",
                             "data": {
@@ -2220,6 +2235,22 @@
                                 "y_anchor": "middle",
                                 "x_offset": 0.22,
                                 "y_offset": 0.12
+                            }
+                        },
+                        "win_down": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "win_down",
+                                "visible": false
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0.12
+                            },
+                            "format": {
+                                "type": "Anchored"
                             }
                         },
                         "combo1": {
@@ -2244,6 +2275,22 @@
                                 "y_offset": 0.06
                             }
                         },
+                        "combo1_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "combo1_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0.06
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
                         "combo2": {
                             "type": "Button",
                             "data": {
@@ -2264,6 +2311,22 @@
                                 "y_anchor": "middle",
                                 "x_offset": 0.22,
                                 "y_offset": 0
+                            }
+                        },
+                        "combo2_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "combo2_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0
+                            },
+                            "format": {
+                                "type": "Anchored"
                             }
                         },
                         "direction1": {
@@ -2288,6 +2351,22 @@
                                 "y_offset": -0.06
                             }
                         },
+                        "direction1_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "direction1_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.06
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
                         "direction2": {
                             "type": "Button",
                             "data": {
@@ -2308,6 +2387,22 @@
                                 "y_anchor": "middle",
                                 "x_offset": 0.22,
                                 "y_offset": -0.12
+                            }
+                        },
+                        "direction2_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "direction2_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.12
+                            },
+                            "format": {
+                                "type": "Anchored"
                             }
                         },
                         "chain": {
@@ -2332,6 +2427,22 @@
                                 "y_offset": -0.18
                             }
                         },
+                        "chain_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "chain_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.18
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
                         "unit_color": {
                             "type": "Button",
                             "data": {
@@ -2354,6 +2465,22 @@
                                 "y_offset": -0.24
                             }
                         },
+                        "unit_color_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "unit_color_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.24
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
                         "spawn": {
                             "type": "Button",
                             "data": {
@@ -2374,6 +2501,22 @@
                                 "y_anchor": "middle",
                                 "x_offset": 0.22,
                                 "y_offset": -0.3
+                            }
+                        },
+                        "spawn_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "spawn_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.3
+                            },
+                            "format": {
+                                "type": "Anchored"
                             }
                         }
                     }
