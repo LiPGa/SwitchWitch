@@ -255,7 +255,7 @@ protected:
     unordered_map<std::string, shared_ptr<cugl::scene2::Button>> _helpTutorialBtns;
 //    std::shared_ptr<cugl::scene2::Button> _helpAttackBtn;
     /** The animation node in help menu */
-    std::shared_ptr<scene2::SceneNode> _helpAnimationNode;
+    std::shared_ptr<scene2::SpriteNode> _helpAnimationNode;
     /** The button to display settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsbutton;
     /** The button to display the explanation for score */

@@ -1163,6 +1163,17 @@ void GameScene::update(float timestep)
     {
         // Show help menu
         _settingsHelpBtn->deactivate();
+        // ------------- tutorial animation ----------------
+        _time_since_last_frame += timestep;
+        _time_since_start_animation += timestep;
+        if (_time_since_last_frame > _time_per_frame) {
+            _time_since_last_frame = 0.0f;
+            int frame = _helpAnimationNode->getFrame() + 1;
+            if (frame >= _helpAnimationNode->getSize()) {
+                frame = 0;
+            }
+            _helpAnimationNode->setFrame(frame);
+        }
         return;
     } else {
         _helpCloseBtn->deactivate();
@@ -2387,43 +2398,15 @@ void GameScene::flipTutorialPage(std::string dir)
             _tutorial_page->setText("2/2");
         break;
     }
-//    case 5:
-//    {
-//        auto level4_rule1 = _tutorialLayout->getChild(0)->getChildByName("level5_rule1");
-//    }
-//        auto level4_rule2 = _tutorialLayout->getChild(0)->getChildByName("level4_rule2");
-//        auto level4_rule3 = _tutorialLayout->getChild(0)->getChildByName("level4_rule3");
-//        if ((dir == "left" && level4_rule1->isVisible()) || (dir == "right" && level4_rule2->isVisible()))
-//        {
-//            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
-//            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
-//            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(true);
-//        }
-//        else if ((dir == "left" && level4_rule2->isVisible()) || (dir == "right" && level4_rule3->isVisible()))
-//        {
-//            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(true);
-//            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(false);
-//            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
-//        }
-//        else
-//        {
-//            _tutorialLayout->getChild(0)->getChildByName("level4_rule1")->setVisible(false);
-//            _tutorialLayout->getChild(0)->getChildByName("level4_rule2")->setVisible(true);
-//            _tutorialLayout->getChild(0)->getChildByName("level4_rule3")->setVisible(false);
-//        }
-//        if (level4_rule1->isVisible())
-//            _tutorial_page->setText("1/3");
-//        else if (level4_rule2->isVisible())
-//            _tutorial_page->setText("2/3");
-//        else
-//            _tutorial_page->setText("3/3");
-//        break;
-//    }
     }
 }
 
 void GameScene::setHelpAnimation() {
-    
+    _helpAnimationNode = scene2::SpriteNode::alloc(_textures.at(_helpBtnPressed), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
+    _helpAnimationNode->setPosition(0.63*_dimen.width, 0.4*_dimen.height);
+    _helpAnimationNode->setScale(0.2f);
+    _helpMenu->removeChildByName("helpAnimationNode");
+    _helpMenu->addChildWithName(_helpAnimationNode, "helpAnimationNode");
 }
 
 void GameScene::setTutorial() {
