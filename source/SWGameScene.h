@@ -73,6 +73,7 @@ protected:
     bool _isScrolling;
     // if the user opens the help menu
     bool _isHelpMenuOpen;
+    std::string _helpBtnPressed;
     // CONSTANTS
     int _maxBoardWidth;
     int _maxBoardHeight;
@@ -487,6 +488,11 @@ public:
      * set the tutorial node according to current level
      */
     void setTutorial();
+    
+    /**
+     * set the help animation
+     */
+    void setHelpAnimation();
     
 //    Size getDimen( ) { return _dimen; }
     

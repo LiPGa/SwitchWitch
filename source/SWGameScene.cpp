@@ -251,7 +251,7 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpAttackBtn->clearListeners();
     helpAttackBtn->addListener([this](const std::string &name, bool down) {
         if (down) {
-            _didPause = true;
+            _helpBtnPressed = "attack";
         }
     });
     _helpTutorialBtns.insert({"attack", helpAttackBtn});
@@ -262,10 +262,86 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
     helpwinBtn->clearListeners();
     helpwinBtn->addListener([this](const std::string &name, bool down) {
         if (down) {
-            _didPause = true;
+            _helpBtnPressed = "win";
         }
     });
     _helpTutorialBtns.insert({"win", helpwinBtn});
+    auto helpCombo1Btn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_combo1"));
+    helpCombo1Btn->setVisible(true);
+    helpCombo1Btn->deactivate();
+    helpCombo1Btn->setDown(false);
+    helpCombo1Btn->clearListeners();
+    helpCombo1Btn->addListener([this](const std::string &name, bool down) {
+        if (down) {
+            _helpBtnPressed = "combo1";
+        }
+    });
+    _helpTutorialBtns.insert({"combo1", helpCombo1Btn});
+    auto helpCombo2Btn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_combo2"));
+    helpCombo2Btn->setVisible(true);
+    helpCombo2Btn->deactivate();
+    helpCombo2Btn->setDown(false);
+    helpCombo2Btn->clearListeners();
+    helpCombo2Btn->addListener([this](const std::string &name, bool down) {
+        if (down) {
+            _helpBtnPressed = "combo2";
+        }
+    });
+    _helpTutorialBtns.insert({"combo2", helpCombo2Btn});
+    auto helpDirection1Btn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_direction1"));
+    helpDirection1Btn->setVisible(true);
+    helpDirection1Btn->deactivate();
+    helpDirection1Btn->setDown(false);
+    helpDirection1Btn->clearListeners();
+    helpDirection1Btn->addListener([this](const std::string &name, bool down) {
+        if (down) {
+            _helpBtnPressed = "direction1";
+        }
+    });
+    _helpTutorialBtns.insert({"direction1", helpDirection1Btn});
+    auto helpDirection2Btn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_direction2"));
+    helpDirection2Btn->setVisible(true);
+    helpDirection2Btn->deactivate();
+    helpDirection2Btn->setDown(false);
+    helpDirection2Btn->clearListeners();
+    helpDirection2Btn->addListener([this](const std::string &name, bool down) {
+        if (down) {
+            _helpBtnPressed = "direction2";
+        }
+    });
+    _helpTutorialBtns.insert({"direction2", helpDirection2Btn});
+    auto helpChainBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_chain"));
+    helpChainBtn->setVisible(true);
+    helpChainBtn->deactivate();
+    helpChainBtn->setDown(false);
+    helpChainBtn->clearListeners();
+    helpChainBtn->addListener([this](const std::string &name, bool down) {
+        if (down) {
+            _helpBtnPressed = "chain";
+        }
+    });
+    _helpTutorialBtns.insert({"chain", helpChainBtn});
+    auto helpUnitColorBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_unit_color"));
+    helpUnitColorBtn->setVisible(true);
+    helpUnitColorBtn->setDown(false);
+    helpUnitColorBtn->clearListeners();
+    helpUnitColorBtn->addListener([this](const std::string &name, bool down) {
+        if (down) {
+            _helpBtnPressed = "unit_color";
+        }
+    });
+    _helpTutorialBtns.insert({"unit_color", helpUnitColorBtn});
+    auto helpSpawnBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("help_board_spawn"));
+    helpSpawnBtn->setVisible(true);
+    helpSpawnBtn->deactivate();
+    helpSpawnBtn->setDown(false);
+    helpSpawnBtn->clearListeners();
+    helpSpawnBtn->addListener([this](const std::string &name, bool down) {
+        if (down) {
+            _helpBtnPressed = "spawn";
+        }
+    });
+    _helpTutorialBtns.insert({"spawn", helpSpawnBtn});
     
     _tutorialLayout = assets->get<scene2::SceneNode>("tutorial");
     _tutorialLayout->setContentSize(dimen);
@@ -2344,6 +2420,10 @@ void GameScene::flipTutorialPage(std::string dir)
 //        break;
 //    }
     }
+}
+
+void GameScene::setHelpAnimation() {
+    
 }
 
 void GameScene::setTutorial() {
