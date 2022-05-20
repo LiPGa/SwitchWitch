@@ -2390,11 +2390,11 @@ void GameScene::showTutorial(std::shared_ptr<cugl::scene2::SceneNode> node)
 }
 
 void GameScene::setHelpAnimation() {
-    _helpAnimationNode = scene2::SpriteNode::alloc(_textures.at(_helpBtnPressed), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
+    _helpAnimationNode = scene2::SpriteNode::alloc(_textures.at(_helpBtnPressed+"_anime"), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
     _helpAnimationNode->setPosition(0.63*_dimen.width, 0.4*_dimen.height);
     _helpAnimationNode->setScale(0.2f);
-    _helpMenu->getChild(0)->removeChildByName("helpAnimationNode");
-    _helpMenu->getChild(0)->addChildWithName(_helpAnimationNode, "helpAnimationNode");
+    _helpMenu->removeChildByName("helpAnimationNode");
+    _helpMenu->addChildWithName(_helpAnimationNode, "helpAnimationNode");
 }
 
 void GameScene::helpPressButton() {
@@ -2403,6 +2403,7 @@ void GameScene::helpPressButton() {
         _helpMenu->getChild(0)->getChildByName(name+"_down")->setVisible(false);
     }
     _helpMenu->getChild(0)->getChildByName(_helpBtnPressed+"_down")->setVisible(true);
+    setHelpAnimation();
 }
 
 void GameScene::setTutorial() {
