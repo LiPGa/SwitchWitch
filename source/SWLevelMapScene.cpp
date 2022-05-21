@@ -51,12 +51,16 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _input.init();
     _assets = assets;
     
+    _backPressed = false;
+    
     // Set up GUI
 //    start_ok = false;
     
     _chosenLevel = 0;
     _num_levels = 30;
     loadLevelButtons();
+    
+    removeAllChildren();
 
     _scrollPane = std::dynamic_pointer_cast<scene2::ScrollPane>(_assets->get<scene2::SceneNode>("map"));
     _scrollPane->setContentSize(dimen);
@@ -65,6 +69,24 @@ bool LevelMapScene::init(const std::shared_ptr<cugl::AssetManager>& assets) {
     _currentState = NOACTION;
     
     addChild(_scrollPane);
+    
+    _invisibleLayer = _assets->get<scene2::SceneNode>("fixmap");
+    //_invisibleLayer->setVisible(false);
+    _invisibleLayer->setContentSize(dimen);
+    //_invisibleLayer->setVisible(false);
+    _invisibleLayer->doLayout();
+    addChild(_invisibleLayer);
+    
+    _levelMapBackBtn = std::dynamic_pointer_cast<scene2::Button>(assets->get<scene2::SceneNode>("fixmap_back"));
+    _levelMapBackBtn->setVisible(true);
+    _levelMapBackBtn->activate();
+    _levelMapBackBtn->setDown(false);
+    _levelMapBackBtn->clearListeners();
+    _levelMapBackBtn->addListener([this](const std::string &name, bool down)
+        {
+        if (down) {
+            _backPressed = true;
+        } });
     
     
 //    _layout = scene2::AnchoredLayout::alloc();
@@ -171,6 +193,8 @@ void LevelMapScene::setActive(bool value) {
             for (auto level : levels) {
                 level->activate();
             }
+            _backPressed = false;
+            _levelMapBackBtn->activate();
         }
         else {
             CULog("Menu button desactivated");
@@ -179,6 +203,7 @@ void LevelMapScene::setActive(bool value) {
                 level->deactivate();
                 level->setDown(false);
             }
+            _levelMapBackBtn->deactivate();
             // If any were pressed, reset them
         }
     }
@@ -218,6 +243,7 @@ void LevelMapScene::update(float dt) {
 void LevelMapScene::render(const std::shared_ptr<cugl::SpriteBatch> &batch) {
     batch->begin(getCamera()->getCombined());
     _scrollPane->render(batch);
+    _invisibleLayer->render(batch);
     batch->end();
 }
 

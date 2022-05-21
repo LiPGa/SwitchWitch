@@ -85,6 +85,7 @@ protected:
     std::string _topUI_scores_color;
     std::string _topUI_maxTurn_color;
     std::string _levelID_color;
+
     
     // hash map for unit textures
     std::unordered_map<std::string, std::shared_ptr<cugl::Texture>> _textures;

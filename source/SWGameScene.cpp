@@ -84,7 +84,8 @@ bool GameScene::init(const std::shared_ptr<cugl::AssetManager> &assets)
 //    _topUI_scores_color = constants->getString("topUI-scores-color");
 //    _topUI_maxTurn_color = constants->getString("topUI-maxTurn-color");
     _levelID_color = constants->getString("levelID-color");
-
+    
+    removeAllChildren();
     // Initialize Scene
     dimen *= sceneHeight / dimen.height;
     _dimen = dimen;
