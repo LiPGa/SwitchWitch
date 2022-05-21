@@ -36,8 +36,6 @@ protected:
         MENU,
         /** The level selection screen */
         MAP,
-        /** The scene to edit a level */
-        EDITOR,
         /** The scene to play the game */
         GAME
     };

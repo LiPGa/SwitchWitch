@@ -73,6 +73,7 @@ protected:
     bool _isScrolling;
     // if the user opens the help menu
     bool _isHelpMenuOpen;
+    std::string _helpBtnPressed;
     // CONSTANTS
     int _maxBoardWidth;
     int _maxBoardHeight;
@@ -256,7 +257,13 @@ protected:
     /** The button to open the help menu  */
     std::shared_ptr<cugl::scene2::Button> _settingsHelpBtn;
     /** The button to close the help menu */
-    std::shared_ptr<cugl::scene2::Button> _helpBackBtn;
+    std::shared_ptr<cugl::scene2::Button> _helpCloseBtn;
+    vector<std::string> _helpButtonNames;
+    unordered_map<std::string, int> _helpBtnNameToNum;
+    unordered_map<std::string, shared_ptr<cugl::scene2::Button>> _helpTutorialBtns;
+//    std::shared_ptr<cugl::scene2::Button> _helpAttackBtn;
+    /** The animation node in help menu */
+    std::shared_ptr<scene2::SpriteNode> _helpAnimationNode;
     /** The button to display settings menu */
     std::shared_ptr<cugl::scene2::Button> _settingsbutton;
     /** The button to display the explanation for score */
@@ -489,6 +496,13 @@ public:
      * set the tutorial node according to current level
      */
     void setTutorial();
+    
+    /**
+     * set the help animation
+     */
+    void setHelpAnimation();
+    
+    void helpPressButton();
     
 //    Size getDimen( ) { return _dimen; }
     

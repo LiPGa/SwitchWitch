@@ -504,12 +504,6 @@
         "tutorial_background": {
             "file": "textures/tutorial_background.png"
         },
-        "tutorial_left": {
-            "file": "textures/tutorial_left.png"
-        },
-        "tutorial_right": {
-            "file": "textures/tutorial_right.png"
-        },
         "tutorial_1": {
             "file": "textures/tutorial_level_1.png"
         },
@@ -555,14 +549,71 @@
         "tutorial_25": {
             "file": "textures/tutorial_level_25.png"
         },
+        "attack": {
+            "file": "textures/attack.png"
+        },
+        "attack_down": {
+            "file": "textures/attack_down.png"
+        },
+        "chain": {
+            "file": "textures/chain.png"
+        },
+        "chain_down": {
+            "file": "textures/chain_down.png"
+        },
+        "combo1": {
+            "file": "textures/combo1.png"
+        },
+        "combo1_down": {
+            "file": "textures/combo1_down.png"
+        },
+        "combo2": {
+            "file": "textures/combo2.png"
+        },
+        "combo2_down": {
+            "file": "textures/combo2_down.png"
+        },
+        "direction1": {
+            "file": "textures/direction1.png"
+        },
+        "direction1_down": {
+            "file": "textures/direction1_down.png"
+        },
+        "direction2": {
+            "file": "textures/direction2.png"
+        },
+        "direction2_down": {
+            "file": "textures/direction2_down.png"
+        },
+        "spawn": {
+            "file": "textures/spawn.png"
+        },
+        "spawn_down": {
+            "file": "textures/spawn_down.png"
+        },
+        "win_anime": {
+            "file": "textures/win_anime.png"
+        },
+        "win": {
+            "file": "textures/win.png"
+        },
+        "win_down": {
+            "file": "textures/win_down.png"
+        },
+        "unit_color_anime": {
+            "file": "textures/unit_color_anime.png"
+        },
+        "unit_color": {
+            "file": "textures/unit_color.png"
+        },
+        "unit_color_down": {
+            "file": "textures/unit_color_down.png"
+        },
         "help_background": {
             "file": "textures/help_background.png"
         },
-        "help_back": {
-            "file": "textures/help_back.png"
-        },
-        "help_title": {
-            "file": "textures/help_title.png"
+        "help_close": {
+            "file": "textures/help_close.png"
         },
         "result_background": {
             "file": "textures/result-background.png"
@@ -587,12 +638,6 @@
         },
         "result_btn_exit": {
             "file": "textures/result-btn-exit.png"
-        },
-        "star_full": {
-            "file": "textures/star-full.png"
-        },
-        "star_empty": {
-            "file": "textures/star-empty.png"
         },
         "level_map": {
             "file": "textures/background_scrollable.png"
@@ -690,18 +735,6 @@
         "locked_level": {
             "file": "textures/level_locked.png"
         },
-        "scoremeter_background": {
-            "file": "textures/scoremeter_background.png"
-        },
-        "scoremeter_foreground": {
-            "file": "textures/scoremeter_foreground.png"
-        },
-        "scoremeter_endcap_left": {
-            "file": "textures/scoremeter_endcap_left.png"
-        },
-        "scoremeter_endcap_right": {
-            "file": "textures/scoremeter_endcap_right.png"
-        },
         "bubble": {
             "file": "textures/bubble.png"
         },
@@ -709,9 +742,6 @@
             "file": "textures/black_texture.png",
             "wrapS": "repeat",
             "wrapT": "repeat"
-        },
-        "score-explanation-popup": {
-            "file": "textures/score_explanation_popup.png"
         },
         "swap-title": {
             "file": "textures/swap_title.png"
@@ -1061,267 +1091,6 @@
                                 "x_offset": 0.1,
                                 "y_offset": -0.035,
                                 "absolute": false
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "help_menu": {
-            "type": "Scroll",
-            "data": {
-                "interior": [
-                    0,
-                    0,
-                    332,
-                    1182
-                ],
-                "constrain": true,
-                "mask": false,
-                "pan": [
-                    0,
-                    0
-                ]
-            },
-            "children": {
-                "background": {
-                    "type": "Solid",
-                    "data": {
-                        "texture": "help_background",
-                        "scale": 0.2216
-                    },
-                    "layout": {
-                        "y_anchor": "middle",
-                        "x_anchor": "center"
-                    },
-                    "format": {
-                        "type": "Anchored"
-                    },
-                    "children": {
-                        "back": {
-                            "type": "Button",
-                            "data": {
-                                "upnode": "up",
-                                "visible": true,
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "scale": 1.2,
-                                "visible": true,
-                                "pushsize": true,
-                                "size": [
-                                    156,
-                                    126
-                                ]
-                            },
-                            "children": {
-                                "up": {
-                                    "type": "Image",
-                                    "data": {
-                                        "texture": "help_back"
-                                    }
-                                }
-                            },
-                            "layout": {
-                                "x_anchor": "left",
-                                "y_anchor": "top",
-                                "x_offset": 0.1,
-                                "y_offset": -0.035,
-                                "absolute": false
-                            }
-                        },
-                        "rule1": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "A selected and swapped \n unit will attack in the \n direction of its swap.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5,
-                                "visible": true
-                            },
-                            "layout": {
-                                "x_anchor": "left",
-                                "y_anchor": "middle",
-                                "y_offset": 0.395,
-                                "x_offset": 0.38
-                            }
-                        },
-                        "rule2": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "A unit will not attack \n another unit of the same \n color.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5
-                            },
-                            "layout": {
-                                "x_anchor": "left",
-                                "y_anchor": "middle",
-                                "y_offset": 0.3,
-                                "x_offset": 0.38
-                            }
-                        },
-                        "rule3": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "A special unit will \n perform a special attack \n only when it is attacked.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5
-                            },
-                            "layout": {
-                                "x_anchor": "left",
-                                "y_anchor": "middle",
-                                "y_offset": 0.205,
-                                "x_offset": 0.38
-                            }
-                        },
-                        "rule4": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "Swap units to set up a \n chain.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5
-                            },
-                            "layout": {
-                                "x_anchor": "left",
-                                "y_anchor": "middle",
-                                "y_offset": 0.115,
-                                "x_offset": 0.38
-                            }
-                        },
-                        "rule5": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "Kill the king within the \n number of moves to win \n the level.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5
-                            },
-                            "layout": {
-                                "x_anchor": "left",
-                                "y_anchor": "middle",
-                                "y_offset": 0.014,
-                                "x_offset": 0.38
-                            }
-                        },
-                        "rule8": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "The king can only be \n killed by a chain of a \n minimum length.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5
-                            },
-                            "layout": {
-                                "x_anchor": "left",
-                                "y_anchor": "middle",
-                                "y_offset": -0.1,
-                                "x_offset": 0.38
-                            }
-                        },
-                        "rule6": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "Select and swap a \n special unit to change \n its direction. ",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5
-                            },
-                            "layout": {
-                                "x_anchor": "left",
-                                "y_anchor": "middle",
-                                "y_offset": -0.21,
-                                "x_offset": 0.38
-                            }
-                        },
-                        "rule7": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "Selecting another unit \n to swap with a special \n unit will not change the \n special unit’s direction.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5
-                            },
-                            "layout": {
-                                "x_anchor": "left",
-                                "y_anchor": "middle",
-                                "y_offset": -0.322,
-                                "x_offset": 0.38
                             }
                         }
                     }
@@ -2365,6 +2134,414 @@
                 }
             }
         },
+        "help": {
+            "type": "Node",
+            "format": {
+                "type": "Float",
+                "orientation": "vertical",
+                "x_alignment": "center",
+                "y_alignment": "middle"
+            },
+            "layout": {
+                "y_anchor": "middle",
+                "x_anchor": "center",
+                "y_offset": 0,
+                "x_offset": 0,
+                "absolute": false
+            },
+            "children": {
+                "board": {
+                    "type": "Image",
+                    "data": {
+                        "texture": "help_background",
+                        "scale": 0.238
+                    },
+                    "layout": {
+                        "y_anchor": "bottom",
+                        "x_anchor": "right"
+                    },
+                    "format": {
+                        "type": "Anchored"
+                    },
+                    "children": {
+                        "close": {
+                            "type": "Button",
+                            "data": {
+                                "upnode": "up",
+                                "size": [
+                                    50,
+                                    50
+                                ],
+                                "visible": true,
+                                "pushsize": true,
+                                "anchor": [
+                                    0,
+                                    0
+                                ],
+                                "scale": 1
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "help_close"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "right",
+                                "y_anchor": "top",
+                                "x_offset": -0.25,
+                                "y_offset": -0.2
+                            }
+                        },
+                        "attack": {
+                            "type": "Button",
+                            "data": {
+                                "upnode": "up",
+                                "visible": true,
+                                "scale": 1
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "attack"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0.18
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
+                        "attack_down": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "attack_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0.18
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
+                        "win": {
+                            "type": "Button",
+                            "data": {
+                                "upnode": "up",
+                                "visible": true
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "win"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0.12
+                            }
+                        },
+                        "win_down": {
+                            "type": "Image",
+                            "data": {
+                                "texture": "win_down",
+                                "visible": false
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0.12
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
+                        "combo1": {
+                            "type": "Button",
+                            "data": {
+                                "upnode": "up",
+                                "visible": true,
+                                "scale": 1
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "combo1"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0.06
+                            }
+                        },
+                        "combo1_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "combo1_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0.06
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
+                        "combo2": {
+                            "type": "Button",
+                            "data": {
+                                "upnode": "up",
+                                "visible": true,
+                                "scale": 1
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "combo2"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0
+                            }
+                        },
+                        "combo2_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "combo2_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": 0
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
+                        "direction1": {
+                            "type": "Button",
+                            "data": {
+                                "upnode": "up",
+                                "visible": true,
+                                "scale": 1
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "direction1"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.06
+                            }
+                        },
+                        "direction1_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "direction1_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.06
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
+                        "direction2": {
+                            "type": "Button",
+                            "data": {
+                                "upnode": "up",
+                                "visible": true,
+                                "scale": 1
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "direction2"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.12
+                            }
+                        },
+                        "direction2_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "direction2_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.12
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
+                        "chain": {
+                            "type": "Button",
+                            "data": {
+                                "upnode": "up",
+                                "visible": true,
+                                "scale": 1
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "chain"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.18
+                            }
+                        },
+                        "chain_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "chain_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.18
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
+                        "unit_color": {
+                            "type": "Button",
+                            "data": {
+                                "upnode": "up",
+                                "visible": true,
+                                "scale": 1
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "unit_color"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.24
+                            }
+                        },
+                        "unit_color_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "unit_color_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.24
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        },
+                        "spawn": {
+                            "type": "Button",
+                            "data": {
+                                "upnode": "up",
+                                "visible": true,
+                                "scale": 1
+                            },
+                            "children": {
+                                "up": {
+                                    "type": "Image",
+                                    "data": {
+                                        "texture": "spawn"
+                                    }
+                                }
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.3
+                            }
+                        },
+                        "spawn_down": {
+                            "type": "Image",
+                            "data": {
+                                "visible": false,
+                                "texture": "spawn_down"
+                            },
+                            "layout": {
+                                "x_anchor": "left",
+                                "y_anchor": "middle",
+                                "x_offset": 0.22,
+                                "y_offset": -0.3
+                            },
+                            "format": {
+                                "type": "Anchored"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "settings-menu": {
             "type": "Node",
             "format": {
@@ -2435,8 +2612,8 @@
                             "layout": {
                                 "y_anchor": "middle",
                                 "x_anchor": "center",
-                                "x_offset": -0.32,
-                                "y_offset": 0.06
+                                "x_offset": -0.35,
+                                "y_offset": 0.05
                             },
                             "format": {
                                 "type": "Anchored"
@@ -2448,7 +2625,7 @@
                                 "bounds": [
                                     0,
                                     20,
-                                    250,
+                                    200,
                                     0
                                 ],
                                 "range": [
@@ -2475,7 +2652,7 @@
                                 "bounds": [
                                     0,
                                     20,
-                                    250,
+                                    200,
                                     0
                                 ],
                                 "range": [
@@ -2603,308 +2780,6 @@
                 "type": "Anchored",
                 "x_alignment": "center",
                 "y_alignment": "middle"
-            }
-        },
-        "tutorial": {
-            "type": "Node",
-            "format": {
-                "type": "Float",
-                "orientation": "vertical",
-                "x_alignment": "center",
-                "y_alignment": "middle"
-            },
-            "children": {
-                "board": {
-                    "type": "Image",
-                    "data": {
-                        "texture": "tutorial_background",
-                        "scale": 0.22
-                    },
-                    "layout": {
-                        "y_anchor": "middle",
-                        "x_anchor": "center"
-                    },
-                    "format": {
-                        "type": "Anchored"
-                    },
-                    "children": {
-                        "close": {
-                            "type": "Button",
-                            "data": {
-                                "upnode": "up",
-                                "visible": true,
-                                "anchor": [
-                                    0,
-                                    0
-                                ],
-                                "scale": 1.1
-                            },
-                            "children": {
-                                "up": {
-                                    "type": "Image",
-                                    "data": {
-                                        "texture": "settings_close_btn"
-                                    }
-                                }
-                            },
-                            "layout": {
-                                "x_anchor": "right",
-                                "y_anchor": "top",
-                                "x_offset": -0.22,
-                                "y_offset": -0.22
-                            }
-                        },
-                        "level1_rule1": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "A selected and swapped \n unit will attack in the \n direction of its swap.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5,
-                                "visible": true
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "y_offset": 0.1,
-                                "x_offset": 0.15
-                            }
-                        },
-                        "level1_rule2": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "Kill the king within the \n number of moves to win \n the level. The king \n cannot be swapped. ",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5,
-                                "visible": false
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "y_offset": 0.1,
-                                "x_offset": 0.15
-                            }
-                        },
-                        "level3_rule1": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "A special unit will perform \n a special attack only \n when it is attacked.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5,
-                                "visible": false
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "y_offset": 0.1,
-                                "x_offset": 0.15
-                            }
-                        },
-                        "level3_rule2": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "The king can only be \n killed by a chain of a \n minimum length.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5,
-                                "visible": false
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "y_offset": 0.1,
-                                "x_offset": 0.15
-                            }
-                        },
-                        "level7_rule1": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "Use special units to set \n up a chain.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5,
-                                "visible": false
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "y_offset": 0.12,
-                                "x_offset": 0.1
-                            }
-                        },
-                        "level5_rule1": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "Select and swap a special \n unit to change its direction.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5,
-                                "visible": false
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "y_offset": 0.12,
-                                "x_offset": 0.1
-                            }
-                        },
-                        "level6_rule1": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel25",
-                                "text": "Selecting another unit to \n swap with a special unit \n will not change the special \n unit’s direction.",
-                                "foreground": "#63351D",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "size": [
-                                    400,
-                                    400
-                                ],
-                                "scale": 2.5,
-                                "visible": false
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "middle",
-                                "y_offset": 0.12,
-                                "x_offset": 0.1
-                            }
-                        },
-                        "left": {
-                            "type": "Button",
-                            "data": {
-                                "upnode": "up",
-                                "visible": true,
-                                "anchor": [
-                                    0,
-                                    0
-                                ],
-                                "scale": 1.2
-                            },
-                            "children": {
-                                "up": {
-                                    "type": "Image",
-                                    "data": {
-                                        "texture": "tutorial_left"
-                                    }
-                                }
-                            },
-                            "layout": {
-                                "x_anchor": "left",
-                                "y_anchor": "middle",
-                                "x_offset": 0.02,
-                                "y_offset": -0.1
-                            }
-                        },
-                        "right": {
-                            "type": "Button",
-                            "data": {
-                                "upnode": "up",
-                                "visible": true,
-                                "anchor": [
-                                    0,
-                                    0
-                                ],
-                                "scale": 1.2
-                            },
-                            "children": {
-                                "up": {
-                                    "type": "Image",
-                                    "data": {
-                                        "texture": "tutorial_right"
-                                    }
-                                }
-                            },
-                            "layout": {
-                                "x_anchor": "right",
-                                "y_anchor": "middle",
-                                "x_offset": -0.32,
-                                "y_offset": -0.1
-                            }
-                        },
-                        "page": {
-                            "type": "Label",
-                            "data": {
-                                "font": "pixel32",
-                                "text": "1/2",
-                                "foreground": "#63351D",
-                                "halign": "center",
-                                "valign": "true middle",
-                                "anchor": [
-                                    0.5,
-                                    0.5
-                                ],
-                                "scale": 2,
-                                "visible": true
-                            },
-                            "layout": {
-                                "x_anchor": "center",
-                                "y_anchor": "bottom",
-                                "x_offset": 0,
-                                "y_offset": 0.2
-                            }
-                        }
-                    }
-                }
             }
         },
         "almanac": {
@@ -3723,444 +3598,6 @@
                             0,
                             0
                         ]
-                    }
-                }
-            }
-        },
-        "level-editor-board": {
-            "comment": "The scene graph definition for the text field demo",
-            "type": "Node",
-            "format": {
-                "type": "Anchored"
-            },
-            "children": {
-                "save": {
-                    "type": "Widget",
-                    "data": {
-                        "key": "textbutton",
-                        "variables": {
-                            "size": [
-                                70,
-                                50
-                            ],
-                            "text": "Save",
-                            "color": "#000088"
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "top",
-                        "x_offset": 0.25,
-                        "y_offset": -0.075
-                    }
-                },
-                "play": {
-                    "type": "Widget",
-                    "data": {
-                        "key": "textbutton",
-                        "variables": {
-                            "size": [
-                                70,
-                                50
-                            ],
-                            "text": "Play",
-                            "color": "#000088"
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "top",
-                        "x_offset": 0,
-                        "y_offset": -0.075
-                    }
-                },
-                "info": {
-                    "type": "Widget",
-                    "data": {
-                        "key": "textbutton",
-                        "variables": {
-                            "size": [
-                                70,
-                                50
-                            ],
-                            "text": "Info",
-                            "color": "#000088"
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "top",
-                        "x_offset": -0.25,
-                        "y_offset": -0.075
-                    }
-                },
-                "next": {
-                    "type": "Widget",
-                    "data": {
-                        "key": "textbutton",
-                        "variables": {
-                            "size": [
-                                70,
-                                50
-                            ],
-                            "text": "Next",
-                            "color": "#000088"
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "top",
-                        "x_offset": 0.25,
-                        "y_offset": -0.175
-                    }
-                },
-                "back": {
-                    "type": "Widget",
-                    "data": {
-                        "key": "textbutton",
-                        "variables": {
-                            "size": [
-                                70,
-                                50
-                            ],
-                            "text": "Back",
-                            "color": "#000088"
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "top",
-                        "x_offset": 0,
-                        "y_offset": -0.175
-                    }
-                },
-                "delete": {
-                    "type": "Widget",
-                    "data": {
-                        "key": "textbutton",
-                        "variables": {
-                            "size": [
-                                70,
-                                50
-                            ],
-                            "text": "Delete",
-                            "color": "#000088"
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "top",
-                        "x_offset": -0.25,
-                        "y_offset": -0.175
-                    }
-                }
-            }
-        },
-        "level-editor-info": {
-            "comment": "The scene graph definition for the text field demo",
-            "type": "Node",
-            "format": {
-                "type": "Anchored"
-            },
-            "children": {
-                "id-field": {
-                    "type": "TextField",
-                    "data": {
-                        "font": "pixel32",
-                        "text": "0",
-                        "foreground": "#ffffff",
-                        "background": "#000000",
-                        "size": [
-                            170,
-                            40
-                        ],
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "cursor": true,
-                        "cursorcolor": "#ffffff"
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "top",
-                        "y_offset": -0.05,
-                        "x_offset": 0.05
-                    }
-                },
-                "id-label": {
-                    "type": "Label",
-                    "data": {
-                        "font": "pixel32",
-                        "text": "LevID:",
-                        "foreground": "#ffffff",
-                        "background": "#000000",
-                        "size": [
-                            100,
-                            40
-                        ],
-                        "anchor": [
-                            1,
-                            0.5
-                        ]
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "top",
-                        "y_offset": -0.05,
-                        "x_offset": -0.2
-                    }
-                },
-                "one-star-score-field": {
-                    "type": "TextField",
-                    "data": {
-                        "font": "pixel32",
-                        "text": "0",
-                        "foreground": "#ffffff",
-                        "background": "#000000",
-                        "size": [
-                            170,
-                            40
-                        ],
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "cursor": true,
-                        "cursorcolor": "#ffffff"
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "bottom",
-                        "y_offset": 0.2,
-                        "x_offset": 0.05
-                    }
-                },
-                "square-size-label": {
-                    "type": "Label",
-                    "data": {
-                        "font": "pixel32",
-                        "text": "Sq",
-                        "foreground": "#ffffff",
-                        "background": "#000000",
-                        "size": [
-                            100,
-                            40
-                        ],
-                        "anchor": [
-                            1,
-                            0.5
-                        ]
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "bottom",
-                        "y_offset": 0.25,
-                        "x_offset": -0.2
-                    }
-                },
-                "square-size-field": {
-                    "type": "TextField",
-                    "data": {
-                        "font": "pixel32",
-                        "text": "0",
-                        "foreground": "#ffffff",
-                        "background": "#000000",
-                        "size": [
-                            170,
-                            40
-                        ],
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "cursor": true,
-                        "cursorcolor": "#ffffff"
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "bottom",
-                        "y_offset": 0.25,
-                        "x_offset": 0.05
-                    }
-                },
-                "one-star-score-label": {
-                    "type": "Label",
-                    "data": {
-                        "font": "pixel32",
-                        "text": "1 Star",
-                        "foreground": "#ffffff",
-                        "background": "#000000",
-                        "size": [
-                            100,
-                            40
-                        ],
-                        "anchor": [
-                            1,
-                            0.5
-                        ]
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "bottom",
-                        "y_offset": 0.2,
-                        "x_offset": -0.2
-                    }
-                },
-                "two-star-score-field": {
-                    "type": "TextField",
-                    "data": {
-                        "font": "pixel32",
-                        "text": "0",
-                        "foreground": "#ffffff",
-                        "background": "#000000",
-                        "size": [
-                            170,
-                            40
-                        ],
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "cursor": true,
-                        "cursorcolor": "#ffffff"
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "bottom",
-                        "y_offset": 0.15,
-                        "x_offset": 0.05
-                    }
-                },
-                "two-star-score-label": {
-                    "type": "Label",
-                    "data": {
-                        "font": "pixel32",
-                        "text": "2 Star",
-                        "foreground": "#ffffff",
-                        "background": "#000000",
-                        "size": [
-                            100,
-                            40
-                        ],
-                        "anchor": [
-                            1,
-                            0.5
-                        ]
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "bottom",
-                        "y_offset": 0.15,
-                        "x_offset": -0.2
-                    }
-                },
-                "three-star-score-field": {
-                    "type": "TextField",
-                    "data": {
-                        "font": "pixel32",
-                        "text": "0",
-                        "foreground": "#ffffff",
-                        "background": "#000000",
-                        "size": [
-                            170,
-                            40
-                        ],
-                        "anchor": [
-                            0.5,
-                            0.5
-                        ],
-                        "cursor": true,
-                        "cursorcolor": "#ffffff"
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "bottom",
-                        "y_offset": 0.1,
-                        "x_offset": 0.05
-                    }
-                },
-                "three-star-score-label": {
-                    "type": "Label",
-                    "data": {
-                        "font": "pixel32",
-                        "text": "3 Star",
-                        "foreground": "#ffffff",
-                        "background": "#000000",
-                        "size": [
-                            100,
-                            40
-                        ],
-                        "anchor": [
-                            1,
-                            0.5
-                        ]
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "bottom",
-                        "y_offset": 0.1,
-                        "x_offset": -0.2
-                    }
-                },
-                "board": {
-                    "type": "Widget",
-                    "data": {
-                        "key": "textbutton",
-                        "variables": {
-                            "size": [
-                                80,
-                                60
-                            ],
-                            "text": "Board",
-                            "color": "#000088"
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "right",
-                        "y_anchor": "top",
-                        "x_offset": -0.1,
-                        "y_offset": -0.225
-                    }
-                },
-                "board-size": {
-                    "type": "Widget",
-                    "data": {
-                        "key": "textbutton",
-                        "variables": {
-                            "size": [
-                                100,
-                                50
-                            ],
-                            "text": "BoardSize",
-                            "color": "#000088"
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "middle",
-                        "x_offset": 0,
-                        "y_offset": 0.1
-                    }
-                },
-                "background": {
-                    "type": "Widget",
-                    "data": {
-                        "key": "textbutton",
-                        "variables": {
-                            "size": [
-                                100,
-                                50
-                            ],
-                            "text": "Background",
-                            "color": "#000088"
-                        }
-                    },
-                    "layout": {
-                        "x_anchor": "center",
-                        "y_anchor": "middle",
-                        "x_offset": 0,
-                        "y_offset": -0.1
                     }
                 }
             }
