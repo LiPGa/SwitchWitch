@@ -2276,6 +2276,8 @@ void GameScene::setHelpAnimation() {
     _helpAnimationNode = scene2::SpriteNode::alloc(_tutorialTextures.at("tutorial_"+std::to_string(_helpBtnNameToNum.at(_helpBtnPressed))), 1, animationFrameCounts.at(ANIMATION_TYPE::TUTORIAL));
     _helpAnimationNode->setPosition(0.63*_dimen.width, 0.4*_dimen.height);
     _helpAnimationNode->setScale(0.18f);
+    if (_helpBtnPressed == "spawn")
+        _helpAnimationNode->setScale(0.2f);
 //    _helpMenu->removeChildByName("helpAnimationNode");
     _helpMenu->getChildByName("helpAnimation")->removeAllChildren();
     _helpMenu->getChildByName("helpAnimation")->addChild(_helpAnimationNode);
