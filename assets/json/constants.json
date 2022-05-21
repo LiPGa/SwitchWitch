@@ -182,8 +182,6 @@
         "two-forward-blue-selected-start",
         "two-forward-blue-selected-moving",
         "two-forward-blue-selected-end",
-        
- 
       
         "next-three-way-blue",
         "special_up_square",
@@ -191,12 +189,9 @@
         "special_left_square",
         "special_right_square",
         "special_four_dir_square",
-        "star_empty",
-        "star_full",
         "bubble",
         "next-special-square",
-        "transparent",
-        "score-explanation-popup"
+        "transparent"
     ],
     "probability-respawn": [
         "basic",

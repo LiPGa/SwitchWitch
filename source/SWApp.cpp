@@ -76,7 +76,7 @@ void SwitchWitchApp::onStartup() {
 void SwitchWitchApp::onShutdown() {
     _loading.dispose();
     _gameplay.dispose();
-    _levelEditor.dispose();
+//    _levelEditor.dispose();
     _mainMenu.dispose();
     _assets = nullptr;
     _batch = nullptr;
@@ -156,11 +156,11 @@ void SwitchWitchApp::update(float timestep) {
                 _levelMap.setActive(true);
                 _scene = State::MAP;
                 break;
-            case MainMenuScene::Choice::EDITOR:
-                _mainMenu.setActive(false);
-                _levelEditor.setActive(true);
-                _scene = State::EDITOR;
-                break;
+//            case MainMenuScene::Choice::EDITOR:
+//                _mainMenu.setActive(false);
+//                _levelEditor.setActive(true);
+//                _scene = State::EDITOR;
+//                break;
             case MainMenuScene::Choice::NONE:
                 // DO NOTHING
                 break;
@@ -177,6 +177,7 @@ void SwitchWitchApp::update(float timestep) {
                     _gameplay.enterLevel();
                     _gameplay.setCurrLevel(level_num);
                     _gameplay.setTutorial();
+                    _gameplay.helpPressButton();
                     _scene = State::GAME;
                 }
             if (_levelMap.getBackPressed()) {
@@ -206,15 +207,15 @@ void SwitchWitchApp::update(float timestep) {
             }
             break;
         }
-        case EDITOR: {
-            _levelEditor.update(timestep);
-            if (_levelEditor.goToGameScene()) {
-                _scene = State::GAME;
-                _gameplay.reset(_levelEditor.getLevelAsJSON());
-                _levelEditor.setActive(false);
-                _gameplay.setActive(true);
-            }
-        }
+//        case EDITOR: {
+//            _levelEditor.update(timestep);
+//            if (_levelEditor.goToGameScene()) {
+//                _scene = State::GAME;
+//                _gameplay.reset(_levelEditor.getLevelAsJSON());
+//                _levelEditor.setActive(false);
+//                _gameplay.setActive(true);
+//            }
+//        }
     }
 }
 
@@ -241,9 +242,9 @@ void SwitchWitchApp::draw() {
     case GAME:
         _gameplay.render(_batch);
         break;
-    case EDITOR:
-        _levelEditor.render(_batch);
-        break;
+//    case EDITOR:
+//        _levelEditor.render(_batch);
+//        break;
     }
 }
 

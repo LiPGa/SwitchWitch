@@ -79,7 +79,7 @@ bool LoadingScene::init(const std::shared_ptr<AssetManager>& assets) {
     });
     
     // credit page
-    _credit =std::dynamic_pointer_cast<scene2::SceneNode>(assets->get<scene2::SceneNode>("load_credit"));
+    _credit = std::dynamic_pointer_cast<scene2::SceneNode>(assets->get<scene2::SceneNode>("load_credit"));
     _credit->setVisible(false);
     
     _aboutBackBtn = std::dynamic_pointer_cast<scene2::Button>(_assets->get<scene2::SceneNode>("load_credit_back"));
