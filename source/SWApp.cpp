@@ -181,6 +181,7 @@ void SwitchWitchApp::update(float timestep) {
                 }
             if (_levelMap.getBackPressed()) {
                 _levelMap.setActive(false);
+                _loading.setActive(true);
                 _scene = State::LOAD;
             }
                 break;
