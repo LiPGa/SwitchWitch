@@ -136,11 +136,11 @@ void SwitchWitchApp::update(float timestep) {
                 _loading.update(timestep);
             }
             else {
-                _loading.dispose(); // Permanently disables the input listeners in this mode
-                _mainMenu.init(_assets);
+//                _loading.dispose(); // Permanently disables the input listeners in this mode
+                //_mainMenu.init(_assets);
                 _levelMap.init(_assets);
                 _gameplay.init(_assets);
-//                _levelEditor.init(_assets);
+                //_levelEditor.init(_assets);
 //                _mainMenu.setActive(true);
 //                _scene = State::MENU;
                 _scene = State::MAP;
@@ -180,6 +180,11 @@ void SwitchWitchApp::update(float timestep) {
                     _gameplay.helpPressButton();
                     _scene = State::GAME;
                 }
+            if (_levelMap.getBackPressed()) {
+                _levelMap.setActive(false);
+                _loading.setActive(true);
+                _scene = State::LOAD;
+            }
                 break;
         }
         case GAME: {

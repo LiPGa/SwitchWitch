@@ -103,6 +103,11 @@ protected:
 
     std::shared_ptr<cugl::audio::AudioNode> _fireNode;
     std::shared_ptr<cugl::audio::AudioNode> _iceNode;
+    
+    std::shared_ptr<cugl::scene2::Button> _levelMapBackBtn;
+    std::shared_ptr<cugl::scene2::SceneNode> _invisibleLayer;
+    
+    bool _backPressed;
 
     
     
@@ -166,6 +171,8 @@ public:
      * @return the user's chosen level.
      */
     int getLevel() const { return _chosenLevel; }
+    
+    bool getBackPressed() const { return _backPressed; }
     
     void loadLevelButtons();
     void adjust_scroll_bgm(float yposition);
